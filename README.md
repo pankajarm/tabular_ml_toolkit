@@ -12,7 +12,7 @@ Just give input file path, index column, target column and validation set size a
 
 *For example below examples show how to load [Melbourne Home Sale price raw data](https://www.kaggle.com/estrotococo/home-data-for-ml-course)*
 
-```
+```python
 dfl = DataFrameLoader().from_csv(
     train_file_path="input/home_data/train.csv",
     test_file_path="input/home_data/test.csv",
@@ -30,7 +30,7 @@ print("Home Data X_test_full shape:", dfl.X_test_full.shape)
 
 Input raw data is already split into X (features) and y (target)
 
-```
+```python
 # show shape of X and y 
 print("homedata X shape:", dfl.X.shape)
 print("homedata y shape", dfl.y.shape)
@@ -42,7 +42,7 @@ print("homedata y shape", dfl.y.shape)
 
 Input raw data is also split into X_train, X_valid, y_train and y_valid based upon validation size provided
 
-```
+```python
 # show shape of X_train, X_valid, y_train and y_valid
 print("homedata X_train shape:", dfl.X_train.shape)
 print("homedata y_train shape", dfl.y_train.shape)

@@ -11,7 +11,7 @@ from sklearn.model_selection import train_test_split
 
 class DataFrameLoader:
     """
-    Represent Data Frame Loader class
+    Represent DataFrameLoader class
 
     Attributes:
     X_full: full dataframe load from raw input

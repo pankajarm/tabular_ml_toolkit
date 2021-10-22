@@ -42,7 +42,7 @@ class DataFrameLoader:
 
     def __str__(self):
         """Returns human readable string reprsentation"""
-        return "DataFrameLoader object with X_full, X_test and X(features) dataframe and y(target) series"
+        return "DataFrameLoader object with attributes: X_full, X_test, X(features), y(target), X_train, X_valid, y_train and y_valid"
 
     def __repr__(self):
         return self.__str__()
@@ -67,9 +67,9 @@ class DataFrameLoader:
         self.X = input_df.drop([target], axis=1)
 
     # split X and y into X_train, y_train, X_valid & y_valid dataframes
-    def prepare_train_valid(self,X:object,y:object, test_size:float, random_state=42):
+    def prepare_train_valid(self,X:object,y:object, valid_size:float, random_state=42):
         self.X_train, self.X_valid, self.y_train, self.y_valid = train_test_split(
-            self.X, self.y, train_size=(1-test_size), test_size=test_size,random_state=random_state)
+            self.X, self.y, train_size=(1-valid_size), test_size=valid_size,random_state=random_state)
 
     # select categorical columns
     def select_categorical_cols(self):
@@ -94,9 +94,9 @@ class DataFrameLoader:
         self.X_test = self.X_test_full[self.final_columns].copy()
 
     # get train and valid dataframe
-    def from_csv(self, train_file_path:str,test_file_path:str, idx_col:str, target:str, test_size:float, random_state=42):
+    def from_csv(self, train_file_path:str,test_file_path:str, idx_col:str, target:str, valid_size:float, random_state=42):
         self.read_csv(train_file_path,test_file_path, idx_col)
         self.prepare_X_y(self.X_full, target)
-        self.prepare_train_valid(self.X,self.y, test_size, random_state)
+        self.prepare_train_valid(self.X,self.y, valid_size, random_state)
         self.prepare_X_train_X_valid()
         return self

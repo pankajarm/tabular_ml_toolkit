@@ -3,7 +3,7 @@
 __all__ = []
 
 # Cell
-from .core import *
+from .dataframeloader import *
 
 # Cell
 # hide

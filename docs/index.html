@@ -89,18 +89,10 @@ nb_path: "index.ipynb"
 
 <div class="output_area">
 
-<div class="output_subarea output_text output_error">
-<pre>
-<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
-<span class="ansi-red-fg">TypeError</span>                                 Traceback (most recent call last)
-<span class="ansi-green-fg">/var/folders/p3/zmg8jfwx0hb9gwzs0w69d7f0rgyjx2/T/ipykernel_34013/2444152123.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
-<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> dfl = DataFrameLoader().from_csv(
-</span><span class="ansi-green-intense-fg ansi-bold">      2</span>     train_file_path<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">&#34;input/home_data/train.csv&#34;</span><span class="ansi-blue-fg">,</span>
-<span class="ansi-green-intense-fg ansi-bold">      3</span>     test_file_path<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">&#34;input/home_data/test.csv&#34;</span><span class="ansi-blue-fg">,</span>
-<span class="ansi-green-intense-fg ansi-bold">      4</span>     idx_col<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">&#34;Id&#34;</span><span class="ansi-blue-fg">,</span>
-<span class="ansi-green-intense-fg ansi-bold">      5</span>     target<span class="ansi-blue-fg">=</span><span class="ansi-blue-fg">&#34;SalePrice&#34;</span><span class="ansi-blue-fg">,</span>
-
-<span class="ansi-red-fg">TypeError</span>: from_csv() got an unexpected keyword argument &#39;valid_size&#39;</pre>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Home Data X_full shape: (1460, 80)
+Home Data X_test_full shape: (1459, 79)
+</pre>
 </div>
 </div>
 
@@ -132,6 +124,21 @@ nb_path: "index.ipynb"
 </div>
 </div>
 
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>homedata X shape: (1460, 79)
+homedata y shape (1460,)
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
 </div>
     {% endraw %}
 
@@ -156,6 +163,23 @@ nb_path: "index.ipynb"
 </pre></div>
 
     </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>homedata X_train shape: (1168, 76)
+homedata y_train shape (1168,)
+homedata X_valid shape: (292, 76)
+homedata y_valid shape (292,)
+</pre>
+</div>
+</div>
+
 </div>
 </div>
 

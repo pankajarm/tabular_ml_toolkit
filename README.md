@@ -24,20 +24,8 @@ print("Home Data X_full shape:", dfl.X_full.shape)
 print("Home Data X_test_full shape:", dfl.X_test_full.shape)
 ```
 
-
-    ---------------------------------------------------------------------------
-
-    TypeError                                 Traceback (most recent call last)
-
-    /var/folders/p3/zmg8jfwx0hb9gwzs0w69d7f0rgyjx2/T/ipykernel_34013/2444152123.py in <module>
-    ----> 1 dfl = DataFrameLoader().from_csv(
-          2     train_file_path="input/home_data/train.csv",
-          3     test_file_path="input/home_data/test.csv",
-          4     idx_col="Id",
-          5     target="SalePrice",
-
-
-    TypeError: from_csv() got an unexpected keyword argument 'valid_size'
+    Home Data X_full shape: (1460, 80)
+    Home Data X_test_full shape: (1459, 79)
 
 
 Input raw data is already split into X (features) and y (target)
@@ -48,6 +36,10 @@ print("homedata X shape:", dfl.X.shape)
 print("homedata y shape", dfl.y.shape)
 ```
 
+    homedata X shape: (1460, 79)
+    homedata y shape (1460,)
+
+
 Input raw data is also split into X_train, X_valid, y_train and y_valid based upon validation size provided
 
 ```
@@ -57,3 +49,9 @@ print("homedata y_train shape", dfl.y_train.shape)
 print("homedata X_valid shape:", dfl.X_valid.shape)
 print("homedata y_valid shape", dfl.y_valid.shape)
 ```
+
+    homedata X_train shape: (1168, 76)
+    homedata y_train shape (1168,)
+    homedata X_valid shape: (292, 76)
+    homedata y_valid shape (292,)
+

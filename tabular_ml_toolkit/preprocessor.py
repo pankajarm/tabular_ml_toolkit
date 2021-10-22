@@ -3,6 +3,9 @@
 __all__ = []
 
 # Cell
+from .core import *
+
+# Cell
 # hide
 import pandas as pd
 from sklearn.compose import ColumnTransformer

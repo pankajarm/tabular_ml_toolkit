@@ -4,11 +4,11 @@ __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
 index = {"DataFrameLoader": "00_dataframeloader.ipynb",
          "PreProcessor": "01_preprocessor.ipynb",
-         "TrainingPipeline": "03_training_pipeline.ipynb"}
+         "MLPipeline": "03_MLPipeline.ipynb"}
 
 modules = ["dataframeloader.py",
            "preprocessor.py",
-           "pipeline.py"]
+           "MLPipeline.py"]
 
 doc_url = "https://psmathur.github.io/tabular_ml_toolkit/"
 

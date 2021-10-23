@@ -30,7 +30,7 @@ class PreProcessor:
     def __init__(self):
         self.numerical_transformer = None
         self.categorical_transformer = None
-        self.preprocessor = None
+        self.column_tranfomer = None
 
     def __str__(self):
         """Returns human readable string reprsentation"""
@@ -59,7 +59,7 @@ class PreProcessor:
     def preprocess_data(self, numerical_cols, categorical_cols):
         self.preprocess_numerical_data()
         self.preprocess_categorical_data()
-        self.preprocessor = ColumnTransformer(
+        self.column_tranfomer = ColumnTransformer(
             transformers=[
                 ('num', self.numerical_transformer, numerical_cols),
                 ('cat', self.categorical_transformer, categorical_cols)

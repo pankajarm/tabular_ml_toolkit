@@ -65,6 +65,10 @@ In background `prepare_data_for_training` method loads your input data into Pand
 
 Here is detail documentation and source code.
 
+```
+# show_doc(MLPipeline.prepare_data_for_training)
+```
+
 
 <h4 id="MLPipeline.prepare_data_for_training" class="doc_header"><code>MLPipeline.prepare_data_for_training</code><a href="https://github.com/psmathur/tabular_ml_toolkit/tree/master/tabular_ml_toolkit/MLPipeline.py#L59" class="source_link" style="float:right">[source]</a></h4>
 
@@ -74,6 +78,10 @@ Here is detail documentation and source code.
 
 
 If you want to customize data and preprocessing steps you can do so by using `DataFrameLoader` and `PreProessor` classes. Check detail documentations for these classes for more options. 
+
+```
+# show_doc(MLPipeline)
+```
 
 
 <h2 id="MLPipeline" class="doc_header"><code>class</code> <code>MLPipeline</code><a href="https://github.com/psmathur/tabular_ml_toolkit/tree/master/tabular_ml_toolkit/MLPipeline.py#L21" class="source_link" style="float:right">[source]</a></h2>

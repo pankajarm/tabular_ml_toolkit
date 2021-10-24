@@ -4,7 +4,7 @@ __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
 index = {"DataFrameLoader": "00_DataFrameLoader.ipynb",
          "PreProcessor": "01_PreProcessor.ipynb",
-         "MLPipeline": "03_MLPipeline.ipynb"}
+         "MLPipeline": "02_MLPipeline.ipynb"}
 
 modules = ["DataFrameLoader.py",
            "PreProcessor.py",

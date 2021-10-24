@@ -1,8 +1,8 @@
 {
   "tabular_ml_toolkit": {
     "Overview": "/",
-    "Data Frame Loader": "DataFrameLoader.html",
+    "DataFrameLoader": "DataFrameLoader.html",
     "PreProcessor": "PreProcessor.html",
-    "Training Pipeline": "MLPipeline.html"
+    "MLPipeline": "MLPipeline.html"
   }
 }

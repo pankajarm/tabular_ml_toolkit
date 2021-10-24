@@ -2,7 +2,7 @@ repository: psmathur/tabular_ml_toolkit
 output: web
 topnav_title: tabular_ml_toolkit
 site_title: tabular_ml_toolkit
-company_name: @pankajmathur.com
+company_name: pankajmathur
 description: A helpful ML toolkit to jumpstart your Tabular or Structured data based Machine learning projects
 # Set to false to disable KaTeX math
 use_math: true

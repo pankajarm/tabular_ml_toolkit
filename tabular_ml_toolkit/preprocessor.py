@@ -3,7 +3,7 @@
 __all__ = ['PreProcessor']
 
 # Cell
-from .dataframeloader import *
+from .DataFrameLoader import *
 
 # Cell
 # hide

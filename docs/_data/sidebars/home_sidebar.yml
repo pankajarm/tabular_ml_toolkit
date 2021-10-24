@@ -11,7 +11,13 @@ entries:
       url: /
     - output: web,pdf
       title: Data Frame Loader
-      url: dataframeloader.html
+      url: DataFrameLoader.html
+    - output: web,pdf
+      title: PreProcessor
+      url: PreProcessor.html
+    - output: web,pdf
+      title: Training Pipeline
+      url: MLPipeline.html
     output: web
     title: tabular_ml_toolkit
   output: web

@@ -58,6 +58,13 @@ nb_path: "03_MLPipeline.ipynb"
     
 <div class="cell border-box-sizing code_cell rendered">
 
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
 <div class="output_wrapper">
 <div class="output">
 
@@ -67,12 +74,12 @@ nb_path: "03_MLPipeline.ipynb"
 <div class="output_markdown rendered_html output_subarea ">
 <h2 id="MLPipeline" class="doc_header"><code>class</code> <code>MLPipeline</code><a href="https://github.com/psmathur/tabular_ml_toolkit/tree/master/tabular_ml_toolkit/MLPipeline.py#L21" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>MLPipeline</code>()</p>
 </blockquote>
-<p>Represent TrainingPipeline class</p>
-<p>Attributes:
-mlpl: A MLPipeline instance
-dfl: A DataFrameLoader instance
-pp: A PreProcessor Instance
-model: The given Model</p>
+<p>Represent MLPipeline class</p>
+<p>Attributes:</p>
+<p>pipeline: An MLPipeline instance</p>
+<p>dataframeloader: A DataFrameLoader instance</p>
+<p>preprocessor: A PreProcessor Instance</p>
+<p>model: The given Model</p>
 
 </div>
 
@@ -80,13 +87,6 @@ model: The given Model</p>
 
 </div>
 </div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
 
 </div>
     {% endraw %}
@@ -123,7 +123,7 @@ model: The given Model</p>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><em>Now you can use MLPipeline to train any model. Here we are using RandomForestRegressor from Scikit-Learn, on  <a href="https://www.kaggle.com/estrotococo/home-data-for-ml-course">Melbourne Home Sale price data</a></em></p>
+<p><em>You can use MLPipeline to train any model. Here we are using RandomForestRegressor from Scikit-Learn, on  <a href="https://www.kaggle.com/estrotococo/home-data-for-ml-course">Melbourne Home Sale price data</a></em></p>
 
 </div>
 </div>
@@ -136,13 +136,15 @@ model: The given Model</p>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">scikit_model</span> <span class="o">=</span> <span class="n">RandomForestRegressor</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
-<span class="n">pl</span> <span class="o">=</span> <span class="n">MLPipeline</span><span class="p">()</span><span class="o">.</span><span class="n">prepare_data_for_training</span><span class="p">(</span><span class="n">train_file_path</span><span class="o">=</span> <span class="s2">&quot;input/home_data/train.csv&quot;</span><span class="p">,</span>
+<span class="c1"># createm ml pipeline for scikit-learn model</span>
+<span class="n">sci_ml_pl</span> <span class="o">=</span> <span class="n">MLPipeline</span><span class="p">()</span><span class="o">.</span><span class="n">prepare_data_for_training</span><span class="p">(</span><span class="n">train_file_path</span><span class="o">=</span> <span class="s2">&quot;input/home_data/train.csv&quot;</span><span class="p">,</span>
                                               <span class="n">test_file_path</span><span class="o">=</span> <span class="s2">&quot;input/home_data/test.csv&quot;</span><span class="p">,</span>
                                               <span class="n">idx_col</span><span class="o">=</span><span class="s2">&quot;Id&quot;</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s2">&quot;SalePrice&quot;</span><span class="p">,</span><span class="n">valid_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
                                               <span class="n">model</span><span class="o">=</span><span class="n">scikit_model</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
-<span class="n">pl</span><span class="o">.</span><span class="n">mlpl</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_train</span><span class="p">,</span> <span class="n">pl</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_train</span><span class="p">)</span>
-<span class="n">preds</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">mlpl</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_valid</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;X_valid MAE:&#39;</span><span class="p">,</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">preds</span><span class="p">))</span>
+<span class="c1"># Now fit and predict</span>
+<span class="n">sci_ml_pl</span><span class="o">.</span><span class="n">pipeline</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">sci_ml_pl</span><span class="o">.</span><span class="n">dataframeloader</span><span class="o">.</span><span class="n">X_train</span><span class="p">,</span> <span class="n">sci_ml_pl</span><span class="o">.</span><span class="n">dataframeloader</span><span class="o">.</span><span class="n">y_train</span><span class="p">)</span>
+<span class="n">preds</span> <span class="o">=</span> <span class="n">sci_ml_pl</span><span class="o">.</span><span class="n">pipeline</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">sci_ml_pl</span><span class="o">.</span><span class="n">dataframeloader</span><span class="o">.</span><span class="n">X_valid</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;X_valid MAE:&#39;</span><span class="p">,</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">sci_ml_pl</span><span class="o">.</span><span class="n">dataframeloader</span><span class="o">.</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">preds</span><span class="p">))</span>
 </pre></div>
 
     </div>
@@ -181,7 +183,7 @@ model: The given Model</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span> 
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># !conda install -c conda-forge xgboost</span>
 </pre></div>
 
     </div>
@@ -199,14 +201,17 @@ model: The given Model</p>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">xgboost</span> <span class="kn">import</span> <span class="n">XGBRegressor</span>
+<span class="c1"># create xgb ml model</span>
 <span class="n">xgb_model</span> <span class="o">=</span> <span class="n">XGBRegressor</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span><span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
-<span class="n">pl</span> <span class="o">=</span> <span class="n">MLPipeline</span><span class="p">()</span><span class="o">.</span><span class="n">prepare_data_for_training</span><span class="p">(</span><span class="n">train_file_path</span><span class="o">=</span> <span class="s2">&quot;input/home_data/train.csv&quot;</span><span class="p">,</span>
+<span class="c1"># createm ml pipeline for xgb model</span>
+<span class="n">xgb_ml_pl</span> <span class="o">=</span> <span class="n">MLPipeline</span><span class="p">()</span><span class="o">.</span><span class="n">prepare_data_for_training</span><span class="p">(</span><span class="n">train_file_path</span><span class="o">=</span> <span class="s2">&quot;input/home_data/train.csv&quot;</span><span class="p">,</span>
                                               <span class="n">test_file_path</span><span class="o">=</span> <span class="s2">&quot;input/home_data/test.csv&quot;</span><span class="p">,</span>
                                               <span class="n">idx_col</span><span class="o">=</span><span class="s2">&quot;Id&quot;</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s2">&quot;SalePrice&quot;</span><span class="p">,</span><span class="n">valid_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
                                               <span class="n">model</span><span class="o">=</span><span class="n">xgb_model</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
-<span class="n">pl</span><span class="o">.</span><span class="n">mlpl</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_train</span><span class="p">,</span> <span class="n">pl</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_train</span><span class="p">)</span>
-<span class="n">preds</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">mlpl</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_valid</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;X_valid MAE:&#39;</span><span class="p">,</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">pl</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">preds</span><span class="p">))</span>
+<span class="c1"># Now fit and predict</span>
+<span class="n">xgb_ml_pl</span><span class="o">.</span><span class="n">pipeline</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">xgb_ml_pl</span><span class="o">.</span><span class="n">dataframeloader</span><span class="o">.</span><span class="n">X_train</span><span class="p">,</span> <span class="n">xgb_ml_pl</span><span class="o">.</span><span class="n">dataframeloader</span><span class="o">.</span><span class="n">y_train</span><span class="p">)</span>
+<span class="n">preds</span> <span class="o">=</span> <span class="n">xgb_ml_pl</span><span class="o">.</span><span class="n">pipeline</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">xgb_ml_pl</span><span class="o">.</span><span class="n">dataframeloader</span><span class="o">.</span><span class="n">X_valid</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;X_valid MAE:&#39;</span><span class="p">,</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">xgb_ml_pl</span><span class="o">.</span><span class="n">dataframeloader</span><span class="o">.</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">preds</span><span class="p">))</span>
 </pre></div>
 
     </div>

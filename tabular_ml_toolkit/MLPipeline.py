@@ -20,19 +20,19 @@ from sklearn.metrics import mean_absolute_error
 
 class MLPipeline:
     """
-    Represent TrainingPipeline class
+    Represent MLPipeline class
 
-    Attributes:
-    mlpl: A MLPipeline instance
-    dfl: A DataFrameLoader instance
-    pp: A PreProcessor Instance
+    Attributes:\n
+    pipeline: An MLPipeline instance \n
+    dataframeloader: A DataFrameLoader instance \n
+    preprocessor: A PreProcessor Instance \n
     model: The given Model
     """
 
     def __init__(self):
-        self.mlpl = None
-        self.dfl = None
-        self.pp = None
+        self.pipeline = None
+        self.dataframeloader = None
+        self.preprocessor = None
         self.model = None
 
     def __str__(self):
@@ -49,7 +49,7 @@ class MLPipeline:
     # core methods
     # Bundle preprocessing and modeling code in a training pipeline
     def bundle_preproessor_model(self, preprocessor:object, model:object):
-        self.mlpl = Pipeline(steps=[('preprocessor', preprocessor),
+        self.pipeline = Pipeline(steps=[('preprocessor', preprocessor),
                       ('model', model)
                      ])
 #     # return pipeline object
@@ -59,11 +59,11 @@ class MLPipeline:
     def prepare_data_for_training(self, train_file_path:str, test_file_path:str, idx_col:str, target:str, valid_size:float, model:object, random_state:int):
         self.model = model
         # call DataFrameLoader module
-        self.dfl = DataFrameLoader().from_csv(train_file_path,test_file_path,idx_col,target,valid_size)
+        self.dataframeloader = DataFrameLoader().from_csv(train_file_path,test_file_path,idx_col,target,valid_size)
         # call PreProcessor module
-        self.pp = PreProcessor().preprocess_data(numerical_cols=self.dfl.numerical_cols,
-                                    categorical_cols=self.dfl.categorical_cols)
+        self.preprocessor = PreProcessor().preprocess_data(numerical_cols=self.dataframeloader.numerical_cols,
+                                    categorical_cols=self.dataframeloader.categorical_cols)
 
         # call self module method
-        self.bundle_preproessor_model(self.pp.column_tranfomer, model)
+        self.bundle_preproessor_model(self.preprocessor.column_tranfomer, model)
         return self

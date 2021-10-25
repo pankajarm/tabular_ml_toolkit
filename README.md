@@ -8,7 +8,7 @@ from tabular_ml_toolkit.MLPipeline import *
 
 ## Install
 
-`pip install tabular_ml_toolkit`
+`pip install -U tabular_ml_toolkit`
 
 ## How to use
 
@@ -26,8 +26,8 @@ from sklearn.metrics import mean_absolute_error
 # create scikit-learn ml model
 scikit_model = RandomForestRegressor(n_estimators=100, random_state=42)
 # createm ml pipeline for scikit-learn model
-sci_ml_pl = MLPipeline().prepare_data_for_training(train_file_path= "input/home_data/train.csv",
-                                              test_file_path= "input/home_data/test.csv",
+sci_ml_pl = MLPipeline().prepare_data_for_training(train_file_path= "https://raw.githubusercontent.com/psmathur/tabular_ml_toolkit/master/input/home_data/train.csv",
+                                              test_file_path= "https://raw.githubusercontent.com/psmathur/tabular_ml_toolkit/master/input/home_data/test.csv",
                                               idx_col="Id", target="SalePrice",valid_size=0.2,
                                               model=scikit_model, random_state=42)
 # Now fit and predict
@@ -44,12 +44,16 @@ print('X_valid MAE:', mean_absolute_error(sci_ml_pl.dataframeloader.y_valid, pre
 *After that all steps remains same. Here is example using XGBRegressor with [Melbourne Home Sale price data](https://www.kaggle.com/estrotococo/home-data-for-ml-course)*
 
 ```
+#!pip install -U xgboost
+```
+
+```
 from xgboost import XGBRegressor
 # create xgb ml model
 xgb_model = XGBRegressor(n_estimators=250,learning_rate=0.05, random_state=42)
 # createm ml pipeline for xgb model
-xgb_ml_pl = MLPipeline().prepare_data_for_training(train_file_path= "input/home_data/train.csv",
-                                              test_file_path= "input/home_data/test.csv",
+xgb_ml_pl = MLPipeline().prepare_data_for_training(train_file_path= "https://raw.githubusercontent.com/psmathur/tabular_ml_toolkit/master/input/home_data/train.csv",
+                                              test_file_path= "https://raw.githubusercontent.com/psmathur/tabular_ml_toolkit/master/input/home_data/test.csv",
                                               idx_col="Id", target="SalePrice",valid_size=0.2,
                                               model=xgb_model, random_state=42)
 # Now fit and predict

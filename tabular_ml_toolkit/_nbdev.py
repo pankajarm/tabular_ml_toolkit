@@ -2,8 +2,8 @@
 
 __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
-index = {"DataFrameLoader": "00_dataframeloader.ipynb",
-         "PreProcessor": "01_preprocessor.ipynb",
+index = {"DataFrameLoader": "00_DataFrameLoader.ipynb",
+         "PreProcessor": "01_PreProcessor.ipynb",
          "MLPipeline": "02_MLPipeline.ipynb"}
 
 modules = ["DataFrameLoader.py",

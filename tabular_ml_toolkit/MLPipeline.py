@@ -13,6 +13,7 @@ from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import OneHotEncoder
+from sklearn.preprocessing import OrdinalEncoder
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error
 
@@ -61,9 +62,12 @@ class MLPipeline:
         # call DataFrameLoader module
         self.dataframeloader = DataFrameLoader().from_csv(train_file_path,test_file_path,idx_col,target,valid_size)
         # call PreProcessor module
-        self.preprocessor = PreProcessor().preprocess_data(numerical_cols=self.dataframeloader.numerical_cols,
-                                    categorical_cols=self.dataframeloader.categorical_cols)
+        self.preprocessor = PreProcessor().preprocess_data(
+            numerical_cols=self.dataframeloader.numerical_cols,
+            low_card_cat_cols=self.dataframeloader.low_card_cat_cols,
+            high_card_cat_cols=self.dataframeloader.high_card_cat_cols
+        )
 
         # call self module method
-        self.bundle_preproessor_model(self.preprocessor.column_tranfomer, model)
+        self.bundle_preproessor_model(self.preprocessor.columns_transfomer, model)
         return self

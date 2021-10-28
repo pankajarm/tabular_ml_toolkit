@@ -44,21 +44,6 @@ nb_path: "01_PreProcessor.ipynb"
 </div>
 </div>
 
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>The autoreload extension is already loaded. To reload it, use:
-  %reload_ext autoreload
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
 </div>
     {% endraw %}
 
@@ -80,7 +65,7 @@ nb_path: "01_PreProcessor.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="PreProcessor" class="doc_header"><code>class</code> <code>PreProcessor</code><a href="https://github.com/psmathur/tabular_ml_toolkit/tree/master/tabular_ml_toolkit/PreProcessor.py#L20" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>PreProcessor</code>()</p>
+<h2 id="PreProcessor" class="doc_header"><code>class</code> <code>PreProcessor</code><a href="https://github.com/psmathur/tabular_ml_toolkit/tree/master/tabular_ml_toolkit/PreProcessor.py#L21" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>PreProcessor</code>()</p>
 </blockquote>
 <p>Represent PreProcessor class</p>
 <p>Attributes:
@@ -139,7 +124,7 @@ preprocessor: Preprocessor for Columns Tranformer</p>
     <span class="n">train_file_path</span><span class="o">=</span><span class="s2">&quot;input/home_data/train.csv&quot;</span><span class="p">,</span>
     <span class="n">test_file_path</span><span class="o">=</span><span class="s2">&quot;input/home_data/test.csv&quot;</span><span class="p">,</span>
     <span class="n">idx_col</span><span class="o">=</span><span class="s2">&quot;Id&quot;</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s2">&quot;SalePrice&quot;</span><span class="p">,</span>
-    <span class="n">valid_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+    <span class="n">valid_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
 <span class="n">dfl</span>
 </pre></div>
 
@@ -174,7 +159,8 @@ preprocessor: Preprocessor for Columns Tranformer</p>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">pp</span> <span class="o">=</span> <span class="n">PreProcessor</span><span class="p">()</span><span class="o">.</span><span class="n">preprocess_data</span><span class="p">(</span><span class="n">numerical_cols</span><span class="o">=</span><span class="n">dfl</span><span class="o">.</span><span class="n">numerical_cols</span><span class="p">,</span>
-                                    <span class="n">categorical_cols</span><span class="o">=</span><span class="n">dfl</span><span class="o">.</span><span class="n">categorical_cols</span><span class="p">)</span>
+                                    <span class="n">low_card_cat_cols</span><span class="o">=</span><span class="n">dfl</span><span class="o">.</span><span class="n">low_card_cat_cols</span><span class="p">,</span>
+                                    <span class="n">high_card_cat_cols</span><span class="o">=</span><span class="n">dfl</span><span class="o">.</span><span class="n">high_card_cat_cols</span><span class="p">)</span>
 <span class="n">pp</span>
 </pre></div>
 
@@ -208,7 +194,207 @@ preprocessor: Preprocessor for Columns Tranformer</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pp</span><span class="o">.</span><span class="n">column_tranfomer</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pp</span><span class="o">.</span><span class="n">numerical_cols</span><span class="p">))</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">numerical_cols</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>36
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[&#39;MSSubClass&#39;,
+ &#39;LotFrontage&#39;,
+ &#39;LotArea&#39;,
+ &#39;OverallQual&#39;,
+ &#39;OverallCond&#39;,
+ &#39;YearBuilt&#39;,
+ &#39;YearRemodAdd&#39;,
+ &#39;MasVnrArea&#39;,
+ &#39;BsmtFinSF1&#39;,
+ &#39;BsmtFinSF2&#39;,
+ &#39;BsmtUnfSF&#39;,
+ &#39;TotalBsmtSF&#39;,
+ &#39;1stFlrSF&#39;,
+ &#39;2ndFlrSF&#39;,
+ &#39;LowQualFinSF&#39;,
+ &#39;GrLivArea&#39;,
+ &#39;BsmtFullBath&#39;,
+ &#39;BsmtHalfBath&#39;,
+ &#39;FullBath&#39;,
+ &#39;HalfBath&#39;,
+ &#39;BedroomAbvGr&#39;,
+ &#39;KitchenAbvGr&#39;,
+ &#39;TotRmsAbvGrd&#39;,
+ &#39;Fireplaces&#39;,
+ &#39;GarageYrBlt&#39;,
+ &#39;GarageCars&#39;,
+ &#39;GarageArea&#39;,
+ &#39;WoodDeckSF&#39;,
+ &#39;OpenPorchSF&#39;,
+ &#39;EnclosedPorch&#39;,
+ &#39;3SsnPorch&#39;,
+ &#39;ScreenPorch&#39;,
+ &#39;PoolArea&#39;,
+ &#39;MiscVal&#39;,
+ &#39;MoSold&#39;,
+ &#39;YrSold&#39;]</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pp</span><span class="o">.</span><span class="n">high_card_cat_cols</span><span class="p">))</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">high_card_cat_cols</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>3
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[&#39;Neighborhood&#39;, &#39;Exterior1st&#39;, &#39;Exterior2nd&#39;]</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pp</span><span class="o">.</span><span class="n">low_card_cat_cols</span><span class="p">))</span>
+<span class="n">pp</span><span class="o">.</span><span class="n">low_card_cat_cols</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>40
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[&#39;MSZoning&#39;,
+ &#39;Street&#39;,
+ &#39;Alley&#39;,
+ &#39;LotShape&#39;,
+ &#39;LandContour&#39;,
+ &#39;Utilities&#39;,
+ &#39;LotConfig&#39;,
+ &#39;LandSlope&#39;,
+ &#39;Condition1&#39;,
+ &#39;Condition2&#39;,
+ &#39;BldgType&#39;,
+ &#39;HouseStyle&#39;,
+ &#39;RoofStyle&#39;,
+ &#39;RoofMatl&#39;,
+ &#39;MasVnrType&#39;,
+ &#39;ExterQual&#39;,
+ &#39;ExterCond&#39;,
+ &#39;Foundation&#39;,
+ &#39;BsmtQual&#39;,
+ &#39;BsmtCond&#39;,
+ &#39;BsmtExposure&#39;,
+ &#39;BsmtFinType1&#39;,
+ &#39;BsmtFinType2&#39;,
+ &#39;Heating&#39;,
+ &#39;HeatingQC&#39;,
+ &#39;CentralAir&#39;,
+ &#39;Electrical&#39;,
+ &#39;KitchenQual&#39;,
+ &#39;Functional&#39;,
+ &#39;FireplaceQu&#39;,
+ &#39;GarageType&#39;,
+ &#39;GarageFinish&#39;,
+ &#39;GarageQual&#39;,
+ &#39;GarageCond&#39;,
+ &#39;PavedDrive&#39;,
+ &#39;PoolQC&#39;,
+ &#39;Fence&#39;,
+ &#39;MiscFeature&#39;,
+ &#39;SaleType&#39;,
+ &#39;SaleCondition&#39;]</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pp</span><span class="o">.</span><span class="n">columns_transfomer</span>
 </pre></div>
 
     </div>
@@ -232,16 +418,18 @@ preprocessor: Preprocessor for Columns Tranformer</p>
                                   &#39;GrLivArea&#39;, &#39;BsmtFullBath&#39;, &#39;BsmtHalfBath&#39;,
                                   &#39;FullBath&#39;, &#39;HalfBath&#39;, &#39;BedroomAbvGr&#39;,
                                   &#39;K...
-                                 [&#39;MSZoning&#39;, &#39;Street&#39;, &#39;Alley&#39;, &#39;LotShape&#39;,
-                                  &#39;LandContour&#39;, &#39;Utilities&#39;, &#39;LotConfig&#39;,
-                                  &#39;LandSlope&#39;, &#39;Condition1&#39;, &#39;Condition2&#39;,
-                                  &#39;BldgType&#39;, &#39;HouseStyle&#39;, &#39;RoofStyle&#39;,
                                   &#39;RoofMatl&#39;, &#39;MasVnrType&#39;, &#39;ExterQual&#39;,
                                   &#39;ExterCond&#39;, &#39;Foundation&#39;, &#39;BsmtQual&#39;,
                                   &#39;BsmtCond&#39;, &#39;BsmtExposure&#39;, &#39;BsmtFinType1&#39;,
                                   &#39;BsmtFinType2&#39;, &#39;Heating&#39;, &#39;HeatingQC&#39;,
                                   &#39;CentralAir&#39;, &#39;Electrical&#39;, &#39;KitchenQual&#39;,
-                                  &#39;Functional&#39;, &#39;FireplaceQu&#39;, ...])])</pre>
+                                  &#39;Functional&#39;, &#39;FireplaceQu&#39;, ...]),
+                                (&#39;high_cad_cat&#39;,
+                                 Pipeline(steps=[(&#39;imputer&#39;,
+                                                  SimpleImputer(strategy=&#39;most_frequent&#39;)),
+                                                 (&#39;onehot&#39;, OrdinalEncoder())]),
+                                 [&#39;Neighborhood&#39;, &#39;Exterior1st&#39;,
+                                  &#39;Exterior2nd&#39;])])</pre>
 </div>
 
 </div>
@@ -293,7 +481,7 @@ preprocessor: Preprocessor for Columns Tranformer</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pl</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;preprocessor&#39;</span><span class="p">,</span> <span class="n">pp</span><span class="o">.</span><span class="n">column_tranfomer</span><span class="p">),</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pl</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;preprocessor&#39;</span><span class="p">,</span> <span class="n">pp</span><span class="o">.</span><span class="n">columns_transfomer</span><span class="p">),</span>
                       <span class="p">(</span><span class="s1">&#39;model&#39;</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
                      <span class="p">])</span>
 <span class="n">pl</span>
@@ -324,19 +512,20 @@ preprocessor: Preprocessor for Columns Tranformer</p>
                                                    &#39;LowQualFinSF&#39;, &#39;GrLivArea&#39;,
                                                    &#39;BsmtFullBath&#39;,
                                                    &#39;BsmtHalfBath&#39;, &#39;FullBa...
-                                                   &#39;LotConfig&#39;, &#39;LandSlope&#39;,
-                                                   &#39;Condition1&#39;, &#39;Condition2&#39;,
-                                                   &#39;BldgType&#39;, &#39;HouseStyle&#39;,
-                                                   &#39;RoofStyle&#39;, &#39;RoofMatl&#39;,
-                                                   &#39;MasVnrType&#39;, &#39;ExterQual&#39;,
-                                                   &#39;ExterCond&#39;, &#39;Foundation&#39;,
-                                                   &#39;BsmtQual&#39;, &#39;BsmtCond&#39;,
                                                    &#39;BsmtExposure&#39;,
                                                    &#39;BsmtFinType1&#39;,
                                                    &#39;BsmtFinType2&#39;, &#39;Heating&#39;,
                                                    &#39;HeatingQC&#39;, &#39;CentralAir&#39;,
                                                    &#39;Electrical&#39;, &#39;KitchenQual&#39;,
-                                                   &#39;Functional&#39;, &#39;FireplaceQu&#39;, ...])])),
+                                                   &#39;Functional&#39;, &#39;FireplaceQu&#39;, ...]),
+                                                 (&#39;high_cad_cat&#39;,
+                                                  Pipeline(steps=[(&#39;imputer&#39;,
+                                                                   SimpleImputer(strategy=&#39;most_frequent&#39;)),
+                                                                  (&#39;onehot&#39;,
+                                                                   OrdinalEncoder())]),
+                                                  [&#39;Neighborhood&#39;,
+                                                   &#39;Exterior1st&#39;,
+                                                   &#39;Exterior2nd&#39;])])),
                 (&#39;model&#39;, RandomForestRegressor(random_state=42))])</pre>
 </div>
 
@@ -383,19 +572,20 @@ preprocessor: Preprocessor for Columns Tranformer</p>
                                                    &#39;LowQualFinSF&#39;, &#39;GrLivArea&#39;,
                                                    &#39;BsmtFullBath&#39;,
                                                    &#39;BsmtHalfBath&#39;, &#39;FullBa...
-                                                   &#39;LotConfig&#39;, &#39;LandSlope&#39;,
-                                                   &#39;Condition1&#39;, &#39;Condition2&#39;,
-                                                   &#39;BldgType&#39;, &#39;HouseStyle&#39;,
-                                                   &#39;RoofStyle&#39;, &#39;RoofMatl&#39;,
-                                                   &#39;MasVnrType&#39;, &#39;ExterQual&#39;,
-                                                   &#39;ExterCond&#39;, &#39;Foundation&#39;,
-                                                   &#39;BsmtQual&#39;, &#39;BsmtCond&#39;,
                                                    &#39;BsmtExposure&#39;,
                                                    &#39;BsmtFinType1&#39;,
                                                    &#39;BsmtFinType2&#39;, &#39;Heating&#39;,
                                                    &#39;HeatingQC&#39;, &#39;CentralAir&#39;,
                                                    &#39;Electrical&#39;, &#39;KitchenQual&#39;,
-                                                   &#39;Functional&#39;, &#39;FireplaceQu&#39;, ...])])),
+                                                   &#39;Functional&#39;, &#39;FireplaceQu&#39;, ...]),
+                                                 (&#39;high_cad_cat&#39;,
+                                                  Pipeline(steps=[(&#39;imputer&#39;,
+                                                                   SimpleImputer(strategy=&#39;most_frequent&#39;)),
+                                                                  (&#39;onehot&#39;,
+                                                                   OrdinalEncoder())]),
+                                                  [&#39;Neighborhood&#39;,
+                                                   &#39;Exterior1st&#39;,
+                                                   &#39;Exterior2nd&#39;])])),
                 (&#39;model&#39;, RandomForestRegressor(random_state=42))])</pre>
 </div>
 
@@ -429,11 +619,28 @@ preprocessor: Preprocessor for Columns Tranformer</p>
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>X_valid MAE: 17678.294143835617
+<pre>X_valid MAE: 17582.46150684932
 </pre>
 </div>
 </div>
 
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span> 
+</pre></div>
+
+    </div>
 </div>
 </div>
 

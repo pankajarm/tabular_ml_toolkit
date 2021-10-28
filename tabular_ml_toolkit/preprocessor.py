@@ -12,6 +12,7 @@ from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import OneHotEncoder
+from sklearn.preprocessing import OrdinalEncoder
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error
 
@@ -30,7 +31,10 @@ class PreProcessor:
     def __init__(self):
         self.numerical_transformer = None
         self.categorical_transformer = None
-        self.column_tranfomer = None
+        self.columns_transfomer = None
+        self.numerical_cols = None
+        self.low_card_cat_cols = None
+        self.high_card_cat_cols = None
 
     def __str__(self):
         """Returns human readable string reprsentation"""
@@ -48,20 +52,33 @@ class PreProcessor:
     def preprocess_numerical_data(self):
         self.numerical_transformer = SimpleImputer(strategy='constant')
 
-    # Preprocessing for categorical data
-    def preprocess_categorical_data(self):
-        self.categorical_transformer = Pipeline(steps=[
+    def preprocess_OHE_categorical_data(self):
+        self.OHE_categorical_transformer = Pipeline(steps=[
         ('imputer', SimpleImputer(strategy='most_frequent')),
         ('onehot', OneHotEncoder(handle_unknown='ignore'))
         ])
 
+    def preprocess_ORE_categorical_data(self):
+        self.ORE_categorical_transformer = Pipeline(steps=[
+        ('imputer', SimpleImputer(strategy='most_frequent')),
+        ('onehot', OrdinalEncoder(handle_unknown='error'))
+        ])
+
     # Bundle preprocessing for numerical and categorical data
-    def preprocess_data(self, numerical_cols, categorical_cols):
+    def preprocess_data(self, numerical_cols, low_card_cat_cols, high_card_cat_cols):
+        self.numerical_cols = numerical_cols
+        self.low_card_cat_cols = low_card_cat_cols
+        self.high_card_cat_cols = high_card_cat_cols
+        # create scikit-learn pipelines
         self.preprocess_numerical_data()
-        self.preprocess_categorical_data()
-        self.column_tranfomer = ColumnTransformer(
+        self.preprocess_OHE_categorical_data()
+        self.preprocess_ORE_categorical_data()
+        # convert to Scikit-learn ColumnTranfomer
+        self.columns_transfomer = ColumnTransformer(
             transformers=[
-                ('num', self.numerical_transformer, numerical_cols),
-                ('cat', self.categorical_transformer, categorical_cols)
+                ('num', self.numerical_transformer, self.numerical_cols),
+                # check for static string here in ColumnTranformer functions params
+                ('low_cad_cat', self.OHE_categorical_transformer, self.low_card_cat_cols),
+                ('high_cad_cat', self.ORE_categorical_transformer, self.high_card_cat_cols)
             ])
         return self

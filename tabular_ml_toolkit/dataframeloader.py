@@ -67,11 +67,14 @@ class DataFrameLoader:
 
     # select categorical columns
     def select_categorical_cols(self):
-        self.categorical_cols = [cname for cname in self.X_train.columns if
+        # for low cardinality columns
+        self.low_card_cat_cols = [cname for cname in self.X_train.columns if
                     self.X_train[cname].nunique() < 10 and
                     self.X_train[cname].dtype == "object"]
-        #TODO: seprate categorical columns into one hot eligible cols for low cardinality
-        # and ordinal cols for high cardinatliy
+        # for high cardinality columns
+        self.high_card_cat_cols = [cname for cname in self.X_train.columns if
+                    self.X_train[cname].nunique() > 10 and
+                    self.X_train[cname].dtype == "object"]
 
     # select numerical columns
     def select_numerical_cols(self):
@@ -82,7 +85,7 @@ class DataFrameLoader:
     def prepare_X_train_X_valid(self):
         self.select_categorical_cols()
         self.select_numerical_cols()
-        self.final_columns = self.categorical_cols + self.numerical_cols
+        self.final_columns = self.low_card_cat_cols + self.high_card_cat_cols + self.numerical_cols
         self.X_train = self.X_train[self.final_columns].copy()
         self.X_valid = self.X_valid[self.final_columns].copy()
         self.X_test = self.X_test_full[self.final_columns].copy()

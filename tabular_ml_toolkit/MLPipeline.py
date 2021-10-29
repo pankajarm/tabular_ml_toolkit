@@ -16,6 +16,7 @@ from sklearn.preprocessing import OneHotEncoder
 from sklearn.preprocessing import OrdinalEncoder
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error
+from sklearn.model_selection import cross_val_score
 
 # Cell
 
@@ -51,23 +52,67 @@ class MLPipeline:
     # Bundle preprocessing and modeling code in a training pipeline
     def bundle_preproessor_model(self, preprocessor:object, model:object):
         self.pipeline = Pipeline(steps=[('preprocessor', preprocessor),
-                      ('model', model)
-                     ])
+                      ('model', model)])
 #     # return pipeline object
 #     def create_pipeline(self, preprocessor:object, model:object):
 #         self.bundle_preproessor_model(preprocessor, model)
 
-    def prepare_data_for_training(self, train_file_path:str, test_file_path:str, idx_col:str, target:str, valid_size:float, model:object, random_state:int):
+    def prepare_data_for_training(self, train_file_path:str,
+                                  test_file_path:str,
+                                  idx_col:str, target:str,
+                                  valid_size:float,
+                                  model:object, random_state:int):
         self.model = model
         # call DataFrameLoader module
-        self.dataframeloader = DataFrameLoader().from_csv(train_file_path,test_file_path,idx_col,target,valid_size)
+        self.dataframeloader = DataFrameLoader().from_csv(
+            train_file_path,
+            test_file_path,
+            idx_col,target,
+            valid_size)
+        # call PreProcessor module
+        self.columns_transfomer = PreProcessor().preprocess_data_for_training(
+            numerical_cols=self.dataframeloader.numerical_cols,
+            low_card_cat_cols=self.dataframeloader.low_card_cat_cols,
+            high_card_cat_cols=self.dataframeloader.high_card_cat_cols
+        )
+
+        # call bundle method
+        self.bundle_preproessor_model(self.columns_transfomer, model)
+        return self
+
+
+    def prepare_data_for_cross_validation(self, train_file_path:str, test_file_path:str,
+                                          idx_col:str, target:str, model:object,
+                                          random_state:int):
+        self.model = model
+        # call DataFrameLoader module
+        self.dataframeloader = DataFrameLoader().from_csv(
+            train_file_path,
+            test_file_path,
+            idx_col,target)
         # call PreProcessor module
         self.preprocessor = PreProcessor().preprocess_data(
             numerical_cols=self.dataframeloader.numerical_cols,
             low_card_cat_cols=self.dataframeloader.low_card_cat_cols,
             high_card_cat_cols=self.dataframeloader.high_card_cat_cols
         )
-
-        # call self module method
-        self.bundle_preproessor_model(self.preprocessor.columns_transfomer, model)
         return self
+
+
+    def cross_validation(self,X:object, y:object, cv_cols = "nums", cv=5,
+                         scoring='neg_mean_absolute_error'):
+
+        self.cv = cv
+        self.scoring = scoring
+        # Multiply by -1 since sklearn calculates *negative* MAE
+        self.X_cv = self.dataframeloader.X[self.cv_cols]
+        self.y_cv = self.dataframeloader.y
+        self.X_test_cv = self.dataframeloader.X_test[self.cv_cols]
+        scores = -1 * cross_val_score(
+            estimator=self.pipeline,
+            X=self.X_cv,
+            y=self.y_cv,
+            scoring=self.scoring,
+            cv=self.cv)
+        return scores
+

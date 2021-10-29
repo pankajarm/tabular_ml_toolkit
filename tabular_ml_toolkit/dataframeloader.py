@@ -32,7 +32,9 @@ class DataFrameLoader:
         self.y_valid = None
         self.categorical_cols = None
         self.numerical_cols = None
-        self.final_columns = None
+        self.low_card_cat_cols = None
+        self.high_card_cat_cols = None
+        self.final_cols = None
 
     def __str__(self):
         """Returns human readable string reprsentation"""
@@ -50,6 +52,7 @@ class DataFrameLoader:
         # Read the csv files using pandas
         self.X_full = pd.read_csv(train_file_path, index_col=idx_col)
         self.X_test_full = pd.read_csv(test_file_path, index_col=idx_col)
+        return self
 
     # prepare X and y
     def prepare_X_y(self,input_df:object, target:str):
@@ -59,41 +62,52 @@ class DataFrameLoader:
         self.y = self.X[target]
         # drop target
         self.X = input_df.drop([target], axis=1)
+        return self
 
     # split X and y into X_train, y_train, X_valid & y_valid dataframes
     def prepare_train_valid(self,X:object,y:object, valid_size:float, random_state=42):
         self.X_train, self.X_valid, self.y_train, self.y_valid = train_test_split(
-            self.X, self.y, train_size=(1-valid_size), test_size=valid_size,random_state=random_state)
+            self.X, self.y, train_size=(1-valid_size), test_size=valid_size,
+            random_state=random_state)
 
     # select categorical columns
     def select_categorical_cols(self):
         # for low cardinality columns
-        self.low_card_cat_cols = [cname for cname in self.X_train.columns if
-                    self.X_train[cname].nunique() < 10 and
-                    self.X_train[cname].dtype == "object"]
+        self.low_card_cat_cols = [cname for cname in self.X.columns if
+                    self.X[cname].nunique() < 10 and
+                    self.X[cname].dtype == "object"]
         # for high cardinality columns
-        self.high_card_cat_cols = [cname for cname in self.X_train.columns if
-                    self.X_train[cname].nunique() > 10 and
-                    self.X_train[cname].dtype == "object"]
+        self.high_card_cat_cols = [cname for cname in self.X.columns if
+                    self.X[cname].nunique() > 10 and
+                    self.X[cname].dtype == "object"]
 
     # select numerical columns
     def select_numerical_cols(self):
-        self.numerical_cols = [cname for cname in self.X_train.columns if
-                self.X_train[cname].dtype in ['int64', 'float64']]
+        self.numerical_cols = [cname for cname in self.X.columns if
+                self.X[cname].dtype in ['int64', 'float64']]
+
+    # prepare final columns by data type
+    def prepare_final_cols(self):
+        self.select_categorical_cols()
+        self.select_numerical_cols()
+        self.categorical_cols = self.low_card_cat_cols + self.high_card_cat_cols
+        self.final_cols = (self.low_card_cat_cols
+                           + self.high_card_cat_cols
+                           + self.numerical_cols)
 
     # prepare X_train, X_valid from selected columns
     def prepare_X_train_X_valid(self):
-        self.select_categorical_cols()
-        self.select_numerical_cols()
-        self.final_columns = self.low_card_cat_cols + self.high_card_cat_cols + self.numerical_cols
-        self.X_train = self.X_train[self.final_columns].copy()
-        self.X_valid = self.X_valid[self.final_columns].copy()
-        self.X_test = self.X_test_full[self.final_columns].copy()
+        self.prepare_final_cols()
+        self.X_train = self.X_train[self.final_cols].copy()
+        self.X_valid = self.X_valid[self.final_cols].copy()
+        self.X_test = self.X_test_full[self.final_cols].copy()
 
     # get train and valid dataframe
-    def from_csv(self, train_file_path:str,test_file_path:str, idx_col:str, target:str, valid_size:float, random_state=42):
+    def from_csv(self, train_file_path:str,test_file_path:str, idx_col:str, target:str,
+                 random_state=42, valid_size:float=None):
         self.read_csv(train_file_path,test_file_path, idx_col)
         self.prepare_X_y(self.X_full, target)
-        self.prepare_train_valid(self.X,self.y, valid_size, random_state)
-        self.prepare_X_train_X_valid()
+        if valid_size:
+            self.prepare_train_valid(self.X,self.y, valid_size, random_state)
+            self.prepare_X_train_X_valid()
         return self

@@ -32,9 +32,10 @@ class PreProcessor:
         self.numerical_transformer = None
         self.categorical_transformer = None
         self.columns_transfomer = None
-        self.numerical_cols = None
-        self.low_card_cat_cols = None
-        self.high_card_cat_cols = None
+#         self.numerical_cols = None
+#         self.low_card_cat_cols = None
+#         self.high_card_cat_cols = None
+#         self.final_cols = None
 
     def __str__(self):
         """Returns human readable string reprsentation"""
@@ -65,10 +66,7 @@ class PreProcessor:
         ])
 
     # Bundle preprocessing for numerical and categorical data
-    def preprocess_data(self, numerical_cols, low_card_cat_cols, high_card_cat_cols):
-        self.numerical_cols = numerical_cols
-        self.low_card_cat_cols = low_card_cat_cols
-        self.high_card_cat_cols = high_card_cat_cols
+    def preprocess_data_for_training(self, numerical_cols, low_card_cat_cols, high_card_cat_cols):
         # create scikit-learn pipelines
         self.preprocess_numerical_data()
         self.preprocess_OHE_categorical_data()
@@ -76,9 +74,36 @@ class PreProcessor:
         # convert to Scikit-learn ColumnTranfomer
         self.columns_transfomer = ColumnTransformer(
             transformers=[
-                ('num', self.numerical_transformer, self.numerical_cols),
-                # check for static string here in ColumnTranformer functions params
-                ('low_cad_cat', self.OHE_categorical_transformer, self.low_card_cat_cols),
-                ('high_cad_cat', self.ORE_categorical_transformer, self.high_card_cat_cols)
+                ('num', self.numerical_transformer, numerical_cols),
+                ('low_cad_cat', self.OHE_categorical_transformer, low_card_cat_cols),
+                ('high_cad_cat', self.ORE_categorical_transformer, high_card_cat_cols)
             ])
-        return self
+        return self.columns_transfomer
+
+    # Bundle preprocessing for cv_cols
+    def preprocess_data_for_cross_validation(self, cv_cols):
+                        # change column types and preprocessor according to cv_cols provided
+        if cv_cols == "all":
+            self.cv_cols = self.dataframeloader.final_columns
+            self.preprocess_numerical_data()
+            self.preprocess_OHE_categorical_data()
+            self.preprocess_ORE_categorical_data()
+            # convert to Scikit-learn ColumnTranfomer
+            self.columns_transfomer = ColumnTransformer(
+                transformers=[
+                    ('num', self.numerical_transformer, numerical_cols),
+                    ('low_cad_cat', self.OHE_categorical_transformer, low_card_cat_cols),
+                    ('high_cad_cat', self.ORE_categorical_transformer, high_card_cat_cols)
+                ])
+            return self.columns_transfomer
+        elif cv_cols == "num":
+            self.cv_cols = self.dataframeloader.numerical_cols
+            self.preprocess_numerical_data()
+            # convert to Scikit-learn ColumnTranfomer
+            return self.numerical_transformer
+        elif cv_cols == "cat":
+            self.cv_cols = (self.dataframeloader.low_card_cat_cols
+                            + self.dataframeloader.high_card_cat_cols)
+            self.bundle_preproessor_model(self.preprocessor.preprocess_numerical_data,
+                                            model)
+            return self

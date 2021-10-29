@@ -35,6 +35,9 @@ class DataFrameLoader:
         self.low_card_cat_cols = None
         self.high_card_cat_cols = None
         self.final_cols = None
+        self.cv_cols = None
+        self.X_cv = None
+        self.X_test_cv = None
 
     def __str__(self):
         """Returns human readable string reprsentation"""
@@ -95,19 +98,47 @@ class DataFrameLoader:
                            + self.high_card_cat_cols
                            + self.numerical_cols)
 
+        # prepare X_train, X_valid from selected columns
+    def prepare_X_cv_X_test_cv(self):
+        self.X_cv = self.X[self.cv_cols].copy()
+        self.X_test_cv = self.X_test_full[self.cv_cols].copy()
+        # ideally clean up all dataframes except these ones
+        # del self.X, del self.X_test
+
     # prepare X_train, X_valid from selected columns
-    def prepare_X_train_X_valid(self):
-        self.prepare_final_cols()
+    def prepare_X_train_X_valid_X_test(self):
         self.X_train = self.X_train[self.final_cols].copy()
         self.X_valid = self.X_valid[self.final_cols].copy()
         self.X_test = self.X_test_full[self.final_cols].copy()
+        # ideally clean up all dataframes except these ones
+        # del self.X_train, del self.X_valid, del self.X_test_full
 
     # get train and valid dataframe
     def from_csv(self, train_file_path:str,test_file_path:str, idx_col:str, target:str,
-                 random_state=42, valid_size:float=None):
+                 random_state=42, valid_size:float=None, cv_cols_type:str=None):
         self.read_csv(train_file_path,test_file_path, idx_col)
         self.prepare_X_y(self.X_full, target)
+        self.prepare_final_cols()
         if valid_size:
             self.prepare_train_valid(self.X,self.y, valid_size, random_state)
-            self.prepare_X_train_X_valid()
+            self.prepare_X_train_X_valid_X_test()
+        if cv_cols_type:
+            if cv_cols_type == "all":
+                # assign all final columns to dataframeloader cross_validations columns
+                self.cv_cols = self.final_columns
+
+            elif cv_cols_type == "num":
+                # assign all numerical columns to cross_validations columns
+                self.cv_cols = self.numerical_cols
+
+            elif cv_cols_type == "cat":
+                # assign all categorical columns to cross_validations columns
+                self.cv_cols = (self.low_card_cat_cols +
+                                self.high_card_cat_cols)
+            else:
+                raise ValueError("Bad cv_cols_type! Only 'num','cat','all' are allowed!")
+
+            # now prepare X_cv, y_cv, X_test
+            self.prepare_X_cv_X_test_cv()
+
         return self

@@ -3,6 +3,7 @@
     "Overview": "/",
     "DataFrameLoader": "DataFrameLoader.html",
     "PreProcessor": "PreProcessor.html",
-    "MLPipeline": "MLPipeline.html"
+    "MLPipeline": "MLPipeline.html",
+    "Cross Validation Tutorial": "CrossValidation_Tutorial.html"
   }
 }

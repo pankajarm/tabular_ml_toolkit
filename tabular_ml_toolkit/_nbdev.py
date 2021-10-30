@@ -4,11 +4,18 @@ __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
 index = {"DataFrameLoader": "00_DataFrameLoader.ipynb",
          "PreProcessor": "01_PreProcessor.ipynb",
-         "MLPipeline": "02_MLPipeline.ipynb"}
+         "MLPipeline": "02_MLPipeline.ipynb",
+         "scikit_model": "03_CrossValidation_Tutorial.ipynb",
+         "sci_ml_pl": "03_CrossValidation_Tutorial.ipynb",
+         "preds": "03_CrossValidation_Tutorial.ipynb",
+         "scores": "03_CrossValidation_Tutorial.ipynb",
+         "xgb_model": "03_CrossValidation_Tutorial.ipynb",
+         "xgb_ml_pl": "03_CrossValidation_Tutorial.ipynb"}
 
 modules = ["DataFrameLoader.py",
            "PreProcessor.py",
-           "MLPipeline.py"]
+           "MLPipeline.py",
+           "CrossValidationTutorial.py"]
 
 doc_url = "https://psmathur.github.io/tabular_ml_toolkit/"
 

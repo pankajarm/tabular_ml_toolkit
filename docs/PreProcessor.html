@@ -124,7 +124,7 @@ preprocessor: Preprocessor for Columns Tranformer</p>
     <span class="n">train_file_path</span><span class="o">=</span><span class="s2">&quot;input/home_data/train.csv&quot;</span><span class="p">,</span>
     <span class="n">test_file_path</span><span class="o">=</span><span class="s2">&quot;input/home_data/test.csv&quot;</span><span class="p">,</span>
     <span class="n">idx_col</span><span class="o">=</span><span class="s2">&quot;Id&quot;</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s2">&quot;SalePrice&quot;</span><span class="p">,</span>
-    <span class="n">valid_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+    <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">valid_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
 <span class="n">dfl</span>
 </pre></div>
 
@@ -158,9 +158,7 @@ preprocessor: Preprocessor for Columns Tranformer</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pp</span> <span class="o">=</span> <span class="n">PreProcessor</span><span class="p">()</span><span class="o">.</span><span class="n">preprocess_data</span><span class="p">(</span><span class="n">numerical_cols</span><span class="o">=</span><span class="n">dfl</span><span class="o">.</span><span class="n">numerical_cols</span><span class="p">,</span>
-                                    <span class="n">low_card_cat_cols</span><span class="o">=</span><span class="n">dfl</span><span class="o">.</span><span class="n">low_card_cat_cols</span><span class="p">,</span>
-                                    <span class="n">high_card_cat_cols</span><span class="o">=</span><span class="n">dfl</span><span class="o">.</span><span class="n">high_card_cat_cols</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pp</span> <span class="o">=</span> <span class="n">PreProcessor</span><span class="p">()</span><span class="o">.</span><span class="n">preprocess_all_cols_for_training</span><span class="p">(</span><span class="n">dataframeloader</span><span class="o">=</span><span class="n">dfl</span><span class="p">)</span>
 <span class="n">pp</span>
 </pre></div>
 
@@ -176,7 +174,7 @@ preprocessor: Preprocessor for Columns Tranformer</p>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>PreProcessor object with attributes: numerical_transformer, categorical_transformer, preprocessor</pre>
+<pre>PreProcessor object with attributes:numerical_transformer, categorical_transformer,columns_transfomer</pre>
 </div>
 
 </div>
@@ -194,8 +192,62 @@ preprocessor: Preprocessor for Columns Tranformer</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pp</span><span class="o">.</span><span class="n">numerical_cols</span><span class="p">))</span>
-<span class="n">pp</span><span class="o">.</span><span class="n">numerical_cols</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pp</span><span class="o">.</span><span class="n">columns_transfomer</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>ColumnTransformer(transformers=[(&#39;num&#39;, SimpleImputer(strategy=&#39;constant&#39;),
+                                 [&#39;MSSubClass&#39;, &#39;LotFrontage&#39;, &#39;LotArea&#39;,
+                                  &#39;OverallQual&#39;, &#39;OverallCond&#39;, &#39;YearBuilt&#39;,
+                                  &#39;YearRemodAdd&#39;, &#39;MasVnrArea&#39;, &#39;BsmtFinSF1&#39;,
+                                  &#39;BsmtFinSF2&#39;, &#39;BsmtUnfSF&#39;, &#39;TotalBsmtSF&#39;,
+                                  &#39;1stFlrSF&#39;, &#39;2ndFlrSF&#39;, &#39;LowQualFinSF&#39;,
+                                  &#39;GrLivArea&#39;, &#39;BsmtFullBath&#39;, &#39;BsmtHalfBath&#39;,
+                                  &#39;FullBath&#39;, &#39;HalfBath&#39;, &#39;BedroomAbvGr&#39;,
+                                  &#39;K...
+                                  &#39;RoofMatl&#39;, &#39;MasVnrType&#39;, &#39;ExterQual&#39;,
+                                  &#39;ExterCond&#39;, &#39;Foundation&#39;, &#39;BsmtQual&#39;,
+                                  &#39;BsmtCond&#39;, &#39;BsmtExposure&#39;, &#39;BsmtFinType1&#39;,
+                                  &#39;BsmtFinType2&#39;, &#39;Heating&#39;, &#39;HeatingQC&#39;,
+                                  &#39;CentralAir&#39;, &#39;Electrical&#39;, &#39;KitchenQual&#39;,
+                                  &#39;Functional&#39;, &#39;FireplaceQu&#39;, ...]),
+                                (&#39;high_cad_cat&#39;,
+                                 Pipeline(steps=[(&#39;imputer&#39;,
+                                                  SimpleImputer(strategy=&#39;most_frequent&#39;)),
+                                                 (&#39;ordinal&#39;,
+                                                  OrdinalEncoder())]),
+                                 [&#39;Neighborhood&#39;, &#39;Exterior1st&#39;,
+                                  &#39;Exterior2nd&#39;])])</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dfl</span><span class="o">.</span><span class="n">numerical_cols</span><span class="p">))</span>
+<span class="n">dfl</span><span class="o">.</span><span class="n">numerical_cols</span>
 </pre></div>
 
     </div>
@@ -271,8 +323,8 @@ preprocessor: Preprocessor for Columns Tranformer</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pp</span><span class="o">.</span><span class="n">high_card_cat_cols</span><span class="p">))</span>
-<span class="n">pp</span><span class="o">.</span><span class="n">high_card_cat_cols</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dfl</span><span class="o">.</span><span class="n">high_card_cat_cols</span><span class="p">))</span>
+<span class="n">dfl</span><span class="o">.</span><span class="n">high_card_cat_cols</span>
 </pre></div>
 
     </div>
@@ -313,8 +365,8 @@ preprocessor: Preprocessor for Columns Tranformer</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pp</span><span class="o">.</span><span class="n">low_card_cat_cols</span><span class="p">))</span>
-<span class="n">pp</span><span class="o">.</span><span class="n">low_card_cat_cols</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dfl</span><span class="o">.</span><span class="n">low_card_cat_cols</span><span class="p">))</span>
+<span class="n">dfl</span><span class="o">.</span><span class="n">low_card_cat_cols</span>
 </pre></div>
 
     </div>
@@ -377,59 +429,6 @@ preprocessor: Preprocessor for Columns Tranformer</p>
  &#39;MiscFeature&#39;,
  &#39;SaleType&#39;,
  &#39;SaleCondition&#39;]</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pp</span><span class="o">.</span><span class="n">columns_transfomer</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>ColumnTransformer(transformers=[(&#39;num&#39;, SimpleImputer(strategy=&#39;constant&#39;),
-                                 [&#39;MSSubClass&#39;, &#39;LotFrontage&#39;, &#39;LotArea&#39;,
-                                  &#39;OverallQual&#39;, &#39;OverallCond&#39;, &#39;YearBuilt&#39;,
-                                  &#39;YearRemodAdd&#39;, &#39;MasVnrArea&#39;, &#39;BsmtFinSF1&#39;,
-                                  &#39;BsmtFinSF2&#39;, &#39;BsmtUnfSF&#39;, &#39;TotalBsmtSF&#39;,
-                                  &#39;1stFlrSF&#39;, &#39;2ndFlrSF&#39;, &#39;LowQualFinSF&#39;,
-                                  &#39;GrLivArea&#39;, &#39;BsmtFullBath&#39;, &#39;BsmtHalfBath&#39;,
-                                  &#39;FullBath&#39;, &#39;HalfBath&#39;, &#39;BedroomAbvGr&#39;,
-                                  &#39;K...
-                                  &#39;RoofMatl&#39;, &#39;MasVnrType&#39;, &#39;ExterQual&#39;,
-                                  &#39;ExterCond&#39;, &#39;Foundation&#39;, &#39;BsmtQual&#39;,
-                                  &#39;BsmtCond&#39;, &#39;BsmtExposure&#39;, &#39;BsmtFinType1&#39;,
-                                  &#39;BsmtFinType2&#39;, &#39;Heating&#39;, &#39;HeatingQC&#39;,
-                                  &#39;CentralAir&#39;, &#39;Electrical&#39;, &#39;KitchenQual&#39;,
-                                  &#39;Functional&#39;, &#39;FireplaceQu&#39;, ...]),
-                                (&#39;high_cad_cat&#39;,
-                                 Pipeline(steps=[(&#39;imputer&#39;,
-                                                  SimpleImputer(strategy=&#39;most_frequent&#39;)),
-                                                 (&#39;onehot&#39;, OrdinalEncoder())]),
-                                 [&#39;Neighborhood&#39;, &#39;Exterior1st&#39;,
-                                  &#39;Exterior2nd&#39;])])</pre>
 </div>
 
 </div>
@@ -521,7 +520,7 @@ preprocessor: Preprocessor for Columns Tranformer</p>
                                                  (&#39;high_cad_cat&#39;,
                                                   Pipeline(steps=[(&#39;imputer&#39;,
                                                                    SimpleImputer(strategy=&#39;most_frequent&#39;)),
-                                                                  (&#39;onehot&#39;,
+                                                                  (&#39;ordinal&#39;,
                                                                    OrdinalEncoder())]),
                                                   [&#39;Neighborhood&#39;,
                                                    &#39;Exterior1st&#39;,
@@ -581,7 +580,7 @@ preprocessor: Preprocessor for Columns Tranformer</p>
                                                  (&#39;high_cad_cat&#39;,
                                                   Pipeline(steps=[(&#39;imputer&#39;,
                                                                    SimpleImputer(strategy=&#39;most_frequent&#39;)),
-                                                                  (&#39;onehot&#39;,
+                                                                  (&#39;ordinal&#39;,
                                                                    OrdinalEncoder())]),
                                                   [&#39;Neighborhood&#39;,
                                                    &#39;Exterior1st&#39;,

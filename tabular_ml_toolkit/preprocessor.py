@@ -32,6 +32,9 @@ class PreProcessor:
         self.numerical_transformer = None
         self.categorical_transformer = None
         self.columns_transfomer = None
+        self.transformer_type = None
+        self.OHE_categorical_transformer = None
+        self.ORE_categorical_transformer = None
 #         self.numerical_cols = None
 #         self.low_card_cat_cols = None
 #         self.high_card_cat_cols = None
@@ -60,52 +63,74 @@ class PreProcessor:
         ('onehot', OneHotEncoder(handle_unknown='ignore'))
         ])
 
-    def preprocess_ORE_categorical_data(self):
-        self.ORE_categorical_transformer = Pipeline(steps=[
+    def preprocess_OE_categorical_data(self):
+        self.OE_categorical_transformer = Pipeline(steps=[
         ('imputer', SimpleImputer(strategy='most_frequent')),
-        ('onehot', OrdinalEncoder(handle_unknown='error'))
+        ('ordinal', OrdinalEncoder(handle_unknown='error'))
         ])
 
     # Bundle preprocessing for numerical and categorical data
-    def preprocess_data_for_training(self, dataframeloader):
+    def preprocess_all_cols_for_training(self, dataframeloader):
         # create scikit-learn pipelines instances
         self.preprocess_numerical_data()
         self.preprocess_OHE_categorical_data()
-        self.preprocess_ORE_categorical_data()
+        self.preprocess_OE_categorical_data()
         # convert to Scikit-learn ColumnTranfomer
         self.columns_transfomer = ColumnTransformer(
             transformers=[
                 ('num', self.numerical_transformer, dataframeloader.numerical_cols),
                 ('low_cad_cat', self.OHE_categorical_transformer,
                  dataframeloader.low_card_cat_cols),
-                ('high_cad_cat', self.ORE_categorical_transformer,
+                ('high_cad_cat', self.OE_categorical_transformer,
                  dataframeloader.high_card_cat_cols)
             ])
+        self.transformer_type = self.columns_transfomer
         return self
 
     # Bundle preprocessing for cv_cols
-    def preprocess_data_for_cv(self, cv_cols_type, dataframeloader):
+    def preprocess_cols_for_cv(self, cv_cols_type, dataframeloader):
                         # change column types and preprocessor according to cv_cols provided
         if cv_cols_type == "all":
-            # for all columns it' similar to call preprocess_data_for_training
-            self.columns_transfomer = preprocess_data_for_training(dataframeloader)
+            # create scikit-learn pipelines instances
+            self.preprocess_numerical_data()
+            self.preprocess_OHE_categorical_data()
+#             self.preprocess_OE_categorical_data()
+            # convert to Scikit-learn ColumnTranfomer
+            self.columns_transfomer = ColumnTransformer(
+                transformers=[
+                    ('num', self.numerical_transformer, dataframeloader.numerical_cols),
+                    ('low_cad_cat', self.OHE_categorical_transformer,
+                     dataframeloader.low_card_cat_cols)
+#                     ,('high_cad_cat', self.OE_categorical_transformer,
+#                      dataframeloader.high_card_cat_cols)
+                ])
+            self.transformer_type = self.columns_transfomer
 
         elif cv_cols_type == "num":
             # for num columns, just process numerocal columns
-            self.columns_transfomer = ColumnTransformer(
-                transformers=[
-                ('num', self.numerical_transformer, dataframeloader.numerical_cols)
-                ])
+#             self.columns_transfomer = ColumnTransformer(
+#                 transformers=[
+#                 ('num', self.numerical_transformer, dataframeloader.numerical_cols)
+#                 ])
+            self.preprocess_numerical_data()
+            self.transformer_type = self.numerical_transformer
 
         elif cv_cols_type == "cat":
-            # convert all categorical columns to Scikit-learn ColumnTranfomer
+            # create scikit-learn pipelines instances
+            self.preprocess_OHE_categorical_data()
+#             self.preprocess_OE_categorical_data()
+            # convert all categorical columns to OrdinalEncoder with Scikit-learn ColumnTranfomer
             self.columns_transfomer = ColumnTransformer(
                 transformers=[
                     ('low_cad_cat', self.OHE_categorical_transformer,
-                     dataframeloader.low_card_cat_cols),
-                    ('high_cad_cat', self.ORE_categorical_transformer,
-                     dataframeloader.high_card_cat_cols)
+                     dataframeloader.low_card_cat_cols)
+                    # REMOVING HIGH CARDINALITY COLUMNS BECAUSE OF NOT ENOUGH REPRESENTATION
+                    # OF CARDINALITY DURING K-FOLD SPLIT OF DATA
+#                     ,('high_cad_cat', self.OE_categorical_transformer,
+#                      dataframeloader.high_card_cat_cols)
                 ])
+            self.transformer_type = self.columns_transfomer
         else:
             raise ValueError("Bad cv_cols_type, Only 'num','cat','all' are allowed!")
+
         return self

@@ -125,7 +125,7 @@ class DataFrameLoader:
         if cv_cols_type:
             if cv_cols_type == "all":
                 # assign all final columns to dataframeloader cross_validations columns
-                self.cv_cols = self.final_columns
+                self.cv_cols = self.final_cols
 
             elif cv_cols_type == "num":
                 # assign all numerical columns to cross_validations columns

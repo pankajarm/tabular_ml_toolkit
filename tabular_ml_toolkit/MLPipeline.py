@@ -36,6 +36,8 @@ class MLPipeline:
         self.dataframeloader = None
         self.preprocessor = None
         self.model = None
+        self.scikit_pipeline = None
+        self.transformer_type = None
 
     def __str__(self):
         """Returns human readable string reprsentation"""
@@ -51,11 +53,11 @@ class MLPipeline:
 
     # core methods
     # Bundle preprocessing and modeling code in a training pipeline
-    def bundle_preproessor_model(self, preprocessor:object, model:object):
-        self.pipeline = Pipeline(
-            steps=[('preprocessor', preprocessor.columns_transfomer),
+    def bundle_preproessor_model(self, transformer_type, model):
+        self.scikit_pipeline = Pipeline(
+            steps=[('preprocessor', transformer_type),
                    ('model', model)])
-#     # return pipeline object
+
 #     def create_pipeline(self, preprocessor:object, model:object):
 #         self.bundle_preproessor_model(preprocessor, model)
 
@@ -73,11 +75,12 @@ class MLPipeline:
             idx_col=idx_col,target=target,
             random_state=random_state,valid_size=valid_size)
         # call PreProcessor module
-        self.preprocessor = PreProcessor().preprocess_data_for_training(
+        self.preprocessor = PreProcessor().preprocess_all_cols_for_training(
             dataframeloader=self.dataframeloader)
 
         # call bundle method
-        self.bundle_preproessor_model(self.preprocessor, model)
+        self.bundle_preproessor_model(transformer_type=self.preprocessor.transformer_type,
+                                     model = model)
         return self
 
 
@@ -95,20 +98,20 @@ class MLPipeline:
             cv_cols_type=cv_cols_type)
 
         # call PreProcessor module
-        self.preprocessor = PreProcessor().preprocess_data_for_cv(
+        self.preprocessor = PreProcessor().preprocess_cols_for_cv(
             cv_cols_type = cv_cols_type,
             dataframeloader=self.dataframeloader)
 
         # call bundle method
-        self.bundle_preproessor_model(self.preprocessor, model)
+        self.bundle_preproessor_model(transformer_type=self.preprocessor.transformer_type,
+                                     model = model)
         return self
 
 
-    def cross_validation(self,X:object, y:object, cv=5,
-                         scoring='neg_mean_absolute_error'):
+    def cross_validation(self,estimator:object, cv=5,scoring='neg_mean_absolute_error'):
         # Multiply by -1 since sklearn calculates *negative* MAE
         scores = -1 * cross_val_score(
-            estimator=self.pipeline,
+            estimator=estimator,
             X=self.dataframeloader.X_cv,
             y=self.dataframeloader.y,
             scoring=scoring,

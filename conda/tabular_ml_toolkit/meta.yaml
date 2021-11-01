@@ -1,0 +1,37 @@
+package:
+  name: tabular_ml_toolkit
+  version: 0.0.6
+source:
+  sha256: f4fb16c3489843b90376812994f530effec750cfd0c576001565bd7b3277f537
+  url: https://files.pythonhosted.org/packages/d9/75/8889243cf38a585943852a6e2c12b3e886c278cee6d9f94f3ea4c88f48e1/tabular_ml_toolkit-0.0.6.tar.gz
+about:
+  dev_url: https://psmathur.github.io
+  doc_url: https://psmathur.github.io
+  home: https://psmathur.github.io
+  license: Apache Software
+  license_family: APACHE
+  summary: A Helpful ML Toolkit to Jumpstart your Machine Learning Project based on
+    Tabular or Structured data.
+build:
+  noarch: python
+  number: '0'
+  script: '{{ PYTHON }} -m pip install . -vv'
+extra:
+  recipe-maintainers:
+  - psmathur
+requirements:
+  host:
+  - pip
+  - python
+  - packaging
+  - pandas>=1.1.0
+  - scikit-learn>=0.23
+  run:
+  - pip
+  - python
+  - packaging
+  - pandas>=1.1.0
+  - scikit-learn>=0.23
+test:
+  imports:
+  - tabular_ml_toolkit

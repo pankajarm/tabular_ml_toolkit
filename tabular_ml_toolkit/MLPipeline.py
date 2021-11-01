@@ -109,11 +109,13 @@ class MLPipeline:
 
 
     def cross_validation(self,estimator:object, cv=5,scoring='neg_mean_absolute_error'):
-        # Multiply by -1 since sklearn calculates *negative* MAE
-        scores = -1 * cross_val_score(
+        scores = cross_val_score(
             estimator=estimator,
             X=self.dataframeloader.X_cv,
             y=self.dataframeloader.y,
             scoring=scoring,
             cv=cv)
+        # Multiply by -1 since sklearn calculates *negative* MAE
+        if "neg_" in scoring:
+            scores = -1 * scores
         return scores

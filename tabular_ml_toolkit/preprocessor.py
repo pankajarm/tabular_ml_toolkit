@@ -66,7 +66,7 @@ class PreProcessor:
     def preprocess_OE_categorical_data(self):
         self.OE_categorical_transformer = Pipeline(steps=[
         ('imputer', SimpleImputer(strategy='most_frequent')),
-        ('ordinal', OrdinalEncoder(handle_unknown='error'))
+        ('ordinal', OrdinalEncoder())
         ])
 
     # Bundle preprocessing for numerical and categorical data

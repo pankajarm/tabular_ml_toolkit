@@ -65,7 +65,7 @@ nb_path: "01_PreProcessor.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="PreProcessor" class="doc_header"><code>class</code> <code>PreProcessor</code><a href="https://github.com/psmathur/tabular_ml_toolkit/tree/master/tabular_ml_toolkit/PreProcessor.py#L21" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>PreProcessor</code>()</p>
+<h2 id="PreProcessor" class="doc_header"><code>class</code> <code>PreProcessor</code><a href="https://github.com/psmathur/tabular_ml_toolkit/tree/master/tabular_ml_toolkit/PreProcessor.py#L20" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>PreProcessor</code>()</p>
 </blockquote>
 <p>Represent PreProcessor class</p>
 <p>Attributes:
@@ -192,47 +192,10 @@ preprocessor: Preprocessor for Columns Tranformer</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pp</span><span class="o">.</span><span class="n">columns_transfomer</span>
+<div class=" highlight hl-ipython3"><pre><span></span> 
 </pre></div>
 
     </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>ColumnTransformer(transformers=[(&#39;num&#39;, SimpleImputer(strategy=&#39;constant&#39;),
-                                 [&#39;MSSubClass&#39;, &#39;LotFrontage&#39;, &#39;LotArea&#39;,
-                                  &#39;OverallQual&#39;, &#39;OverallCond&#39;, &#39;YearBuilt&#39;,
-                                  &#39;YearRemodAdd&#39;, &#39;MasVnrArea&#39;, &#39;BsmtFinSF1&#39;,
-                                  &#39;BsmtFinSF2&#39;, &#39;BsmtUnfSF&#39;, &#39;TotalBsmtSF&#39;,
-                                  &#39;1stFlrSF&#39;, &#39;2ndFlrSF&#39;, &#39;LowQualFinSF&#39;,
-                                  &#39;GrLivArea&#39;, &#39;BsmtFullBath&#39;, &#39;BsmtHalfBath&#39;,
-                                  &#39;FullBath&#39;, &#39;HalfBath&#39;, &#39;BedroomAbvGr&#39;,
-                                  &#39;K...
-                                  &#39;RoofMatl&#39;, &#39;MasVnrType&#39;, &#39;ExterQual&#39;,
-                                  &#39;ExterCond&#39;, &#39;Foundation&#39;, &#39;BsmtQual&#39;,
-                                  &#39;BsmtCond&#39;, &#39;BsmtExposure&#39;, &#39;BsmtFinType1&#39;,
-                                  &#39;BsmtFinType2&#39;, &#39;Heating&#39;, &#39;HeatingQC&#39;,
-                                  &#39;CentralAir&#39;, &#39;Electrical&#39;, &#39;KitchenQual&#39;,
-                                  &#39;Functional&#39;, &#39;FireplaceQu&#39;, ...]),
-                                (&#39;high_cad_cat&#39;,
-                                 Pipeline(steps=[(&#39;imputer&#39;,
-                                                  SimpleImputer(strategy=&#39;most_frequent&#39;)),
-                                                 (&#39;ordinal&#39;,
-                                                  OrdinalEncoder())]),
-                                 [&#39;Neighborhood&#39;, &#39;Exterior1st&#39;,
-                                  &#39;Exterior2nd&#39;])])</pre>
-</div>
-
-</div>
-
 </div>
 </div>
 
@@ -247,7 +210,7 @@ preprocessor: Preprocessor for Columns Tranformer</p>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dfl</span><span class="o">.</span><span class="n">numerical_cols</span><span class="p">))</span>
-<span class="n">dfl</span><span class="o">.</span><span class="n">numerical_cols</span>
+<span class="c1"># dfl.numerical_cols</span>
 </pre></div>
 
     </div>
@@ -265,51 +228,6 @@ preprocessor: Preprocessor for Columns Tranformer</p>
 </div>
 </div>
 
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>[&#39;MSSubClass&#39;,
- &#39;LotFrontage&#39;,
- &#39;LotArea&#39;,
- &#39;OverallQual&#39;,
- &#39;OverallCond&#39;,
- &#39;YearBuilt&#39;,
- &#39;YearRemodAdd&#39;,
- &#39;MasVnrArea&#39;,
- &#39;BsmtFinSF1&#39;,
- &#39;BsmtFinSF2&#39;,
- &#39;BsmtUnfSF&#39;,
- &#39;TotalBsmtSF&#39;,
- &#39;1stFlrSF&#39;,
- &#39;2ndFlrSF&#39;,
- &#39;LowQualFinSF&#39;,
- &#39;GrLivArea&#39;,
- &#39;BsmtFullBath&#39;,
- &#39;BsmtHalfBath&#39;,
- &#39;FullBath&#39;,
- &#39;HalfBath&#39;,
- &#39;BedroomAbvGr&#39;,
- &#39;KitchenAbvGr&#39;,
- &#39;TotRmsAbvGrd&#39;,
- &#39;Fireplaces&#39;,
- &#39;GarageYrBlt&#39;,
- &#39;GarageCars&#39;,
- &#39;GarageArea&#39;,
- &#39;WoodDeckSF&#39;,
- &#39;OpenPorchSF&#39;,
- &#39;EnclosedPorch&#39;,
- &#39;3SsnPorch&#39;,
- &#39;ScreenPorch&#39;,
- &#39;PoolArea&#39;,
- &#39;MiscVal&#39;,
- &#39;MoSold&#39;,
- &#39;YrSold&#39;]</pre>
-</div>
-
-</div>
-
 </div>
 </div>
 
@@ -324,7 +242,7 @@ preprocessor: Preprocessor for Columns Tranformer</p>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dfl</span><span class="o">.</span><span class="n">high_card_cat_cols</span><span class="p">))</span>
-<span class="n">dfl</span><span class="o">.</span><span class="n">high_card_cat_cols</span>
+<span class="c1"># dfl.high_card_cat_cols</span>
 </pre></div>
 
     </div>
@@ -342,16 +260,6 @@ preprocessor: Preprocessor for Columns Tranformer</p>
 </div>
 </div>
 
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>[&#39;Neighborhood&#39;, &#39;Exterior1st&#39;, &#39;Exterior2nd&#39;]</pre>
-</div>
-
-</div>
-
 </div>
 </div>
 
@@ -366,7 +274,7 @@ preprocessor: Preprocessor for Columns Tranformer</p>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dfl</span><span class="o">.</span><span class="n">low_card_cat_cols</span><span class="p">))</span>
-<span class="n">dfl</span><span class="o">.</span><span class="n">low_card_cat_cols</span>
+<span class="c1"># dfl.low_card_cat_cols</span>
 </pre></div>
 
     </div>
@@ -382,55 +290,6 @@ preprocessor: Preprocessor for Columns Tranformer</p>
 <pre>40
 </pre>
 </div>
-</div>
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>[&#39;MSZoning&#39;,
- &#39;Street&#39;,
- &#39;Alley&#39;,
- &#39;LotShape&#39;,
- &#39;LandContour&#39;,
- &#39;Utilities&#39;,
- &#39;LotConfig&#39;,
- &#39;LandSlope&#39;,
- &#39;Condition1&#39;,
- &#39;Condition2&#39;,
- &#39;BldgType&#39;,
- &#39;HouseStyle&#39;,
- &#39;RoofStyle&#39;,
- &#39;RoofMatl&#39;,
- &#39;MasVnrType&#39;,
- &#39;ExterQual&#39;,
- &#39;ExterCond&#39;,
- &#39;Foundation&#39;,
- &#39;BsmtQual&#39;,
- &#39;BsmtCond&#39;,
- &#39;BsmtExposure&#39;,
- &#39;BsmtFinType1&#39;,
- &#39;BsmtFinType2&#39;,
- &#39;Heating&#39;,
- &#39;HeatingQC&#39;,
- &#39;CentralAir&#39;,
- &#39;Electrical&#39;,
- &#39;KitchenQual&#39;,
- &#39;Functional&#39;,
- &#39;FireplaceQu&#39;,
- &#39;GarageType&#39;,
- &#39;GarageFinish&#39;,
- &#39;GarageQual&#39;,
- &#39;GarageCond&#39;,
- &#39;PavedDrive&#39;,
- &#39;PoolQC&#39;,
- &#39;Fence&#39;,
- &#39;MiscFeature&#39;,
- &#39;SaleType&#39;,
- &#39;SaleCondition&#39;]</pre>
-</div>
-
 </div>
 
 </div>
@@ -483,6 +342,26 @@ preprocessor: Preprocessor for Columns Tranformer</p>
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">pl</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;preprocessor&#39;</span><span class="p">,</span> <span class="n">pp</span><span class="o">.</span><span class="n">columns_transfomer</span><span class="p">),</span>
                       <span class="p">(</span><span class="s1">&#39;model&#39;</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
                      <span class="p">])</span>
+<span class="c1"># pl</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">set_config</span>
+
+<span class="n">set_config</span><span class="p">(</span><span class="n">display</span><span class="o">=</span><span class="s2">&quot;diagram&quot;</span><span class="p">)</span>
 <span class="n">pl</span>
 </pre></div>
 
@@ -496,36 +375,59 @@ preprocessor: Preprocessor for Columns Tranformer</p>
 <div class="output_area">
 
 
-
-<div class="output_text output_subarea output_execute_result">
-<pre>Pipeline(steps=[(&#39;preprocessor&#39;,
-                 ColumnTransformer(transformers=[(&#39;num&#39;,
-                                                  SimpleImputer(strategy=&#39;constant&#39;),
-                                                  [&#39;MSSubClass&#39;, &#39;LotFrontage&#39;,
-                                                   &#39;LotArea&#39;, &#39;OverallQual&#39;,
-                                                   &#39;OverallCond&#39;, &#39;YearBuilt&#39;,
-                                                   &#39;YearRemodAdd&#39;, &#39;MasVnrArea&#39;,
-                                                   &#39;BsmtFinSF1&#39;, &#39;BsmtFinSF2&#39;,
-                                                   &#39;BsmtUnfSF&#39;, &#39;TotalBsmtSF&#39;,
-                                                   &#39;1stFlrSF&#39;, &#39;2ndFlrSF&#39;,
-                                                   &#39;LowQualFinSF&#39;, &#39;GrLivArea&#39;,
-                                                   &#39;BsmtFullBath&#39;,
-                                                   &#39;BsmtHalfBath&#39;, &#39;FullBa...
-                                                   &#39;BsmtExposure&#39;,
-                                                   &#39;BsmtFinType1&#39;,
-                                                   &#39;BsmtFinType2&#39;, &#39;Heating&#39;,
-                                                   &#39;HeatingQC&#39;, &#39;CentralAir&#39;,
-                                                   &#39;Electrical&#39;, &#39;KitchenQual&#39;,
-                                                   &#39;Functional&#39;, &#39;FireplaceQu&#39;, ...]),
-                                                 (&#39;high_cad_cat&#39;,
-                                                  Pipeline(steps=[(&#39;imputer&#39;,
-                                                                   SimpleImputer(strategy=&#39;most_frequent&#39;)),
-                                                                  (&#39;ordinal&#39;,
+<div class="output_html rendered_html output_subarea output_execute_result">
+<style>#sk-f411dc81-84cf-4761-a979-5f8db6f8c1f3 {color: black;background-color: white;}#sk-f411dc81-84cf-4761-a979-5f8db6f8c1f3 pre{padding: 0;}#sk-f411dc81-84cf-4761-a979-5f8db6f8c1f3 div.sk-toggleable {background-color: white;}#sk-f411dc81-84cf-4761-a979-5f8db6f8c1f3 label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.3em;box-sizing: border-box;text-align: center;}#sk-f411dc81-84cf-4761-a979-5f8db6f8c1f3 div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}#sk-f411dc81-84cf-4761-a979-5f8db6f8c1f3 div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}#sk-f411dc81-84cf-4761-a979-5f8db6f8c1f3 input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}#sk-f411dc81-84cf-4761-a979-5f8db6f8c1f3 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-f411dc81-84cf-4761-a979-5f8db6f8c1f3 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-f411dc81-84cf-4761-a979-5f8db6f8c1f3 input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}#sk-f411dc81-84cf-4761-a979-5f8db6f8c1f3 div.sk-estimator {font-family: monospace;background-color: #f0f8ff;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;margin-bottom: 0.5em;}#sk-f411dc81-84cf-4761-a979-5f8db6f8c1f3 div.sk-estimator:hover {background-color: #d4ebff;}#sk-f411dc81-84cf-4761-a979-5f8db6f8c1f3 div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}#sk-f411dc81-84cf-4761-a979-5f8db6f8c1f3 div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}#sk-f411dc81-84cf-4761-a979-5f8db6f8c1f3 div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}#sk-f411dc81-84cf-4761-a979-5f8db6f8c1f3 div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;padding-right: 0.2em;padding-left: 0.2em;}#sk-f411dc81-84cf-4761-a979-5f8db6f8c1f3 div.sk-item {z-index: 1;}#sk-f411dc81-84cf-4761-a979-5f8db6f8c1f3 div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}#sk-f411dc81-84cf-4761-a979-5f8db6f8c1f3 div.sk-parallel::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}#sk-f411dc81-84cf-4761-a979-5f8db6f8c1f3 div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}#sk-f411dc81-84cf-4761-a979-5f8db6f8c1f3 div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}#sk-f411dc81-84cf-4761-a979-5f8db6f8c1f3 div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}#sk-f411dc81-84cf-4761-a979-5f8db6f8c1f3 div.sk-parallel-item:only-child::after {width: 0;}#sk-f411dc81-84cf-4761-a979-5f8db6f8c1f3 div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0 0.4em 0.5em 0.4em;box-sizing: border-box;padding-bottom: 0.4em;background-color: white;position: relative;}#sk-f411dc81-84cf-4761-a979-5f8db6f8c1f3 div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}#sk-f411dc81-84cf-4761-a979-5f8db6f8c1f3 div.sk-label-container {position: relative;z-index: 2;text-align: center;}#sk-f411dc81-84cf-4761-a979-5f8db6f8c1f3 div.sk-container {display: inline-block;position: relative;}</style><div id="sk-f411dc81-84cf-4761-a979-5f8db6f8c1f3" class"sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="75fb9a94-9c29-4f96-9685-34fe04a52e17" type="checkbox" ><label class="sk-toggleable__label" for="75fb9a94-9c29-4f96-9685-34fe04a52e17">Pipeline</label><div class="sk-toggleable__content"><pre>Pipeline(steps=[('preprocessor',
+                 ColumnTransformer(transformers=[('num',
+                                                  Pipeline(steps=[('imputer',
+                                                                   SimpleImputer(strategy='median')),
+                                                                  ('scaler',
+                                                                   StandardScaler())]),
+                                                  ['MSSubClass', 'LotFrontage',
+                                                   'LotArea', 'OverallQual',
+                                                   'OverallCond', 'YearBuilt',
+                                                   'YearRemodAdd', 'MasVnrArea',
+                                                   'BsmtFinSF1', 'BsmtFinSF2',
+                                                   'BsmtUnfSF', 'TotalBsmtSF',
+                                                   '1stFlrSF', '2ndFlrSF',
+                                                   'LowQual...
+                                                   'BsmtQual', 'BsmtCond',
+                                                   'BsmtExposure',
+                                                   'BsmtFinType1',
+                                                   'BsmtFinType2', 'Heating',
+                                                   'HeatingQC', 'CentralAir',
+                                                   'Electrical', 'KitchenQual',
+                                                   'Functional', 'FireplaceQu', ...]),
+                                                 ('high_cad_cat',
+                                                  Pipeline(steps=[('imputer',
+                                                                   SimpleImputer(strategy='constant')),
+                                                                  ('ordinal',
                                                                    OrdinalEncoder())]),
-                                                  [&#39;Neighborhood&#39;,
-                                                   &#39;Exterior1st&#39;,
-                                                   &#39;Exterior2nd&#39;])])),
-                (&#39;model&#39;, RandomForestRegressor(random_state=42))])</pre>
+                                                  ['Neighborhood',
+                                                   'Exterior1st',
+                                                   'Exterior2nd'])])),
+                ('model', RandomForestRegressor(random_state=42))])</pre></div></div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="6d56dd96-38c7-4c29-8df3-ce9a9ebf52fd" type="checkbox" ><label class="sk-toggleable__label" for="6d56dd96-38c7-4c29-8df3-ce9a9ebf52fd">preprocessor: ColumnTransformer</label><div class="sk-toggleable__content"><pre>ColumnTransformer(transformers=[('num',
+                                 Pipeline(steps=[('imputer',
+                                                  SimpleImputer(strategy='median')),
+                                                 ('scaler', StandardScaler())]),
+                                 ['MSSubClass', 'LotFrontage', 'LotArea',
+                                  'OverallQual', 'OverallCond', 'YearBuilt',
+                                  'YearRemodAdd', 'MasVnrArea', 'BsmtFinSF1',
+                                  'BsmtFinSF2', 'BsmtUnfSF', 'TotalBsmtSF',
+                                  '1stFlrSF', '2ndFlrSF', 'LowQualFinSF',
+                                  'GrLivArea', 'BsmtFullBath...
+                                  'RoofMatl', 'MasVnrType', 'ExterQual',
+                                  'ExterCond', 'Foundation', 'BsmtQual',
+                                  'BsmtCond', 'BsmtExposure', 'BsmtFinType1',
+                                  'BsmtFinType2', 'Heating', 'HeatingQC',
+                                  'CentralAir', 'Electrical', 'KitchenQual',
+                                  'Functional', 'FireplaceQu', ...]),
+                                ('high_cad_cat',
+                                 Pipeline(steps=[('imputer',
+                                                  SimpleImputer(strategy='constant')),
+                                                 ('ordinal',
+                                                  OrdinalEncoder())]),
+                                 ['Neighborhood', 'Exterior1st',
+                                  'Exterior2nd'])])</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="b4c5910e-6d92-47ec-be9d-259c3ffd2416" type="checkbox" ><label class="sk-toggleable__label" for="b4c5910e-6d92-47ec-be9d-259c3ffd2416">num</label><div class="sk-toggleable__content"><pre>['MSSubClass', 'LotFrontage', 'LotArea', 'OverallQual', 'OverallCond', 'YearBuilt', 'YearRemodAdd', 'MasVnrArea', 'BsmtFinSF1', 'BsmtFinSF2', 'BsmtUnfSF', 'TotalBsmtSF', '1stFlrSF', '2ndFlrSF', 'LowQualFinSF', 'GrLivArea', 'BsmtFullBath', 'BsmtHalfBath', 'FullBath', 'HalfBath', 'BedroomAbvGr', 'KitchenAbvGr', 'TotRmsAbvGrd', 'Fireplaces', 'GarageYrBlt', 'GarageCars', 'GarageArea', 'WoodDeckSF', 'OpenPorchSF', 'EnclosedPorch', '3SsnPorch', 'ScreenPorch', 'PoolArea', 'MiscVal', 'MoSold', 'YrSold']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="ee68547e-6e86-4090-88aa-2a2a6a455c58" type="checkbox" ><label class="sk-toggleable__label" for="ee68547e-6e86-4090-88aa-2a2a6a455c58">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(strategy='median')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="5c045a52-86b1-4e39-8928-fae6f23c9ace" type="checkbox" ><label class="sk-toggleable__label" for="5c045a52-86b1-4e39-8928-fae6f23c9ace">StandardScaler</label><div class="sk-toggleable__content"><pre>StandardScaler()</pre></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="f569cd7b-9ec1-482e-aeeb-ba428c65eb30" type="checkbox" ><label class="sk-toggleable__label" for="f569cd7b-9ec1-482e-aeeb-ba428c65eb30">low_cad_cat</label><div class="sk-toggleable__content"><pre>['MSZoning', 'Street', 'Alley', 'LotShape', 'LandContour', 'Utilities', 'LotConfig', 'LandSlope', 'Condition1', 'Condition2', 'BldgType', 'HouseStyle', 'RoofStyle', 'RoofMatl', 'MasVnrType', 'ExterQual', 'ExterCond', 'Foundation', 'BsmtQual', 'BsmtCond', 'BsmtExposure', 'BsmtFinType1', 'BsmtFinType2', 'Heating', 'HeatingQC', 'CentralAir', 'Electrical', 'KitchenQual', 'Functional', 'FireplaceQu', 'GarageType', 'GarageFinish', 'GarageQual', 'GarageCond', 'PavedDrive', 'PoolQC', 'Fence', 'MiscFeature', 'SaleType', 'SaleCondition']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="8fe8d95d-b63a-440b-bf76-28b631470813" type="checkbox" ><label class="sk-toggleable__label" for="8fe8d95d-b63a-440b-bf76-28b631470813">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(strategy='constant')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="b195dcad-d4ec-48b6-9b80-de64734eaa90" type="checkbox" ><label class="sk-toggleable__label" for="b195dcad-d4ec-48b6-9b80-de64734eaa90">OneHotEncoder</label><div class="sk-toggleable__content"><pre>OneHotEncoder(handle_unknown='ignore')</pre></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="1b69e33b-aa47-43dd-b98c-4b3cd295abed" type="checkbox" ><label class="sk-toggleable__label" for="1b69e33b-aa47-43dd-b98c-4b3cd295abed">high_cad_cat</label><div class="sk-toggleable__content"><pre>['Neighborhood', 'Exterior1st', 'Exterior2nd']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="79ce1e09-760d-4407-8b87-dfc6953bafe2" type="checkbox" ><label class="sk-toggleable__label" for="79ce1e09-760d-4407-8b87-dfc6953bafe2">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(strategy='constant')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="f0a71320-9fee-460a-b688-9382dd7f36f7" type="checkbox" ><label class="sk-toggleable__label" for="f0a71320-9fee-460a-b688-9382dd7f36f7">OrdinalEncoder</label><div class="sk-toggleable__content"><pre>OrdinalEncoder()</pre></div></div></div></div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="a82e30da-6d69-4105-b41d-845ec31db120" type="checkbox" ><label class="sk-toggleable__label" for="a82e30da-6d69-4105-b41d-845ec31db120">RandomForestRegressor</label><div class="sk-toggleable__content"><pre>RandomForestRegressor(random_state=42)</pre></div></div></div></div></div></div></div>
 </div>
 
 </div>
@@ -556,36 +458,59 @@ preprocessor: Preprocessor for Columns Tranformer</p>
 <div class="output_area">
 
 
-
-<div class="output_text output_subarea output_execute_result">
-<pre>Pipeline(steps=[(&#39;preprocessor&#39;,
-                 ColumnTransformer(transformers=[(&#39;num&#39;,
-                                                  SimpleImputer(strategy=&#39;constant&#39;),
-                                                  [&#39;MSSubClass&#39;, &#39;LotFrontage&#39;,
-                                                   &#39;LotArea&#39;, &#39;OverallQual&#39;,
-                                                   &#39;OverallCond&#39;, &#39;YearBuilt&#39;,
-                                                   &#39;YearRemodAdd&#39;, &#39;MasVnrArea&#39;,
-                                                   &#39;BsmtFinSF1&#39;, &#39;BsmtFinSF2&#39;,
-                                                   &#39;BsmtUnfSF&#39;, &#39;TotalBsmtSF&#39;,
-                                                   &#39;1stFlrSF&#39;, &#39;2ndFlrSF&#39;,
-                                                   &#39;LowQualFinSF&#39;, &#39;GrLivArea&#39;,
-                                                   &#39;BsmtFullBath&#39;,
-                                                   &#39;BsmtHalfBath&#39;, &#39;FullBa...
-                                                   &#39;BsmtExposure&#39;,
-                                                   &#39;BsmtFinType1&#39;,
-                                                   &#39;BsmtFinType2&#39;, &#39;Heating&#39;,
-                                                   &#39;HeatingQC&#39;, &#39;CentralAir&#39;,
-                                                   &#39;Electrical&#39;, &#39;KitchenQual&#39;,
-                                                   &#39;Functional&#39;, &#39;FireplaceQu&#39;, ...]),
-                                                 (&#39;high_cad_cat&#39;,
-                                                  Pipeline(steps=[(&#39;imputer&#39;,
-                                                                   SimpleImputer(strategy=&#39;most_frequent&#39;)),
-                                                                  (&#39;ordinal&#39;,
+<div class="output_html rendered_html output_subarea output_execute_result">
+<style>#sk-e460f318-aefe-4bf0-8175-17a26f7d1771 {color: black;background-color: white;}#sk-e460f318-aefe-4bf0-8175-17a26f7d1771 pre{padding: 0;}#sk-e460f318-aefe-4bf0-8175-17a26f7d1771 div.sk-toggleable {background-color: white;}#sk-e460f318-aefe-4bf0-8175-17a26f7d1771 label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.3em;box-sizing: border-box;text-align: center;}#sk-e460f318-aefe-4bf0-8175-17a26f7d1771 div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}#sk-e460f318-aefe-4bf0-8175-17a26f7d1771 div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}#sk-e460f318-aefe-4bf0-8175-17a26f7d1771 input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}#sk-e460f318-aefe-4bf0-8175-17a26f7d1771 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-e460f318-aefe-4bf0-8175-17a26f7d1771 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-e460f318-aefe-4bf0-8175-17a26f7d1771 input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}#sk-e460f318-aefe-4bf0-8175-17a26f7d1771 div.sk-estimator {font-family: monospace;background-color: #f0f8ff;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;margin-bottom: 0.5em;}#sk-e460f318-aefe-4bf0-8175-17a26f7d1771 div.sk-estimator:hover {background-color: #d4ebff;}#sk-e460f318-aefe-4bf0-8175-17a26f7d1771 div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}#sk-e460f318-aefe-4bf0-8175-17a26f7d1771 div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}#sk-e460f318-aefe-4bf0-8175-17a26f7d1771 div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}#sk-e460f318-aefe-4bf0-8175-17a26f7d1771 div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;padding-right: 0.2em;padding-left: 0.2em;}#sk-e460f318-aefe-4bf0-8175-17a26f7d1771 div.sk-item {z-index: 1;}#sk-e460f318-aefe-4bf0-8175-17a26f7d1771 div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}#sk-e460f318-aefe-4bf0-8175-17a26f7d1771 div.sk-parallel::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}#sk-e460f318-aefe-4bf0-8175-17a26f7d1771 div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}#sk-e460f318-aefe-4bf0-8175-17a26f7d1771 div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}#sk-e460f318-aefe-4bf0-8175-17a26f7d1771 div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}#sk-e460f318-aefe-4bf0-8175-17a26f7d1771 div.sk-parallel-item:only-child::after {width: 0;}#sk-e460f318-aefe-4bf0-8175-17a26f7d1771 div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0 0.4em 0.5em 0.4em;box-sizing: border-box;padding-bottom: 0.4em;background-color: white;position: relative;}#sk-e460f318-aefe-4bf0-8175-17a26f7d1771 div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}#sk-e460f318-aefe-4bf0-8175-17a26f7d1771 div.sk-label-container {position: relative;z-index: 2;text-align: center;}#sk-e460f318-aefe-4bf0-8175-17a26f7d1771 div.sk-container {display: inline-block;position: relative;}</style><div id="sk-e460f318-aefe-4bf0-8175-17a26f7d1771" class"sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="514d9b81-c7ea-4883-9636-14d64829e70a" type="checkbox" ><label class="sk-toggleable__label" for="514d9b81-c7ea-4883-9636-14d64829e70a">Pipeline</label><div class="sk-toggleable__content"><pre>Pipeline(steps=[('preprocessor',
+                 ColumnTransformer(transformers=[('num',
+                                                  Pipeline(steps=[('imputer',
+                                                                   SimpleImputer(strategy='median')),
+                                                                  ('scaler',
+                                                                   StandardScaler())]),
+                                                  ['MSSubClass', 'LotFrontage',
+                                                   'LotArea', 'OverallQual',
+                                                   'OverallCond', 'YearBuilt',
+                                                   'YearRemodAdd', 'MasVnrArea',
+                                                   'BsmtFinSF1', 'BsmtFinSF2',
+                                                   'BsmtUnfSF', 'TotalBsmtSF',
+                                                   '1stFlrSF', '2ndFlrSF',
+                                                   'LowQual...
+                                                   'BsmtQual', 'BsmtCond',
+                                                   'BsmtExposure',
+                                                   'BsmtFinType1',
+                                                   'BsmtFinType2', 'Heating',
+                                                   'HeatingQC', 'CentralAir',
+                                                   'Electrical', 'KitchenQual',
+                                                   'Functional', 'FireplaceQu', ...]),
+                                                 ('high_cad_cat',
+                                                  Pipeline(steps=[('imputer',
+                                                                   SimpleImputer(strategy='constant')),
+                                                                  ('ordinal',
                                                                    OrdinalEncoder())]),
-                                                  [&#39;Neighborhood&#39;,
-                                                   &#39;Exterior1st&#39;,
-                                                   &#39;Exterior2nd&#39;])])),
-                (&#39;model&#39;, RandomForestRegressor(random_state=42))])</pre>
+                                                  ['Neighborhood',
+                                                   'Exterior1st',
+                                                   'Exterior2nd'])])),
+                ('model', RandomForestRegressor(random_state=42))])</pre></div></div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="ab05ad3c-10a6-429f-916e-fbf47780b039" type="checkbox" ><label class="sk-toggleable__label" for="ab05ad3c-10a6-429f-916e-fbf47780b039">preprocessor: ColumnTransformer</label><div class="sk-toggleable__content"><pre>ColumnTransformer(transformers=[('num',
+                                 Pipeline(steps=[('imputer',
+                                                  SimpleImputer(strategy='median')),
+                                                 ('scaler', StandardScaler())]),
+                                 ['MSSubClass', 'LotFrontage', 'LotArea',
+                                  'OverallQual', 'OverallCond', 'YearBuilt',
+                                  'YearRemodAdd', 'MasVnrArea', 'BsmtFinSF1',
+                                  'BsmtFinSF2', 'BsmtUnfSF', 'TotalBsmtSF',
+                                  '1stFlrSF', '2ndFlrSF', 'LowQualFinSF',
+                                  'GrLivArea', 'BsmtFullBath...
+                                  'RoofMatl', 'MasVnrType', 'ExterQual',
+                                  'ExterCond', 'Foundation', 'BsmtQual',
+                                  'BsmtCond', 'BsmtExposure', 'BsmtFinType1',
+                                  'BsmtFinType2', 'Heating', 'HeatingQC',
+                                  'CentralAir', 'Electrical', 'KitchenQual',
+                                  'Functional', 'FireplaceQu', ...]),
+                                ('high_cad_cat',
+                                 Pipeline(steps=[('imputer',
+                                                  SimpleImputer(strategy='constant')),
+                                                 ('ordinal',
+                                                  OrdinalEncoder())]),
+                                 ['Neighborhood', 'Exterior1st',
+                                  'Exterior2nd'])])</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="f13dc468-67d8-45f1-afec-f46f1c0115d0" type="checkbox" ><label class="sk-toggleable__label" for="f13dc468-67d8-45f1-afec-f46f1c0115d0">num</label><div class="sk-toggleable__content"><pre>['MSSubClass', 'LotFrontage', 'LotArea', 'OverallQual', 'OverallCond', 'YearBuilt', 'YearRemodAdd', 'MasVnrArea', 'BsmtFinSF1', 'BsmtFinSF2', 'BsmtUnfSF', 'TotalBsmtSF', '1stFlrSF', '2ndFlrSF', 'LowQualFinSF', 'GrLivArea', 'BsmtFullBath', 'BsmtHalfBath', 'FullBath', 'HalfBath', 'BedroomAbvGr', 'KitchenAbvGr', 'TotRmsAbvGrd', 'Fireplaces', 'GarageYrBlt', 'GarageCars', 'GarageArea', 'WoodDeckSF', 'OpenPorchSF', 'EnclosedPorch', '3SsnPorch', 'ScreenPorch', 'PoolArea', 'MiscVal', 'MoSold', 'YrSold']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="f6bb737c-b28c-466a-bd6a-253331385cf1" type="checkbox" ><label class="sk-toggleable__label" for="f6bb737c-b28c-466a-bd6a-253331385cf1">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(strategy='median')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="953867d8-d1e3-4926-b285-dd11120fa72c" type="checkbox" ><label class="sk-toggleable__label" for="953867d8-d1e3-4926-b285-dd11120fa72c">StandardScaler</label><div class="sk-toggleable__content"><pre>StandardScaler()</pre></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="3ad75d35-e69b-4214-a592-62892d8756ef" type="checkbox" ><label class="sk-toggleable__label" for="3ad75d35-e69b-4214-a592-62892d8756ef">low_cad_cat</label><div class="sk-toggleable__content"><pre>['MSZoning', 'Street', 'Alley', 'LotShape', 'LandContour', 'Utilities', 'LotConfig', 'LandSlope', 'Condition1', 'Condition2', 'BldgType', 'HouseStyle', 'RoofStyle', 'RoofMatl', 'MasVnrType', 'ExterQual', 'ExterCond', 'Foundation', 'BsmtQual', 'BsmtCond', 'BsmtExposure', 'BsmtFinType1', 'BsmtFinType2', 'Heating', 'HeatingQC', 'CentralAir', 'Electrical', 'KitchenQual', 'Functional', 'FireplaceQu', 'GarageType', 'GarageFinish', 'GarageQual', 'GarageCond', 'PavedDrive', 'PoolQC', 'Fence', 'MiscFeature', 'SaleType', 'SaleCondition']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="94d78f3e-1390-4a60-9f85-ce24f5d4a5dd" type="checkbox" ><label class="sk-toggleable__label" for="94d78f3e-1390-4a60-9f85-ce24f5d4a5dd">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(strategy='constant')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="77f2cf9b-4458-4c8a-b20a-50257f784479" type="checkbox" ><label class="sk-toggleable__label" for="77f2cf9b-4458-4c8a-b20a-50257f784479">OneHotEncoder</label><div class="sk-toggleable__content"><pre>OneHotEncoder(handle_unknown='ignore')</pre></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="553bbf71-0022-4ac2-88f8-810cde0d97bd" type="checkbox" ><label class="sk-toggleable__label" for="553bbf71-0022-4ac2-88f8-810cde0d97bd">high_cad_cat</label><div class="sk-toggleable__content"><pre>['Neighborhood', 'Exterior1st', 'Exterior2nd']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="9e8cbeb8-7d92-4fb5-9296-65c4e8cb6784" type="checkbox" ><label class="sk-toggleable__label" for="9e8cbeb8-7d92-4fb5-9296-65c4e8cb6784">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(strategy='constant')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="287e62e6-2d4b-4699-9cc1-8bca054b62e5" type="checkbox" ><label class="sk-toggleable__label" for="287e62e6-2d4b-4699-9cc1-8bca054b62e5">OrdinalEncoder</label><div class="sk-toggleable__content"><pre>OrdinalEncoder()</pre></div></div></div></div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="0b43a4c2-a1ed-408e-8041-146eb433ab63" type="checkbox" ><label class="sk-toggleable__label" for="0b43a4c2-a1ed-408e-8041-146eb433ab63">RandomForestRegressor</label><div class="sk-toggleable__content"><pre>RandomForestRegressor(random_state=42)</pre></div></div></div></div></div></div></div>
 </div>
 
 </div>
@@ -618,7 +543,7 @@ preprocessor: Preprocessor for Columns Tranformer</p>
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>X_valid MAE: 17582.46150684932
+<pre>X_valid MAE: 17735.8051369863
 </pre>
 </div>
 </div>

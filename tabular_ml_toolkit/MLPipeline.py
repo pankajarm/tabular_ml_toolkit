@@ -9,14 +9,16 @@ from .PreProcessor import *
 # Cell
 # hide
 import pandas as pd
+import numpy as np
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.preprocessing import OrdinalEncoder
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import mean_absolute_error
-from sklearn.model_selection import cross_val_score
+from sklearn.metrics import mean_absolute_error, roc_auc_score,accuracy_score
+from sklearn.model_selection import cross_val_score, GridSearchCV, StratifiedKFold
+
 
 # Cell
 
@@ -52,15 +54,14 @@ class MLPipeline:
 #         return True
 
     # core methods
+
     # Bundle preprocessing and modeling code in a training pipeline
     def bundle_preproessor_model(self, transformer_type, model):
         self.scikit_pipeline = Pipeline(
             steps=[('preprocessor', transformer_type),
                    ('model', model)])
 
-#     def create_pipeline(self, preprocessor:object, model:object):
-#         self.bundle_preproessor_model(preprocessor, model)
-
+    # Core methods for Simple Training
     def prepare_data_for_training(self, train_file_path:str,
                                   test_file_path:str,
                                   idx_col:str, target:str,
@@ -84,6 +85,7 @@ class MLPipeline:
         return self
 
 
+    # Core methods for Cross Validation
     def prepare_data_for_cv(self, train_file_path:str, test_file_path:str,
                                           idx_col:str, target:str, model:object,
                                           random_state:int, cv_cols_type:str):
@@ -108,14 +110,84 @@ class MLPipeline:
         return self
 
 
-    def cross_validation(self,estimator:object, cv=5,scoring='neg_mean_absolute_error'):
+    def do_cross_validation(self,estimator:object, cv:int, scoring:str):
         scores = cross_val_score(
             estimator=estimator,
             X=self.dataframeloader.X_cv,
             y=self.dataframeloader.y,
             scoring=scoring,
             cv=cv)
-        # Multiply by -1 since sklearn calculates *negative* MAE
+        # Multiply by -1 since sklearn calculates *negative* scoring for some of the metrics
         if "neg_" in scoring:
             scores = -1 * scores
         return scores
+
+    # Core methods for GridSearch
+    def do_grid_search(self, estimator:object, param_grid:object, cv:int, scoring:str):
+
+        # create GridSeachCV instance
+        grid_search = GridSearchCV(estimator=estimator,
+                                   param_grid=param_grid,
+                                   cv=cv,
+                                   scoring=scoring)
+        # now call fit
+        grid_search.fit(self.dataframeloader.X_cv, self.dataframeloader.y)
+        return grid_search
+
+    # core method for K-Fold training
+    def prepare_data_for_k_fold(self, train_file_path:str, test_file_path:str,
+                                          idx_col:str, target:str, model:object,
+                                          random_state:int):
+
+        return self.prepare_data_for_cv(train_file_path,
+                                        test_file_path,
+                                        idx_col,
+                                        target,
+                                        model,
+                                        random_state,
+                                        cv_cols_type="all")
+
+    # do k-fold training
+    def do_k_fold_training(self, n_splits:int, metrics:object):
+
+        #create stratified K Folds instance
+        k_fold = StratifiedKFold(n_splits=n_splits,
+                             random_state=48,
+                             shuffle=True)
+
+        # list contains metrics score for each fold
+        metrics_score = []
+        n=0
+        for train_idx, valid_idx in k_fold.split(self.dataframeloader.X_cv, self.dataframeloader.y):
+            # create X_train
+            self.dataframeloader.X_train = self.dataframeloader.X_cv.iloc[train_idx]
+            # create X_valid
+            self.dataframeloader.X_valid = self.dataframeloader.X_cv.iloc[valid_idx]
+            # create y_train
+            self.dataframeloader.y_train = self.dataframeloader.y.iloc[train_idx]
+            # create y_valid
+            self.dataframeloader.y_valid = self.dataframeloader.y.iloc[valid_idx]
+
+            # fit
+            self.scikit_pipeline.fit(self.dataframeloader.X_train, self.dataframeloader.y_train)
+
+            #evaluate metrics based upon input
+            if "proba" in metrics.__globals__:
+                metrics_score.append(metrics(self.dataframeloader.y_valid,
+                                               self.scikit_pipeline.predict_proba(self.dataframeloader.X_valid)[:,1]))
+            else:
+                metrics_score.append(metrics(self.dataframeloader.y_valid,
+                                               self.scikit_pipeline.predict(self.dataframeloader.X_valid)))
+
+            print(f"fold: {n+1} , {str(metrics.__name__)}: {metrics_score[n]}")
+            # increment fold counter label
+            n += 1
+        return k_fold
+
+    def do_k_fold_prediction(self, k_fold:object):
+        # create preds dataframe
+        preds = np.zeros(self.dataframeloader.X_test_cv.shape[0])
+        for _ in range(k_fold.n_splits):
+            # predict
+            preds += self.scikit_pipeline.predict(self.dataframeloader.X_test_cv) / k_fold.n_splits
+        return preds

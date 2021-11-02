@@ -50,22 +50,22 @@ class PreProcessor:
     # PreProcessor core methods
 
     # Preprocessing for numerical data
-    def preprocess_numerical_data(self):
+    def preprocess_numerical_data(self, num_imput_strg):
         self.numerical_transformer = Pipeline(steps=[
-            ('imputer', SimpleImputer(strategy='constant')),
+            ('imputer', SimpleImputer(strategy=num_imput_strg)),
             ('scaler',  StandardScaler())
         ])
 
     # Preprocessing for categorical data
-    def preprocess_OHE_categorical_data(self):
+    def preprocess_OHE_categorical_data(self, low_cad_cat_imput_strg):
         self.OHE_categorical_transformer = Pipeline(steps=[
-        ('imputer', SimpleImputer(strategy='most_frequent')),
+        ('imputer', SimpleImputer(strategy=low_cad_cat_imput_strg)),
         ('onehot', OneHotEncoder(handle_unknown='ignore'))
         ])
 
-    def preprocess_OE_categorical_data(self):
+    def preprocess_OE_categorical_data(self, high_cad_cat_imput_strg):
         self.OE_categorical_transformer = Pipeline(steps=[
-        ('imputer', SimpleImputer(strategy='most_frequent')),
+        ('imputer', SimpleImputer(strategy=high_cad_cat_imput_strg)),
         ('ordinal', OrdinalEncoder())
         ])
 
@@ -74,11 +74,13 @@ class PreProcessor:
 #         pass
 
     # Bundle preprocessing for numerical and categorical data
-    def preprocess_all_cols_for_training(self, dataframeloader):
+    def preprocess_all_cols_for_training(self, dataframeloader, num_imput_strg='median',
+                                         low_cad_cat_imput_strg='constant',
+                                         high_cad_cat_imput_strg='constant'):
         # create scikit-learn pipelines instances
-        self.preprocess_numerical_data()
-        self.preprocess_OHE_categorical_data()
-        self.preprocess_OE_categorical_data()
+        self.preprocess_numerical_data(num_imput_strg)
+        self.preprocess_OHE_categorical_data(low_cad_cat_imput_strg)
+        self.preprocess_OE_categorical_data(high_cad_cat_imput_strg)
         # convert to Scikit-learn ColumnTranfomer
         self.columns_transfomer = ColumnTransformer(
             transformers=[
@@ -92,13 +94,16 @@ class PreProcessor:
         return self
 
     # Bundle preprocessing for cv_cols
-    def preprocess_cols_for_cv(self, cv_cols_type, dataframeloader):
+    def preprocess_cols_for_cv(self, cv_cols_type, dataframeloader,
+                               num_imput_strg='median',
+                               low_cad_cat_imput_strg='constant',
+                               high_cad_cat_imput_strg='constant'):
 
         # change column types and preprocessor according to cv_cols provided
         if cv_cols_type == "all":
             # create scikit-learn pipelines instances
-            self.preprocess_numerical_data()
-            self.preprocess_OHE_categorical_data()
+            self.preprocess_numerical_data(num_imput_strg)
+            self.preprocess_OHE_categorical_data(low_cad_cat_imput_strg)
             # convert to Scikit-learn ColumnTranfomer
             self.columns_transfomer = ColumnTransformer(
                 transformers=[
@@ -109,12 +114,12 @@ class PreProcessor:
             self.transformer_type = self.columns_transfomer
 
         elif cv_cols_type == "num":
-            self.preprocess_numerical_data()
+            self.preprocess_numerical_data(num_imput_strg)
             self.transformer_type = self.numerical_transformer
 
         elif cv_cols_type == "cat":
             # create scikit-learn pipelines instances
-            self.preprocess_OHE_categorical_data()
+            self.preprocess_OHE_categorical_data(low_cad_cat_imput_strg)
             # convert all categorical columns to OrdinalEncoder with Scikit-learn ColumnTranfomer
             self.columns_transfomer = ColumnTransformer(
                 transformers=[

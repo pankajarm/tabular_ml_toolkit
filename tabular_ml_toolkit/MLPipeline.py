@@ -110,9 +110,9 @@ class MLPipeline:
         return self
 
 
-    def do_cross_validation(self,estimator:object, cv:int, scoring:str):
+    def do_cross_validation(self, cv:int, scoring:str):
         scores = cross_val_score(
-            estimator=estimator,
+            estimator=self.scikit_pipeline,
             X=self.dataframeloader.X_cv,
             y=self.dataframeloader.y,
             scoring=scoring,
@@ -123,10 +123,10 @@ class MLPipeline:
         return scores
 
     # Core methods for GridSearch
-    def do_grid_search(self, estimator:object, param_grid:object, cv:int, scoring:str):
+    def do_grid_search(self, param_grid:object, cv:int, scoring:str):
 
         # create GridSeachCV instance
-        grid_search = GridSearchCV(estimator=estimator,
+        grid_search = GridSearchCV(estimator=self.scikit_pipeline,
                                    param_grid=param_grid,
                                    cv=cv,
                                    scoring=scoring)
@@ -182,7 +182,7 @@ class MLPipeline:
             print(f"fold: {n+1} , {str(metrics.__name__)}: {metrics_score[n]}")
             # increment fold counter label
             n += 1
-        return k_fold
+        return k_fold, metrics_score
 
     def do_k_fold_prediction(self, k_fold:object):
         # create preds dataframe

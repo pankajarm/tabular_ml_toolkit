@@ -11,7 +11,7 @@ import pandas as pd
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
-from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder, StandardScaler
+from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder, StandardScaler, MinMaxScaler
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error
 
@@ -50,22 +50,22 @@ class PreProcessor:
     # PreProcessor core methods
 
     # Preprocessing for numerical data
-    def preprocess_numerical_data(self, num_imput_strg):
+    def preprocess_numerical_data(self, num_imputer, num_scaler):
         self.numerical_transformer = Pipeline(steps=[
-            ('imputer', SimpleImputer(strategy=num_imput_strg)),
-            ('scaler',  StandardScaler())
+            ('imputer', num_imputer),
+            ('scaler',  num_scaler)
         ])
 
     # Preprocessing for categorical data
-    def preprocess_OHE_categorical_data(self, low_cad_cat_imput_strg):
+    def preprocess_OHE_categorical_data(self, cat_imputer):
         self.OHE_categorical_transformer = Pipeline(steps=[
-        ('imputer', SimpleImputer(strategy=low_cad_cat_imput_strg)),
+        ('imputer', cat_imputer),
         ('onehot', OneHotEncoder(handle_unknown='ignore'))
         ])
 
-    def preprocess_OE_categorical_data(self, high_cad_cat_imput_strg):
+    def preprocess_OE_categorical_data(self, cat_imputer):
         self.OE_categorical_transformer = Pipeline(steps=[
-        ('imputer', SimpleImputer(strategy=high_cad_cat_imput_strg)),
+        ('imputer', cat_imputer),
         ('ordinal', OrdinalEncoder())
         ])
 
@@ -73,63 +73,44 @@ class PreProcessor:
 #     def reduce_dims(self):
 #         pass
 
-    # Bundle preprocessing for numerical and categorical data
-    def preprocess_all_cols_for_training(self, dataframeloader, num_imput_strg='median',
-                                         low_cad_cat_imput_strg='constant',
-                                         high_cad_cat_imput_strg='constant'):
-        # create scikit-learn pipelines instances
-        self.preprocess_numerical_data(num_imput_strg)
-        self.preprocess_OHE_categorical_data(low_cad_cat_imput_strg)
-        self.preprocess_OE_categorical_data(high_cad_cat_imput_strg)
-        # convert to Scikit-learn ColumnTranfomer
-        self.columns_transfomer = ColumnTransformer(
-            transformers=[
-                ('num', self.numerical_transformer, dataframeloader.numerical_cols),
-                ('low_cad_cat', self.OHE_categorical_transformer,
-                 dataframeloader.low_card_cat_cols),
-                ('high_cad_cat', self.OE_categorical_transformer,
-                 dataframeloader.high_card_cat_cols)
-            ])
-        self.transformer_type = self.columns_transfomer
-        return self
+    # Bundle preprocessing pipelines based upon types of columns
+    def preprocess_all_cols(self, dataframeloader,
+                            num_imputer = SimpleImputer(strategy='median'),
+                            num_scaler = StandardScaler(),
+                            cat_imputer = SimpleImputer(strategy='constant')):
 
-    # Bundle preprocessing for cv_cols
-    def preprocess_cols_for_cv(self, cv_cols_type, dataframeloader,
-                               num_imput_strg='median',
-                               low_cad_cat_imput_strg='constant',
-                               high_cad_cat_imput_strg='constant'):
+        # change preprocessor according to type of column found
 
-        # change column types and preprocessor according to cv_cols provided
-        if cv_cols_type == "all":
-            # create scikit-learn pipelines instances
-            self.preprocess_numerical_data(num_imput_strg)
-            self.preprocess_OHE_categorical_data(low_cad_cat_imput_strg)
-            # convert to Scikit-learn ColumnTranfomer
-            self.columns_transfomer = ColumnTransformer(
-                transformers=[
-                    ('num', self.numerical_transformer, dataframeloader.numerical_cols),
-                    ('low_cad_cat', self.OHE_categorical_transformer,
-                     dataframeloader.low_card_cat_cols)
-                ])
-            self.transformer_type = self.columns_transfomer
-
-        elif cv_cols_type == "num":
-            self.preprocess_numerical_data(num_imput_strg)
+        if (dataframeloader.low_card_cat_cols and dataframeloader.high_card_cat_cols) is None:
+            self.preprocess_numerical_data(num_imputer, num_scaler)
             self.transformer_type = self.numerical_transformer
 
-        elif cv_cols_type == "cat":
+        elif (dataframeloader.numerical_cols and dataframeloader.high_card_cat_cols) is None:
             # create scikit-learn pipelines instances
-            self.preprocess_OHE_categorical_data(low_cad_cat_imput_strg)
+            self.preprocess_OHE_categorical_data(cat_imputer)
             # convert all categorical columns to OrdinalEncoder with Scikit-learn ColumnTranfomer
             self.columns_transfomer = ColumnTransformer(
                 transformers=[
                     ('low_cad_cat', self.OHE_categorical_transformer,
                      dataframeloader.low_card_cat_cols)
-                    # REMOVING HIGH CARDINALITY COLUMNS BECAUSE OF NOT ENOUGH REPRESENTATION
-                    # OF CARDINALITY DURING K-FOLD SPLIT OF DATA
                 ])
             self.transformer_type = self.columns_transfomer
+
         else:
-            raise ValueError("Bad cv_cols_type, Only 'num','cat','all' are allowed!")
+            # create scikit-learn pipelines instances
+            self.preprocess_numerical_data(num_imputer, num_scaler)
+            self.preprocess_OHE_categorical_data(cat_imputer)
+            self.preprocess_OE_categorical_data(cat_imputer)
+            # convert to Scikit-learn ColumnTranfomer
+            self.columns_transfomer = ColumnTransformer(
+                transformers=[
+                    ('num', self.numerical_transformer,
+                     dataframeloader.numerical_cols),
+                    ('low_cad_cat', self.OHE_categorical_transformer,
+                     dataframeloader.low_card_cat_cols),
+                    ('high_cad_cat', self.OE_categorical_transformer,
+                     dataframeloader.high_card_cat_cols)
+                ])
+            self.transformer_type = self.columns_transfomer
 
         return self

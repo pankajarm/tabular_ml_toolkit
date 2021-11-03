@@ -49,9 +49,6 @@ class MLPipeline:
     def __repr__(self):
         return self.__str__()
 
-#     def __lt__(self):
-#         """returns: boolean"""
-#         return True
 
     # core methods
 
@@ -66,48 +63,28 @@ class MLPipeline:
                                   test_file_path:str,
                                   idx_col:str, target:str,
                                   random_state:int,
-                                  valid_size:float,
-                                  model:object):
-        self.model = model
-        # call DataFrameLoader module
-        self.dataframeloader = DataFrameLoader().from_csv(
-            train_file_path=train_file_path,
-            test_file_path=test_file_path,
-            idx_col=idx_col,target=target,
-            random_state=random_state,valid_size=valid_size)
-        # call PreProcessor module
-        self.preprocessor = PreProcessor().preprocess_all_cols_for_training(
-            dataframeloader=self.dataframeloader)
-
-        # call bundle method
-        self.bundle_preproessor_model(transformer_type=self.preprocessor.transformer_type,
-                                     model = model)
-        return self
-
-
-    # Core methods for Cross Validation
-    def prepare_data_for_cv(self, train_file_path:str, test_file_path:str,
-                                          idx_col:str, target:str, model:object,
-                                          random_state:int, cv_cols_type:str):
+                                  model:object,
+                                  valid_size:float=None):
         self.model = model
 
         # call DataFrameLoader module
         self.dataframeloader = DataFrameLoader().from_csv(
             train_file_path=train_file_path,
             test_file_path=test_file_path,
-            idx_col=idx_col, target=target,
+            idx_col=idx_col,
+            target=target,
             random_state=random_state,
-            cv_cols_type=cv_cols_type)
+            valid_size=valid_size)
 
         # call PreProcessor module
-        self.preprocessor = PreProcessor().preprocess_cols_for_cv(
-            cv_cols_type = cv_cols_type,
+        self.preprocessor = PreProcessor().preprocess_all_cols(
             dataframeloader=self.dataframeloader)
 
         # call bundle method
         self.bundle_preproessor_model(transformer_type=self.preprocessor.transformer_type,
                                      model = model)
         return self
+
 
 
     def do_cross_validation(self, cv:int, scoring:str):
@@ -134,18 +111,6 @@ class MLPipeline:
         grid_search.fit(self.dataframeloader.X_cv, self.dataframeloader.y)
         return grid_search
 
-    # core method for K-Fold training
-    def prepare_data_for_k_fold(self, train_file_path:str, test_file_path:str,
-                                          idx_col:str, target:str, model:object,
-                                          random_state:int):
-
-        return self.prepare_data_for_cv(train_file_path,
-                                        test_file_path,
-                                        idx_col,
-                                        target,
-                                        model,
-                                        random_state,
-                                        cv_cols_type="all")
 
     # do k-fold training
     def do_k_fold_training(self, n_splits:int, metrics:object):

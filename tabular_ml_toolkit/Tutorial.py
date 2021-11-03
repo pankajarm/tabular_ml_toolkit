@@ -32,13 +32,14 @@ sci_ml_pl = MLPipeline().prepare_data_for_training(
     valid_size=0.2)
 
 # Cell
-# createm ml pipeline for scikit-learn model
-sci_ml_pl = MLPipeline().prepare_data_for_cv(
+# createm ml pipeline for scikit-learn model without valid_size i.e. no split, so X,y remain original size
+sci_ml_pl = MLPipeline().prepare_data_for_training(
     train_file_path= DIRECTORY_PATH+TRAIN_FILE,
     test_file_path= DIRECTORY_PATH+TEST_FILE,
-    idx_col="Id", target="SalePrice",
-    model=scikit_model,random_state=42,
-    cv_cols_type = "all") #cv_cols_type = all|num|cat
+    idx_col="Id",
+    target="SalePrice",
+    model=scikit_model,
+    random_state=42)
 
 # Cell
 from xgboost import XGBRegressor

@@ -1,5 +1,5 @@
 # Tabular ML Toolkit
-> A Helpful ML Toolkit to Jumpstart your Machine Learning Project based on Tabular or Structured data.
+> A helper library to jumpstart your machine learning project based on tabular or structured data.
 
 
 ## Install
@@ -15,11 +15,11 @@ Start with your favorite model and then just simply create MLPipeline with one A
 
 *No need to install scikit-learn as it comes preinstall with Tabular_ML_Toolkit*
 
-```
+```python
 from tabular_ml_toolkit.MLPipeline import *
 ```
 
-```
+```python
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error
 
@@ -42,18 +42,18 @@ preds = sci_ml_pl.scikit_pipeline.predict(sci_ml_pl.dataframeloader.X_valid)
 print('X_valid MAE:', mean_absolute_error(sci_ml_pl.dataframeloader.y_valid, preds))
 ```
 
-    X_valid MAE: 17528.007756849314
+    X_valid MAE: 17676.01967465753
 
 
 *You can also use MLPipeline with XGBoost model, Just make sure to install XGBooost first depending upon your OS.*
 
 *After that all steps remains same. Here is example using XGBRegressor with [Melbourne Home Sale price data](https://www.kaggle.com/estrotococo/home-data-for-ml-course)*
 
-```
+```python
 #!pip install -U xgboost
 ```
 
-```
+```python
 from xgboost import XGBRegressor
 # create xgb ml model
 xgb_model = XGBRegressor(n_estimators=250,learning_rate=0.05, random_state=42)
@@ -74,19 +74,19 @@ preds = xgb_ml_pl.scikit_pipeline.predict(xgb_ml_pl.dataframeloader.X_valid)
 print('X_valid MAE:', mean_absolute_error(xgb_ml_pl.dataframeloader.y_valid, preds))
 ```
 
-    X_valid MAE: 15801.672262949487
+    X_valid MAE: 15824.136571596746
 
 
 In background `prepare_data_for_training` method loads your input data into Pandas DataFrame, seprates X(features) and y(target), split X(features) into X_train, y_train, X_valid, y_valid DataFrames. Then it preprocess all numerical and categorical type data found in these DataFrames. Then it bundle preprocessed data with your given model and return an MLPipeline object, so you can call MLPipeline to fit X_train and y_train and predict on X_valid or X_test.
 
 Here is detail documentation and source code.
 
-```
+```python
 # show_doc(MLPipeline.prepare_data_for_training)
 ```
 
 If you want to customize data and preprocessing steps you can do so by using `DataFrameLoader` and `PreProessor` classes. Check detail documentations for these classes for more options. 
 
-```
+```python
 # show_doc(MLPipeline)
 ```

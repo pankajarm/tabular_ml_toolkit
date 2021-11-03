@@ -28,22 +28,21 @@ class MLPipeline:
 
     Attributes:\n
     pipeline: An MLPipeline instance \n
-    dataframeloader: A DataFrameLoader instance \n
-    preprocessor: A PreProcessor Instance \n
+    dfl: A DataFrameLoader instance \n
+    pp: A PreProcessor Instance \n
     model: The given Model
     """
 
     def __init__(self):
-        self.pipeline = None
-        self.dataframeloader = None
-        self.preprocessor = None
+        self.dfl = None
+        self.pp = None
         self.model = None
-        self.scikit_pipeline = None
+        self.spl = None
         self.transformer_type = None
 
     def __str__(self):
         """Returns human readable string reprsentation"""
-        attr_str = ("pipeline, dataframeloader, preprocessor, model")
+        attr_str = ("spl, dfl, pp, model")
         return ("Training Pipeline object with attributes:"+attr_str)
 
     def __repr__(self):
@@ -54,7 +53,7 @@ class MLPipeline:
 
     # Bundle preprocessing and modeling code in a training pipeline
     def bundle_preproessor_model(self, transformer_type, model):
-        self.scikit_pipeline = Pipeline(
+        self.spl = Pipeline(
             steps=[('preprocessor', transformer_type),
                    ('model', model)])
 
@@ -68,7 +67,7 @@ class MLPipeline:
         self.model = model
 
         # call DataFrameLoader module
-        self.dataframeloader = DataFrameLoader().from_csv(
+        self.dfl = DataFrameLoader().from_csv(
             train_file_path=train_file_path,
             test_file_path=test_file_path,
             idx_col=idx_col,
@@ -77,11 +76,11 @@ class MLPipeline:
             valid_size=valid_size)
 
         # call PreProcessor module
-        self.preprocessor = PreProcessor().preprocess_all_cols(
-            dataframeloader=self.dataframeloader)
+        self.pp = PreProcessor().preprocess_all_cols(
+            dataframeloader=self.dfl)
 
         # call bundle method
-        self.bundle_preproessor_model(transformer_type=self.preprocessor.transformer_type,
+        self.bundle_preproessor_model(transformer_type=self.pp.transformer_type,
                                      model = model)
         return self
 
@@ -89,9 +88,9 @@ class MLPipeline:
 
     def do_cross_validation(self, cv:int, scoring:str):
         scores = cross_val_score(
-            estimator=self.scikit_pipeline,
-            X=self.dataframeloader.X,
-            y=self.dataframeloader.y,
+            estimator=self.spl,
+            X=self.dfl.X,
+            y=self.dfl.y,
             scoring=scoring,
             cv=cv)
         # Multiply by -1 since sklearn calculates *negative* scoring for some of the metrics
@@ -103,12 +102,12 @@ class MLPipeline:
     def do_grid_search(self, param_grid:object, cv:int, scoring:str):
 
         # create GridSeachCV instance
-        grid_search = GridSearchCV(estimator=self.scikit_pipeline,
+        grid_search = GridSearchCV(estimator=self.spl,
                                    param_grid=param_grid,
                                    cv=cv,
                                    scoring=scoring)
         # now call fit
-        grid_search.fit(self.dataframeloader.X, self.dataframeloader.y)
+        grid_search.fit(self.dfl.X, self.dfl.y)
         return grid_search
 
 
@@ -123,26 +122,26 @@ class MLPipeline:
         # list contains metrics score for each fold
         metrics_score = []
         n=0
-        for train_idx, valid_idx in k_fold.split(self.dataframeloader.X, self.dataframeloader.y):
+        for train_idx, valid_idx in k_fold.split(self.dfl.X, self.dfl.y):
             # create X_train
-            self.dataframeloader.X_train = self.dataframeloader.X.iloc[train_idx]
+            self.dfl.X_train = self.dfl.X.iloc[train_idx]
             # create X_valid
-            self.dataframeloader.X_valid = self.dataframeloader.X.iloc[valid_idx]
+            self.dfl.X_valid = self.dfl.X.iloc[valid_idx]
             # create y_train
-            self.dataframeloader.y_train = self.dataframeloader.y.iloc[train_idx]
+            self.dfl.y_train = self.dfl.y.iloc[train_idx]
             # create y_valid
-            self.dataframeloader.y_valid = self.dataframeloader.y.iloc[valid_idx]
+            self.dfl.y_valid = self.dfl.y.iloc[valid_idx]
 
             # fit
-            self.scikit_pipeline.fit(self.dataframeloader.X_train, self.dataframeloader.y_train)
+            self.spl.fit(self.dfl.X_train, self.dfl.y_train)
 
             #evaluate metrics based upon input
             if "proba" in metrics.__globals__:
-                metrics_score.append(metrics(self.dataframeloader.y_valid,
-                                               self.scikit_pipeline.predict_proba(self.dataframeloader.X_valid)[:,1]))
+                metrics_score.append(metrics(self.dfl.y_valid,
+                                               self.spl.predict_proba(self.dfl.X_valid)[:,1]))
             else:
-                metrics_score.append(metrics(self.dataframeloader.y_valid,
-                                               self.scikit_pipeline.predict(self.dataframeloader.X_valid)))
+                metrics_score.append(metrics(self.dfl.y_valid,
+                                               self.spl.predict(self.dfl.X_valid)))
 
             print(f"fold: {n+1} , {str(metrics.__name__)}: {metrics_score[n]}")
             # increment fold counter label
@@ -151,8 +150,8 @@ class MLPipeline:
 
     def do_k_fold_prediction(self, k_fold:object):
         # create preds dataframe
-        preds = np.zeros(self.dataframeloader.X_test.shape[0])
+        preds = np.zeros(self.dfl.X_test.shape[0])
         for _ in range(k_fold.n_splits):
             # predict
-            preds += self.scikit_pipeline.predict(self.dataframeloader.X_test) / k_fold.n_splits
+            preds += self.spl.predict(self.dfl.X_test) / k_fold.n_splits
         return preds

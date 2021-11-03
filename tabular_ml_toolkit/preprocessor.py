@@ -34,10 +34,6 @@ class PreProcessor:
         self.transformer_type = None
         self.OHE_categorical_transformer = None
         self.ORE_categorical_transformer = None
-#         self.numerical_cols = None
-#         self.low_card_cat_cols = None
-#         self.high_card_cat_cols = None
-#         self.final_cols = None
 
     def __str__(self):
         """Returns human readable string reprsentation"""
@@ -81,34 +77,64 @@ class PreProcessor:
 
         # change preprocessor according to type of column found
 
-        if (dataframeloader.low_card_cat_cols and dataframeloader.high_card_cat_cols) is None:
-            self.preprocess_numerical_data(num_imputer, num_scaler)
-            self.transformer_type = self.numerical_transformer
+        if len(dataframeloader.high_card_cat_cols) < 1:
+            if len(dataframeloader.low_card_cat_cols) < 1:
+                print("both high_card_cat_cols and low_card_cat_cols are None")
+                self.preprocess_numerical_data(num_imputer, num_scaler)
+                self.transformer_type = self.numerical_transformer
 
-        elif (dataframeloader.numerical_cols and dataframeloader.high_card_cat_cols) is None:
+            elif len(dataframeloader.numerical_cols) < 1:
+                print("both numeric nand high card cat cols are None")
+                # create scikit-learn pipelines instances
+                self.preprocess_OHE_categorical_data(cat_imputer)
+                # convert all categorical columns to OneHotEncoder with Scikit-learn ColumnTranfomer
+                self.columns_transfomer = ColumnTransformer(
+                    transformers=[
+                        ('low_card_cat_cols', self.OHE_categorical_transformer,
+                         dataframeloader.low_card_cat_cols)
+                    ])
+                self.transformer_type = self.columns_transfomer
+
+        elif len(dataframeloader.low_card_cat_cols) < 1:
+            if len(dataframeloader.numerical_cols) < 1:
+                print("both numeric nand low card cat cols are None")
+                # create scikit-learn pipelines instances
+                self.preprocess_OHE_categorical_data(cat_imputer)
+                # convert all categorical columns to OneHotEncoder with Scikit-learn ColumnTranfomer
+                self.columns_transfomer = ColumnTransformer(
+                    transformers=[
+                        ('high_card_cat_cols', self.OHE_categorical_transformer,
+                         dataframeloader.high_card_cat_cols)
+                    ])
+                self.transformer_type = self.columns_transfomer
+
+        elif len(dataframeloader.numerical_cols) < 1:
+            print("numeric cols are None")
             # create scikit-learn pipelines instances
             self.preprocess_OHE_categorical_data(cat_imputer)
-            # convert all categorical columns to OrdinalEncoder with Scikit-learn ColumnTranfomer
+            # convert all categorical columns to OneHotEncoder with Scikit-learn ColumnTranfomer
             self.columns_transfomer = ColumnTransformer(
                 transformers=[
-                    ('low_cad_cat', self.OHE_categorical_transformer,
-                     dataframeloader.low_card_cat_cols)
+                    ('low_card_cat_cols', self.OHE_categorical_transformer,
+                     dataframeloader.low_card_cat_cols),
+                    ('high_card_cat_cols', self.OHE_categorical_transformer,
+                     dataframeloader.high_card_cat_cols)
                 ])
             self.transformer_type = self.columns_transfomer
-
         else:
             # create scikit-learn pipelines instances
+            print("No cols types are None, So ALL preprocessors called!")
             self.preprocess_numerical_data(num_imputer, num_scaler)
             self.preprocess_OHE_categorical_data(cat_imputer)
             self.preprocess_OE_categorical_data(cat_imputer)
             # convert to Scikit-learn ColumnTranfomer
             self.columns_transfomer = ColumnTransformer(
                 transformers=[
-                    ('num', self.numerical_transformer,
+                    ('num_cols', self.numerical_transformer,
                      dataframeloader.numerical_cols),
-                    ('low_cad_cat', self.OHE_categorical_transformer,
+                    ('low_card_cat_cols', self.OHE_categorical_transformer,
                      dataframeloader.low_card_cat_cols),
-                    ('high_cad_cat', self.OE_categorical_transformer,
+                    ('high_card_cat_cols', self.OHE_categorical_transformer,
                      dataframeloader.high_card_cat_cols)
                 ])
             self.transformer_type = self.columns_transfomer

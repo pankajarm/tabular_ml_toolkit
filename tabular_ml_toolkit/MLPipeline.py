@@ -90,7 +90,7 @@ class MLPipeline:
     def do_cross_validation(self, cv:int, scoring:str):
         scores = cross_val_score(
             estimator=self.scikit_pipeline,
-            X=self.dataframeloader.X_cv,
+            X=self.dataframeloader.X,
             y=self.dataframeloader.y,
             scoring=scoring,
             cv=cv)
@@ -108,7 +108,7 @@ class MLPipeline:
                                    cv=cv,
                                    scoring=scoring)
         # now call fit
-        grid_search.fit(self.dataframeloader.X_cv, self.dataframeloader.y)
+        grid_search.fit(self.dataframeloader.X, self.dataframeloader.y)
         return grid_search
 
 
@@ -123,11 +123,11 @@ class MLPipeline:
         # list contains metrics score for each fold
         metrics_score = []
         n=0
-        for train_idx, valid_idx in k_fold.split(self.dataframeloader.X_cv, self.dataframeloader.y):
+        for train_idx, valid_idx in k_fold.split(self.dataframeloader.X, self.dataframeloader.y):
             # create X_train
-            self.dataframeloader.X_train = self.dataframeloader.X_cv.iloc[train_idx]
+            self.dataframeloader.X_train = self.dataframeloader.X.iloc[train_idx]
             # create X_valid
-            self.dataframeloader.X_valid = self.dataframeloader.X_cv.iloc[valid_idx]
+            self.dataframeloader.X_valid = self.dataframeloader.X.iloc[valid_idx]
             # create y_train
             self.dataframeloader.y_train = self.dataframeloader.y.iloc[train_idx]
             # create y_valid
@@ -151,8 +151,8 @@ class MLPipeline:
 
     def do_k_fold_prediction(self, k_fold:object):
         # create preds dataframe
-        preds = np.zeros(self.dataframeloader.X_test_cv.shape[0])
+        preds = np.zeros(self.dataframeloader.X_test.shape[0])
         for _ in range(k_fold.n_splits):
             # predict
-            preds += self.scikit_pipeline.predict(self.dataframeloader.X_test_cv) / k_fold.n_splits
+            preds += self.scikit_pipeline.predict(self.dataframeloader.X_test) / k_fold.n_splits
         return preds

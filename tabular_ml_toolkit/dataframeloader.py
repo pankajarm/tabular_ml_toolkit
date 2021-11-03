@@ -34,8 +34,6 @@ class DataFrameLoader:
         self.high_card_cat_cols = None
         self.final_cols = None
         self.cv_cols = None
-        self.X_cv = None
-        self.X_test_cv = None
 
     def __str__(self):
         """Returns human readable string reprsentation"""
@@ -97,7 +95,7 @@ class DataFrameLoader:
                            + self.numerical_cols)
 
     # prepare X_train, X_valid from selected columns
-    def update_X_train_X_valid_X_test(self, final_cols):
+    def update_X_train_X_valid_X_test(self, final_cols:object):
         self.X_train = self.X_train[final_cols]
         self.X_valid = self.X_valid[final_cols]
         self.X_test = self.X_test_full[final_cols]

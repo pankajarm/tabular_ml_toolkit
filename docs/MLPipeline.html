@@ -72,7 +72,7 @@ nb_path: "02_MLPipeline.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="MLPipeline" class="doc_header"><code>class</code> <code>MLPipeline</code><a href="https://github.com/psmathur/tabular_ml_toolkit/tree/master/tabular_ml_toolkit/MLPipeline.py#L25" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>MLPipeline</code>()</p>
+<h2 id="MLPipeline" class="doc_header"><code>class</code> <code>MLPipeline</code><a href="https://github.com/psmathur/tabular_ml_toolkit/tree/master/tabular_ml_toolkit/MLPipeline.py#L29" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>MLPipeline</code>()</p>
 </blockquote>
 <p>Represent MLPipeline class</p>
 <p>Attributes:</p>
@@ -102,7 +102,7 @@ nb_path: "02_MLPipeline.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="MLPipeline.prepare_data_for_training" class="doc_header"><code>MLPipeline.prepare_data_for_training</code><a href="https://github.com/psmathur/tabular_ml_toolkit/tree/master/tabular_ml_toolkit/MLPipeline.py#L61" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>MLPipeline.prepare_data_for_training</code>(<strong><code>train_file_path</code></strong>:<code>str</code>, <strong><code>test_file_path</code></strong>:<code>str</code>, <strong><code>idx_col</code></strong>:<code>str</code>, <strong><code>target</code></strong>:<code>str</code>, <strong><code>random_state</code></strong>:<code>int</code>, <strong><code>model</code></strong>:<code>object</code>, <strong><code>valid_size</code></strong>:<code>float</code>=<em><code>None</code></em>)</p>
+<h4 id="MLPipeline.prepare_data_for_training" class="doc_header"><code>MLPipeline.prepare_data_for_training</code><a href="https://github.com/psmathur/tabular_ml_toolkit/tree/master/tabular_ml_toolkit/MLPipeline.py#L65" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>MLPipeline.prepare_data_for_training</code>(<strong><code>train_file_path</code></strong>:<code>str</code>, <strong><code>test_file_path</code></strong>:<code>str</code>, <strong><code>idx_col</code></strong>:<code>str</code>, <strong><code>target</code></strong>:<code>str</code>, <strong><code>random_state</code></strong>:<code>int</code>, <strong><code>model</code></strong>:<code>object</code>)</p>
 </blockquote>
 
 </div>
@@ -128,6 +128,151 @@ nb_path: "02_MLPipeline.ipynb"
 </div>
 </div>
 </div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sci_ml_pl</span><span class="o">.</span><span class="n">spl</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<style>#sk-0269d4ed-716f-4a9c-84cc-c923462aa029 {color: black;background-color: white;}#sk-0269d4ed-716f-4a9c-84cc-c923462aa029 pre{padding: 0;}#sk-0269d4ed-716f-4a9c-84cc-c923462aa029 div.sk-toggleable {background-color: white;}#sk-0269d4ed-716f-4a9c-84cc-c923462aa029 label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.3em;box-sizing: border-box;text-align: center;}#sk-0269d4ed-716f-4a9c-84cc-c923462aa029 div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}#sk-0269d4ed-716f-4a9c-84cc-c923462aa029 div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}#sk-0269d4ed-716f-4a9c-84cc-c923462aa029 input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}#sk-0269d4ed-716f-4a9c-84cc-c923462aa029 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-0269d4ed-716f-4a9c-84cc-c923462aa029 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-0269d4ed-716f-4a9c-84cc-c923462aa029 input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}#sk-0269d4ed-716f-4a9c-84cc-c923462aa029 div.sk-estimator {font-family: monospace;background-color: #f0f8ff;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;margin-bottom: 0.5em;}#sk-0269d4ed-716f-4a9c-84cc-c923462aa029 div.sk-estimator:hover {background-color: #d4ebff;}#sk-0269d4ed-716f-4a9c-84cc-c923462aa029 div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}#sk-0269d4ed-716f-4a9c-84cc-c923462aa029 div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}#sk-0269d4ed-716f-4a9c-84cc-c923462aa029 div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}#sk-0269d4ed-716f-4a9c-84cc-c923462aa029 div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;padding-right: 0.2em;padding-left: 0.2em;}#sk-0269d4ed-716f-4a9c-84cc-c923462aa029 div.sk-item {z-index: 1;}#sk-0269d4ed-716f-4a9c-84cc-c923462aa029 div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}#sk-0269d4ed-716f-4a9c-84cc-c923462aa029 div.sk-parallel::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}#sk-0269d4ed-716f-4a9c-84cc-c923462aa029 div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}#sk-0269d4ed-716f-4a9c-84cc-c923462aa029 div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}#sk-0269d4ed-716f-4a9c-84cc-c923462aa029 div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}#sk-0269d4ed-716f-4a9c-84cc-c923462aa029 div.sk-parallel-item:only-child::after {width: 0;}#sk-0269d4ed-716f-4a9c-84cc-c923462aa029 div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0 0.4em 0.5em 0.4em;box-sizing: border-box;padding-bottom: 0.4em;background-color: white;position: relative;}#sk-0269d4ed-716f-4a9c-84cc-c923462aa029 div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}#sk-0269d4ed-716f-4a9c-84cc-c923462aa029 div.sk-label-container {position: relative;z-index: 2;text-align: center;}#sk-0269d4ed-716f-4a9c-84cc-c923462aa029 div.sk-container {display: inline-block;position: relative;}</style><div id="sk-0269d4ed-716f-4a9c-84cc-c923462aa029" class"sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="cef6d363-44ef-4adb-aab3-2599a2859d40" type="checkbox" ><label class="sk-toggleable__label" for="cef6d363-44ef-4adb-aab3-2599a2859d40">Pipeline</label><div class="sk-toggleable__content"><pre>Pipeline(steps=[('preprocessor',
+                 ColumnTransformer(transformers=[('num_cols',
+                                                  Pipeline(steps=[('imputer',
+                                                                   SimpleImputer(strategy='median')),
+                                                                  ('scaler',
+                                                                   StandardScaler())]),
+                                                  ['MSSubClass', 'LotFrontage',
+                                                   'LotArea', 'OverallQual',
+                                                   'OverallCond', 'YearBuilt',
+                                                   'YearRemodAdd', 'MasVnrArea',
+                                                   'BsmtFinSF1', 'BsmtFinSF2',
+                                                   'BsmtUnfSF', 'TotalBsmtSF',
+                                                   '1stFlrSF', '2ndFlrSF',
+                                                   'Lo...
+                                                   'BsmtFinType2', 'Heating',
+                                                   'HeatingQC', 'CentralAir',
+                                                   'Electrical', 'KitchenQual',
+                                                   'Functional', 'FireplaceQu', ...]),
+                                                 ('high_card_cat_cols',
+                                                  Pipeline(steps=[('imputer',
+                                                                   SimpleImputer(strategy='constant')),
+                                                                  ('onehot',
+                                                                   OneHotEncoder(handle_unknown='ignore'))]),
+                                                  ['Neighborhood',
+                                                   'Exterior1st',
+                                                   'Exterior2nd'])])),
+                ('model',
+                 RandomForestRegressor(n_estimators=200, random_state=42))])</pre></div></div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="fa289c9a-793b-4b87-9048-191d65f1497f" type="checkbox" ><label class="sk-toggleable__label" for="fa289c9a-793b-4b87-9048-191d65f1497f">preprocessor: ColumnTransformer</label><div class="sk-toggleable__content"><pre>ColumnTransformer(transformers=[('num_cols',
+                                 Pipeline(steps=[('imputer',
+                                                  SimpleImputer(strategy='median')),
+                                                 ('scaler', StandardScaler())]),
+                                 ['MSSubClass', 'LotFrontage', 'LotArea',
+                                  'OverallQual', 'OverallCond', 'YearBuilt',
+                                  'YearRemodAdd', 'MasVnrArea', 'BsmtFinSF1',
+                                  'BsmtFinSF2', 'BsmtUnfSF', 'TotalBsmtSF',
+                                  '1stFlrSF', '2ndFlrSF', 'LowQualFinSF',
+                                  'GrLivArea', 'BsmtFul...
+                                  'ExterCond', 'Foundation', 'BsmtQual',
+                                  'BsmtCond', 'BsmtExposure', 'BsmtFinType1',
+                                  'BsmtFinType2', 'Heating', 'HeatingQC',
+                                  'CentralAir', 'Electrical', 'KitchenQual',
+                                  'Functional', 'FireplaceQu', ...]),
+                                ('high_card_cat_cols',
+                                 Pipeline(steps=[('imputer',
+                                                  SimpleImputer(strategy='constant')),
+                                                 ('onehot',
+                                                  OneHotEncoder(handle_unknown='ignore'))]),
+                                 ['Neighborhood', 'Exterior1st',
+                                  'Exterior2nd'])])</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="6a907ff2-6146-4088-89bc-28ca90c2c5a5" type="checkbox" ><label class="sk-toggleable__label" for="6a907ff2-6146-4088-89bc-28ca90c2c5a5">num_cols</label><div class="sk-toggleable__content"><pre>['MSSubClass', 'LotFrontage', 'LotArea', 'OverallQual', 'OverallCond', 'YearBuilt', 'YearRemodAdd', 'MasVnrArea', 'BsmtFinSF1', 'BsmtFinSF2', 'BsmtUnfSF', 'TotalBsmtSF', '1stFlrSF', '2ndFlrSF', 'LowQualFinSF', 'GrLivArea', 'BsmtFullBath', 'BsmtHalfBath', 'FullBath', 'HalfBath', 'BedroomAbvGr', 'KitchenAbvGr', 'TotRmsAbvGrd', 'Fireplaces', 'GarageYrBlt', 'GarageCars', 'GarageArea', 'WoodDeckSF', 'OpenPorchSF', 'EnclosedPorch', '3SsnPorch', 'ScreenPorch', 'PoolArea', 'MiscVal', 'MoSold', 'YrSold']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="bf1a4872-6451-4832-9511-0ac4ee0c7be8" type="checkbox" ><label class="sk-toggleable__label" for="bf1a4872-6451-4832-9511-0ac4ee0c7be8">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(strategy='median')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="415029ab-952a-4d5b-8149-4b1728d1fcd5" type="checkbox" ><label class="sk-toggleable__label" for="415029ab-952a-4d5b-8149-4b1728d1fcd5">StandardScaler</label><div class="sk-toggleable__content"><pre>StandardScaler()</pre></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="ab23063a-a9df-4fee-a3ba-373a65fe9acf" type="checkbox" ><label class="sk-toggleable__label" for="ab23063a-a9df-4fee-a3ba-373a65fe9acf">low_card_cat_cols</label><div class="sk-toggleable__content"><pre>['MSZoning', 'Street', 'Alley', 'LotShape', 'LandContour', 'Utilities', 'LotConfig', 'LandSlope', 'Condition1', 'Condition2', 'BldgType', 'HouseStyle', 'RoofStyle', 'RoofMatl', 'MasVnrType', 'ExterQual', 'ExterCond', 'Foundation', 'BsmtQual', 'BsmtCond', 'BsmtExposure', 'BsmtFinType1', 'BsmtFinType2', 'Heating', 'HeatingQC', 'CentralAir', 'Electrical', 'KitchenQual', 'Functional', 'FireplaceQu', 'GarageType', 'GarageFinish', 'GarageQual', 'GarageCond', 'PavedDrive', 'PoolQC', 'Fence', 'MiscFeature', 'SaleType', 'SaleCondition']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="a1835ecb-92ee-4c57-b69d-f43edb8574b3" type="checkbox" ><label class="sk-toggleable__label" for="a1835ecb-92ee-4c57-b69d-f43edb8574b3">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(strategy='constant')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="1acf2d5c-b90d-49ad-9d32-b75ec01a2c2a" type="checkbox" ><label class="sk-toggleable__label" for="1acf2d5c-b90d-49ad-9d32-b75ec01a2c2a">OneHotEncoder</label><div class="sk-toggleable__content"><pre>OneHotEncoder(handle_unknown='ignore')</pre></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="75a143a2-ecd2-44e3-bf95-0d5f74eb158b" type="checkbox" ><label class="sk-toggleable__label" for="75a143a2-ecd2-44e3-bf95-0d5f74eb158b">high_card_cat_cols</label><div class="sk-toggleable__content"><pre>['Neighborhood', 'Exterior1st', 'Exterior2nd']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="51a9da57-bbda-4e0c-b031-f62527474459" type="checkbox" ><label class="sk-toggleable__label" for="51a9da57-bbda-4e0c-b031-f62527474459">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(strategy='constant')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="6f53a1df-56ae-4c7f-9a17-8707a74d45ed" type="checkbox" ><label class="sk-toggleable__label" for="6f53a1df-56ae-4c7f-9a17-8707a74d45ed">OneHotEncoder</label><div class="sk-toggleable__content"><pre>OneHotEncoder(handle_unknown='ignore')</pre></div></div></div></div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="574b0eb2-1623-43af-9895-42114a3489f9" type="checkbox" ><label class="sk-toggleable__label" for="574b0eb2-1623-43af-9895-42114a3489f9">RandomForestRegressor</label><div class="sk-toggleable__content"><pre>RandomForestRegressor(n_estimators=200, random_state=42)</pre></div></div></div></div></div></div></div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sci_ml_pl</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">create_train_valid</span><span class="p">(</span><span class="n">valid_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sci_ml_pl</span><span class="o">.</span><span class="n">spl</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">sci_ml_pl</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_train</span><span class="p">,</span> <span class="n">sci_ml_pl</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_train</span><span class="p">)</span>
+
+<span class="n">preds</span> <span class="o">=</span> <span class="n">sci_ml_pl</span><span class="o">.</span><span class="n">spl</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">sci_ml_pl</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_valid</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;X_valid MAE:&#39;</span><span class="p">,</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">sci_ml_pl</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">preds</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>X_valid MAE: 17483.238390410956
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
 </div>
  
 

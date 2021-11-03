@@ -19,8 +19,11 @@ entries:
       title: MLPipeline
       url: MLPipeline.html
     - output: web,pdf
-      title: Cross Validation Tutorial
-      url: CrossValidation_Tutorial.html
+      title: Tutorial
+      url: Tutorial.html
+    - output: web,pdf
+      title: Kaggle TPS Tutorial
+      url: Kaggle_TPS_Tutorial.html
     output: web
     title: tabular_ml_toolkit
   output: web

@@ -26,22 +26,6 @@ nb_path: "03_Tutorial.ipynb"
     
 <div class="cell border-box-sizing code_cell rendered">
 
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>No cols types are None, So ALL preprocessors called!
-No cols types are None, So ALL preprocessors called!
-No cols types are None, So ALL preprocessors called!
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
 </div>
     {% endraw %}
 
@@ -107,10 +91,87 @@ No cols types are None, So ALL preprocessors called!
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">set_config</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ml_pl</span><span class="o">.</span><span class="n">spl</span>
+</pre></div>
 
-<span class="n">set_config</span><span class="p">(</span><span class="n">display</span><span class="o">=</span><span class="s2">&quot;diagram&quot;</span><span class="p">)</span>
-<span class="n">sci_ml_pl</span><span class="o">.</span><span class="n">scikit_pipeline</span>
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<style>#sk-28e6661c-d989-49e3-9ee0-7f48680bf230 {color: black;background-color: white;}#sk-28e6661c-d989-49e3-9ee0-7f48680bf230 pre{padding: 0;}#sk-28e6661c-d989-49e3-9ee0-7f48680bf230 div.sk-toggleable {background-color: white;}#sk-28e6661c-d989-49e3-9ee0-7f48680bf230 label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.3em;box-sizing: border-box;text-align: center;}#sk-28e6661c-d989-49e3-9ee0-7f48680bf230 div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}#sk-28e6661c-d989-49e3-9ee0-7f48680bf230 div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}#sk-28e6661c-d989-49e3-9ee0-7f48680bf230 input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}#sk-28e6661c-d989-49e3-9ee0-7f48680bf230 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-28e6661c-d989-49e3-9ee0-7f48680bf230 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-28e6661c-d989-49e3-9ee0-7f48680bf230 input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}#sk-28e6661c-d989-49e3-9ee0-7f48680bf230 div.sk-estimator {font-family: monospace;background-color: #f0f8ff;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;margin-bottom: 0.5em;}#sk-28e6661c-d989-49e3-9ee0-7f48680bf230 div.sk-estimator:hover {background-color: #d4ebff;}#sk-28e6661c-d989-49e3-9ee0-7f48680bf230 div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}#sk-28e6661c-d989-49e3-9ee0-7f48680bf230 div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}#sk-28e6661c-d989-49e3-9ee0-7f48680bf230 div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}#sk-28e6661c-d989-49e3-9ee0-7f48680bf230 div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;padding-right: 0.2em;padding-left: 0.2em;}#sk-28e6661c-d989-49e3-9ee0-7f48680bf230 div.sk-item {z-index: 1;}#sk-28e6661c-d989-49e3-9ee0-7f48680bf230 div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}#sk-28e6661c-d989-49e3-9ee0-7f48680bf230 div.sk-parallel::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}#sk-28e6661c-d989-49e3-9ee0-7f48680bf230 div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}#sk-28e6661c-d989-49e3-9ee0-7f48680bf230 div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}#sk-28e6661c-d989-49e3-9ee0-7f48680bf230 div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}#sk-28e6661c-d989-49e3-9ee0-7f48680bf230 div.sk-parallel-item:only-child::after {width: 0;}#sk-28e6661c-d989-49e3-9ee0-7f48680bf230 div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0 0.4em 0.5em 0.4em;box-sizing: border-box;padding-bottom: 0.4em;background-color: white;position: relative;}#sk-28e6661c-d989-49e3-9ee0-7f48680bf230 div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}#sk-28e6661c-d989-49e3-9ee0-7f48680bf230 div.sk-label-container {position: relative;z-index: 2;text-align: center;}#sk-28e6661c-d989-49e3-9ee0-7f48680bf230 div.sk-container {display: inline-block;position: relative;}</style><div id="sk-28e6661c-d989-49e3-9ee0-7f48680bf230" class"sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="405630d8-4ea3-4911-be18-61f719302fc1" type="checkbox" ><label class="sk-toggleable__label" for="405630d8-4ea3-4911-be18-61f719302fc1">Pipeline</label><div class="sk-toggleable__content"><pre>Pipeline(steps=[('preprocessor',
+                 ColumnTransformer(transformers=[('num_cols',
+                                                  Pipeline(steps=[('imputer',
+                                                                   SimpleImputer(strategy='median')),
+                                                                  ('scaler',
+                                                                   StandardScaler())]),
+                                                  ['MSSubClass', 'LotFrontage',
+                                                   'LotArea', 'OverallQual',
+                                                   'OverallCond', 'YearBuilt',
+                                                   'YearRemodAdd', 'MasVnrArea',
+                                                   'BsmtFinSF1', 'BsmtFinSF2',
+                                                   'BsmtUnfSF', 'TotalBsmtSF',
+                                                   '1stFlrSF', '2ndFlrSF',
+                                                   'Lo...
+                                                   'BsmtFinType2', 'Heating',
+                                                   'HeatingQC', 'CentralAir',
+                                                   'Electrical', 'KitchenQual',
+                                                   'Functional', 'FireplaceQu', ...]),
+                                                 ('high_card_cat_cols',
+                                                  Pipeline(steps=[('imputer',
+                                                                   SimpleImputer(strategy='constant')),
+                                                                  ('onehot',
+                                                                   OneHotEncoder(handle_unknown='ignore'))]),
+                                                  ['Neighborhood',
+                                                   'Exterior1st',
+                                                   'Exterior2nd'])])),
+                ('model',
+                 RandomForestRegressor(n_estimators=200, random_state=42))])</pre></div></div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="932ebe55-ba93-4ed4-ac04-d3f68ef0a14e" type="checkbox" ><label class="sk-toggleable__label" for="932ebe55-ba93-4ed4-ac04-d3f68ef0a14e">preprocessor: ColumnTransformer</label><div class="sk-toggleable__content"><pre>ColumnTransformer(transformers=[('num_cols',
+                                 Pipeline(steps=[('imputer',
+                                                  SimpleImputer(strategy='median')),
+                                                 ('scaler', StandardScaler())]),
+                                 ['MSSubClass', 'LotFrontage', 'LotArea',
+                                  'OverallQual', 'OverallCond', 'YearBuilt',
+                                  'YearRemodAdd', 'MasVnrArea', 'BsmtFinSF1',
+                                  'BsmtFinSF2', 'BsmtUnfSF', 'TotalBsmtSF',
+                                  '1stFlrSF', '2ndFlrSF', 'LowQualFinSF',
+                                  'GrLivArea', 'BsmtFul...
+                                  'ExterCond', 'Foundation', 'BsmtQual',
+                                  'BsmtCond', 'BsmtExposure', 'BsmtFinType1',
+                                  'BsmtFinType2', 'Heating', 'HeatingQC',
+                                  'CentralAir', 'Electrical', 'KitchenQual',
+                                  'Functional', 'FireplaceQu', ...]),
+                                ('high_card_cat_cols',
+                                 Pipeline(steps=[('imputer',
+                                                  SimpleImputer(strategy='constant')),
+                                                 ('onehot',
+                                                  OneHotEncoder(handle_unknown='ignore'))]),
+                                 ['Neighborhood', 'Exterior1st',
+                                  'Exterior2nd'])])</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="905c7193-e7ab-4ac7-b534-f17a3dbde8ca" type="checkbox" ><label class="sk-toggleable__label" for="905c7193-e7ab-4ac7-b534-f17a3dbde8ca">num_cols</label><div class="sk-toggleable__content"><pre>['MSSubClass', 'LotFrontage', 'LotArea', 'OverallQual', 'OverallCond', 'YearBuilt', 'YearRemodAdd', 'MasVnrArea', 'BsmtFinSF1', 'BsmtFinSF2', 'BsmtUnfSF', 'TotalBsmtSF', '1stFlrSF', '2ndFlrSF', 'LowQualFinSF', 'GrLivArea', 'BsmtFullBath', 'BsmtHalfBath', 'FullBath', 'HalfBath', 'BedroomAbvGr', 'KitchenAbvGr', 'TotRmsAbvGrd', 'Fireplaces', 'GarageYrBlt', 'GarageCars', 'GarageArea', 'WoodDeckSF', 'OpenPorchSF', 'EnclosedPorch', '3SsnPorch', 'ScreenPorch', 'PoolArea', 'MiscVal', 'MoSold', 'YrSold']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="63c11dbc-6793-4691-aea8-e7b2dd2ab362" type="checkbox" ><label class="sk-toggleable__label" for="63c11dbc-6793-4691-aea8-e7b2dd2ab362">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(strategy='median')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="1a6bda56-4c19-49fd-b57f-66a96626ac42" type="checkbox" ><label class="sk-toggleable__label" for="1a6bda56-4c19-49fd-b57f-66a96626ac42">StandardScaler</label><div class="sk-toggleable__content"><pre>StandardScaler()</pre></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="496d364c-2f10-48cb-b27e-98129cdab629" type="checkbox" ><label class="sk-toggleable__label" for="496d364c-2f10-48cb-b27e-98129cdab629">low_card_cat_cols</label><div class="sk-toggleable__content"><pre>['MSZoning', 'Street', 'Alley', 'LotShape', 'LandContour', 'Utilities', 'LotConfig', 'LandSlope', 'Condition1', 'Condition2', 'BldgType', 'HouseStyle', 'RoofStyle', 'RoofMatl', 'MasVnrType', 'ExterQual', 'ExterCond', 'Foundation', 'BsmtQual', 'BsmtCond', 'BsmtExposure', 'BsmtFinType1', 'BsmtFinType2', 'Heating', 'HeatingQC', 'CentralAir', 'Electrical', 'KitchenQual', 'Functional', 'FireplaceQu', 'GarageType', 'GarageFinish', 'GarageQual', 'GarageCond', 'PavedDrive', 'PoolQC', 'Fence', 'MiscFeature', 'SaleType', 'SaleCondition']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="9ac77ce3-bab2-400e-88f5-193e56d3f106" type="checkbox" ><label class="sk-toggleable__label" for="9ac77ce3-bab2-400e-88f5-193e56d3f106">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(strategy='constant')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="ac9513cd-e523-4090-b0cd-13d6c784ab0d" type="checkbox" ><label class="sk-toggleable__label" for="ac9513cd-e523-4090-b0cd-13d6c784ab0d">OneHotEncoder</label><div class="sk-toggleable__content"><pre>OneHotEncoder(handle_unknown='ignore')</pre></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="19266106-ab65-48ce-bc92-5a8afeca32f6" type="checkbox" ><label class="sk-toggleable__label" for="19266106-ab65-48ce-bc92-5a8afeca32f6">high_card_cat_cols</label><div class="sk-toggleable__content"><pre>['Neighborhood', 'Exterior1st', 'Exterior2nd']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="15da2104-b7bc-4034-a534-54a1dc277ad2" type="checkbox" ><label class="sk-toggleable__label" for="15da2104-b7bc-4034-a534-54a1dc277ad2">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(strategy='constant')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="9d1e00d1-773c-4573-bd88-73c95a7ea3df" type="checkbox" ><label class="sk-toggleable__label" for="9d1e00d1-773c-4573-bd88-73c95a7ea3df">OneHotEncoder</label><div class="sk-toggleable__content"><pre>OneHotEncoder(handle_unknown='ignore')</pre></div></div></div></div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="630f1282-d68c-4236-93cf-f9f1272b8539" type="checkbox" ><label class="sk-toggleable__label" for="630f1282-d68c-4236-93cf-f9f1272b8539">RandomForestRegressor</label><div class="sk-toggleable__content"><pre>RandomForestRegressor(n_estimators=200, random_state=42)</pre></div></div></div></div></div></div></div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ml_pl</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">create_train_valid</span><span class="p">(</span><span class="n">valid_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -127,13 +188,27 @@ No cols types are None, So ALL preprocessors called!
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sci_ml_pl</span><span class="o">.</span><span class="n">scikit_pipeline</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">sci_ml_pl</span><span class="o">.</span><span class="n">dataframeloader</span><span class="o">.</span><span class="n">X_train</span><span class="p">,</span> <span class="n">sci_ml_pl</span><span class="o">.</span><span class="n">dataframeloader</span><span class="o">.</span><span class="n">y_train</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ml_pl</span><span class="o">.</span><span class="n">spl</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">ml_pl</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_train</span><span class="p">,</span> <span class="n">ml_pl</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_train</span><span class="p">)</span>
 
-<span class="n">preds</span> <span class="o">=</span> <span class="n">sci_ml_pl</span><span class="o">.</span><span class="n">scikit_pipeline</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">sci_ml_pl</span><span class="o">.</span><span class="n">dataframeloader</span><span class="o">.</span><span class="n">X_valid</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;X_valid MAE:&#39;</span><span class="p">,</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">sci_ml_pl</span><span class="o">.</span><span class="n">dataframeloader</span><span class="o">.</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">preds</span><span class="p">))</span>
+<span class="n">preds</span> <span class="o">=</span> <span class="n">ml_pl</span><span class="o">.</span><span class="n">spl</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">ml_pl</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_valid</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;X_valid MAE:&#39;</span><span class="p">,</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">ml_pl</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">preds</span><span class="p">))</span>
 </pre></div>
 
     </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>X_valid MAE: 17483.238390410956
+</pre>
+</div>
+</div>
+
 </div>
 </div>
 
@@ -149,10 +224,61 @@ No cols types are None, So ALL preprocessors called!
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">scores</span> <span class="o">=</span> <span class="n">ml_pl</span><span class="o">.</span><span class="n">do_cross_validation</span><span class="p">(</span><span class="n">cv</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;neg_mean_absolute_error&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;scores:&quot;</span><span class="p">,</span> <span class="n">scores</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Average MAE score:&quot;</span><span class="p">,</span> <span class="n">scores</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>scores: [17701.71892197 17568.5187269  18495.24910494]
+Average MAE score: 17921.828917936306
+</pre>
+</div>
+</div>
+
+</div>
+</div>
 
 </div>
     {% endraw %}
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>In background <code>prepare_data_for_training</code> and <code>prepare_data_for_cv</code>  methods loads your input data into Pandas DataFrame, seprates X(features) and y(target).</p>
+<p>Then <code>prepare_data_for_training</code> methods split X(features) into X_train, y_train, X_valid and y_valid DataFrames.
+However, <code>prepare_data_for_cv</code>  method do not split but let's cross validation split internally X and y DataFrames.</p>
+<p>Then both methods preprocess all numerical and categorical type data found in these DataFrames using scikit-learn pipelines. Then it bundle preprocessed data with your given model and return an MLPipeline object, this class instance has dataframeloader, preprocessor and scikit-lean pipeline instances, so you can call fit methods on X_train and y_train and predict methods on X_valid or X_test.</p>
+<p>Please check detail documentation and source code for more details.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><em>NOTE: If you want to customize data and preprocessing steps you can do so by using <a href="/tabular_ml_toolkit/DataFrameLoader.html#DataFrameLoader"><code>DataFrameLoader</code></a> and <code>PreProessor</code> classes. Check detail documentations for these classes for more options.</em></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Let's-do-Grid-Search-for-HyperParameters-Tunning-for-Scikit-Model-on-our-MLPipeline">Let's do Grid Search for HyperParameters Tunning for Scikit Model on our MLPipeline<a class="anchor-link" href="#Let's-do-Grid-Search-for-HyperParameters-Tunning-for-Scikit-Model-on-our-MLPipeline"> </a></h4>
+</div>
+</div>
+</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -160,10 +286,51 @@ No cols types are None, So ALL preprocessors called!
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">set_config</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># #     &quot;preprocessor__num__imputer__strategy&quot;: [&quot;constant&quot;, &quot;mean&quot;, &quot;median&quot;],</span>
+<span class="c1"># #     &quot;preprocessor__low_cad_cat__imputer__strategy&quot;: [&quot;most_frequent&quot;, &quot;constant&quot;],</span>
+<span class="c1"># #     &quot;model__max_depth&quot;: [40,80,100],</span>
+<span class="c1"># #     &#39;model__max_features&#39;: [2, 3],</span>
+<span class="c1"># #     &#39;model__min_samples_leaf&#39;: [3,4,5],</span>
+<span class="c1"># #     &#39;model__min_samples_split&#39;: [8,10,12],</span>
+<span class="c1">#     &quot;model__n_estimators&quot;: [250,550]</span>
+<span class="c1"># }</span>
 
-<span class="n">set_config</span><span class="p">(</span><span class="n">display</span><span class="o">=</span><span class="s2">&quot;diagram&quot;</span><span class="p">)</span>
-<span class="n">sci_ml_pl</span><span class="o">.</span><span class="n">scikit_pipeline</span>
+<span class="c1"># grid_search = ml_pl.do_grid_search(param_grid=param_grid, cv=3,</span>
+<span class="c1">#                                        scoring=&#39;neg_mean_absolute_error&#39;)</span>
+
+<span class="c1"># print(&quot;Best params:&quot;)</span>
+<span class="c1"># print(grid_search.best_params_)</span>
+
+<span class="c1"># print(f&quot;Internal CV Metrics score: {-1*(grid_search.best_score_):.3f}&quot;)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Let's-Use-K-Fold-Training-with-best-params-from-grid-search">Let's Use K-Fold Training with best params from grid search<a class="anchor-link" href="#Let's-Use-K-Fold-Training-with-best-params-from-grid-search"> </a></h4>
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># scikit_model_new = RandomForestRegressor(</span>
+<span class="c1">#     n_estimators=550,</span>
+<span class="c1"># #     max_depth = 80,</span>
+<span class="c1"># #     max_features = 3,</span>
+<span class="c1"># #     min_samples_leaf = 3,</span>
+<span class="c1"># #     min_samples_split = 8,</span>
+<span class="c1">#     random_state=42)</span>
 </pre></div>
 
     </div>
@@ -180,114 +347,7 @@ No cols types are None, So ALL preprocessors called!
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sci_ml_pl</span><span class="o">.</span><span class="n">dataframeloader</span><span class="o">.</span><span class="n">final_cols</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">sci_ml_pl</span><span class="o">.</span><span class="n">dataframeloader</span><span class="o">.</span><span class="n">final_cols</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sci_ml_pl</span><span class="o">.</span><span class="n">dataframeloader</span><span class="o">.</span><span class="n">numerical_cols</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">sci_ml_pl</span><span class="o">.</span><span class="n">dataframeloader</span><span class="o">.</span><span class="n">numerical_cols</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sci_ml_pl</span><span class="o">.</span><span class="n">dataframeloader</span><span class="o">.</span><span class="n">low_card_cat_cols</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">sci_ml_pl</span><span class="o">.</span><span class="n">dataframeloader</span><span class="o">.</span><span class="n">low_card_cat_cols</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sci_ml_pl</span><span class="o">.</span><span class="n">dataframeloader</span><span class="o">.</span><span class="n">high_card_cat_cols</span><span class="p">))</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">sci_ml_pl</span><span class="o">.</span><span class="n">dataframeloader</span><span class="o">.</span><span class="n">high_card_cat_cols</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sci_ml_pl</span><span class="o">.</span><span class="n">dataframeloader</span><span class="o">.</span><span class="n">X</span><span class="p">[</span><span class="n">sci_ml_pl</span><span class="o">.</span><span class="n">dataframeloader</span><span class="o">.</span><span class="n">high_card_cat_cols</span><span class="p">]</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#     if sci_ml_pl.dataframeloader.X[col_name].nunique() &gt; len():</span>
-<span class="c1">#         print(&quot;High cardinatliy in:&quot;, col_name)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#     print(f&quot;{col_name} cardinatliy is:&quot;, sci_ml_pl.dataframeloader.X[col_name].nunique())</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># ml_pl.model = scikit_model_new</span>
 </pre></div>
 
     </div>
@@ -321,9 +381,7 @@ No cols types are None, So ALL preprocessors called!
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">scores</span> <span class="o">=</span> <span class="n">sci_ml_pl</span><span class="o">.</span><span class="n">do_cross_validation</span><span class="p">(</span><span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;neg_mean_absolute_error&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;scores:&quot;</span><span class="p">,</span> <span class="n">scores</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Average MAE score:&quot;</span><span class="p">,</span> <span class="n">scores</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># sci_ml_pl.dataframeloader.final_cols</span>
 </pre></div>
 
     </div>
@@ -333,24 +391,85 @@ No cols types are None, So ALL preprocessors called!
 </div>
     {% endraw %}
 
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>In background <code>prepare_data_for_training</code> and <code>prepare_data_for_cv</code>  methods loads your input data into Pandas DataFrame, seprates X(features) and y(target).</p>
-<p>Then <code>prepare_data_for_training</code> methods split X(features) into X_train, y_train, X_valid and y_valid DataFrames.
-However, <code>prepare_data_for_cv</code>  method do not split but let's cross validation split internally X and y DataFrames.</p>
-<p>Then both methods preprocess all numerical and categorical type data found in these DataFrames using scikit-learn pipelines. Then it bundle preprocessed data with your given model and return an MLPipeline object, this class instance has dataframeloader, preprocessor and scikit-lean pipeline instances, so you can call fit methods on X_train and y_train and predict methods on X_valid or X_test.</p>
-<p>Please check detail documentation and source code for more details.</p>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">k_fold</span><span class="p">,</span> <span class="n">metrics_score</span> <span class="o">=</span> <span class="n">ml_pl</span><span class="o">.</span><span class="n">do_k_fold_training</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="n">mean_absolute_error</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;mean metrics score:&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">metrics_score</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>/Users/pamathur/miniconda3/envs/nbdev_env/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 1 members, which is less than n_splits=5.
+  warnings.warn(
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>fold: 1 , mean_absolute_error: 18568.04107876712
+fold: 2 , mean_absolute_error: 16109.12285958904
+fold: 3 , mean_absolute_error: 18086.338938356163
+fold: 4 , mean_absolute_error: 16517.901232876713
+fold: 5 , mean_absolute_error: 17584.88452054795
+mean metrics score: 17373.257726027397
+</pre>
+</div>
+</div>
 
 </div>
 </div>
+
 </div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><em>NOTE: If you want to customize data and preprocessing steps you can do so by using <a href="/tabular_ml_toolkit/DataFrameLoader.html#DataFrameLoader"><code>DataFrameLoader</code></a> and <code>PreProessor</code> classes. Check detail documentations for these classes for more options.</em></p>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">preds</span> <span class="o">=</span> <span class="n">ml_pl</span><span class="o">.</span><span class="n">do_k_fold_prediction</span><span class="p">(</span><span class="n">k_fold</span><span class="o">=</span><span class="n">k_fold</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">preds</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="c1"># preds</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>(1459,)
+</pre>
+</div>
+</div>
 
 </div>
 </div>
+
 </div>
+    {% endraw %}
+
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h4 id="Let's-Use-XGBosst-on-MLPipeline">Let's Use XGBosst on MLPipeline<a class="anchor-link" href="#Let's-Use-XGBosst-on-MLPipeline"> </a></h4>
@@ -403,13 +522,49 @@ However, <code>prepare_data_for_cv</code>  method do not split but let's cross v
     
 <div class="cell border-box-sizing code_cell rendered">
 
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ml_pl</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">xgb_model</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ml_pl</span><span class="o">.</span><span class="n">spl</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">ml_pl</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_train</span><span class="p">,</span> <span class="n">ml_pl</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_train</span><span class="p">)</span>
+<span class="n">preds</span> <span class="o">=</span> <span class="n">ml_pl</span><span class="o">.</span><span class="n">spl</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">ml_pl</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_valid</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;X_valid MAE:&#39;</span><span class="p">,</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">ml_pl</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">preds</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
 <div class="output_wrapper">
 <div class="output">
 
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>No cols types are None, So ALL preprocessors called!
+<pre>X_valid MAE: 17584.88452054795
 </pre>
 </div>
 </div>
@@ -420,51 +575,6 @@ However, <code>prepare_data_for_cv</code>  method do not split but let's cross v
 </div>
     {% endraw %}
 
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">set_config</span>
-
-<span class="n">set_config</span><span class="p">(</span><span class="n">display</span><span class="o">=</span><span class="s2">&quot;diagram&quot;</span><span class="p">)</span>
-<span class="n">xgb_ml_pl</span><span class="o">.</span><span class="n">scikit_pipeline</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">xgb_ml_pl</span><span class="o">.</span><span class="n">scikit_pipeline</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">xgb_ml_pl</span><span class="o">.</span><span class="n">dataframeloader</span><span class="o">.</span><span class="n">X_train</span><span class="p">,</span> <span class="n">xgb_ml_pl</span><span class="o">.</span><span class="n">dataframeloader</span><span class="o">.</span><span class="n">y_train</span><span class="p">)</span>
-<span class="n">preds</span> <span class="o">=</span> <span class="n">xgb_ml_pl</span><span class="o">.</span><span class="n">scikit_pipeline</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">xgb_ml_pl</span><span class="o">.</span><span class="n">dataframeloader</span><span class="o">.</span><span class="n">X_valid</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;X_valid MAE:&#39;</span><span class="p">,</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">xgb_ml_pl</span><span class="o">.</span><span class="n">dataframeloader</span><span class="o">.</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">preds</span><span class="p">))</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Let's-do-Cross-Validation-for-Scikit-Model-on-our-MLPipeline">Let's do Cross Validation for Scikit Model on our MLPipeline<a class="anchor-link" href="#Let's-do-Cross-Validation-for-Scikit-Model-on-our-MLPipeline"> </a></h4>
-</div>
-</div>
-</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h4 id="Let's-do-Cross-Validation-for-XGB-Model-on-our-MLPipeline">Let's do Cross Validation for XGB Model on our MLPipeline<a class="anchor-link" href="#Let's-do-Cross-Validation-for-XGB-Model-on-our-MLPipeline"> </a></h4>
@@ -478,530 +588,9 @@ However, <code>prepare_data_for_cv</code>  method do not split but let's cross v
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">xgb_ml_pl</span> <span class="o">=</span> <span class="n">MLPipeline</span><span class="p">()</span><span class="o">.</span><span class="n">prepare_data_for_training</span><span class="p">(</span>
-    <span class="n">train_file_path</span><span class="o">=</span> <span class="n">DIRECTORY_PATH</span><span class="o">+</span><span class="n">TRAIN_FILE</span><span class="p">,</span>
-    <span class="n">test_file_path</span><span class="o">=</span> <span class="n">DIRECTORY_PATH</span><span class="o">+</span><span class="n">TEST_FILE</span><span class="p">,</span>
-    <span class="n">idx_col</span><span class="o">=</span><span class="s2">&quot;Id&quot;</span><span class="p">,</span>
-    <span class="n">target</span><span class="o">=</span><span class="s2">&quot;SalePrice&quot;</span><span class="p">,</span>
-    <span class="n">model</span><span class="o">=</span><span class="n">xgb_model</span><span class="p">,</span>
-    <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">set_config</span>
-
-<span class="n">set_config</span><span class="p">(</span><span class="n">display</span><span class="o">=</span><span class="s2">&quot;diagram&quot;</span><span class="p">)</span>
-<span class="n">xgb_ml_pl</span><span class="o">.</span><span class="n">scikit_pipeline</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">scores</span> <span class="o">=</span> <span class="n">xgb_ml_pl</span><span class="o">.</span><span class="n">do_cross_validation</span><span class="p">(</span><span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;neg_mean_absolute_error&#39;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">scores</span> <span class="o">=</span> <span class="n">ml_pl</span><span class="o">.</span><span class="n">do_cross_validation</span><span class="p">(</span><span class="n">cv</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;neg_mean_absolute_error&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;scores:&quot;</span><span class="p">,</span> <span class="n">scores</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Average MAE score:&quot;</span><span class="p">,</span> <span class="n">scores</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Let's-do-Grid-Search-for-HyperParameters-Tunning-for-Scikit-Model-on-our-MLPipeline">Let's do Grid Search for HyperParameters Tunning for Scikit Model on our MLPipeline<a class="anchor-link" href="#Let's-do-Grid-Search-for-HyperParameters-Tunning-for-Scikit-Model-on-our-MLPipeline"> </a></h4>
-</div>
-</div>
-</div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">scikit_model</span> <span class="o">=</span> <span class="n">RandomForestRegressor</span><span class="p">()</span>
-
-<span class="c1"># createm ml pipeline for scikit-learn model</span>
-<span class="n">sci_ml_pl</span> <span class="o">=</span> <span class="n">MLPipeline</span><span class="p">()</span><span class="o">.</span><span class="n">prepare_data_for_training</span><span class="p">(</span>
-    <span class="n">train_file_path</span><span class="o">=</span> <span class="n">DIRECTORY_PATH</span><span class="o">+</span><span class="n">TRAIN_FILE</span><span class="p">,</span>
-    <span class="n">test_file_path</span><span class="o">=</span> <span class="n">DIRECTORY_PATH</span><span class="o">+</span><span class="n">TEST_FILE</span><span class="p">,</span>
-    <span class="n">idx_col</span><span class="o">=</span><span class="s2">&quot;Id&quot;</span><span class="p">,</span>
-    <span class="n">target</span><span class="o">=</span><span class="s2">&quot;SalePrice&quot;</span><span class="p">,</span>
-    <span class="n">model</span><span class="o">=</span><span class="n">scikit_model</span><span class="p">,</span>
-    <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">set_config</span>
-
-<span class="n">set_config</span><span class="p">(</span><span class="n">display</span><span class="o">=</span><span class="s2">&quot;diagram&quot;</span><span class="p">)</span>
-<span class="n">sci_ml_pl</span><span class="o">.</span><span class="n">scikit_pipeline</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">param_grid</span> <span class="o">=</span> <span class="p">{</span>
-<span class="c1">#     &quot;preprocessor__num__imputer__strategy&quot;: [&quot;constant&quot;, &quot;mean&quot;, &quot;median&quot;],</span>
-<span class="c1">#     &quot;preprocessor__low_cad_cat__imputer__strategy&quot;: [&quot;most_frequent&quot;, &quot;constant&quot;],</span>
-<span class="c1">#     &quot;model__max_depth&quot;: [40,80,100],</span>
-<span class="c1">#     &#39;model__max_features&#39;: [2, 3],</span>
-<span class="c1">#     &#39;model__min_samples_leaf&#39;: [3,4,5],</span>
-<span class="c1">#     &#39;model__min_samples_split&#39;: [8,10,12],</span>
-    <span class="s2">&quot;model__n_estimators&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">250</span><span class="p">,</span> <span class="mi">350</span><span class="p">,</span><span class="mi">450</span><span class="p">,</span> <span class="mi">550</span><span class="p">]</span>
-<span class="p">}</span>
-
-<span class="n">grid_search</span> <span class="o">=</span> <span class="n">sci_ml_pl</span><span class="o">.</span><span class="n">do_grid_search</span><span class="p">(</span><span class="n">param_grid</span><span class="o">=</span><span class="n">param_grid</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-                                       <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;neg_mean_absolute_error&#39;</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Best params:&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">grid_search</span><span class="o">.</span><span class="n">best_params_</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Internal CV Metrics score: </span><span class="si">{</span><span class="o">-</span><span class="mi">1</span><span class="o">*</span><span class="p">(</span><span class="n">grid_search</span><span class="o">.</span><span class="n">best_score_</span><span class="p">)</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Let's-Use-K-Fold-Training-with-best-params-from-grid-search">Let's Use K-Fold Training with best params from grid search<a class="anchor-link" href="#Let's-Use-K-Fold-Training-with-best-params-from-grid-search"> </a></h4>
-</div>
-</div>
-</div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">scikit_model</span> <span class="o">=</span> <span class="n">RandomForestRegressor</span><span class="p">(</span>
-    <span class="n">n_estimators</span><span class="o">=</span><span class="mi">550</span><span class="p">,</span>
-<span class="c1">#     max_depth = 80,</span>
-<span class="c1">#     max_features = 3,</span>
-<span class="c1">#     min_samples_leaf = 3,</span>
-<span class="c1">#     min_samples_split = 8,</span>
-    <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sci_ml_pl</span> <span class="o">=</span> <span class="n">MLPipeline</span><span class="p">()</span><span class="o">.</span><span class="n">prepare_data_for_training</span><span class="p">(</span>
-    <span class="n">train_file_path</span><span class="o">=</span> <span class="n">DIRECTORY_PATH</span><span class="o">+</span><span class="n">TRAIN_FILE</span><span class="p">,</span>
-    <span class="n">test_file_path</span><span class="o">=</span> <span class="n">DIRECTORY_PATH</span><span class="o">+</span><span class="n">TEST_FILE</span><span class="p">,</span>
-    <span class="n">idx_col</span><span class="o">=</span><span class="s2">&quot;Id&quot;</span><span class="p">,</span>
-    <span class="n">target</span><span class="o">=</span><span class="s2">&quot;SalePrice&quot;</span><span class="p">,</span>
-    <span class="n">model</span><span class="o">=</span><span class="n">scikit_model</span><span class="p">,</span>
-    <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span> 
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">set_config</span>
-
-<span class="n">set_config</span><span class="p">(</span><span class="n">display</span><span class="o">=</span><span class="s2">&quot;diagram&quot;</span><span class="p">)</span>
-<span class="n">sci_ml_pl</span><span class="o">.</span><span class="n">scikit_pipeline</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_html rendered_html output_subarea output_execute_result">
-<style>#sk-e098ba9c-2022-4831-bbc9-24f985aaf922 {color: black;background-color: white;}#sk-e098ba9c-2022-4831-bbc9-24f985aaf922 pre{padding: 0;}#sk-e098ba9c-2022-4831-bbc9-24f985aaf922 div.sk-toggleable {background-color: white;}#sk-e098ba9c-2022-4831-bbc9-24f985aaf922 label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.3em;box-sizing: border-box;text-align: center;}#sk-e098ba9c-2022-4831-bbc9-24f985aaf922 div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}#sk-e098ba9c-2022-4831-bbc9-24f985aaf922 div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}#sk-e098ba9c-2022-4831-bbc9-24f985aaf922 input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}#sk-e098ba9c-2022-4831-bbc9-24f985aaf922 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-e098ba9c-2022-4831-bbc9-24f985aaf922 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-e098ba9c-2022-4831-bbc9-24f985aaf922 input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}#sk-e098ba9c-2022-4831-bbc9-24f985aaf922 div.sk-estimator {font-family: monospace;background-color: #f0f8ff;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;margin-bottom: 0.5em;}#sk-e098ba9c-2022-4831-bbc9-24f985aaf922 div.sk-estimator:hover {background-color: #d4ebff;}#sk-e098ba9c-2022-4831-bbc9-24f985aaf922 div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}#sk-e098ba9c-2022-4831-bbc9-24f985aaf922 div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}#sk-e098ba9c-2022-4831-bbc9-24f985aaf922 div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}#sk-e098ba9c-2022-4831-bbc9-24f985aaf922 div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;padding-right: 0.2em;padding-left: 0.2em;}#sk-e098ba9c-2022-4831-bbc9-24f985aaf922 div.sk-item {z-index: 1;}#sk-e098ba9c-2022-4831-bbc9-24f985aaf922 div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}#sk-e098ba9c-2022-4831-bbc9-24f985aaf922 div.sk-parallel::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}#sk-e098ba9c-2022-4831-bbc9-24f985aaf922 div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}#sk-e098ba9c-2022-4831-bbc9-24f985aaf922 div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}#sk-e098ba9c-2022-4831-bbc9-24f985aaf922 div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}#sk-e098ba9c-2022-4831-bbc9-24f985aaf922 div.sk-parallel-item:only-child::after {width: 0;}#sk-e098ba9c-2022-4831-bbc9-24f985aaf922 div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0 0.4em 0.5em 0.4em;box-sizing: border-box;padding-bottom: 0.4em;background-color: white;position: relative;}#sk-e098ba9c-2022-4831-bbc9-24f985aaf922 div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}#sk-e098ba9c-2022-4831-bbc9-24f985aaf922 div.sk-label-container {position: relative;z-index: 2;text-align: center;}#sk-e098ba9c-2022-4831-bbc9-24f985aaf922 div.sk-container {display: inline-block;position: relative;}</style><div id="sk-e098ba9c-2022-4831-bbc9-24f985aaf922" class"sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="776657a3-444b-4148-9f43-7b87a26a13b8" type="checkbox" ><label class="sk-toggleable__label" for="776657a3-444b-4148-9f43-7b87a26a13b8">Pipeline</label><div class="sk-toggleable__content"><pre>Pipeline(steps=[('preprocessor',
-                 ColumnTransformer(transformers=[('num',
-                                                  Pipeline(steps=[('imputer',
-                                                                   SimpleImputer(strategy='median')),
-                                                                  ('scaler',
-                                                                   StandardScaler())]),
-                                                  ['MSSubClass', 'LotFrontage',
-                                                   'LotArea', 'OverallQual',
-                                                   'OverallCond', 'YearBuilt',
-                                                   'YearRemodAdd', 'MasVnrArea',
-                                                   'BsmtFinSF1', 'BsmtFinSF2',
-                                                   'BsmtUnfSF', 'TotalBsmtSF',
-                                                   '1stFlrSF', '2ndFlrSF',
-                                                   'LowQual...
-                                                   'BsmtFinType2', 'Heating',
-                                                   'HeatingQC', 'CentralAir',
-                                                   'Electrical', 'KitchenQual',
-                                                   'Functional', 'FireplaceQu', ...]),
-                                                 ('high_cad_cat',
-                                                  Pipeline(steps=[('imputer',
-                                                                   SimpleImputer(strategy='constant')),
-                                                                  ('onehot',
-                                                                   OneHotEncoder(handle_unknown='ignore'))]),
-                                                  ['Neighborhood',
-                                                   'Exterior1st',
-                                                   'Exterior2nd'])])),
-                ('model',
-                 RandomForestRegressor(n_estimators=550, random_state=42))])</pre></div></div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="b49a7992-5735-4a9a-ac79-c767f1f29c3f" type="checkbox" ><label class="sk-toggleable__label" for="b49a7992-5735-4a9a-ac79-c767f1f29c3f">preprocessor: ColumnTransformer</label><div class="sk-toggleable__content"><pre>ColumnTransformer(transformers=[('num',
-                                 Pipeline(steps=[('imputer',
-                                                  SimpleImputer(strategy='median')),
-                                                 ('scaler', StandardScaler())]),
-                                 ['MSSubClass', 'LotFrontage', 'LotArea',
-                                  'OverallQual', 'OverallCond', 'YearBuilt',
-                                  'YearRemodAdd', 'MasVnrArea', 'BsmtFinSF1',
-                                  'BsmtFinSF2', 'BsmtUnfSF', 'TotalBsmtSF',
-                                  '1stFlrSF', '2ndFlrSF', 'LowQualFinSF',
-                                  'GrLivArea', 'BsmtFullBath...
-                                  'ExterCond', 'Foundation', 'BsmtQual',
-                                  'BsmtCond', 'BsmtExposure', 'BsmtFinType1',
-                                  'BsmtFinType2', 'Heating', 'HeatingQC',
-                                  'CentralAir', 'Electrical', 'KitchenQual',
-                                  'Functional', 'FireplaceQu', ...]),
-                                ('high_cad_cat',
-                                 Pipeline(steps=[('imputer',
-                                                  SimpleImputer(strategy='constant')),
-                                                 ('onehot',
-                                                  OneHotEncoder(handle_unknown='ignore'))]),
-                                 ['Neighborhood', 'Exterior1st',
-                                  'Exterior2nd'])])</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="58262b38-c2d5-4428-85d8-fa7f8923b2c3" type="checkbox" ><label class="sk-toggleable__label" for="58262b38-c2d5-4428-85d8-fa7f8923b2c3">num</label><div class="sk-toggleable__content"><pre>['MSSubClass', 'LotFrontage', 'LotArea', 'OverallQual', 'OverallCond', 'YearBuilt', 'YearRemodAdd', 'MasVnrArea', 'BsmtFinSF1', 'BsmtFinSF2', 'BsmtUnfSF', 'TotalBsmtSF', '1stFlrSF', '2ndFlrSF', 'LowQualFinSF', 'GrLivArea', 'BsmtFullBath', 'BsmtHalfBath', 'FullBath', 'HalfBath', 'BedroomAbvGr', 'KitchenAbvGr', 'TotRmsAbvGrd', 'Fireplaces', 'GarageYrBlt', 'GarageCars', 'GarageArea', 'WoodDeckSF', 'OpenPorchSF', 'EnclosedPorch', '3SsnPorch', 'ScreenPorch', 'PoolArea', 'MiscVal', 'MoSold', 'YrSold']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="cde0dafe-6ddd-4a38-a4a3-7eaaf1b926e1" type="checkbox" ><label class="sk-toggleable__label" for="cde0dafe-6ddd-4a38-a4a3-7eaaf1b926e1">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(strategy='median')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="f9cd4280-c18a-4e28-b052-3dceeb4bbbd6" type="checkbox" ><label class="sk-toggleable__label" for="f9cd4280-c18a-4e28-b052-3dceeb4bbbd6">StandardScaler</label><div class="sk-toggleable__content"><pre>StandardScaler()</pre></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="985776b5-9105-412f-9ea0-e5a3b676b674" type="checkbox" ><label class="sk-toggleable__label" for="985776b5-9105-412f-9ea0-e5a3b676b674">low_cad_cat</label><div class="sk-toggleable__content"><pre>['MSZoning', 'Street', 'Alley', 'LotShape', 'LandContour', 'Utilities', 'LotConfig', 'LandSlope', 'Condition1', 'Condition2', 'BldgType', 'HouseStyle', 'RoofStyle', 'RoofMatl', 'MasVnrType', 'ExterQual', 'ExterCond', 'Foundation', 'BsmtQual', 'BsmtCond', 'BsmtExposure', 'BsmtFinType1', 'BsmtFinType2', 'Heating', 'HeatingQC', 'CentralAir', 'Electrical', 'KitchenQual', 'Functional', 'FireplaceQu', 'GarageType', 'GarageFinish', 'GarageQual', 'GarageCond', 'PavedDrive', 'PoolQC', 'Fence', 'MiscFeature', 'SaleType', 'SaleCondition']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="36c5e17e-f291-463c-a562-a8fae7242703" type="checkbox" ><label class="sk-toggleable__label" for="36c5e17e-f291-463c-a562-a8fae7242703">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(strategy='constant')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="4a6cf1c9-29f4-41ea-b24a-3b049b0bd6cd" type="checkbox" ><label class="sk-toggleable__label" for="4a6cf1c9-29f4-41ea-b24a-3b049b0bd6cd">OneHotEncoder</label><div class="sk-toggleable__content"><pre>OneHotEncoder(handle_unknown='ignore')</pre></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="a10d8867-345f-4063-95bb-9605db2cc047" type="checkbox" ><label class="sk-toggleable__label" for="a10d8867-345f-4063-95bb-9605db2cc047">high_cad_cat</label><div class="sk-toggleable__content"><pre>['Neighborhood', 'Exterior1st', 'Exterior2nd']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="2095d77a-fa82-4b79-95ec-02baac186290" type="checkbox" ><label class="sk-toggleable__label" for="2095d77a-fa82-4b79-95ec-02baac186290">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(strategy='constant')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="deddd5b2-c9c6-4831-b38e-1f2bd018cdf0" type="checkbox" ><label class="sk-toggleable__label" for="deddd5b2-c9c6-4831-b38e-1f2bd018cdf0">OneHotEncoder</label><div class="sk-toggleable__content"><pre>OneHotEncoder(handle_unknown='ignore')</pre></div></div></div></div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="4f84f6ce-8742-4957-b752-182fb3b0a0a0" type="checkbox" ><label class="sk-toggleable__label" for="4f84f6ce-8742-4957-b752-182fb3b0a0a0">RandomForestRegressor</label><div class="sk-toggleable__content"><pre>RandomForestRegressor(n_estimators=550, random_state=42)</pre></div></div></div></div></div></div></div>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sci_ml_pl</span><span class="o">.</span><span class="n">dataframeloader</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
-
-<span class="c1"># sci_ml_pl.dataframeloader.y.head()</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_html rendered_html output_subarea output_execute_result">
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>MSZoning</th>
-      <th>Street</th>
-      <th>Alley</th>
-      <th>LotShape</th>
-      <th>LandContour</th>
-      <th>Utilities</th>
-      <th>LotConfig</th>
-      <th>LandSlope</th>
-      <th>Condition1</th>
-      <th>Condition2</th>
-      <th>...</th>
-      <th>GarageArea</th>
-      <th>WoodDeckSF</th>
-      <th>OpenPorchSF</th>
-      <th>EnclosedPorch</th>
-      <th>3SsnPorch</th>
-      <th>ScreenPorch</th>
-      <th>PoolArea</th>
-      <th>MiscVal</th>
-      <th>MoSold</th>
-      <th>YrSold</th>
-    </tr>
-    <tr>
-      <th>Id</th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>1</th>
-      <td>RL</td>
-      <td>Pave</td>
-      <td>NaN</td>
-      <td>Reg</td>
-      <td>Lvl</td>
-      <td>AllPub</td>
-      <td>Inside</td>
-      <td>Gtl</td>
-      <td>Norm</td>
-      <td>Norm</td>
-      <td>...</td>
-      <td>548</td>
-      <td>0</td>
-      <td>61</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>2</td>
-      <td>2008</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>RL</td>
-      <td>Pave</td>
-      <td>NaN</td>
-      <td>Reg</td>
-      <td>Lvl</td>
-      <td>AllPub</td>
-      <td>FR2</td>
-      <td>Gtl</td>
-      <td>Feedr</td>
-      <td>Norm</td>
-      <td>...</td>
-      <td>460</td>
-      <td>298</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>5</td>
-      <td>2007</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>RL</td>
-      <td>Pave</td>
-      <td>NaN</td>
-      <td>IR1</td>
-      <td>Lvl</td>
-      <td>AllPub</td>
-      <td>Inside</td>
-      <td>Gtl</td>
-      <td>Norm</td>
-      <td>Norm</td>
-      <td>...</td>
-      <td>608</td>
-      <td>0</td>
-      <td>42</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>9</td>
-      <td>2008</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>RL</td>
-      <td>Pave</td>
-      <td>NaN</td>
-      <td>IR1</td>
-      <td>Lvl</td>
-      <td>AllPub</td>
-      <td>Corner</td>
-      <td>Gtl</td>
-      <td>Norm</td>
-      <td>Norm</td>
-      <td>...</td>
-      <td>642</td>
-      <td>0</td>
-      <td>35</td>
-      <td>272</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>2</td>
-      <td>2006</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>RL</td>
-      <td>Pave</td>
-      <td>NaN</td>
-      <td>IR1</td>
-      <td>Lvl</td>
-      <td>AllPub</td>
-      <td>FR2</td>
-      <td>Gtl</td>
-      <td>Norm</td>
-      <td>Norm</td>
-      <td>...</td>
-      <td>836</td>
-      <td>192</td>
-      <td>84</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>12</td>
-      <td>2008</td>
-    </tr>
-  </tbody>
-</table>
-<p>5 rows × 79 columns</p>
-</div>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sci_ml_pl</span><span class="o">.</span><span class="n">dataframeloader</span><span class="o">.</span><span class="n">final_cols</span><span class="p">))</span>
-<span class="c1"># sci_ml_pl.dataframeloader.final_cols</span>
 </pre></div>
 
     </div>
@@ -1014,7 +603,8 @@ However, <code>prepare_data_for_cv</code>  method do not split but let's cross v
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>79
+<pre>scores: [17701.71892197 17568.5187269  18495.24910494]
+Average MAE score: 17921.828917936306
 </pre>
 </div>
 </div>
@@ -1025,6 +615,12 @@ However, <code>prepare_data_for_cv</code>  method do not split but let's cross v
 </div>
     {% endraw %}
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Let's-Use-K-Fold-Training-for-XGB-model">Let's Use K-Fold Training for XGB model<a class="anchor-link" href="#Let's-Use-K-Fold-Training-for-XGB-model"> </a></h4>
+</div>
+</div>
+</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -1032,7 +628,7 @@ However, <code>prepare_data_for_cv</code>  method do not split but let's cross v
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">k_fold</span><span class="p">,</span> <span class="n">metrics_score</span> <span class="o">=</span> <span class="n">sci_ml_pl</span><span class="o">.</span><span class="n">do_k_fold_training</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="n">mean_absolute_error</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">k_fold</span><span class="p">,</span> <span class="n">metrics_score</span> <span class="o">=</span> <span class="n">ml_pl</span><span class="o">.</span><span class="n">do_k_fold_training</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="n">mean_absolute_error</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;mean metrics score:&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">metrics_score</span><span class="p">))</span>
 </pre></div>
 
@@ -1046,7 +642,7 @@ However, <code>prepare_data_for_cv</code>  method do not split but let's cross v
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>/Users/pankajmathur/anaconda3/envs/nbdev_env/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 1 members, which is less than n_splits=10.
+<pre>/Users/pamathur/miniconda3/envs/nbdev_env/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 1 members, which is less than n_splits=5.
   warnings.warn(
 </pre>
 </div>
@@ -1055,17 +651,12 @@ However, <code>prepare_data_for_cv</code>  method do not split but let's cross v
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>fold: 1 , mean_absolute_error: 15645.6100373599
-fold: 2 , mean_absolute_error: 16915.74810709838
-fold: 3 , mean_absolute_error: 18681.55120797011
-fold: 4 , mean_absolute_error: 14994.692528019925
-fold: 5 , mean_absolute_error: 14636.41408468244
-fold: 6 , mean_absolute_error: 23128.262889165628
-fold: 7 , mean_absolute_error: 19186.444483188046
-fold: 8 , mean_absolute_error: 17261.42219178082
-fold: 9 , mean_absolute_error: 14535.645392278953
-fold: 10 , mean_absolute_error: 18368.801693648813
-mean metrics score: 17335.459261519303
+<pre>fold: 1 , mean_absolute_error: 18568.04107876712
+fold: 2 , mean_absolute_error: 16109.12285958904
+fold: 3 , mean_absolute_error: 18086.338938356163
+fold: 4 , mean_absolute_error: 16517.901232876713
+fold: 5 , mean_absolute_error: 17584.88452054795
+mean metrics score: 17373.257726027397
 </pre>
 </div>
 </div>
@@ -1083,10 +674,9 @@ mean metrics score: 17335.459261519303
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">preds</span> <span class="o">=</span> <span class="n">sci_ml_pl</span><span class="o">.</span><span class="n">do_k_fold_prediction</span><span class="p">(</span><span class="n">k_fold</span><span class="o">=</span><span class="n">k_fold</span><span class="p">)</span>
-
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">preds</span> <span class="o">=</span> <span class="n">ml_pl</span><span class="o">.</span><span class="n">do_k_fold_prediction</span><span class="p">(</span><span class="n">k_fold</span><span class="o">=</span><span class="n">k_fold</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">preds</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-<span class="n">preds</span>
+<span class="c1"># preds</span>
 </pre></div>
 
     </div>
@@ -1102,17 +692,6 @@ mean metrics score: 17335.459261519303
 <pre>(1459,)
 </pre>
 </div>
-</div>
-
-<div class="output_area">
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>array([125771.40545455, 156372.86363636, 178874.88      , ...,
-       157298.68727273, 113193.10727273, 226793.96363636])</pre>
-</div>
-
 </div>
 
 </div>

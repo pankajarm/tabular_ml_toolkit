@@ -10,16 +10,14 @@ index = {"DataFrameLoader": "00_DataFrameLoader.ipynb",
          "TEST_FILE": "03_Tutorial.ipynb",
          "SAMPLE_SUB_FILE": "03_Tutorial.ipynb",
          "scikit_model": "03_Tutorial.ipynb",
-         "sci_ml_pl": "03_Tutorial.ipynb",
-         "xgb_model": "03_Tutorial.ipynb",
-         "xgb_ml_pl": "03_Tutorial.ipynb"}
+         "sci_ml_pl": "02_MLPipeline.ipynb",
+         "ml_pl": "03_Tutorial.ipynb",
+         "xgb_model": "03_Tutorial.ipynb"}
 
 modules = ["DataFrameLoader.py",
            "PreProcessor.py",
            "MLPipeline.py",
-           "Tutorial.py",
-           "Kaggle_TPS_Tutorial.py",
-           "None.py"]
+           "Tutorial.py"]
 
 doc_url = "https://psmathur.github.io/tabular_ml_toolkit/"
 

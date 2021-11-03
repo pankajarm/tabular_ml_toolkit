@@ -24,6 +24,8 @@ class DataFrameLoader:
 
         self.shape_X_full = None
         self.shape_X_test_full = None
+        self.X_full = None
+        self.X_test_full = None
         self.X = None
         self.y = None
         self.X_train = None
@@ -68,12 +70,6 @@ class DataFrameLoader:
         self.X = input_df.drop([target], axis=1)
         return self
 
-    # split X and y into X_train, y_train, X_valid & y_valid dataframes
-    def train_valid_split(self,X:object,y:object, valid_size:float, random_state=42):
-        self.X_train, self.X_valid, self.y_train, self.y_valid = train_test_split(
-            self.X, self.y, train_size=(1-valid_size), test_size=valid_size,
-            random_state=random_state)
-
     # select categorical columns
     def select_categorical_cols(self):
         # for low cardinality columns
@@ -100,35 +96,36 @@ class DataFrameLoader:
                            + self.numerical_cols)
 
     # prepare X_train, X_valid from selected columns
-    def update_X_train_X_valid_X_test(self, final_cols:object):
+    def update_X_train_X_valid_X_test_with_final_cols(self, final_cols:object):
         self.X_train = self.X_train[final_cols]
         self.X_valid = self.X_valid[final_cols]
         self.X_test = self.X_test_full[final_cols]
-        # clean up leftover dataframes
-        del self.X_full
+        # clean up unused dataframes
         del self.X_test_full
 
-    def update_X_y(self,final_cols:object):
+    def update_X_y_with_final_cols(self,final_cols:object):
         self.X = self.X[final_cols]
         self.X_test = self.X_test_full[final_cols]
-        # clean up leftover dataframes
-        del self.X_full
-        del self.X_test_full
 
+    # split X and y into X_train, y_train, X_valid & y_valid dataframes
+    def create_train_valid(self, valid_size:float, random_state=42):
 
+        self.X_train, self.X_valid, self.y_train, self.y_valid = train_test_split(
+            self.X, self.y, train_size=(1-valid_size), test_size=valid_size, random_state=random_state)
+
+        self.update_X_train_X_valid_X_test_with_final_cols(self.final_cols)
 
     # get train and valid dataframe
     def from_csv(self, train_file_path:str,test_file_path:str, idx_col:str, target:str,
-                 random_state=42, valid_size:float=None):
+                 random_state=42):
 
+        # read csv and load dataframes using pandas
         self.read_csv(train_file_path,test_file_path, idx_col)
         self.prepare_X_y(self.X_full, target)
+        # create final columns based upon type of columns
         self.prepare_final_cols()
-
-        if valid_size:
-            self.train_valid_split(self.X, self.y, valid_size, random_state)
-            self.update_X_train_X_valid_X_test(self.final_cols)
-        else:
-            self.update_X_y(self.final_cols)
+        self.update_X_y_with_final_cols(self.final_cols)
+        # clean up unused dataframes
+        del self.X_full
 
         return self

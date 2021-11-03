@@ -5,6 +5,11 @@ __all__ = []
 # Cell
 from .MLPipeline import *
 from sklearn.linear_model import LogisticRegression
+from sklearn.neural_network import BernoulliRBM, MLPClassifier
 from sklearn.metrics import roc_auc_score, accuracy_score
 import pandas as pd
 import numpy as np
+
+# for visualizing pipeline
+from sklearn import set_config
+set_config(display="diagram")

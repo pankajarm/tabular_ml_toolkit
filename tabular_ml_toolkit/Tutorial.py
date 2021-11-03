@@ -9,6 +9,8 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error
 import pandas as pd
 import numpy as np
+from sklearn import set_config
+set_config(display="diagram")
 
 # Cell
 # Dataset file names and Paths

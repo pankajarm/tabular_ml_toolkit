@@ -1,9 +1,10 @@
 {
   "tabular_ml_toolkit": {
-    "Overview": "/",
-    "DataFrameLoader": "DataFrameLoader.html",
-    "PreProcessor": "PreProcessor.html",
-    "MLPipeline": "MLPipeline.html",
-    "Cross Validation Tutorial": "CrossValidation_Tutorial.html"
+      "Overview": "/",
+      "DataFrameLoader": "DataFrameLoader.html",
+      "PreProcessor": "PreProcessor.html",
+      "MLPipeline": "MLPipeline.html",
+      "Tutorial": "Tutorial.html",
+      "Kaggle TPS Tutorial": "Kaggle_TPS_Tutorial.html"
   }
 }

@@ -19,7 +19,7 @@ modules = ["DataFrameLoader.py",
            "MLPipeline.py",
            "Tutorial.py",
            "Kaggle_TPS_Tutorial.py",
-           "Optuna_Tutorial.py"]
+           "None.py"]
 
 doc_url = "https://psmathur.github.io/tabular_ml_toolkit/"
 

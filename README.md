@@ -15,11 +15,11 @@ Start with your favorite model and then just simply create MLPipeline with one A
 
 *No need to install scikit-learn as it comes preinstall with Tabular_ML_Toolkit*
 
-```python
+```
 from tabular_ml_toolkit.MLPipeline import *
 ```
 
-```python
+```
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error
 
@@ -49,11 +49,11 @@ print('X_valid MAE:', mean_absolute_error(sci_ml_pl.dataframeloader.y_valid, pre
 
 *After that all steps remains same. Here is example using XGBRegressor with [Melbourne Home Sale price data](https://www.kaggle.com/estrotococo/home-data-for-ml-course)*
 
-```python
+```
 #!pip install -U xgboost
 ```
 
-```python
+```
 from xgboost import XGBRegressor
 # create xgb ml model
 xgb_model = XGBRegressor(n_estimators=250,learning_rate=0.05, random_state=42)
@@ -81,12 +81,12 @@ In background `prepare_data_for_training` method loads your input data into Pand
 
 Here is detail documentation and source code.
 
-```python
+```
 # show_doc(MLPipeline.prepare_data_for_training)
 ```
 
 If you want to customize data and preprocessing steps you can do so by using `DataFrameLoader` and `PreProessor` classes. Check detail documentations for these classes for more options. 
 
-```python
+```
 # show_doc(MLPipeline)
 ```

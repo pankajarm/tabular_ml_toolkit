@@ -21,6 +21,9 @@ class DataFrameLoader:
     """
 
     def __init__(self):
+
+        self.shape_X_full = None
+        self.shape_X_test_full = None
         self.X = None
         self.y = None
         self.X_train = None
@@ -50,7 +53,9 @@ class DataFrameLoader:
     def read_csv(self,train_file_path:str,test_file_path:str, idx_col:str):
         # Read the csv files using pandas
         self.X_full = pd.read_csv(train_file_path, index_col=idx_col)
+        self.shape_X_full = self.X_full.shape
         self.X_test_full = pd.read_csv(test_file_path, index_col=idx_col)
+        self.shape_X_test_full = self.X_test_full.shape
         return self
 
     # prepare X and y

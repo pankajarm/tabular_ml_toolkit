@@ -6,8 +6,8 @@ title: Tabular ML Toolkit
 keywords: fastai
 sidebar: home_sidebar
 
-summary: "A helper library to jumpstart your machine learning project based on tabular or structured data."
-description: "A helper library to jumpstart your machine learning project based on tabular or structured data."
+summary: "A superfast helper library to jumpstart your machine learning project based on tabular or structured data."
+description: "A superfast helper library to jumpstart your machine learning project based on tabular or structured data."
 nb_path: "index.ipynb"
 ---
 <!--
@@ -71,6 +71,8 @@ nb_path: "index.ipynb"
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">tabular_ml_toolkit.MLPipeline</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">RandomForestRegressor</span>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">mean_absolute_error</span>
 </pre></div>
 
     </div>
@@ -87,26 +89,65 @@ nb_path: "index.ipynb"
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">RandomForestRegressor</span>
-<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">mean_absolute_error</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">DIRECTORY_PATH</span> <span class="o">=</span> <span class="s2">&quot;https://raw.githubusercontent.com/psmathur/tabular_ml_toolkit/master/input/home_data/&quot;</span>
+<span class="n">TRAIN_FILE</span> <span class="o">=</span> <span class="s2">&quot;train.csv&quot;</span>
+<span class="n">TEST_FILE</span> <span class="o">=</span> <span class="s2">&quot;test.csv&quot;</span>
+<span class="n">SAMPLE_SUB_FILE</span> <span class="o">=</span> <span class="s2">&quot;sample_submission.csv&quot;</span>
+</pre></div>
 
-<span class="c1"># create scikit-learn ml model</span>
-<span class="n">scikit_model</span> <span class="o">=</span> <span class="n">RandomForestRegressor</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">scikit_model</span> <span class="o">=</span> <span class="n">RandomForestRegressor</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
 
 <span class="c1"># createm ml pipeline for scikit-learn model</span>
-<span class="n">sci_ml_pl</span> <span class="o">=</span> <span class="n">MLPipeline</span><span class="p">()</span><span class="o">.</span><span class="n">prepare_data_for_training</span><span class="p">(</span>
-    <span class="n">train_file_path</span><span class="o">=</span> <span class="s2">&quot;https://raw.githubusercontent.com/psmathur/tabular_ml_toolkit/master/input/home_data/train.csv&quot;</span><span class="p">,</span>
-    <span class="n">test_file_path</span><span class="o">=</span> <span class="s2">&quot;https://raw.githubusercontent.com/psmathur/tabular_ml_toolkit/master/input/home_data/test.csv&quot;</span><span class="p">,</span>
+<span class="n">tmlt</span> <span class="o">=</span> <span class="n">MLPipeline</span><span class="p">()</span><span class="o">.</span><span class="n">prepare_data_for_training</span><span class="p">(</span>
+    <span class="n">train_file_path</span><span class="o">=</span> <span class="n">DIRECTORY_PATH</span><span class="o">+</span><span class="n">TRAIN_FILE</span><span class="p">,</span>
+    <span class="n">test_file_path</span><span class="o">=</span> <span class="n">DIRECTORY_PATH</span><span class="o">+</span><span class="n">TEST_FILE</span><span class="p">,</span>
     <span class="n">idx_col</span><span class="o">=</span><span class="s2">&quot;Id&quot;</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s2">&quot;SalePrice&quot;</span><span class="p">,</span>
     <span class="n">model</span><span class="o">=</span><span class="n">scikit_model</span><span class="p">,</span>
-    <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>
-    <span class="n">valid_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+    <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
 
-<span class="c1"># # Now fit and predict</span>
-<span class="n">sci_ml_pl</span><span class="o">.</span><span class="n">scikit_pipeline</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">sci_ml_pl</span><span class="o">.</span><span class="n">dataframeloader</span><span class="o">.</span><span class="n">X_train</span><span class="p">,</span> <span class="n">sci_ml_pl</span><span class="o">.</span><span class="n">dataframeloader</span><span class="o">.</span><span class="n">y_train</span><span class="p">)</span>
+<span class="c1">#scikit-pipeline</span>
+<span class="c1"># tmlt.spl</span>
+</pre></div>
 
-<span class="n">preds</span> <span class="o">=</span> <span class="n">sci_ml_pl</span><span class="o">.</span><span class="n">scikit_pipeline</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">sci_ml_pl</span><span class="o">.</span><span class="n">dataframeloader</span><span class="o">.</span><span class="n">X_valid</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;X_valid MAE:&#39;</span><span class="p">,</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">sci_ml_pl</span><span class="o">.</span><span class="n">dataframeloader</span><span class="o">.</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">preds</span><span class="p">))</span>
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">create_train_valid</span><span class="p">(</span><span class="n">valid_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+
+<span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="c1"># Now fit</span>
+<span class="n">tmlt</span><span class="o">.</span><span class="n">spl</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_train</span><span class="p">,</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_train</span><span class="p">)</span>
+<span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Fit Time:&quot;</span><span class="p">,</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
+
+<span class="c1">#predict</span>
+<span class="n">preds</span> <span class="o">=</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">spl</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_valid</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;X_valid MAE:&#39;</span><span class="p">,</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">preds</span><span class="p">))</span>
 </pre></div>
 
     </div>
@@ -119,7 +160,8 @@ nb_path: "index.ipynb"
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>X_valid MAE: 17676.01967465753
+<pre>Fit Time: 1.0225746631622314
+X_valid MAE: 17634.989965753426
 </pre>
 </div>
 </div>
@@ -163,23 +205,62 @@ nb_path: "index.ipynb"
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">xgboost</span> <span class="kn">import</span> <span class="n">XGBRegressor</span>
-<span class="c1"># create xgb ml model</span>
-<span class="n">xgb_model</span> <span class="o">=</span> <span class="n">XGBRegressor</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span><span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">xgb_params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;n_estimators&#39;</span><span class="p">:</span><span class="mi">250</span><span class="p">,</span>
+    <span class="s1">&#39;learning_rate&#39;</span><span class="p">:</span><span class="mf">0.05</span><span class="p">,</span>
+    <span class="s1">&#39;random_state&#39;</span><span class="p">:</span><span class="mi">42</span><span class="p">,</span>
+    <span class="c1"># for GPU</span>
+<span class="c1">#     &#39;tree_method&#39;: &#39;gpu_hist&#39;,</span>
+<span class="c1">#     &#39;predictor&#39;: &#39;gpu_predictor&#39;,</span>
+<span class="p">}</span>
 
-<span class="c1"># createm ml pipeline for xgb model</span>
-<span class="n">xgb_ml_pl</span> <span class="o">=</span> <span class="n">MLPipeline</span><span class="p">()</span><span class="o">.</span><span class="n">prepare_data_for_training</span><span class="p">(</span>
-    <span class="n">train_file_path</span><span class="o">=</span> <span class="s2">&quot;input/home_data/train.csv&quot;</span><span class="p">,</span>
-    <span class="n">test_file_path</span><span class="o">=</span> <span class="s2">&quot;input/home_data/test.csv&quot;</span><span class="p">,</span>
-    <span class="n">idx_col</span><span class="o">=</span><span class="s2">&quot;Id&quot;</span><span class="p">,</span>
-    <span class="n">target</span><span class="o">=</span><span class="s2">&quot;SalePrice&quot;</span><span class="p">,</span>
-    <span class="n">model</span><span class="o">=</span><span class="n">xgb_model</span><span class="p">,</span>
-    <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>
-    <span class="n">valid_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+<span class="c1"># create xgb model</span>
+<span class="n">xgb_model</span> <span class="o">=</span> <span class="n">XGBRegressor</span><span class="p">(</span><span class="o">**</span><span class="n">xgb_params</span><span class="p">)</span>
+</pre></div>
 
-<span class="c1"># Now fit and predict</span>
-<span class="n">xgb_ml_pl</span><span class="o">.</span><span class="n">scikit_pipeline</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">xgb_ml_pl</span><span class="o">.</span><span class="n">dataframeloader</span><span class="o">.</span><span class="n">X_train</span><span class="p">,</span> <span class="n">xgb_ml_pl</span><span class="o">.</span><span class="n">dataframeloader</span><span class="o">.</span><span class="n">y_train</span><span class="p">)</span>
-<span class="n">preds</span> <span class="o">=</span> <span class="n">xgb_ml_pl</span><span class="o">.</span><span class="n">scikit_pipeline</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">xgb_ml_pl</span><span class="o">.</span><span class="n">dataframeloader</span><span class="o">.</span><span class="n">X_valid</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;X_valid MAE:&#39;</span><span class="p">,</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">xgb_ml_pl</span><span class="o">.</span><span class="n">dataframeloader</span><span class="o">.</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">preds</span><span class="p">))</span>
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tmlt</span><span class="o">.</span><span class="n">update_model</span><span class="p">(</span><span class="n">xgb_model</span><span class="p">)</span>
+<span class="c1"># tmlt.spl</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">create_train_valid</span><span class="p">(</span><span class="n">valid_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+
+<span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="c1"># Now fit</span>
+<span class="n">tmlt</span><span class="o">.</span><span class="n">spl</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_train</span><span class="p">,</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_train</span><span class="p">)</span>
+<span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Fit Time:&quot;</span><span class="p">,</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
+
+<span class="c1">#predict</span>
+<span class="n">preds</span> <span class="o">=</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">spl</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_valid</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;X_valid MAE:&#39;</span><span class="p">,</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">preds</span><span class="p">))</span>
 </pre></div>
 
     </div>
@@ -192,7 +273,8 @@ nb_path: "index.ipynb"
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>X_valid MAE: 15824.136571596746
+<pre>Fit Time: 0.502791166305542
+X_valid MAE: 15851.009123501712
 </pre>
 </div>
 </div>
@@ -205,53 +287,21 @@ nb_path: "index.ipynb"
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>In background <code>prepare_data_for_training</code> method loads your input data into Pandas DataFrame, seprates X(features) and y(target), split X(features) into X_train, y_train, X_valid, y_valid DataFrames. Then it preprocess all numerical and categorical type data found in these DataFrames. Then it bundle preprocessed data with your given model and return an MLPipeline object, so you can call MLPipeline to fit X_train and y_train and predict on X_valid or X_test.</p>
+<p>In background <code>prepare_data_for_training</code> method loads your input data into Pandas DataFrame, seprates X(features) and y(target), Then it preprocess all numerical and categorical type data found in these DataFrames. Then it bundle preprocessed data with your given model and return an MLPipeline object which contains dataframeloader, preprocessor and scikit-learn pipeline.</p>
+<p><code>create_train_valid</code> methods split X(features) into X_train, y_train, X_valid, y_valid DataFrames.</p>
+<p>so you can call scikit-learn pipeline fit method on X_train and y_train and predict on X_valid or X_test.</p>
 <p>Here is detail documentation and source code.</p>
 
 </div>
 </div>
 </div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span> 
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>If you want to customize data and preprocessing steps you can do so by using <a href="/tabular_ml_toolkit/DataFrameLoader.html#DataFrameLoader"><code>DataFrameLoader</code></a> and <code>PreProessor</code> classes. Check detail documentations for these classes for more options.</p>
+<p>If you want to customize data and preprocessing steps you can do so by using <a href="/tabular_ml_toolkit/DataFrameLoader.html#DataFrameLoader"><code>DataFrameLoader</code></a> and <code>PreProessor</code> classes. Please Check other Tutorials and detail documentations for these classes for more options.</p>
 
 </div>
 </div>
 </div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span> 
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
 </div>
  
 

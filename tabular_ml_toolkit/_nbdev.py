@@ -10,8 +10,7 @@ index = {"DataFrameLoader": "00_DataFrameLoader.ipynb",
          "TEST_FILE": "03_Tutorial.ipynb",
          "SAMPLE_SUB_FILE": "03_Tutorial.ipynb",
          "scikit_model": "03_Tutorial.ipynb",
-         "ml_pl": "03_Tutorial.ipynb",
-         "xgb_model": "03_Tutorial.ipynb"}
+         "tmlt": "03_Tutorial.ipynb"}
 
 modules = ["DataFrameLoader.py",
            "PreProcessor.py",

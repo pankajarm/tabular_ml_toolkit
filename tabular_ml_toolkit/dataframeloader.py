@@ -15,7 +15,7 @@ class DataFrameLoader:
 
     Attributes:
     X_full: full dataframe load from raw input
-    X_test_full: full test dataframe load from raw input
+    X_test: full test dataframe load from raw input
     X: features
     y: target
     """
@@ -23,9 +23,8 @@ class DataFrameLoader:
     def __init__(self):
 
         self.shape_X_full = None
-        self.shape_X_test_full = None
         self.X_full = None
-        self.X_test_full = None
+        self.X_test = None
         self.X = None
         self.y = None
         self.X_train = None
@@ -56,8 +55,8 @@ class DataFrameLoader:
         # Read the csv files using pandas
         self.X_full = pd.read_csv(train_file_path, index_col=idx_col)
         self.shape_X_full = self.X_full.shape
-        self.X_test_full = pd.read_csv(test_file_path, index_col=idx_col)
-        self.shape_X_test_full = self.X_test_full.shape
+        self.X_test = pd.read_csv(test_file_path, index_col=idx_col)
+        self.shape_X_test = self.X_test.shape
         return self
 
     # prepare X and y
@@ -99,13 +98,12 @@ class DataFrameLoader:
     def update_X_train_X_valid_X_test_with_final_cols(self, final_cols:object):
         self.X_train = self.X_train[final_cols]
         self.X_valid = self.X_valid[final_cols]
-        self.X_test = self.X_test_full[final_cols]
-        # clean up unused dataframes
-        del self.X_test_full
+        self.X_test = self.X_test[final_cols]
+
 
     def update_X_y_with_final_cols(self,final_cols:object):
         self.X = self.X[final_cols]
-        self.X_test = self.X_test_full[final_cols]
+        self.X_test = self.X_test[final_cols]
 
     # split X and y into X_train, y_train, X_valid & y_valid dataframes
     def create_train_valid(self, valid_size:float, random_state=42):

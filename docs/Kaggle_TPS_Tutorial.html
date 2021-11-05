@@ -6,8 +6,8 @@ title: Getting Started Kaggle TPS Challenge with Tabular ML Toolkit
 keywords: fastai
 sidebar: home_sidebar
 
-summary: "A Tutorial to showcase usage of Tabular_ML_Toolkit library on Kaggle TPS Challenge Nov 2021"
-description: "A Tutorial to showcase usage of Tabular_ML_Toolkit library on Kaggle TPS Challenge Nov 2021"
+summary: "A Tutorial to showcase usage of tabular_ml_toolkit library on Kaggle TPS Challenge Nov 2021."
+description: "A Tutorial to showcase usage of tabular_ml_toolkit library on Kaggle TPS Challenge Nov 2021."
 nb_path: "07_Kaggle_TPS_Tutorial.ipynb"
 ---
 <!--
@@ -72,7 +72,7 @@ nb_path: "07_Kaggle_TPS_Tutorial.ipynb"
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">tabular_ml_toolkit.MLPipeline</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LogisticRegression</span>
-<span class="kn">from</span> <span class="nn">sklearn.neural_network</span> <span class="kn">import</span> <span class="n">BernoulliRBM</span><span class="p">,</span> <span class="n">MLPClassifier</span>
+<span class="c1"># from sklearn.neural_network import BernoulliRBM, MLPClassifier</span>
 <span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">roc_auc_score</span><span class="p">,</span> <span class="n">accuracy_score</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -80,6 +80,9 @@ nb_path: "07_Kaggle_TPS_Tutorial.ipynb"
 <span class="c1"># for visualizing pipeline</span>
 <span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">set_config</span>
 <span class="n">set_config</span><span class="p">(</span><span class="n">display</span><span class="o">=</span><span class="s2">&quot;diagram&quot;</span><span class="p">)</span>
+
+<span class="c1"># just to measure fit performance</span>
+<span class="kn">import</span> <span class="nn">time</span>
 </pre></div>
 
     </div>
@@ -116,7 +119,7 @@ nb_path: "07_Kaggle_TPS_Tutorial.ipynb"
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">scikit_model</span> <span class="o">=</span> <span class="n">MLPClassifier</span><span class="p">(</span><span class="n">early_stopping</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">scikit_model</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -133,7 +136,7 @@ nb_path: "07_Kaggle_TPS_Tutorial.ipynb"
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ml_pl</span> <span class="o">=</span> <span class="n">MLPipeline</span><span class="p">()</span><span class="o">.</span><span class="n">prepare_data_for_training</span><span class="p">(</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tmlt</span> <span class="o">=</span> <span class="n">MLPipeline</span><span class="p">()</span><span class="o">.</span><span class="n">prepare_data_for_training</span><span class="p">(</span>
     <span class="n">train_file_path</span><span class="o">=</span> <span class="n">DIRECTORY_PATH</span> <span class="o">+</span> <span class="n">TRAIN_FILE</span><span class="p">,</span>
     <span class="n">test_file_path</span><span class="o">=</span> <span class="n">DIRECTORY_PATH</span> <span class="o">+</span> <span class="n">TEST_FILE</span><span class="p">,</span>
     <span class="c1">#make sure to use right index and target column</span>
@@ -157,7 +160,7 @@ nb_path: "07_Kaggle_TPS_Tutorial.ipynb"
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ml_pl</span><span class="o">.</span><span class="n">spl</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tmlt</span><span class="o">.</span><span class="n">spl</span>
 </pre></div>
 
     </div>
@@ -171,11 +174,11 @@ nb_path: "07_Kaggle_TPS_Tutorial.ipynb"
 
 
 <div class="output_html rendered_html output_subarea output_execute_result">
-<style>#sk-2405c5b7-d1ca-4a39-9b57-c006648ffc62 {color: black;background-color: white;}#sk-2405c5b7-d1ca-4a39-9b57-c006648ffc62 pre{padding: 0;}#sk-2405c5b7-d1ca-4a39-9b57-c006648ffc62 div.sk-toggleable {background-color: white;}#sk-2405c5b7-d1ca-4a39-9b57-c006648ffc62 label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.3em;box-sizing: border-box;text-align: center;}#sk-2405c5b7-d1ca-4a39-9b57-c006648ffc62 div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}#sk-2405c5b7-d1ca-4a39-9b57-c006648ffc62 div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}#sk-2405c5b7-d1ca-4a39-9b57-c006648ffc62 input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}#sk-2405c5b7-d1ca-4a39-9b57-c006648ffc62 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-2405c5b7-d1ca-4a39-9b57-c006648ffc62 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-2405c5b7-d1ca-4a39-9b57-c006648ffc62 input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}#sk-2405c5b7-d1ca-4a39-9b57-c006648ffc62 div.sk-estimator {font-family: monospace;background-color: #f0f8ff;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;margin-bottom: 0.5em;}#sk-2405c5b7-d1ca-4a39-9b57-c006648ffc62 div.sk-estimator:hover {background-color: #d4ebff;}#sk-2405c5b7-d1ca-4a39-9b57-c006648ffc62 div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}#sk-2405c5b7-d1ca-4a39-9b57-c006648ffc62 div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}#sk-2405c5b7-d1ca-4a39-9b57-c006648ffc62 div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}#sk-2405c5b7-d1ca-4a39-9b57-c006648ffc62 div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;padding-right: 0.2em;padding-left: 0.2em;}#sk-2405c5b7-d1ca-4a39-9b57-c006648ffc62 div.sk-item {z-index: 1;}#sk-2405c5b7-d1ca-4a39-9b57-c006648ffc62 div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}#sk-2405c5b7-d1ca-4a39-9b57-c006648ffc62 div.sk-parallel::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}#sk-2405c5b7-d1ca-4a39-9b57-c006648ffc62 div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}#sk-2405c5b7-d1ca-4a39-9b57-c006648ffc62 div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}#sk-2405c5b7-d1ca-4a39-9b57-c006648ffc62 div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}#sk-2405c5b7-d1ca-4a39-9b57-c006648ffc62 div.sk-parallel-item:only-child::after {width: 0;}#sk-2405c5b7-d1ca-4a39-9b57-c006648ffc62 div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0 0.4em 0.5em 0.4em;box-sizing: border-box;padding-bottom: 0.4em;background-color: white;position: relative;}#sk-2405c5b7-d1ca-4a39-9b57-c006648ffc62 div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}#sk-2405c5b7-d1ca-4a39-9b57-c006648ffc62 div.sk-label-container {position: relative;z-index: 2;text-align: center;}#sk-2405c5b7-d1ca-4a39-9b57-c006648ffc62 div.sk-container {display: inline-block;position: relative;}</style><div id="sk-2405c5b7-d1ca-4a39-9b57-c006648ffc62" class"sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="b1d191e9-b1c9-4a86-bc94-ed4f45f558d0" type="checkbox" ><label class="sk-toggleable__label" for="b1d191e9-b1c9-4a86-bc94-ed4f45f558d0">Pipeline</label><div class="sk-toggleable__content"><pre>Pipeline(steps=[('preprocessor',
+<style>#sk-5a3a8801-fd16-4700-b374-69d497330872 {color: black;background-color: white;}#sk-5a3a8801-fd16-4700-b374-69d497330872 pre{padding: 0;}#sk-5a3a8801-fd16-4700-b374-69d497330872 div.sk-toggleable {background-color: white;}#sk-5a3a8801-fd16-4700-b374-69d497330872 label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.3em;box-sizing: border-box;text-align: center;}#sk-5a3a8801-fd16-4700-b374-69d497330872 div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}#sk-5a3a8801-fd16-4700-b374-69d497330872 div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}#sk-5a3a8801-fd16-4700-b374-69d497330872 input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}#sk-5a3a8801-fd16-4700-b374-69d497330872 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-5a3a8801-fd16-4700-b374-69d497330872 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-5a3a8801-fd16-4700-b374-69d497330872 input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}#sk-5a3a8801-fd16-4700-b374-69d497330872 div.sk-estimator {font-family: monospace;background-color: #f0f8ff;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;margin-bottom: 0.5em;}#sk-5a3a8801-fd16-4700-b374-69d497330872 div.sk-estimator:hover {background-color: #d4ebff;}#sk-5a3a8801-fd16-4700-b374-69d497330872 div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}#sk-5a3a8801-fd16-4700-b374-69d497330872 div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}#sk-5a3a8801-fd16-4700-b374-69d497330872 div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}#sk-5a3a8801-fd16-4700-b374-69d497330872 div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;padding-right: 0.2em;padding-left: 0.2em;}#sk-5a3a8801-fd16-4700-b374-69d497330872 div.sk-item {z-index: 1;}#sk-5a3a8801-fd16-4700-b374-69d497330872 div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}#sk-5a3a8801-fd16-4700-b374-69d497330872 div.sk-parallel::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}#sk-5a3a8801-fd16-4700-b374-69d497330872 div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}#sk-5a3a8801-fd16-4700-b374-69d497330872 div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}#sk-5a3a8801-fd16-4700-b374-69d497330872 div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}#sk-5a3a8801-fd16-4700-b374-69d497330872 div.sk-parallel-item:only-child::after {width: 0;}#sk-5a3a8801-fd16-4700-b374-69d497330872 div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0 0.4em 0.5em 0.4em;box-sizing: border-box;padding-bottom: 0.4em;background-color: white;position: relative;}#sk-5a3a8801-fd16-4700-b374-69d497330872 div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}#sk-5a3a8801-fd16-4700-b374-69d497330872 div.sk-label-container {position: relative;z-index: 2;text-align: center;}#sk-5a3a8801-fd16-4700-b374-69d497330872 div.sk-container {display: inline-block;position: relative;}</style><div id="sk-5a3a8801-fd16-4700-b374-69d497330872" class"sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="6d107082-5676-45cc-b761-5dcf8ce8664b" type="checkbox" ><label class="sk-toggleable__label" for="6d107082-5676-45cc-b761-5dcf8ce8664b">Pipeline</label><div class="sk-toggleable__content"><pre>Pipeline(steps=[('preprocessor',
                  Pipeline(steps=[('imputer', SimpleImputer(strategy='median')),
                                  ('scaler', StandardScaler())])),
-                ('model', MLPClassifier(early_stopping=True, random_state=42))])</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="c62f7fad-b6f0-49b3-9678-e598a830f633" type="checkbox" ><label class="sk-toggleable__label" for="c62f7fad-b6f0-49b3-9678-e598a830f633">preprocessor: Pipeline</label><div class="sk-toggleable__content"><pre>Pipeline(steps=[('imputer', SimpleImputer(strategy='median')),
-                ('scaler', StandardScaler())])</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="bfd985fc-36e2-460b-a7f5-dc5559e11e14" type="checkbox" ><label class="sk-toggleable__label" for="bfd985fc-36e2-460b-a7f5-dc5559e11e14">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(strategy='median')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="47113582-3fde-42c8-afd3-bf1e7d85c8e4" type="checkbox" ><label class="sk-toggleable__label" for="47113582-3fde-42c8-afd3-bf1e7d85c8e4">StandardScaler</label><div class="sk-toggleable__content"><pre>StandardScaler()</pre></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="94a53631-7bfe-47c9-bfa5-9ece9853e7ad" type="checkbox" ><label class="sk-toggleable__label" for="94a53631-7bfe-47c9-bfa5-9ece9853e7ad">MLPClassifier</label><div class="sk-toggleable__content"><pre>MLPClassifier(early_stopping=True, random_state=42)</pre></div></div></div></div></div></div></div>
+                ('model', LogisticRegression(n_jobs=-1, random_state=42))])</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="3b3d048d-af35-46b0-b1f8-ebaf16719212" type="checkbox" ><label class="sk-toggleable__label" for="3b3d048d-af35-46b0-b1f8-ebaf16719212">preprocessor: Pipeline</label><div class="sk-toggleable__content"><pre>Pipeline(steps=[('imputer', SimpleImputer(strategy='median')),
+                ('scaler', StandardScaler())])</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="021a952e-9aeb-4d2c-a646-0a4ddcd5ecad" type="checkbox" ><label class="sk-toggleable__label" for="021a952e-9aeb-4d2c-a646-0a4ddcd5ecad">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(strategy='median')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="b9a3dc2f-c107-4b41-9c43-898e67aa8260" type="checkbox" ><label class="sk-toggleable__label" for="b9a3dc2f-c107-4b41-9c43-898e67aa8260">StandardScaler</label><div class="sk-toggleable__content"><pre>StandardScaler()</pre></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="5d112561-bcc6-4b0c-bf6a-72eace8e2426" type="checkbox" ><label class="sk-toggleable__label" for="5d112561-bcc6-4b0c-bf6a-72eace8e2426">LogisticRegression</label><div class="sk-toggleable__content"><pre>LogisticRegression(n_jobs=-1, random_state=42)</pre></div></div></div></div></div></div></div>
 </div>
 
 </div>
@@ -193,7 +196,7 @@ nb_path: "07_Kaggle_TPS_Tutorial.ipynb"
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ml_pl</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">create_train_valid</span><span class="p">(</span><span class="n">valid_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">create_train_valid</span><span class="p">(</span><span class="n">valid_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -210,10 +213,10 @@ nb_path: "07_Kaggle_TPS_Tutorial.ipynb"
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;X_train shape is </span><span class="si">{</span><span class="n">ml_pl</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span> <span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;X_valid shape is </span><span class="si">{</span><span class="n">ml_pl</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_valid</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span> <span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;y_train shape is </span><span class="si">{</span><span class="n">ml_pl</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_train</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;y_valid shape is </span><span class="si">{</span><span class="n">ml_pl</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_valid</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;X_train shape is </span><span class="si">{</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span> <span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;X_valid shape is </span><span class="si">{</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_valid</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span> <span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;y_train shape is </span><span class="si">{</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_train</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;y_valid shape is </span><span class="si">{</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_valid</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -247,60 +250,19 @@ y_valid shape is (120000,)
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ml_pl</span><span class="o">.</span><span class="n">spl</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">ml_pl</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_train</span><span class="p">,</span> <span class="n">ml_pl</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_train</span><span class="p">)</span>
-<span class="n">preds</span> <span class="o">=</span> <span class="n">ml_pl</span><span class="o">.</span><span class="n">spl</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">ml_pl</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_valid</span><span class="p">)</span>
-<span class="n">preds_probs</span> <span class="o">=</span> <span class="n">ml_pl</span><span class="o">.</span><span class="n">spl</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">ml_pl</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_valid</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
-</pre></div>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="c1"># Now fit</span>
+<span class="n">tmlt</span><span class="o">.</span><span class="n">spl</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_train</span><span class="p">,</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_train</span><span class="p">)</span>
+<span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Fit Time:&quot;</span><span class="p">,</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
 
-    </div>
-</div>
-</div>
+<span class="c1">#predict</span>
+<span class="n">preds</span> <span class="o">=</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">spl</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_valid</span><span class="p">)</span>
+<span class="n">preds_probs</span> <span class="o">=</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">spl</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_valid</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
 
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># print(f&quot;preds shape is {preds.shape}&quot; )</span>
-<span class="c1"># print(f&quot;preds_probs shape is {preds_probs.shape}&quot; )</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>preds shape is (120000,)
-preds_probs shape is (120000,)
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">auc</span> <span class="o">=</span> <span class="n">roc_auc_score</span><span class="p">(</span><span class="n">ml_pl</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">preds_probs</span><span class="p">)</span>
-<span class="n">acc</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">ml_pl</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">preds</span><span class="p">)</span>
+<span class="c1"># Metrics</span>
+<span class="n">auc</span> <span class="o">=</span> <span class="n">roc_auc_score</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">preds_probs</span><span class="p">)</span>
+<span class="n">acc</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">preds</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;AUC is : </span><span class="si">{</span><span class="n">auc</span><span class="si">}</span><span class="s2"> while Accuracy is : </span><span class="si">{</span><span class="n">acc</span><span class="si">}</span><span class="s2"> &quot;</span><span class="p">)</span>
 </pre></div>
@@ -315,7 +277,8 @@ preds_probs shape is (120000,)
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>AUC is : 0.7550680676073396 while Accuracy is : 0.7422916666666667 
+<pre>Fit Time: 24.23397397994995
+AUC is : 0.7506636452348747 while Accuracy is : 0.7385833333333334 
 </pre>
 </div>
 </div>
@@ -328,7 +291,8 @@ preds_probs shape is (120000,)
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Let's update the numerical scaler to MinMax</p>
+<p>Fit Time: 59.285420179367065
+AUC is : 0.7550680676073396 while Accuracy is : 0.7422916666666667</p>
 
 </div>
 </div>
@@ -340,11 +304,271 @@ preds_probs shape is (120000,)
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">MinMaxScaler</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">sklearn</span>
+<span class="nb">sorted</span><span class="p">(</span><span class="n">sklearn</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">SCORERS</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+</pre></div>
 
-<span class="n">ml_pl</span><span class="o">.</span><span class="n">update_preprocessor</span><span class="p">(</span><span class="n">num_scaler</span><span class="o">=</span><span class="n">MinMaxScaler</span><span class="p">())</span>
-<span class="c1"># check the udpated pipeline</span>
-<span class="n">ml_pl</span><span class="o">.</span><span class="n">spl</span>
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[&#39;accuracy&#39;,
+ &#39;adjusted_mutual_info_score&#39;,
+ &#39;adjusted_rand_score&#39;,
+ &#39;average_precision&#39;,
+ &#39;balanced_accuracy&#39;,
+ &#39;completeness_score&#39;,
+ &#39;explained_variance&#39;,
+ &#39;f1&#39;,
+ &#39;f1_macro&#39;,
+ &#39;f1_micro&#39;,
+ &#39;f1_samples&#39;,
+ &#39;f1_weighted&#39;,
+ &#39;fowlkes_mallows_score&#39;,
+ &#39;homogeneity_score&#39;,
+ &#39;jaccard&#39;,
+ &#39;jaccard_macro&#39;,
+ &#39;jaccard_micro&#39;,
+ &#39;jaccard_samples&#39;,
+ &#39;jaccard_weighted&#39;,
+ &#39;max_error&#39;,
+ &#39;mutual_info_score&#39;,
+ &#39;neg_brier_score&#39;,
+ &#39;neg_log_loss&#39;,
+ &#39;neg_mean_absolute_error&#39;,
+ &#39;neg_mean_absolute_percentage_error&#39;,
+ &#39;neg_mean_gamma_deviance&#39;,
+ &#39;neg_mean_poisson_deviance&#39;,
+ &#39;neg_mean_squared_error&#39;,
+ &#39;neg_mean_squared_log_error&#39;,
+ &#39;neg_median_absolute_error&#39;,
+ &#39;neg_root_mean_squared_error&#39;,
+ &#39;normalized_mutual_info_score&#39;,
+ &#39;precision&#39;,
+ &#39;precision_macro&#39;,
+ &#39;precision_micro&#39;,
+ &#39;precision_samples&#39;,
+ &#39;precision_weighted&#39;,
+ &#39;r2&#39;,
+ &#39;rand_score&#39;,
+ &#39;recall&#39;,
+ &#39;recall_macro&#39;,
+ &#39;recall_micro&#39;,
+ &#39;recall_samples&#39;,
+ &#39;recall_weighted&#39;,
+ &#39;roc_auc&#39;,
+ &#39;roc_auc_ovo&#39;,
+ &#39;roc_auc_ovo_weighted&#39;,
+ &#39;roc_auc_ovr&#39;,
+ &#39;roc_auc_ovr_weighted&#39;,
+ &#39;top_k_accuracy&#39;,
+ &#39;v_measure_score&#39;]</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h5 id="Let's-do-cross-validation">Let's do cross validation<a class="anchor-link" href="#Let's-do-cross-validation"> </a></h5>
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">scores</span> <span class="o">=</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">do_cross_validation</span><span class="p">(</span><span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;roc_auc&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;scores:&quot;</span><span class="p">,</span> <span class="n">scores</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Average auc score:&quot;</span><span class="p">,</span> <span class="n">scores</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>scores: [0.7444891  0.74708114 0.7553452  0.72882056 0.74817016]
+Average auc score: 0.7447812310949615
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h5 id="Let's-do-HyperParams-Search-using-Tune-Grid-Search">Let's do HyperParams Search using Tune Grid Search<a class="anchor-link" href="#Let's-do-HyperParams-Search-using-Tune-Grid-Search"> </a></h5>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+
+<pre><code>These are LogisticRegression params that can be tuned:
+
+
+penalty='l2',
+*,
+dual=False,
+tol=0.0001,
+C=1.0,
+fit_intercept=True,
+intercept_scaling=1,
+class_weight=None,
+random_state=None,
+solver='lbfgs',
+max_iter=100,
+multi_class='auto',
+verbose=0,
+warm_start=False,
+n_jobs=None,
+l1_ratio=None,</code></pre>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">param_grid</span> <span class="o">=</span> <span class="p">{</span>
+<span class="c1">#     &quot;preprocessor__num_cols__scaler&quot;: [StandardScaler(), MinMaxScaler()],</span>
+<span class="c1">#     &quot;preprocessor__low_card_cat_cols__imputer&quot;: [SimpleImputer(strategy=&#39;constant&#39;),</span>
+<span class="c1">#                                                  SimpleImputer(strategy=&#39;most_frequent&#39;)],</span>
+<span class="c1">#     &#39;model__solver&#39;: [&#39;lbfgs&#39;, &#39;saga&#39;, &#39;newton-cg&#39;, &#39;sag&#39;, &#39;liblinear&#39;],</span>
+    <span class="s1">&#39;model__max_iter&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">100</span><span class="p">,</span> <span class="mi">1000</span><span class="p">]</span>
+<span class="p">}</span>
+
+<span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="c1"># Now do tune grid search</span>
+<span class="n">tune_search</span> <span class="o">=</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">do_tune_grid_search</span><span class="p">(</span><span class="n">param_grid</span><span class="o">=</span><span class="n">param_grid</span><span class="p">,</span>
+                                       <span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                                       <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;roc_auc&#39;</span><span class="p">,</span>
+                                      <span class="n">early_stopping</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Grid Search Time:&quot;</span><span class="p">,</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Best params:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tune_search</span><span class="o">.</span><span class="n">best_params_</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Internal CV Metrics score: </span><span class="si">{</span><span class="p">(</span><span class="n">tune_search</span><span class="o">.</span><span class="n">best_score_</span><span class="p">)</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>/Users/pamathur/miniconda3/envs/nbdev_env/lib/python3.9/site-packages/tune_sklearn/tune_basesearch.py:400: UserWarning: max_iters is set &gt; 1 but incremental/partial training is not enabled. To enable partial training, ensure the estimator has `partial_fit` or `warm_start` and set `early_stopping=True`. Automatically setting max_iters=1.
+  warnings.warn(
+/Users/pamathur/miniconda3/envs/nbdev_env/lib/python3.9/site-packages/ray/tune/tune.py:368: UserWarning: The `loggers` argument is deprecated. Please pass the respective `LoggerCallback` classes to the `callbacks` argument instead. See https://docs.ray.io/en/latest/tune/api_docs/logging.html
+  warnings.warn(
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Grid Search Time: 174.76603078842163
+Best params:
+{&#39;model__max_iter&#39;: 100}
+Internal CV Metrics score: 0.745
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Grid Search Time: 476.33784890174866
+Best params:
+{'model__solver': 'sag'}
+Internal CV Metrics score: 0.745</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now, Let's update the Model with best params</p>
+<p>for example, use numerical scaler to MinMax instead StandardScaler</p>
+<p>use resolver = 'sag'</p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># tmlt.update_preprocessor(num_scaler=MinMaxScaler())</span>
+<span class="c1"># # check the udpated pipeline</span>
+<span class="c1"># tmlt.spl</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">scikit_model_tuned</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>
+                                       <span class="n">solver</span><span class="o">=</span><span class="s1">&#39;sag&#39;</span><span class="p">)</span>
+
+<span class="c1"># Update pipeline with new model</span>
+<span class="n">tmlt</span><span class="o">.</span><span class="n">update_model</span><span class="p">(</span><span class="n">scikit_model_tuned</span><span class="p">)</span>
+<span class="n">tmlt</span><span class="o">.</span><span class="n">spl</span>
 </pre></div>
 
     </div>
@@ -358,11 +582,11 @@ preds_probs shape is (120000,)
 
 
 <div class="output_html rendered_html output_subarea output_execute_result">
-<style>#sk-15af54d2-392c-4666-b040-f37206f925a7 {color: black;background-color: white;}#sk-15af54d2-392c-4666-b040-f37206f925a7 pre{padding: 0;}#sk-15af54d2-392c-4666-b040-f37206f925a7 div.sk-toggleable {background-color: white;}#sk-15af54d2-392c-4666-b040-f37206f925a7 label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.3em;box-sizing: border-box;text-align: center;}#sk-15af54d2-392c-4666-b040-f37206f925a7 div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}#sk-15af54d2-392c-4666-b040-f37206f925a7 div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}#sk-15af54d2-392c-4666-b040-f37206f925a7 input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}#sk-15af54d2-392c-4666-b040-f37206f925a7 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-15af54d2-392c-4666-b040-f37206f925a7 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-15af54d2-392c-4666-b040-f37206f925a7 input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}#sk-15af54d2-392c-4666-b040-f37206f925a7 div.sk-estimator {font-family: monospace;background-color: #f0f8ff;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;margin-bottom: 0.5em;}#sk-15af54d2-392c-4666-b040-f37206f925a7 div.sk-estimator:hover {background-color: #d4ebff;}#sk-15af54d2-392c-4666-b040-f37206f925a7 div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}#sk-15af54d2-392c-4666-b040-f37206f925a7 div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}#sk-15af54d2-392c-4666-b040-f37206f925a7 div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}#sk-15af54d2-392c-4666-b040-f37206f925a7 div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;padding-right: 0.2em;padding-left: 0.2em;}#sk-15af54d2-392c-4666-b040-f37206f925a7 div.sk-item {z-index: 1;}#sk-15af54d2-392c-4666-b040-f37206f925a7 div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}#sk-15af54d2-392c-4666-b040-f37206f925a7 div.sk-parallel::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}#sk-15af54d2-392c-4666-b040-f37206f925a7 div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}#sk-15af54d2-392c-4666-b040-f37206f925a7 div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}#sk-15af54d2-392c-4666-b040-f37206f925a7 div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}#sk-15af54d2-392c-4666-b040-f37206f925a7 div.sk-parallel-item:only-child::after {width: 0;}#sk-15af54d2-392c-4666-b040-f37206f925a7 div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0 0.4em 0.5em 0.4em;box-sizing: border-box;padding-bottom: 0.4em;background-color: white;position: relative;}#sk-15af54d2-392c-4666-b040-f37206f925a7 div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}#sk-15af54d2-392c-4666-b040-f37206f925a7 div.sk-label-container {position: relative;z-index: 2;text-align: center;}#sk-15af54d2-392c-4666-b040-f37206f925a7 div.sk-container {display: inline-block;position: relative;}</style><div id="sk-15af54d2-392c-4666-b040-f37206f925a7" class"sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="45836107-b8f9-4e40-ae2d-d1257b50f95c" type="checkbox" ><label class="sk-toggleable__label" for="45836107-b8f9-4e40-ae2d-d1257b50f95c">Pipeline</label><div class="sk-toggleable__content"><pre>Pipeline(steps=[('preprocessor',
+<style>#sk-c6dac622-72cf-4dd9-881b-9a7381bfcca9 {color: black;background-color: white;}#sk-c6dac622-72cf-4dd9-881b-9a7381bfcca9 pre{padding: 0;}#sk-c6dac622-72cf-4dd9-881b-9a7381bfcca9 div.sk-toggleable {background-color: white;}#sk-c6dac622-72cf-4dd9-881b-9a7381bfcca9 label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.3em;box-sizing: border-box;text-align: center;}#sk-c6dac622-72cf-4dd9-881b-9a7381bfcca9 div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}#sk-c6dac622-72cf-4dd9-881b-9a7381bfcca9 div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}#sk-c6dac622-72cf-4dd9-881b-9a7381bfcca9 input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}#sk-c6dac622-72cf-4dd9-881b-9a7381bfcca9 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-c6dac622-72cf-4dd9-881b-9a7381bfcca9 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-c6dac622-72cf-4dd9-881b-9a7381bfcca9 input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}#sk-c6dac622-72cf-4dd9-881b-9a7381bfcca9 div.sk-estimator {font-family: monospace;background-color: #f0f8ff;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;margin-bottom: 0.5em;}#sk-c6dac622-72cf-4dd9-881b-9a7381bfcca9 div.sk-estimator:hover {background-color: #d4ebff;}#sk-c6dac622-72cf-4dd9-881b-9a7381bfcca9 div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}#sk-c6dac622-72cf-4dd9-881b-9a7381bfcca9 div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}#sk-c6dac622-72cf-4dd9-881b-9a7381bfcca9 div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}#sk-c6dac622-72cf-4dd9-881b-9a7381bfcca9 div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;padding-right: 0.2em;padding-left: 0.2em;}#sk-c6dac622-72cf-4dd9-881b-9a7381bfcca9 div.sk-item {z-index: 1;}#sk-c6dac622-72cf-4dd9-881b-9a7381bfcca9 div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}#sk-c6dac622-72cf-4dd9-881b-9a7381bfcca9 div.sk-parallel::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}#sk-c6dac622-72cf-4dd9-881b-9a7381bfcca9 div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}#sk-c6dac622-72cf-4dd9-881b-9a7381bfcca9 div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}#sk-c6dac622-72cf-4dd9-881b-9a7381bfcca9 div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}#sk-c6dac622-72cf-4dd9-881b-9a7381bfcca9 div.sk-parallel-item:only-child::after {width: 0;}#sk-c6dac622-72cf-4dd9-881b-9a7381bfcca9 div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0 0.4em 0.5em 0.4em;box-sizing: border-box;padding-bottom: 0.4em;background-color: white;position: relative;}#sk-c6dac622-72cf-4dd9-881b-9a7381bfcca9 div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}#sk-c6dac622-72cf-4dd9-881b-9a7381bfcca9 div.sk-label-container {position: relative;z-index: 2;text-align: center;}#sk-c6dac622-72cf-4dd9-881b-9a7381bfcca9 div.sk-container {display: inline-block;position: relative;}</style><div id="sk-c6dac622-72cf-4dd9-881b-9a7381bfcca9" class"sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="10544960-d297-4985-b8a9-eba15e302d68" type="checkbox" ><label class="sk-toggleable__label" for="10544960-d297-4985-b8a9-eba15e302d68">Pipeline</label><div class="sk-toggleable__content"><pre>Pipeline(steps=[('preprocessor',
                  Pipeline(steps=[('imputer', SimpleImputer(strategy='median')),
-                                 ('scaler', MinMaxScaler())])),
-                ('model', MLPClassifier(early_stopping=True, random_state=42))])</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="320aac15-3093-4ede-a76a-fd4c4b9763b5" type="checkbox" ><label class="sk-toggleable__label" for="320aac15-3093-4ede-a76a-fd4c4b9763b5">preprocessor: Pipeline</label><div class="sk-toggleable__content"><pre>Pipeline(steps=[('imputer', SimpleImputer(strategy='median')),
-                ('scaler', MinMaxScaler())])</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="964f9477-2ebb-4513-96ef-d2d12c22c95c" type="checkbox" ><label class="sk-toggleable__label" for="964f9477-2ebb-4513-96ef-d2d12c22c95c">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(strategy='median')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="12737f9f-f03e-46bf-9d94-8896bbcd2b59" type="checkbox" ><label class="sk-toggleable__label" for="12737f9f-f03e-46bf-9d94-8896bbcd2b59">MinMaxScaler</label><div class="sk-toggleable__content"><pre>MinMaxScaler()</pre></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="eb13e083-3979-41ba-a18a-f70880273074" type="checkbox" ><label class="sk-toggleable__label" for="eb13e083-3979-41ba-a18a-f70880273074">MLPClassifier</label><div class="sk-toggleable__content"><pre>MLPClassifier(early_stopping=True, random_state=42)</pre></div></div></div></div></div></div></div>
+                                 ('scaler', StandardScaler())])),
+                ('model', LogisticRegression(random_state=42, solver='sag'))])</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="1273e06f-db4c-46a3-8c8a-3ec60ad4bdba" type="checkbox" ><label class="sk-toggleable__label" for="1273e06f-db4c-46a3-8c8a-3ec60ad4bdba">preprocessor: Pipeline</label><div class="sk-toggleable__content"><pre>Pipeline(steps=[('imputer', SimpleImputer(strategy='median')),
+                ('scaler', StandardScaler())])</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="9209b4ce-6edf-420c-9646-ac76e173184b" type="checkbox" ><label class="sk-toggleable__label" for="9209b4ce-6edf-420c-9646-ac76e173184b">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(strategy='median')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="2cdfcbf3-1d43-4c3d-ba11-f9e949d91d56" type="checkbox" ><label class="sk-toggleable__label" for="2cdfcbf3-1d43-4c3d-ba11-f9e949d91d56">StandardScaler</label><div class="sk-toggleable__content"><pre>StandardScaler()</pre></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="a09d5472-adfc-4bcf-8f42-058c230d715a" type="checkbox" ><label class="sk-toggleable__label" for="a09d5472-adfc-4bcf-8f42-058c230d715a">LogisticRegression</label><div class="sk-toggleable__content"><pre>LogisticRegression(random_state=42, solver='sag')</pre></div></div></div></div></div></div></div>
 </div>
 
 </div>
@@ -380,31 +604,39 @@ preds_probs shape is (120000,)
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ml_pl</span><span class="o">.</span><span class="n">spl</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">ml_pl</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_train</span><span class="p">,</span> <span class="n">ml_pl</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_train</span><span class="p">)</span>
-<span class="n">preds</span> <span class="o">=</span> <span class="n">ml_pl</span><span class="o">.</span><span class="n">spl</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">ml_pl</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_valid</span><span class="p">)</span>
-<span class="n">preds_probs</span> <span class="o">=</span> <span class="n">ml_pl</span><span class="o">.</span><span class="n">spl</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">ml_pl</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_valid</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
-</pre></div>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="c1"># Now fit</span>
+<span class="n">tmlt</span><span class="o">.</span><span class="n">spl</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_train</span><span class="p">,</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_train</span><span class="p">)</span>
+<span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Fit Time:&quot;</span><span class="p">,</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
 
-    </div>
-</div>
-</div>
+<span class="c1">#predict</span>
+<span class="n">preds</span> <span class="o">=</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">spl</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_valid</span><span class="p">)</span>
+<span class="n">preds_probs</span> <span class="o">=</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">spl</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_valid</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
 
-</div>
-    {% endraw %}
+<span class="c1"># Metrics</span>
+<span class="n">auc</span> <span class="o">=</span> <span class="n">roc_auc_score</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">preds_probs</span><span class="p">)</span>
+<span class="n">acc</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">preds</span><span class="p">)</span>
 
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">auc</span> <span class="o">=</span> <span class="n">roc_auc_score</span><span class="p">(</span><span class="n">ml_pl</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">preds_probs</span><span class="p">)</span>
-<span class="n">acc</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">ml_pl</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">preds</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;AUC is : </span><span class="si">{</span><span class="n">auc</span><span class="si">}</span><span class="s2"> while Accuracy is : </span><span class="si">{</span><span class="n">acc</span><span class="si">}</span><span class="s2"> &quot;</span><span class="p">)</span>
 </pre></div>
 
     </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Fit Time: 23.976211071014404
+AUC is : 0.7506636005030084 while Accuracy is : 0.7386 
+</pre>
+</div>
+</div>
+
 </div>
 </div>
 
@@ -424,10 +656,29 @@ preds_probs shape is (120000,)
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ml_pl</span><span class="o">.</span><span class="n">spl</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tmlt</span><span class="o">.</span><span class="n">spl</span>
 </pre></div>
 
     </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<style>#sk-c20435eb-6f5b-4a96-964e-b58139fbbaea {color: black;background-color: white;}#sk-c20435eb-6f5b-4a96-964e-b58139fbbaea pre{padding: 0;}#sk-c20435eb-6f5b-4a96-964e-b58139fbbaea div.sk-toggleable {background-color: white;}#sk-c20435eb-6f5b-4a96-964e-b58139fbbaea label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.3em;box-sizing: border-box;text-align: center;}#sk-c20435eb-6f5b-4a96-964e-b58139fbbaea div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}#sk-c20435eb-6f5b-4a96-964e-b58139fbbaea div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}#sk-c20435eb-6f5b-4a96-964e-b58139fbbaea input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}#sk-c20435eb-6f5b-4a96-964e-b58139fbbaea div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-c20435eb-6f5b-4a96-964e-b58139fbbaea div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-c20435eb-6f5b-4a96-964e-b58139fbbaea input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}#sk-c20435eb-6f5b-4a96-964e-b58139fbbaea div.sk-estimator {font-family: monospace;background-color: #f0f8ff;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;margin-bottom: 0.5em;}#sk-c20435eb-6f5b-4a96-964e-b58139fbbaea div.sk-estimator:hover {background-color: #d4ebff;}#sk-c20435eb-6f5b-4a96-964e-b58139fbbaea div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}#sk-c20435eb-6f5b-4a96-964e-b58139fbbaea div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}#sk-c20435eb-6f5b-4a96-964e-b58139fbbaea div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}#sk-c20435eb-6f5b-4a96-964e-b58139fbbaea div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;padding-right: 0.2em;padding-left: 0.2em;}#sk-c20435eb-6f5b-4a96-964e-b58139fbbaea div.sk-item {z-index: 1;}#sk-c20435eb-6f5b-4a96-964e-b58139fbbaea div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}#sk-c20435eb-6f5b-4a96-964e-b58139fbbaea div.sk-parallel::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}#sk-c20435eb-6f5b-4a96-964e-b58139fbbaea div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}#sk-c20435eb-6f5b-4a96-964e-b58139fbbaea div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}#sk-c20435eb-6f5b-4a96-964e-b58139fbbaea div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}#sk-c20435eb-6f5b-4a96-964e-b58139fbbaea div.sk-parallel-item:only-child::after {width: 0;}#sk-c20435eb-6f5b-4a96-964e-b58139fbbaea div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0 0.4em 0.5em 0.4em;box-sizing: border-box;padding-bottom: 0.4em;background-color: white;position: relative;}#sk-c20435eb-6f5b-4a96-964e-b58139fbbaea div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}#sk-c20435eb-6f5b-4a96-964e-b58139fbbaea div.sk-label-container {position: relative;z-index: 2;text-align: center;}#sk-c20435eb-6f5b-4a96-964e-b58139fbbaea div.sk-container {display: inline-block;position: relative;}</style><div id="sk-c20435eb-6f5b-4a96-964e-b58139fbbaea" class"sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="0df4c7d7-9a1f-4656-9d54-b5082cf49fb7" type="checkbox" ><label class="sk-toggleable__label" for="0df4c7d7-9a1f-4656-9d54-b5082cf49fb7">Pipeline</label><div class="sk-toggleable__content"><pre>Pipeline(steps=[('preprocessor',
+                 Pipeline(steps=[('imputer', SimpleImputer(strategy='median')),
+                                 ('scaler', StandardScaler())])),
+                ('model', LogisticRegression(random_state=42, solver='sag'))])</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="35cc7347-d8ba-4f3a-b55b-f57cb53a4125" type="checkbox" ><label class="sk-toggleable__label" for="35cc7347-d8ba-4f3a-b55b-f57cb53a4125">preprocessor: Pipeline</label><div class="sk-toggleable__content"><pre>Pipeline(steps=[('imputer', SimpleImputer(strategy='median')),
+                ('scaler', StandardScaler())])</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="a323cb06-0526-4f38-af6f-1c3e7ec3ef68" type="checkbox" ><label class="sk-toggleable__label" for="a323cb06-0526-4f38-af6f-1c3e7ec3ef68">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(strategy='median')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="75ba327d-71dd-4827-ba0c-e37991f46aef" type="checkbox" ><label class="sk-toggleable__label" for="75ba327d-71dd-4827-ba0c-e37991f46aef">StandardScaler</label><div class="sk-toggleable__content"><pre>StandardScaler()</pre></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="a89b6d32-d993-42ba-9fdd-b19049f6869d" type="checkbox" ><label class="sk-toggleable__label" for="a89b6d32-d993-42ba-9fdd-b19049f6869d">LogisticRegression</label><div class="sk-toggleable__content"><pre>LogisticRegression(random_state=42, solver='sag')</pre></div></div></div></div></div></div></div>
+</div>
+
+</div>
+
 </div>
 </div>
 
@@ -441,11 +692,123 @@ preds_probs shape is (120000,)
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sci_model_new_k_fold</span><span class="p">,</span> <span class="n">sci_model_new_metrics_score</span> <span class="o">=</span> <span class="n">ml_pl</span><span class="o">.</span><span class="n">do_k_fold_training</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="n">roc_auc_score</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;mean metrics score:&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sci_model_new_metrics_score</span><span class="p">))</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sci_model_k_fold</span><span class="p">,</span> <span class="n">sci_model_metrics_score</span> <span class="o">=</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">do_k_fold_training</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="n">roc_auc_score</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;mean metrics score:&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sci_model_metrics_score</span><span class="p">))</span>
 </pre></div>
 
     </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_text output_error">
+<pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">KeyboardInterrupt</span>                         Traceback (most recent call last)
+<span class="ansi-green-fg">/var/folders/p3/zmg8jfwx0hb9gwzs0w69d7f0rgyjx2/T/ipykernel_73237/1173519160.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">      1</span> <span class="ansi-red-fg"># fit and predict</span>
+<span class="ansi-green-fg">----&gt; 2</span><span class="ansi-red-fg"> </span>sci_model_k_fold<span class="ansi-blue-fg">,</span> sci_model_metrics_score <span class="ansi-blue-fg">=</span> tmlt<span class="ansi-blue-fg">.</span>do_k_fold_training<span class="ansi-blue-fg">(</span>n_splits<span class="ansi-blue-fg">=</span><span class="ansi-cyan-fg">10</span><span class="ansi-blue-fg">,</span> metrics<span class="ansi-blue-fg">=</span>roc_auc_score<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">      3</span> print<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">&#34;mean metrics score:&#34;</span><span class="ansi-blue-fg">,</span> np<span class="ansi-blue-fg">.</span>mean<span class="ansi-blue-fg">(</span>sci_model_metrics_score<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">~/GitHub/tabular_ml_toolkit/tabular_ml_toolkit/MLPipeline.py</span> in <span class="ansi-cyan-fg">do_k_fold_training</span><span class="ansi-blue-fg">(self, n_splits, metrics, random_state)</span>
+<span class="ansi-green-intense-fg ansi-bold">    215</span> 
+<span class="ansi-green-intense-fg ansi-bold">    216</span>             <span class="ansi-red-fg"># fit</span>
+<span class="ansi-green-fg">--&gt; 217</span><span class="ansi-red-fg">             </span>self<span class="ansi-blue-fg">.</span>spl<span class="ansi-blue-fg">.</span>fit<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>dfl<span class="ansi-blue-fg">.</span>X_train<span class="ansi-blue-fg">,</span> self<span class="ansi-blue-fg">.</span>dfl<span class="ansi-blue-fg">.</span>y_train<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    218</span> 
+<span class="ansi-green-intense-fg ansi-bold">    219</span>             <span class="ansi-red-fg">#evaluate metrics based upon input</span>
+
+<span class="ansi-green-fg">~/miniconda3/envs/nbdev_env/lib/python3.9/site-packages/sklearn/pipeline.py</span> in <span class="ansi-cyan-fg">fit</span><span class="ansi-blue-fg">(self, X, y, **fit_params)</span>
+<span class="ansi-green-intense-fg ansi-bold">    392</span>             <span class="ansi-green-fg">if</span> self<span class="ansi-blue-fg">.</span>_final_estimator <span class="ansi-blue-fg">!=</span> <span class="ansi-blue-fg">&#34;passthrough&#34;</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    393</span>                 fit_params_last_step <span class="ansi-blue-fg">=</span> fit_params_steps<span class="ansi-blue-fg">[</span>self<span class="ansi-blue-fg">.</span>steps<span class="ansi-blue-fg">[</span><span class="ansi-blue-fg">-</span><span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">[</span><span class="ansi-cyan-fg">0</span><span class="ansi-blue-fg">]</span><span class="ansi-blue-fg">]</span>
+<span class="ansi-green-fg">--&gt; 394</span><span class="ansi-red-fg">                 </span>self<span class="ansi-blue-fg">.</span>_final_estimator<span class="ansi-blue-fg">.</span>fit<span class="ansi-blue-fg">(</span>Xt<span class="ansi-blue-fg">,</span> y<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">**</span>fit_params_last_step<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    395</span> 
+<span class="ansi-green-intense-fg ansi-bold">    396</span>         <span class="ansi-green-fg">return</span> self
+
+<span class="ansi-green-fg">~/miniconda3/envs/nbdev_env/lib/python3.9/site-packages/sklearn/linear_model/_logistic.py</span> in <span class="ansi-cyan-fg">fit</span><span class="ansi-blue-fg">(self, X, y, sample_weight)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1587</span>         <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">   1588</span>             prefer <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">&#34;processes&#34;</span>
+<span class="ansi-green-fg">-&gt; 1589</span><span class="ansi-red-fg">         fold_coefs_ = Parallel(
+</span><span class="ansi-green-intense-fg ansi-bold">   1590</span>             n_jobs<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>n_jobs<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">   1591</span>             verbose<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>verbose<span class="ansi-blue-fg">,</span>
+
+<span class="ansi-green-fg">~/miniconda3/envs/nbdev_env/lib/python3.9/site-packages/joblib/parallel.py</span> in <span class="ansi-cyan-fg">__call__</span><span class="ansi-blue-fg">(self, iterable)</span>
+<span class="ansi-green-intense-fg ansi-bold">   1041</span>             <span class="ansi-red-fg"># remaining jobs.</span>
+<span class="ansi-green-intense-fg ansi-bold">   1042</span>             self<span class="ansi-blue-fg">.</span>_iterating <span class="ansi-blue-fg">=</span> <span class="ansi-green-fg">False</span>
+<span class="ansi-green-fg">-&gt; 1043</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">if</span> self<span class="ansi-blue-fg">.</span>dispatch_one_batch<span class="ansi-blue-fg">(</span>iterator<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">   1044</span>                 self<span class="ansi-blue-fg">.</span>_iterating <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>_original_iterator <span class="ansi-green-fg">is</span> <span class="ansi-green-fg">not</span> <span class="ansi-green-fg">None</span>
+<span class="ansi-green-intense-fg ansi-bold">   1045</span> 
+
+<span class="ansi-green-fg">~/miniconda3/envs/nbdev_env/lib/python3.9/site-packages/joblib/parallel.py</span> in <span class="ansi-cyan-fg">dispatch_one_batch</span><span class="ansi-blue-fg">(self, iterator)</span>
+<span class="ansi-green-intense-fg ansi-bold">    859</span>                 <span class="ansi-green-fg">return</span> <span class="ansi-green-fg">False</span>
+<span class="ansi-green-intense-fg ansi-bold">    860</span>             <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 861</span><span class="ansi-red-fg">                 </span>self<span class="ansi-blue-fg">.</span>_dispatch<span class="ansi-blue-fg">(</span>tasks<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    862</span>                 <span class="ansi-green-fg">return</span> <span class="ansi-green-fg">True</span>
+<span class="ansi-green-intense-fg ansi-bold">    863</span> 
+
+<span class="ansi-green-fg">~/miniconda3/envs/nbdev_env/lib/python3.9/site-packages/joblib/parallel.py</span> in <span class="ansi-cyan-fg">_dispatch</span><span class="ansi-blue-fg">(self, batch)</span>
+<span class="ansi-green-intense-fg ansi-bold">    777</span>         <span class="ansi-green-fg">with</span> self<span class="ansi-blue-fg">.</span>_lock<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    778</span>             job_idx <span class="ansi-blue-fg">=</span> len<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>_jobs<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">--&gt; 779</span><span class="ansi-red-fg">             </span>job <span class="ansi-blue-fg">=</span> self<span class="ansi-blue-fg">.</span>_backend<span class="ansi-blue-fg">.</span>apply_async<span class="ansi-blue-fg">(</span>batch<span class="ansi-blue-fg">,</span> callback<span class="ansi-blue-fg">=</span>cb<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    780</span>             <span class="ansi-red-fg"># A job can complete so quickly than its callback is</span>
+<span class="ansi-green-intense-fg ansi-bold">    781</span>             <span class="ansi-red-fg"># called before we get here, causing self._jobs to</span>
+
+<span class="ansi-green-fg">~/miniconda3/envs/nbdev_env/lib/python3.9/site-packages/joblib/_parallel_backends.py</span> in <span class="ansi-cyan-fg">apply_async</span><span class="ansi-blue-fg">(self, func, callback)</span>
+<span class="ansi-green-intense-fg ansi-bold">    206</span>     <span class="ansi-green-fg">def</span> apply_async<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> func<span class="ansi-blue-fg">,</span> callback<span class="ansi-blue-fg">=</span><span class="ansi-green-fg">None</span><span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    207</span>         <span class="ansi-blue-fg">&#34;&#34;&#34;Schedule a func to be run&#34;&#34;&#34;</span>
+<span class="ansi-green-fg">--&gt; 208</span><span class="ansi-red-fg">         </span>result <span class="ansi-blue-fg">=</span> ImmediateResult<span class="ansi-blue-fg">(</span>func<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    209</span>         <span class="ansi-green-fg">if</span> callback<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    210</span>             callback<span class="ansi-blue-fg">(</span>result<span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">~/miniconda3/envs/nbdev_env/lib/python3.9/site-packages/joblib/_parallel_backends.py</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-fg">(self, batch)</span>
+<span class="ansi-green-intense-fg ansi-bold">    570</span>         <span class="ansi-red-fg"># Don&#39;t delay the application, to avoid keeping the input</span>
+<span class="ansi-green-intense-fg ansi-bold">    571</span>         <span class="ansi-red-fg"># arguments in memory</span>
+<span class="ansi-green-fg">--&gt; 572</span><span class="ansi-red-fg">         </span>self<span class="ansi-blue-fg">.</span>results <span class="ansi-blue-fg">=</span> batch<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    573</span> 
+<span class="ansi-green-intense-fg ansi-bold">    574</span>     <span class="ansi-green-fg">def</span> get<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+
+<span class="ansi-green-fg">~/miniconda3/envs/nbdev_env/lib/python3.9/site-packages/joblib/parallel.py</span> in <span class="ansi-cyan-fg">__call__</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-intense-fg ansi-bold">    260</span>         <span class="ansi-red-fg"># change the default number of processes to -1</span>
+<span class="ansi-green-intense-fg ansi-bold">    261</span>         <span class="ansi-green-fg">with</span> parallel_backend<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>_backend<span class="ansi-blue-fg">,</span> n_jobs<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>_n_jobs<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 262</span><span class="ansi-red-fg">             return [func(*args, **kwargs)
+</span><span class="ansi-green-intense-fg ansi-bold">    263</span>                     for func, args, kwargs in self.items]
+<span class="ansi-green-intense-fg ansi-bold">    264</span> 
+
+<span class="ansi-green-fg">~/miniconda3/envs/nbdev_env/lib/python3.9/site-packages/joblib/parallel.py</span> in <span class="ansi-cyan-fg">&lt;listcomp&gt;</span><span class="ansi-blue-fg">(.0)</span>
+<span class="ansi-green-intense-fg ansi-bold">    260</span>         <span class="ansi-red-fg"># change the default number of processes to -1</span>
+<span class="ansi-green-intense-fg ansi-bold">    261</span>         <span class="ansi-green-fg">with</span> parallel_backend<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">.</span>_backend<span class="ansi-blue-fg">,</span> n_jobs<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>_n_jobs<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 262</span><span class="ansi-red-fg">             return [func(*args, **kwargs)
+</span><span class="ansi-green-intense-fg ansi-bold">    263</span>                     for func, args, kwargs in self.items]
+<span class="ansi-green-intense-fg ansi-bold">    264</span> 
+
+<span class="ansi-green-fg">~/miniconda3/envs/nbdev_env/lib/python3.9/site-packages/sklearn/utils/fixes.py</span> in <span class="ansi-cyan-fg">__call__</span><span class="ansi-blue-fg">(self, *args, **kwargs)</span>
+<span class="ansi-green-intense-fg ansi-bold">    207</span>     <span class="ansi-green-fg">def</span> __call__<span class="ansi-blue-fg">(</span>self<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">*</span>args<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">**</span>kwargs<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">    208</span>         <span class="ansi-green-fg">with</span> config_context<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">**</span>self<span class="ansi-blue-fg">.</span>config<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg">--&gt; 209</span><span class="ansi-red-fg">             </span><span class="ansi-green-fg">return</span> self<span class="ansi-blue-fg">.</span>function<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">*</span>args<span class="ansi-blue-fg">,</span> <span class="ansi-blue-fg">**</span>kwargs<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-intense-fg ansi-bold">    210</span> 
+<span class="ansi-green-intense-fg ansi-bold">    211</span> 
+
+<span class="ansi-green-fg">~/miniconda3/envs/nbdev_env/lib/python3.9/site-packages/sklearn/linear_model/_logistic.py</span> in <span class="ansi-cyan-fg">_logistic_regression_path</span><span class="ansi-blue-fg">(X, y, pos_class, Cs, fit_intercept, max_iter, tol, verbose, solver, coef, class_weight, dual, penalty, intercept_scaling, multi_class, random_state, check_input, max_squared_sum, sample_weight, l1_ratio)</span>
+<span class="ansi-green-intense-fg ansi-bold">    862</span>                 beta <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">(</span><span class="ansi-cyan-fg">1.0</span> <span class="ansi-blue-fg">/</span> C<span class="ansi-blue-fg">)</span> <span class="ansi-blue-fg">*</span> l1_ratio
+<span class="ansi-green-intense-fg ansi-bold">    863</span> 
+<span class="ansi-green-fg">--&gt; 864</span><span class="ansi-red-fg">             w0, n_iter_i, warm_start_sag = sag_solver(
+</span><span class="ansi-green-intense-fg ansi-bold">    865</span>                 X<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    866</span>                 target<span class="ansi-blue-fg">,</span>
+
+<span class="ansi-green-fg">~/miniconda3/envs/nbdev_env/lib/python3.9/site-packages/sklearn/linear_model/_sag.py</span> in <span class="ansi-cyan-fg">sag_solver</span><span class="ansi-blue-fg">(X, y, sample_weight, loss, alpha, beta, max_iter, tol, verbose, random_state, check_input, max_squared_sum, warm_start_mem, is_saga)</span>
+<span class="ansi-green-intense-fg ansi-bold">    325</span> 
+<span class="ansi-green-intense-fg ansi-bold">    326</span>     sag <span class="ansi-blue-fg">=</span> sag64 <span class="ansi-green-fg">if</span> X<span class="ansi-blue-fg">.</span>dtype <span class="ansi-blue-fg">==</span> np<span class="ansi-blue-fg">.</span>float64 <span class="ansi-green-fg">else</span> sag32
+<span class="ansi-green-fg">--&gt; 327</span><span class="ansi-red-fg">     num_seen, n_iter_ = sag(
+</span><span class="ansi-green-intense-fg ansi-bold">    328</span>         dataset<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-intense-fg ansi-bold">    329</span>         coef_init<span class="ansi-blue-fg">,</span>
+
+<span class="ansi-red-fg">KeyboardInterrupt</span>: </pre>
+</div>
+</div>
+
 </div>
 </div>
 
@@ -476,9 +839,9 @@ preds_probs shape is (120000,)
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sci_model_new_preds</span> <span class="o">=</span> <span class="n">ml_pl</span><span class="o">.</span><span class="n">do_k_fold_prediction</span><span class="p">(</span><span class="n">k_fold</span><span class="o">=</span><span class="n">sci_model_new_k_fold</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sci_model_preds</span> <span class="o">=</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">do_k_fold_prediction</span><span class="p">(</span><span class="n">k_fold</span><span class="o">=</span><span class="n">sci_model_k_fold</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="n">sci_model_new_preds</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sci_model_preds</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -562,15 +925,15 @@ However, <code>prepare_data_for_cv</code>  method do not split but let's cross v
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">xgb_params</span> <span class="o">=</span> <span class="p">{</span>
-<span class="c1">#     &#39;n_estimators&#39;: 1000,</span>
-<span class="c1">#     &#39;learning_rate&#39;: 0.01,</span>
+<span class="c1">#     &#39;learning_rate&#39;: 0.3,</span>
 <span class="c1">#     &#39;max_depth&#39;: 9,</span>
 <span class="c1">#     &#39;booster&#39;: &#39;gbtree&#39;,</span>
     <span class="s1">&#39;eval_metric&#39;</span><span class="p">:</span> <span class="s1">&#39;auc&#39;</span><span class="p">,</span>
-<span class="c1">#     &#39;tree_method&#39;: &#39;gpu_hist&#39;,</span>
-<span class="c1">#     &#39;predictor&#39;: &#39;gpu_predictor&#39;,</span>
     <span class="s1">&#39;use_label_encoder&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="s1">&#39;random_state&#39;</span><span class="p">:</span> <span class="mi">42</span>
+    <span class="s1">&#39;random_state&#39;</span><span class="p">:</span> <span class="mi">42</span><span class="p">,</span>
+    <span class="c1"># for GPU</span>
+    <span class="c1">#     &#39;tree_method&#39;: &#39;gpu_hist&#39;,</span>
+<span class="c1">#     &#39;predictor&#39;: &#39;gpu_predictor&#39;</span>
 <span class="p">}</span>
 </pre></div>
 
@@ -607,11 +970,55 @@ However, <code>prepare_data_for_cv</code>  method do not split but let's cross v
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ml_pl</span><span class="o">.</span><span class="n">update_model</span><span class="p">(</span><span class="n">xgb_model</span><span class="p">)</span>
-<span class="n">ml_pl</span><span class="o">.</span><span class="n">spl</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tmlt</span><span class="o">.</span><span class="n">update_model</span><span class="p">(</span><span class="n">xgb_model</span><span class="p">)</span>
+<span class="n">tmlt</span><span class="o">.</span><span class="n">spl</span>
 </pre></div>
 
     </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<style>#sk-6843e6ac-d7b2-4c62-8fce-1b3cdcd704cf {color: black;background-color: white;}#sk-6843e6ac-d7b2-4c62-8fce-1b3cdcd704cf pre{padding: 0;}#sk-6843e6ac-d7b2-4c62-8fce-1b3cdcd704cf div.sk-toggleable {background-color: white;}#sk-6843e6ac-d7b2-4c62-8fce-1b3cdcd704cf label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.3em;box-sizing: border-box;text-align: center;}#sk-6843e6ac-d7b2-4c62-8fce-1b3cdcd704cf div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}#sk-6843e6ac-d7b2-4c62-8fce-1b3cdcd704cf div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}#sk-6843e6ac-d7b2-4c62-8fce-1b3cdcd704cf input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}#sk-6843e6ac-d7b2-4c62-8fce-1b3cdcd704cf div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-6843e6ac-d7b2-4c62-8fce-1b3cdcd704cf div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-6843e6ac-d7b2-4c62-8fce-1b3cdcd704cf input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}#sk-6843e6ac-d7b2-4c62-8fce-1b3cdcd704cf div.sk-estimator {font-family: monospace;background-color: #f0f8ff;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;margin-bottom: 0.5em;}#sk-6843e6ac-d7b2-4c62-8fce-1b3cdcd704cf div.sk-estimator:hover {background-color: #d4ebff;}#sk-6843e6ac-d7b2-4c62-8fce-1b3cdcd704cf div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}#sk-6843e6ac-d7b2-4c62-8fce-1b3cdcd704cf div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}#sk-6843e6ac-d7b2-4c62-8fce-1b3cdcd704cf div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}#sk-6843e6ac-d7b2-4c62-8fce-1b3cdcd704cf div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;padding-right: 0.2em;padding-left: 0.2em;}#sk-6843e6ac-d7b2-4c62-8fce-1b3cdcd704cf div.sk-item {z-index: 1;}#sk-6843e6ac-d7b2-4c62-8fce-1b3cdcd704cf div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}#sk-6843e6ac-d7b2-4c62-8fce-1b3cdcd704cf div.sk-parallel::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}#sk-6843e6ac-d7b2-4c62-8fce-1b3cdcd704cf div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}#sk-6843e6ac-d7b2-4c62-8fce-1b3cdcd704cf div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}#sk-6843e6ac-d7b2-4c62-8fce-1b3cdcd704cf div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}#sk-6843e6ac-d7b2-4c62-8fce-1b3cdcd704cf div.sk-parallel-item:only-child::after {width: 0;}#sk-6843e6ac-d7b2-4c62-8fce-1b3cdcd704cf div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0 0.4em 0.5em 0.4em;box-sizing: border-box;padding-bottom: 0.4em;background-color: white;position: relative;}#sk-6843e6ac-d7b2-4c62-8fce-1b3cdcd704cf div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}#sk-6843e6ac-d7b2-4c62-8fce-1b3cdcd704cf div.sk-label-container {position: relative;z-index: 2;text-align: center;}#sk-6843e6ac-d7b2-4c62-8fce-1b3cdcd704cf div.sk-container {display: inline-block;position: relative;}</style><div id="sk-6843e6ac-d7b2-4c62-8fce-1b3cdcd704cf" class"sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="28727da8-00c3-4ac4-a519-d30d8a7efd00" type="checkbox" ><label class="sk-toggleable__label" for="28727da8-00c3-4ac4-a519-d30d8a7efd00">Pipeline</label><div class="sk-toggleable__content"><pre>Pipeline(steps=[('preprocessor',
+                 Pipeline(steps=[('imputer', SimpleImputer(strategy='median')),
+                                 ('scaler', StandardScaler())])),
+                ('model',
+                 XGBClassifier(base_score=None, booster=None,
+                               colsample_bylevel=None, colsample_bynode=None,
+                               colsample_bytree=None, enable_categorical=False,
+                               eval_metric='auc', gamma=None, gpu_id=None,
+                               importance_type=None,
+                               interaction_constrai..., learning_rate=None,
+                               max_delta_step=None, max_depth=None,
+                               min_child_weight=None, missing=nan,
+                               monotone_constraints=None, n_estimators=100,
+                               n_jobs=None, num_parallel_tree=None,
+                               predictor=None, random_state=42, reg_alpha=None,
+                               reg_lambda=None, scale_pos_weight=None,
+                               subsample=None, tree_method=None,
+                               use_label_encoder=False,
+                               validate_parameters=None, verbosity=None))])</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="897642f7-aedf-495d-be06-e228c4ac31ab" type="checkbox" ><label class="sk-toggleable__label" for="897642f7-aedf-495d-be06-e228c4ac31ab">preprocessor: Pipeline</label><div class="sk-toggleable__content"><pre>Pipeline(steps=[('imputer', SimpleImputer(strategy='median')),
+                ('scaler', StandardScaler())])</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="1f349f61-deca-4b05-b3cd-2c8393e65797" type="checkbox" ><label class="sk-toggleable__label" for="1f349f61-deca-4b05-b3cd-2c8393e65797">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(strategy='median')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="d7a21df6-0b96-490d-b82e-1ffb8d49d320" type="checkbox" ><label class="sk-toggleable__label" for="d7a21df6-0b96-490d-b82e-1ffb8d49d320">StandardScaler</label><div class="sk-toggleable__content"><pre>StandardScaler()</pre></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="3556489d-37fb-4cfd-ba63-f4979dd4df44" type="checkbox" ><label class="sk-toggleable__label" for="3556489d-37fb-4cfd-ba63-f4979dd4df44">XGBClassifier</label><div class="sk-toggleable__content"><pre>XGBClassifier(base_score=None, booster=None, colsample_bylevel=None,
+              colsample_bynode=None, colsample_bytree=None,
+              enable_categorical=False, eval_metric='auc', gamma=None,
+              gpu_id=None, importance_type=None, interaction_constraints=None,
+              learning_rate=None, max_delta_step=None, max_depth=None,
+              min_child_weight=None, missing=nan, monotone_constraints=None,
+              n_estimators=100, n_jobs=None, num_parallel_tree=None,
+              predictor=None, random_state=42, reg_alpha=None, reg_lambda=None,
+              scale_pos_weight=None, subsample=None, tree_method=None,
+              use_label_encoder=False, validate_parameters=None,
+              verbosity=None)</pre></div></div></div></div></div></div></div>
+</div>
+
+</div>
+
 </div>
 </div>
 
@@ -625,27 +1032,19 @@ However, <code>prepare_data_for_cv</code>  method do not split but let's cross v
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ml_pl</span><span class="o">.</span><span class="n">spl</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">ml_pl</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_train</span><span class="p">,</span> <span class="n">ml_pl</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_train</span><span class="p">)</span>
-<span class="n">preds</span> <span class="o">=</span> <span class="n">ml_pl</span><span class="o">.</span><span class="n">spl</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">ml_pl</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_valid</span><span class="p">)</span>
-<span class="n">preds_probs</span> <span class="o">=</span> <span class="n">ml_pl</span><span class="o">.</span><span class="n">spl</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">ml_pl</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_valid</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
-</pre></div>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="c1"># Now fit</span>
+<span class="n">tmlt</span><span class="o">.</span><span class="n">spl</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_train</span><span class="p">,</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_train</span><span class="p">)</span>
+<span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Fit Time:&quot;</span><span class="p">,</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
 
-    </div>
-</div>
-</div>
+<span class="c1">#predict</span>
+<span class="n">preds</span> <span class="o">=</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">spl</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_valid</span><span class="p">)</span>
+<span class="n">preds_probs</span> <span class="o">=</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">spl</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_valid</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
 
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">auc</span> <span class="o">=</span> <span class="n">roc_auc_score</span><span class="p">(</span><span class="n">ml_pl</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">preds_probs</span><span class="p">)</span>
-<span class="n">acc</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">ml_pl</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">preds</span><span class="p">)</span>
+<span class="c1"># Metrics</span>
+<span class="n">auc</span> <span class="o">=</span> <span class="n">roc_auc_score</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">preds_probs</span><span class="p">)</span>
+<span class="n">acc</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">preds</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;AUC is : </span><span class="si">{</span><span class="n">auc</span><span class="si">}</span><span class="s2"> while Accuracy is : </span><span class="si">{</span><span class="n">acc</span><span class="si">}</span><span class="s2"> &quot;</span><span class="p">)</span>
 </pre></div>
@@ -654,9 +1053,135 @@ However, <code>prepare_data_for_cv</code>  method do not split but let's cross v
 </div>
 </div>
 
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Fit Time: 237.51949214935303
+AUC is : 0.7306965219658297 while Accuracy is : 0.6909 
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
 </div>
     {% endraw %}
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h5 id="Let's-do-HyperParmas-search-for-XGBClassifier">Let's do HyperParmas search for XGBClassifier<a class="anchor-link" href="#Let's-do-HyperParmas-search-for-XGBClassifier"> </a></h5>
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">param_grid</span> <span class="o">=</span> <span class="p">{</span>
+<span class="c1">#     &quot;preprocessor__num_cols__scaler&quot;: [StandardScaler(), MinMaxScaler()],</span>
+<span class="c1">#     &quot;preprocessor__low_card_cat_cols__imputer&quot;: [SimpleImputer(strategy=&#39;constant&#39;),</span>
+<span class="c1">#                                                  SimpleImputer(strategy=&#39;most_frequent&#39;)],</span>
+    <span class="s1">&#39;model__booster&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;gbtree&#39;</span><span class="p">,</span> <span class="s1">&#39;gblinear&#39;</span><span class="p">],</span>
+<span class="c1">#     &#39;model__max_iter&#39;: [100, 1000]</span>
+<span class="p">}</span>
+
+<span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="c1"># Now do tune grid search</span>
+<span class="n">tune_search</span> <span class="o">=</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">do_tune_grid_search</span><span class="p">(</span><span class="n">param_grid</span><span class="o">=</span><span class="n">param_grid</span><span class="p">,</span>
+                                       <span class="n">cv</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                                       <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;roc_auc&#39;</span><span class="p">,</span>
+                                      <span class="n">early_stopping</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Grid Search Time:&quot;</span><span class="p">,</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Best params:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tune_search</span><span class="o">.</span><span class="n">best_params_</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Internal CV Metrics score: </span><span class="si">{</span><span class="p">(</span><span class="n">tune_search</span><span class="o">.</span><span class="n">best_score_</span><span class="p">)</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>/Users/pamathur/miniconda3/envs/nbdev_env/lib/python3.9/site-packages/tune_sklearn/tune_basesearch.py:400: UserWarning: max_iters is set &gt; 1 but incremental/partial training is not enabled. To enable partial training, ensure the estimator has `partial_fit` or `warm_start` and set `early_stopping=True`. Automatically setting max_iters=1.
+  warnings.warn(
+/Users/pamathur/miniconda3/envs/nbdev_env/lib/python3.9/site-packages/ray/tune/tune.py:368: UserWarning: The `loggers` argument is deprecated. Please pass the respective `LoggerCallback` classes to the `callbacks` argument instead. See https://docs.ray.io/en/latest/tune/api_docs/logging.html
+  warnings.warn(
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre><span class="ansi-cyan-fg">(_Trainable pid=74442)</span> [18:00:36] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
+<span class="ansi-cyan-fg">(_Trainable pid=74442)</span> Parameters: { &#34;colsample_bylevel&#34;, &#34;colsample_bynode&#34;, &#34;colsample_bytree&#34;, &#34;gamma&#34;, &#34;interaction_constraints&#34;, &#34;max_delta_step&#34;, &#34;max_depth&#34;, &#34;min_child_weight&#34;, &#34;monotone_constraints&#34;, &#34;num_parallel_tree&#34;, &#34;predictor&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
+<span class="ansi-cyan-fg">(_Trainable pid=74442)</span> 
+<span class="ansi-cyan-fg">(_Trainable pid=74442)</span>   This could be a false alarm, with some parameters getting used by language bindings but
+<span class="ansi-cyan-fg">(_Trainable pid=74442)</span>   then being mistakenly passed down to XGBoost core, or some parameter actually being used
+<span class="ansi-cyan-fg">(_Trainable pid=74442)</span>   but getting flagged wrongly here. Please open an issue if you find any such cases.
+<span class="ansi-cyan-fg">(_Trainable pid=74442)</span> 
+<span class="ansi-cyan-fg">(_Trainable pid=74442)</span> 
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>SIGINT received (e.g. via Ctrl+C), ending Ray Tune run. This will try to checkpoint the experiment state one last time. Press CTRL+C one more time (or send SIGINT/SIGKILL/SIGTERM) to skip. 
+Trials did not complete: [_Trainable_c7eac_00000]
+Experiment has been interrupted, but the most recent state was saved. You can continue running this experiment by passing `resume=True` to `tune.run()`
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[18:02:34] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
+Parameters: { &#34;colsample_bylevel&#34;, &#34;colsample_bynode&#34;, &#34;colsample_bytree&#34;, &#34;gamma&#34;, &#34;interaction_constraints&#34;, &#34;max_delta_step&#34;, &#34;max_depth&#34;, &#34;min_child_weight&#34;, &#34;monotone_constraints&#34;, &#34;num_parallel_tree&#34;, &#34;predictor&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
+
+  This could be a false alarm, with some parameters getting used by language bindings but
+  then being mistakenly passed down to XGBoost core, or some parameter actually being used
+  but getting flagged wrongly here. Please open an issue if you find any such cases.
+
+
+Grid Search Time: 131.64094710350037
+Best params:
+{&#39;model__booster&#39;: &#39;gblinear&#39;}
+Internal CV Metrics score: 0.742
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Indeed CV score was increased using hyper parameter tunning, let's use best_params to do k-fold training</p>
+
+</div>
+</div>
+</div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h4 id="Let's-Use-K-Fold-Training-for-xgb-model">Let's Use K-Fold Training for xgb model<a class="anchor-link" href="#Let's-Use-K-Fold-Training-for-xgb-model"> </a></h4>
@@ -670,7 +1195,16 @@ However, <code>prepare_data_for_cv</code>  method do not split but let's cross v
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ml_pl</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">scikit_model_new</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">xgb_params</span> <span class="o">=</span> <span class="p">{</span>
+<span class="c1">#     &#39;learning_rate&#39;: 0.05,</span>
+    <span class="s1">&#39;booster&#39;</span><span class="p">:</span> <span class="s1">&#39;gbtree&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;eval_metric&#39;</span><span class="p">:</span> <span class="s1">&#39;auc&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;use_label_encoder&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s1">&#39;random_state&#39;</span><span class="p">:</span> <span class="mi">42</span><span class="p">,</span>
+    <span class="c1"># for GPU</span>
+    <span class="c1">#     &#39;tree_method&#39;: &#39;gpu_hist&#39;,</span>
+<span class="c1">#     &#39;predictor&#39;: &#39;gpu_predictor&#39;</span>
+<span class="p">}</span>
 </pre></div>
 
     </div>
@@ -687,7 +1221,25 @@ However, <code>prepare_data_for_cv</code>  method do not split but let's cross v
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">xgb_k_fold</span><span class="p">,</span> <span class="n">xgb_k_metrics_score</span> <span class="o">=</span> <span class="n">ml_pl</span><span class="o">.</span><span class="n">do_k_fold_training</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="n">roc_auc_score</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tmlt</span><span class="o">.</span><span class="n">update_model</span><span class="p">(</span><span class="n">xgb_model</span><span class="p">)</span>
+<span class="n">tmlt</span><span class="o">.</span><span class="n">spl</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">xgb_k_fold</span><span class="p">,</span> <span class="n">xgb_k_metrics_score</span> <span class="o">=</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">do_k_fold_training</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="n">roc_auc_score</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;mean metrics score:&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">xgb_k_metrics_score</span><span class="p">))</span>
 </pre></div>
 
@@ -722,7 +1274,7 @@ However, <code>prepare_data_for_cv</code>  method do not split but let's cross v
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">xgb_preds</span> <span class="o">=</span> <span class="n">ml_pl</span><span class="o">.</span><span class="n">do_k_fold_prediction</span><span class="p">(</span><span class="n">k_fold</span><span class="o">=</span><span class="n">xgb_k_fold</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">xgb_preds</span> <span class="o">=</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">do_k_fold_prediction</span><span class="p">(</span><span class="n">k_fold</span><span class="o">=</span><span class="n">xgb_k_fold</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="n">xgb_preds</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 </pre></div>
@@ -741,7 +1293,7 @@ However, <code>prepare_data_for_cv</code>  method do not split but let's cross v
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">final_preds</span> <span class="o">=</span> <span class="p">((</span><span class="mf">0.7</span> <span class="o">*</span> <span class="n">sci_model_new_preds</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mf">0.3</span><span class="o">*</span> <span class="n">xgb_pred</span><span class="p">))</span> <span class="o">/</span> <span class="mi">2</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">final_preds</span> <span class="o">=</span> <span class="p">((</span><span class="mf">0.45</span> <span class="o">*</span> <span class="n">sci_model_preds</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="mf">0.55</span><span class="o">*</span> <span class="n">xgb_pred</span><span class="p">))</span> <span class="o">/</span> <span class="mi">2</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">final_preds</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 </pre></div>
 

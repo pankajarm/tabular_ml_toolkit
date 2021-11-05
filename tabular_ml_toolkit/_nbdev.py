@@ -5,6 +5,7 @@ __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 index = {"DataFrameLoader": "00_DataFrameLoader.ipynb",
          "PreProcessor": "01_PreProcessor.ipynb",
          "MLPipeline": "02_MLPipeline.ipynb",
+         "IDEAL_CPU_CORES": "02_MLPipeline.ipynb",
          "DIRECTORY_PATH": "03_Tutorial.ipynb",
          "TRAIN_FILE": "03_Tutorial.ipynb",
          "TEST_FILE": "03_Tutorial.ipynb",

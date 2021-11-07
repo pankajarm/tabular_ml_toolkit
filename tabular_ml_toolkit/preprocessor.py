@@ -4,6 +4,7 @@ __all__ = ['PreProcessor']
 
 # Cell
 from .DataFrameLoader import *
+from .Logger import *
 
 # Cell
 # hide
@@ -32,8 +33,7 @@ class PreProcessor:
         self.categorical_transformer = None
         self.columns_transfomer = None
         self.transformer_type = None
-        self.OHE_categorical_transformer = None
-        self.ORE_categorical_transformer = None
+        self.categorical_transformer = None
 
     def __str__(self):
         """Returns human readable string reprsentation"""
@@ -46,97 +46,73 @@ class PreProcessor:
     # PreProcessor core methods
 
     # Preprocessing for numerical data
-    def preprocess_numerical_data(self, num_imputer, num_scaler):
+    def preprocess_numerical_data(self, num_cols__imputer, num_cols__scaler):
         self.numerical_transformer = Pipeline(steps=[
-            ('imputer', num_imputer),
-            ('scaler',  num_scaler)
+            ('imputer', num_cols__imputer),
+            ('scaler',  num_cols__scaler)
         ])
+        return self.numerical_transformer
 
     # Preprocessing for categorical data
-    def preprocess_OHE_categorical_data(self, cat_imputer):
-        self.OHE_categorical_transformer = Pipeline(steps=[
-        ('imputer', cat_imputer),
-        ('onehot', OneHotEncoder(handle_unknown='ignore'))
+    def preprocess_categorical_data(self, cat_cols__imputer, cat_cols__encoder):
+        self.categorical_transformer = Pipeline(steps=[
+        ('imputer', cat_cols__imputer),
+        ('encoder', cat_cols__encoder)
         ])
-
-    def preprocess_OE_categorical_data(self, cat_imputer):
-        self.OE_categorical_transformer = Pipeline(steps=[
-        ('imputer', cat_imputer),
-        ('ordinal', OrdinalEncoder())
-        ])
-
-    #TO-DO
-#     def reduce_dims(self):
-#         pass
+        return self.categorical_transformer
 
     # Bundle preprocessing pipelines based upon types of columns
     def preprocess_all_cols(self, dataframeloader,
-                            num_imputer = SimpleImputer(strategy='median'),
-                            num_scaler = StandardScaler(),
-                            cat_imputer = SimpleImputer(strategy='constant')):
+                            num_cols__imputer=SimpleImputer(strategy='median'),
+                            num_cols__scaler=StandardScaler(),
+                            cat_cols__imputer=SimpleImputer(strategy='constant'),
+                            cat_cols__encoder=OneHotEncoder(handle_unknown='ignore')):
 
         # change preprocessor according to type of column found
 
-        if len(dataframeloader.high_card_cat_cols) < 1:
-            if len(dataframeloader.low_card_cat_cols) < 1:
-#                 print("both high_card_cat_cols and low_card_cat_cols are None")
-                self.preprocess_numerical_data(num_imputer, num_scaler)
-                self.transformer_type = self.numerical_transformer
+        if len(dataframeloader.categorical_cols) < 1:
+            #print("categorical cols are None")
+            # create scikit-learn pipelines instances
+            self.numerical_transformer = self.preprocess_numerical_data(num_cols__imputer, num_cols__scaler)
 
-            elif len(dataframeloader.numerical_cols) < 1:
-#                 print("both numeric nand high card cat cols are None")
-                # create scikit-learn pipelines instances
-                self.preprocess_OHE_categorical_data(cat_imputer)
-                # convert all categorical columns to OneHotEncoder with Scikit-learn ColumnTranfomer
-                self.columns_transfomer = ColumnTransformer(
-                    transformers=[
-                        ('low_card_cat_cols', self.OHE_categorical_transformer,
-                         dataframeloader.low_card_cat_cols)
-                    ])
-                self.transformer_type = self.columns_transfomer
+            # scaled and impute all numerical columns
+            self.columns_transfomer = ColumnTransformer(
+                transformers=[
+                    ('num_cols', self.numerical_transformer,
+                     dataframeloader.numerical_cols)
+                ])
 
-        elif len(dataframeloader.low_card_cat_cols) < 1:
-            if len(dataframeloader.numerical_cols) < 1:
-#                 print("both numeric nand low card cat cols are None")
-                # create scikit-learn pipelines instances
-                self.preprocess_OHE_categorical_data(cat_imputer)
-                # convert all categorical columns to OneHotEncoder with Scikit-learn ColumnTranfomer
-                self.columns_transfomer = ColumnTransformer(
-                    transformers=[
-                        ('high_card_cat_cols', self.OHE_categorical_transformer,
-                         dataframeloader.high_card_cat_cols)
-                    ])
-                self.transformer_type = self.columns_transfomer
+            self.transformer_type = self.columns_transfomer
 
         elif len(dataframeloader.numerical_cols) < 1:
-#             print("numeric cols are None")
+            #print("numeric cols are None")
             # create scikit-learn pipelines instances
-            self.preprocess_OHE_categorical_data(cat_imputer)
+            self.categorical_transformer = self.preprocess_categorical_data(cat_cols__imputer, cat_cols__encoder)
+
             # convert all categorical columns to OneHotEncoder with Scikit-learn ColumnTranfomer
             self.columns_transfomer = ColumnTransformer(
                 transformers=[
-                    ('low_card_cat_cols', self.OHE_categorical_transformer,
-                     dataframeloader.low_card_cat_cols),
-                    ('high_card_cat_cols', self.OHE_categorical_transformer,
-                     dataframeloader.high_card_cat_cols)
+                    ('cat_cols', self.categorical_transformer,
+                     dataframeloader.categorical_cols)
                 ])
+
             self.transformer_type = self.columns_transfomer
+
         else:
             # create scikit-learn pipelines instances
-#             print("No cols types are None, So ALL preprocessors called!")
-            self.preprocess_numerical_data(num_imputer, num_scaler)
-            self.preprocess_OHE_categorical_data(cat_imputer)
-            self.preprocess_OE_categorical_data(cat_imputer)
+            #print("No cols types are None, So ALL preprocessors called!")
+            self.numerical_transformer = self.preprocess_numerical_data(num_cols__imputer, num_cols__scaler)
+            self.categorical_transformer = self.preprocess_categorical_data(cat_cols__imputer, cat_cols__encoder)
+
             # convert to Scikit-learn ColumnTranfomer
             self.columns_transfomer = ColumnTransformer(
                 transformers=[
                     ('num_cols', self.numerical_transformer,
                      dataframeloader.numerical_cols),
-                    ('low_card_cat_cols', self.OHE_categorical_transformer,
-                     dataframeloader.low_card_cat_cols),
-                    ('high_card_cat_cols', self.OHE_categorical_transformer,
-                     dataframeloader.high_card_cat_cols)
+                    ('cat_cols', self.categorical_transformer,
+                     dataframeloader.categorical_cols)
                 ])
+
             self.transformer_type = self.columns_transfomer
 
         return self

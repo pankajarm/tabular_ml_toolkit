@@ -4,8 +4,10 @@ __all__ = ['DataFrameLoader']
 
 # Cell
 # hide
+from .Logger import *
 import pandas as pd
 from sklearn.model_selection import train_test_split
+import numpy as np
 
 # Cell
 
@@ -22,6 +24,7 @@ class DataFrameLoader:
 
     def __init__(self):
 
+        self.numerics = ["int8", "int16", "int32", "int64", "float16", "float32", "float64"]
         self.shape_X_full = None
         self.X_full = None
         self.X_test = None
@@ -32,6 +35,8 @@ class DataFrameLoader:
         self.X_test = None
         self.y_train = None
         self.y_valid = None
+        self.use_num_cols = None
+        self.use_cat_cols = None
         self.categorical_cols = None
         self.numerical_cols = None
         self.low_card_cat_cols = None
@@ -46,18 +51,60 @@ class DataFrameLoader:
     def __repr__(self):
         return self.__str__()
 
-#     def __lt__(self):
-#         """returns: boolean"""
-#         return True
+    # utility method
+    # Idea taken from https://www.kaggle.com/arjanso/reducing-dataframe-memory-size-by-65/comments
+    # Author ArjenGroen https://www.kaggle.com/arjanso
+    def reduce_memory_usage(self, df, verbose=True):
+        start_mem = df.memory_usage().sum() / 1024 ** 2
+        for col in df.columns:
+            col_type = df[col].dtypes
+            if col_type in self.numerics:
+                c_min = df[col].min()
+                c_max = df[col].max()
+                if str(col_type)[:3] == "int":
+                    if c_min > np.iinfo(np.int8).min and c_max < np.iinfo(np.int8).max:
+                        df[col] = df[col].astype(np.int8)
+                    elif c_min > np.iinfo(np.int16).min and c_max < np.iinfo(np.int16).max:
+                        df[col] = df[col].astype(np.int16)
+                    elif c_min > np.iinfo(np.int32).min and c_max < np.iinfo(np.int32).max:
+                        df[col] = df[col].astype(np.int32)
+                    elif c_min > np.iinfo(np.int64).min and c_max < np.iinfo(np.int64).max:
+                        df[col] = df[col].astype(np.int64)
+                else:
+                    if c_min > np.finfo(np.float16).min and c_max < np.finfo(np.float16).max:
+                        df[col] = df[col].astype(np.float16)
+                    elif c_min > np.finfo(np.float32).min and c_max < np.finfo(np.float32).max:
+                        df[col] = df[col].astype(np.float32)
+                    else:
+                        df[col] = df[col].astype(np.float64)
+        end_mem = df.memory_usage().sum() / 1024 ** 2
+        if verbose:
+            logger.info(
+                "DataFrame Memory usage decreased to {:.2f} Mb ({:.1f}% reduction)".format(
+                    end_mem, 100 * (start_mem - end_mem) / start_mem
+                )
+            )
+        return df
 
+    # CORE METHODS
     # load data from csv
     def read_csv(self,train_file_path:str,test_file_path:str, idx_col:str):
         # Read the csv files using pandas
-        self.X_full = pd.read_csv(train_file_path, index_col=idx_col)
-        self.shape_X_full = self.X_full.shape
-        self.X_test = pd.read_csv(test_file_path, index_col=idx_col)
-        self.shape_X_test = self.X_test.shape
+        if train_file_path is not None:
+            self.X_full = pd.read_csv(train_file_path, index_col=idx_col)
+            self.shape_X_full = self.X_full.shape
+            self.X_full = self.reduce_memory_usage(self.X_full, verbose=True)
+        else:
+            logger.info(f"Not valid train_file_path, input provided: {train_file_path}")
+        if test_file_path is not None:
+            self.X_test = pd.read_csv(test_file_path, index_col=idx_col)
+            self.shape_X_test = self.X_test.shape
+            self.X_test = self.reduce_memory_usage(self.X_test, verbose=True)
+
+        else:
+            logger.info(f"No test_file_path given, so training will continue without it!")
         return self
+
 
     # prepare X and y
     def prepare_X_y(self,input_df:object, target:str):
@@ -79,20 +126,35 @@ class DataFrameLoader:
         self.high_card_cat_cols = [cname for cname in self.X.columns if
                     self.X[cname].nunique() > 10 and
                     self.X[cname].dtype == "object"]
+        # for all categorical columns
+        self.categorical_cols = self.low_card_cat_cols + self.high_card_cat_cols
 
     # select numerical columns
     def select_numerical_cols(self):
         self.numerical_cols = [cname for cname in self.X.columns if
-                self.X[cname].dtype in ['int64', 'float64']]
+                self.X[cname].dtype in self.numerics]
 
     # prepare final columns by data type
-    def prepare_final_cols(self):
-        self.select_categorical_cols()
-        self.select_numerical_cols()
-        self.categorical_cols = self.low_card_cat_cols + self.high_card_cat_cols
-        self.final_cols = (self.low_card_cat_cols
-                           + self.high_card_cat_cols
-                           + self.numerical_cols)
+    def prepare_final_cols(self, use_num_cols:bool, use_cat_cols:bool):
+        self.use_num_cols = use_num_cols
+        self.use_cat_cols = use_cat_cols
+#         print("use_num_cols", self.use_num_cols)
+#         print("use_cat_cols", self.use_cat_cols)
+
+        if self.use_num_cols:
+            self.select_categorical_cols()
+        if self.use_cat_cols:
+            self.select_numerical_cols()
+
+        if (self.numerical_cols is not None) and (self.categorical_cols is not None):
+            self.final_cols = self.numerical_cols + self.categorical_cols
+
+        elif (self.numerical_cols is not None) and (self.categorical_cols is None):
+            self.final_cols = self.numerical_cols
+
+        elif (self.numerical_cols is None) and (self.categorical_cols is not None):
+            self.final_cols = self.categorical_cols
+
 
     # prepare X_train, X_valid from selected columns
     def update_X_train_X_valid_X_test_with_final_cols(self, final_cols:object):
@@ -114,15 +176,22 @@ class DataFrameLoader:
         self.update_X_train_X_valid_X_test_with_final_cols(self.final_cols)
 
     # get train and valid dataframe
-    def from_csv(self, train_file_path:str,test_file_path:str, idx_col:str, target:str,
+    def from_csv(self, train_file_path:str,
+                 test_file_path:str,
+                 idx_col:str, target:str,
+                 use_num_cols:bool=True,
+                 use_cat_cols:bool=True,
                  random_state=42):
 
         # read csv and load dataframes using pandas
         self.read_csv(train_file_path,test_file_path, idx_col)
-        self.prepare_X_y(self.X_full, target)
+        if self.X_full is not None:
+            self.prepare_X_y(self.X_full, target)
         # create final columns based upon type of columns
-        self.prepare_final_cols()
-        self.update_X_y_with_final_cols(self.final_cols)
+        self.prepare_final_cols(use_num_cols=use_num_cols, use_cat_cols=use_cat_cols)
+        if self.final_cols is not None:
+            self.update_X_y_with_final_cols(self.final_cols)
+
         # clean up unused dataframes
         del self.X_full
 

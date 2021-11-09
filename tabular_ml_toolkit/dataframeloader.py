@@ -54,7 +54,7 @@ class DataFrameLoader:
     # utility method
     # Idea taken from https://www.kaggle.com/arjanso/reducing-dataframe-memory-size-by-65/comments
     # Author ArjenGroen https://www.kaggle.com/arjanso
-    def reduce_memory_usage(self, df, verbose=True):
+    def reduce_num_dtype_mem_usage(self, df, verbose=True):
         start_mem = df.memory_usage().sum() / 1024 ** 2
         for col in df.columns:
             col_type = df[col].dtypes
@@ -93,13 +93,13 @@ class DataFrameLoader:
         if train_file_path is not None:
             self.X_full = pd.read_csv(train_file_path, index_col=idx_col)
             self.shape_X_full = self.X_full.shape
-            self.X_full = self.reduce_memory_usage(self.X_full, verbose=True)
+            self.X_full = self.reduce_num_dtype_mem_usage(self.X_full, verbose=True)
         else:
             logger.info(f"Not valid train_file_path, input provided: {train_file_path}")
         if test_file_path is not None:
             self.X_test = pd.read_csv(test_file_path, index_col=idx_col)
             self.shape_X_test = self.X_test.shape
-            self.X_test = self.reduce_memory_usage(self.X_test, verbose=True)
+            self.X_test = self.reduce_num_dtype_mem_usage(self.X_test, verbose=True)
 
         else:
             logger.info(f"No test_file_path given, so training will continue without it!")

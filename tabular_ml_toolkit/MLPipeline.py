@@ -225,6 +225,7 @@ class MLPipeline:
 
 
     # do k-fold training
+    # metrics has to be sklearn metrics object type mean_absoulte_error, acccuracy
     def do_k_fold_training(self, n_splits:int, metrics:object, random_state=42):
 
         #create stratified K Folds instance
@@ -266,12 +267,97 @@ class MLPipeline:
                     # predictions on test dataset
                     test_preds += self.spl.predict(self.dfl.X_test) / k_fold.n_splits
 
-            print(f"fold: {n+1} , {str(metrics.__name__)}: {metrics_score[n]}")
+            logger.info(f"fold: {n+1} , {str(metrics.__name__)}: {metrics_score[n]}")
             # increment fold counter label
             n += 1
 
 
         return metrics_score, test_preds
+
+    # do optuna bases study optimization for hyperparmaeter search
+    # task could be only "classification" or "regression"
+    # xgb_eval_metric string reprsenting "mae", "rmse", "logloss"
+    # kfold_metrics need to be sklearn metrics object type some of them are:
+    # from sklearn.metrics import mean_absolute_error, roc_auc_score,accuracy_score
+    # kfold_splits should be int, default is 5
+    def do_xgb_optuna_optimization(self, task:str, xgb_eval_metric:str, kfold_metrics:str,
+                                   kfold_splits=5, use_gpu=False, opt_trials=100, opt_timeout=360):
+
+        #get params
+        def get_params(trial, use_gpu=False):
+            params = {
+                "learning_rate": trial.suggest_float("learning_rate", 1e-2, 0.25, log=True),
+                "reg_lambda": trial.suggest_float("reg_lambda", 1e-8, 100.0, log=True),
+                "reg_alpha": trial.suggest_float("reg_alpha", 1e-8, 100.0, log=True),
+                "subsample": trial.suggest_float("subsample", 0.1, 1.0),
+                "colsample_bytree": trial.suggest_float("colsample_bytree", 0.1, 1.0),
+                "max_depth": trial.suggest_int("max_depth", 1, 9),
+                "early_stopping_rounds": trial.suggest_int("early_stopping_rounds", 100, 500),
+                "n_estimators": trial.suggest_categorical("n_estimators", [7000, 15000, 20000]),
+            }
+            if use_gpu:
+                params["tree_method"] = "gpu_hist"
+                params["gpu_id"] = 0
+                params["predictor"] = "gpu_predictor"
+            else:
+                params["tree_method"] = trial.suggest_categorical("tree_method", ["exact", "approx", "hist"])
+                params["booster"] = trial.suggest_categorical("booster", ["gbtree", "gblinear"])
+                if params["booster"] == "gbtree":
+                    params["gamma"] = trial.suggest_float("gamma", 1e-8, 1.0, log=True)
+                    params["grow_policy"] = trial.suggest_categorical("grow_policy", ["depthwise", "lossguide"])
+
+            return params
+
+        # Creatre Optuna Objective Class
+        class Objective(object):
+            def __init__(self, dfl):
+                self.X = dfl.X
+                self.y = dfl.y
+
+            def __call__(self, trial):
+                x, y = self.X, self.y
+
+                #get_params here
+                params = get_params(trial, use_gpu=False)
+                early_stopping_rounds = params["early_stopping_rounds"]
+                del params["early_stopping_rounds"]
+
+                # get xgb model based on task type
+                if task == "regression":
+                    xgb_model = XGBRegressor(eval_metric=xgb_eval_metric,random_state=42, use_label_encoder=False,**params)
+                if task == "classification":
+                    xgb_model = XGBClassifier(eval_metric=xgb_eval_metric,random_state=42, use_label_encoder=False,**params)
+
+                # update the model here on tmlt pipeline
+                self.update_model(xgb_model)
+
+                #rest remains same
+                score, _ = tmlt.do_k_fold_training(n_splits=kfold_splits, metrics=kfold_metrics)
+                metrics_mean_score = np.mean(score)
+                return metrics_mean_score
+
+
+        # now call objective instance
+        # Load the dataset in advance for reusing it each trial execution.
+        objective = Objective(tmlt.dfl)
+        # create sql db in output directory path
+        db_path = os.path.join(OUTPUT_DIR_PATH, "params.db")
+
+        # choose direction based upon metrics type
+        if "proba" in metrics.__globals__:
+            metrics_direction = "maximize"
+        else:
+            metrics_direction = "minimize"
+
+        # now create study
+        study = optuna.create_study(
+            direction=metrics_direction,
+            study_name="tmlt_autoxgb",
+            storage=f"sqlite:///{db_path}",
+            load_if_exists=True,
+        )
+        study.optimize(objective, n_trials=opt_trials, timeout=opt_timeout)
+        return study
 
 
     # helper method for update_preprocessor

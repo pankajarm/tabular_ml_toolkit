@@ -11,6 +11,7 @@ index = {"DataFrameLoader": "00_DataFrameLoader.ipynb",
 modules = ["DataFrameLoader.py",
            "PreProcessor.py",
            "MLPipeline.py",
+           "Optuna_Tutorial.py",
            "Logger.py"]
 
 doc_url = "https://psmathur.github.io/tabular_ml_toolkit/"

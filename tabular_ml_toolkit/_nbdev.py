@@ -2,17 +2,19 @@
 
 __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
-index = {"DataFrameLoader": "00_DataFrameLoader.ipynb",
-         "PreProcessor": "01_PreProcessor.ipynb",
-         "MLPipeline": "02_MLPipeline.ipynb",
-         "handler": "Logger.ipynb",
-         "logger": "Logger.ipynb"}
+index = {"DataFrameLoader": "00_dataframeloader.ipynb",
+         "PreProcessor": "01_preprocessor.ipynb",
+         "MLPipeline": "02_mlpipeline.ipynb",
+         "Optuna_Objective": "04_optuna_objective.ipynb",
+         "handler": "logger.ipynb",
+         "logger": "logger.ipynb"}
 
-modules = ["DataFrameLoader.py",
-           "PreProcessor.py",
-           "MLPipeline.py",
+modules = ["dataframeloader.py",
+           "preprocessor.py",
+           "mlpipeline.py",
+           "optuna_objective.py",
            "Optuna_Tutorial.py",
-           "Logger.py"]
+           "logger.py"]
 
 doc_url = "https://psmathur.github.io/tabular_ml_toolkit/"
 

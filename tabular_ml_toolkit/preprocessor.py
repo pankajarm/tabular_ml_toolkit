@@ -15,6 +15,7 @@ from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder, StandardScaler, MinMaxScaler
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error
+import numpy as np
 
 # Cell
 
@@ -61,12 +62,36 @@ class PreProcessor:
         ])
         return self.categorical_transformer
 
+
+#     # TODO PreProcess for target column in case of Binary and Multi Class Classification
+#     def encode_targets(self):
+#         # encode target(s)
+#         if problem_type in [ProblemType.binary_classification, ProblemType.multi_class_classification]:
+#             logger.info("Encoding target(s)")
+#             target_encoder = LabelEncoder()
+#             target_encoder.fit(
+#                 train_df[self.targets].values.reshape(
+#                     -1,
+#                 )
+#             )
+#             train_df.loc[:, self.targets] = target_encoder.transform(
+#                 train_df[self.targets].values.reshape(
+#                     -1,
+#                 )
+#             )
+#         else:
+#             target_encoder = None
+
+#         return target_encoder
+
     # Bundle preprocessing pipelines based upon types of columns
     def preprocess_all_cols(self, dataframeloader,
                             num_cols__imputer=SimpleImputer(strategy='median'),
                             num_cols__scaler=StandardScaler(),
                             cat_cols__imputer=SimpleImputer(strategy='constant'),
                             cat_cols__encoder=OneHotEncoder(handle_unknown='ignore')):
+#                             cat_cols__encoder=OrdinalEncoder(handle_unknown='use_encoded_value',
+#                                                             unknown_value=np.nan)):
 
         # change preprocessor according to type of column found
 

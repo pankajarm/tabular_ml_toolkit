@@ -6,7 +6,7 @@ from xgboost import XGBRegressor
 DIRECTORY_PATH = "https://raw.githubusercontent.com/psmathur/tabular_ml_toolkit/master/input/home_data/"
 TRAIN_FILE = "train.csv"
 TEST_FILE = "test.csv"
-SAMPLE_SUB_FILE = "sample_submission.csv"
+`1
 
 xgb_params = {
     'n_estimators':250,

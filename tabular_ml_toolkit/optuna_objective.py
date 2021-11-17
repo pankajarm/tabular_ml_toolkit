@@ -66,8 +66,8 @@ class Optuna_Objective:
 
         #get_params here
         self.xgb_params = self.get_xgb_params(self.trial, use_gpu=self.use_gpu)
-#         early_stopping_rounds = self.xgb_params["early_stopping_rounds"]
-#         del self.xgb_params["early_stopping_rounds"]
+        early_stopping_rounds = self.xgb_params["early_stopping_rounds"]
+        del self.xgb_params["early_stopping_rounds"]
 
         # get xgb model based on task type
         if self.task == "regression":
@@ -80,8 +80,14 @@ class Optuna_Objective:
         # update the model here on tmlt pipeline
         self.tmlt.update_model(self.xgb_model)
 
-        #rest remains same
-        score, _ = self.tmlt.do_k_fold_training(n_splits=self.kfold_splits, metrics=self.kfold_metrics)
+#         #rest remains same
+#         xgb_model_params = {
+#             'model__early_stopping_rounds':early_stopping_rounds,
+#             'model__eval_set':[(test_X, test_y)]
+#         }
+
+        score, _ = self.tmlt.do_k_fold_training(n_splits=self.kfold_splits,
+                                                metrics=self.kfold_metrics)
         metrics_mean_score = np.mean(score)
         return metrics_mean_score
 
@@ -105,7 +111,7 @@ class Optuna_Objective:
             "subsample": trial.suggest_float("subsample", 0.1, 1.0),
             "colsample_bytree": trial.suggest_float("colsample_bytree", 0.1, 1.0),
             "max_depth": trial.suggest_int("max_depth", 1, 9),
-            #"early_stopping_rounds": trial.suggest_int("early_stopping_rounds", 100, 500),
+            "early_stopping_rounds": trial.suggest_int("early_stopping_rounds", 100, 500),
             "n_estimators": trial.suggest_categorical("n_estimators", [7000, 15000, 20000]),
         }
         if use_gpu:

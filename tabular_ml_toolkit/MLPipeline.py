@@ -251,11 +251,12 @@ class MLPipeline:
             # create X_valid
             self.dfl.X_valid = self.dfl.X.iloc[valid_idx]
             # create y_train
-            self.dfl.y_train = self.dfl.y.iloc[train_idx]
+            self.dfl.y_train = self.dfl.y.iloc[train_idx].values
             # create y_valid
-            self.dfl.y_valid = self.dfl.y.iloc[valid_idx]
+            self.dfl.y_valid = self.dfl.y.iloc[valid_idx].values
 
             # fit
+            #TODO use early_stopping_rounds = True for XGBoost based Sklearn Pipeline
             self.spl.fit(self.dfl.X_train, self.dfl.y_train)
 
             #TODO CHANGE HERE FOR multi metrics calculation, i.e. metrics provided in list
@@ -301,9 +302,13 @@ class MLPipeline:
         """
 
         # now call objective instance
+
         # Load the dataset in advance for reusing it each trial execution.
-        objective = Optuna_Objective(dfl=self.dfl, tmlt=self, task=task, xgb_eval_metric=xgb_eval_metric,
-                                     kfold_splits=kfold_splits, kfold_metrics=kfold_metrics, use_gpu=use_gpu)
+        objective = Optuna_Objective(dfl=self.dfl, tmlt=self, task=task,
+                                     xgb_eval_metric=xgb_eval_metric,
+                                     kfold_splits=kfold_splits,
+                                     kfold_metrics=kfold_metrics,
+                                     use_gpu=use_gpu)
         # create sql db in output directory path
         db_path = os.path.join(output_dir_path, "params.db")
 
@@ -337,11 +342,11 @@ class MLPipeline:
         return pp_best_params
 
     # helper method for update_model
-        def get_model_best_params_from_grid_search(self, grid_search_object:object):
-            model_best_params = {}
-            for k in grid_search_object.best_params_:
-                #print(k)
-                if 'model' in k:
-                    key = k.split('__')[1]
-                    model_best_params[key] = grid_search_object.best_params_[k]
-            return model_best_params
+    def get_model_best_params_from_grid_search(self, grid_search_object:object):
+        model_best_params = {}
+        for k in grid_search_object.best_params_:
+            #print(k)
+            if 'model' in k:
+                key = k.split('__')[1]
+                model_best_params[key] = grid_search_object.best_params_[k]
+        return model_best_params

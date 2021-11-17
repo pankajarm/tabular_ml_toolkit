@@ -138,8 +138,6 @@ class DataFrameLoader:
     def prepare_final_cols(self, use_num_cols:bool, use_cat_cols:bool):
         self.use_num_cols = use_num_cols
         self.use_cat_cols = use_cat_cols
-#         print("use_num_cols", self.use_num_cols)
-#         print("use_cat_cols", self.use_cat_cols)
 
         if self.use_num_cols:
             self.select_categorical_cols()

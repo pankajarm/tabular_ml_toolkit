@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
 from tabular_ml_toolkit.mlpipeline import *
 from sklearn.metrics import mean_absolute_error
 from xgboost import XGBRegressor

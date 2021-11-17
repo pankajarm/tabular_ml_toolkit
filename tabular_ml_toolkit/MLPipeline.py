@@ -281,15 +281,23 @@ class MLPipeline:
         return metrics_score, test_preds
 
     # do optuna bases study optimization for hyperparmaeter search
-    # task could be only "classification" or "regression"
-    # xgb_eval_metric string reprsenting "mae", "rmse", "logloss"
-    # kfold_metrics need to be sklearn metrics object type some of them are:
-    # from sklearn.metrics import mean_absolute_error, roc_auc_score,accuracy_score
-    # kfold_splits should be int, default is 5
-    def do_xgb_optuna_optimization(self, task:str, xgb_eval_metric:str, kfold_metrics:str,
-                                   output_dir_path:str,kfold_splits=5, use_gpu=False, opt_trials=100,
-                                   opt_timeout=360):
 
+    def do_xgb_optuna_optimization(self, task:str, xgb_eval_metric:str, kfold_metrics:str,
+                                   output_dir_path:str, kfold_splits=5, use_gpu=False, opt_trials=100,
+                                   opt_timeout=360):
+        """
+            This methods do optuna bases study optimization for hyperparmaeter search
+            task could be only "classification" or "regression"
+            xgb_eval_metric string reprsenting "mae", "rmse", "logloss"
+            kfold_metrics need to be sklearn metrics object type some of them are:
+                from sklearn.metrics import mean_absolute_error, roc_auc_score,accuracy_score
+            kfold_splits should be int, default is 5
+            output_dir_path is output directory you want to use for storing sql db used for optuna
+            use_gpu=False by default, make it True if running on gpu machine
+            opt_trials=100 by default, change it based upon need
+            opt_timeout=360 by default, timeout value in seconds
+
+        """
 
         # now call objective instance
         # Load the dataset in advance for reusing it each trial execution.
@@ -305,6 +313,7 @@ class MLPipeline:
             metrics_direction = "minimize"
 
         # now create study
+        logger.info(f"direction is: {metrics_direction}")
         study = optuna.create_study(
             direction=metrics_direction,
             study_name="tmlt_autoxgb",
@@ -317,7 +326,7 @@ class MLPipeline:
 
     # helper method for update_preprocessor
     # to create params value dict from grid_search object
-    def get_preprocessor_best_params(self, grid_search_object:object):
+    def get_preprocessor_best_params_from_grid_search(self, grid_search_object:object):
         pp_best_params = {}
         for k in grid_search_object.best_params_:
             #print(k)
@@ -327,12 +336,11 @@ class MLPipeline:
         return pp_best_params
 
     # helper method for update_model
-    # to create params value dict from grid_search object
-    def get_model_best_params(self, grid_search_object:object):
-        model_best_params = {}
-        for k in grid_search_object.best_params_:
-            #print(k)
-            if 'model' in k:
-                key = k.split('__')[1]
-                model_best_params[key] = grid_search_object.best_params_[k]
-        return model_best_params
+        def get_model_best_params_from_grid_search(self, grid_search_object:object):
+            model_best_params = {}
+            for k in grid_search_object.best_params_:
+                #print(k)
+                if 'model' in k:
+                    key = k.split('__')[1]
+                    model_best_params[key] = grid_search_object.best_params_[k]
+            return model_best_params

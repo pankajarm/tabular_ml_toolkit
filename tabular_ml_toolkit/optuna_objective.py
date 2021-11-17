@@ -66,8 +66,8 @@ class Optuna_Objective:
 
         #get_params here
         self.xgb_params = self.get_xgb_params(self.trial, use_gpu=self.use_gpu)
-        early_stopping_rounds = self.xgb_params["early_stopping_rounds"]
-        del self.xgb_params["early_stopping_rounds"]
+#         early_stopping_rounds = self.xgb_params["early_stopping_rounds"]
+#         del self.xgb_params["early_stopping_rounds"]
 
         # get xgb model based on task type
         if self.task == "regression":

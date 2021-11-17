@@ -50,7 +50,7 @@ class MLPipeline:
     Attributes:\n
     pipeline: An MLPipeline instance \n
     dfl: A DataFrameLoader instance \n
-    pp: A PreProcessor Instance \n
+    pp: A PreProcessor instance \n
     model: The given Model
     """
 
@@ -258,6 +258,7 @@ class MLPipeline:
             # fit
             self.spl.fit(self.dfl.X_train, self.dfl.y_train)
 
+            #TODO CHANGE HERE FOR multi metrics calculation, i.e. metrics provided in list
             #evaluate metrics based upon input
             if "proba" in metrics.__globals__:
                 # predictions on valid dataset

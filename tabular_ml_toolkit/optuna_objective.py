@@ -105,7 +105,7 @@ class Optuna_Objective:
             "subsample": trial.suggest_float("subsample", 0.1, 1.0),
             "colsample_bytree": trial.suggest_float("colsample_bytree", 0.1, 1.0),
             "max_depth": trial.suggest_int("max_depth", 1, 9),
-            "early_stopping_rounds": trial.suggest_int("early_stopping_rounds", 100, 500),
+            #"early_stopping_rounds": trial.suggest_int("early_stopping_rounds", 100, 500),
             "n_estimators": trial.suggest_categorical("n_estimators", [7000, 15000, 20000]),
         }
         if use_gpu:

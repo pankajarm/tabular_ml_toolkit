@@ -4,16 +4,15 @@ __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 
 index = {"DataFrameLoader": "00_dataframeloader.ipynb",
          "PreProcessor": "01_preprocessor.ipynb",
-         "MLPipeline": "02_mlpipeline.ipynb",
+         "TMLT": "02_tmlt.ipynb",
          "Optuna_Objective": "04_optuna_objective.ipynb",
          "handler": "logger.ipynb",
          "logger": "logger.ipynb"}
 
 modules = ["dataframeloader.py",
            "preprocessor.py",
-           "mlpipeline.py",
+           "tmlt.py",
            "optuna_objective.py",
-           "Optuna_Tutorial.py",
            "logger.py"]
 
 doc_url = "https://psmathur.github.io/tabular_ml_toolkit/"

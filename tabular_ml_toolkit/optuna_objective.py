@@ -48,12 +48,12 @@ class Optuna_Objective:
     model: The given Model
     """
 
-    def __init__(self, dfl, tmlt, task, xgb_eval_metric, kfold_splits, kfold_metrics, use_gpu):
+    def __init__(self, dfl, tmlt, xgb_eval_metric, kfold_splits, kfold_metrics, use_gpu):
         self.X = dfl.X
         self.y = dfl.y
-        self.task = task
         self.use_gpu = use_gpu
         self.tmlt = tmlt
+        self.task = tmlt.problem_type
         self.xgb_model = None
         self.trial = None
         self.xgb_eval_metric = xgb_eval_metric
@@ -86,9 +86,10 @@ class Optuna_Objective:
 #             'model__eval_set':[(test_X, test_y)]
 #         }
 
-        score, _ = self.tmlt.do_k_fold_training(n_splits=self.kfold_splits,
+        score, _ = self.tmlt.do_kfold_training(n_splits=self.kfold_splits,
                                                 metrics=self.kfold_metrics)
         metrics_mean_score = np.mean(score)
+
         return metrics_mean_score
 
 

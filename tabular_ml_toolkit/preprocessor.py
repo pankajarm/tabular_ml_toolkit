@@ -12,7 +12,7 @@ import pandas as pd
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
-from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder, StandardScaler, MinMaxScaler
+from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder, StandardScaler, MinMaxScaler, LabelEncoder
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error
 import numpy as np
@@ -34,7 +34,11 @@ class PreProcessor:
         self.categorical_transformer = None
         self.columns_transfomer = None
         self.transformer_type = None
-        self.categorical_transformer = None
+        self.target_cols_transformer = None
+        self.target_cols_pl = None
+        self.categorical_cols_pl = None
+        self.numerical_cols_pl = None
+
 
     def __str__(self):
         """Returns human readable string reprsentation"""
@@ -48,96 +52,101 @@ class PreProcessor:
 
     # Preprocessing for numerical data
     def preprocess_numerical_data(self, num_cols__imputer, num_cols__scaler):
-        self.numerical_transformer = Pipeline(steps=[
+        self.numerical_cols_pl = Pipeline(steps=[
             ('imputer', num_cols__imputer),
             ('scaler',  num_cols__scaler)
         ])
-        return self.numerical_transformer
+        return self.numerical_cols_pl
 
     # Preprocessing for categorical data
     def preprocess_categorical_data(self, cat_cols__imputer, cat_cols__encoder):
-        self.categorical_transformer = Pipeline(steps=[
+        self.categorical_cols_pl = Pipeline(steps=[
         ('imputer', cat_cols__imputer),
         ('encoder', cat_cols__encoder)
         ])
-        return self.categorical_transformer
+        return self.categorical_cols_pl
+
+    # Preprocessing for target cols
+    def preprocess_target_cols(self, target_cols__encoder):
+        self.target_cols_pl = Pipeline(steps=[
+        ('encoder', target_cols__encoder)
+        ])
+        return self.target_cols_pl
 
 
-#     # TODO PreProcess for target column in case of Binary and Multi Class Classification
-#     def encode_targets(self):
-#         # encode target(s)
-#         if problem_type in [ProblemType.binary_classification, ProblemType.multi_class_classification]:
-#             logger.info("Encoding target(s)")
-#             target_encoder = LabelEncoder()
-#             target_encoder.fit(
-#                 train_df[self.targets].values.reshape(
-#                     -1,
-#                 )
-#             )
-#             train_df.loc[:, self.targets] = target_encoder.transform(
-#                 train_df[self.targets].values.reshape(
-#                     -1,
-#                 )
-#             )
-#         else:
-#             target_encoder = None
+    # TODO PreProcess for target column in case of Binary and Multi Class Classification
+    def encode_targets(self, dataframeloader, target_cols__encoder):
+        # create scikit-learn pipelines instances
+        self.target_cols_pl = self.preprocess_target_cols(target_cols__encoder)
 
-#         return target_encoder
+        # convert all categorical columns to LabelEncoder with Scikit-learn ColumnTranfomer
+        self.target_cols_transfomer = ColumnTransformer(
+            transformers=[
+                ('target_cols', self.target_cols_transformer,
+                 dataframeloader.y)
+            ])
+
+        return self.target_cols_transformer
 
     # Bundle preprocessing pipelines based upon types of columns
-    def preprocess_all_cols(self, dataframeloader,
+    def preprocess_all_cols(self, dataframeloader, problem_type="regression",
                             num_cols__imputer=SimpleImputer(strategy='median'),
                             num_cols__scaler=StandardScaler(),
                             cat_cols__imputer=SimpleImputer(strategy='constant'),
-                            cat_cols__encoder=OneHotEncoder(handle_unknown='ignore')):
+                            cat_cols__encoder=OneHotEncoder(handle_unknown='ignore'),
+                            target_cols__encoder=LabelEncoder()):
 #                             cat_cols__encoder=OrdinalEncoder(handle_unknown='use_encoded_value',
 #                                                             unknown_value=np.nan)):
+
+        # encode target based upon problem type
+        if problem_type == "classification":
+            logger.info("PreProcessing will include target(s) encoding!")
+            self.encode_targets(dataframeloader=dataframeloader, target_cols__encoder=target_cols__encoder)
+
 
         # change preprocessor according to type of column found
 
         if len(dataframeloader.categorical_cols) < 1:
-            #print("categorical cols are None")
+            logger.info("categorical columns are None, Preprocessing will done accordingly!")
             # create scikit-learn pipelines instances
-            self.numerical_transformer = self.preprocess_numerical_data(num_cols__imputer, num_cols__scaler)
+            self.numerical_cols_pl = self.preprocess_numerical_data(num_cols__imputer, num_cols__scaler)
 
             # scaled and impute all numerical columns
             self.columns_transfomer = ColumnTransformer(
                 transformers=[
-                    ('num_cols', self.numerical_transformer,
+                    ('num_cols', self.numerical_cols_pl,
                      dataframeloader.numerical_cols)
+                    ##TODO add here target columns tranformer
                 ])
 
-            self.transformer_type = self.columns_transfomer
-
         elif len(dataframeloader.numerical_cols) < 1:
-            #print("numeric cols are None")
+            logger.info("numerical columns are None, Preprocessing will done accordingly!")
             # create scikit-learn pipelines instances
             self.categorical_transformer = self.preprocess_categorical_data(cat_cols__imputer, cat_cols__encoder)
 
             # convert all categorical columns to OneHotEncoder with Scikit-learn ColumnTranfomer
             self.columns_transfomer = ColumnTransformer(
                 transformers=[
-                    ('cat_cols', self.categorical_transformer,
+                    ('cat_cols', self.categorical_cols_pl,
                      dataframeloader.categorical_cols)
                 ])
 
-            self.transformer_type = self.columns_transfomer
-
         else:
             # create scikit-learn pipelines instances
-            #print("No cols types are None, So ALL preprocessors called!")
+            logger.info("Both Numerical & Categorical columns found, Preprocessing will done accordingly!")
             self.numerical_transformer = self.preprocess_numerical_data(num_cols__imputer, num_cols__scaler)
             self.categorical_transformer = self.preprocess_categorical_data(cat_cols__imputer, cat_cols__encoder)
 
             # convert to Scikit-learn ColumnTranfomer
             self.columns_transfomer = ColumnTransformer(
                 transformers=[
-                    ('num_cols', self.numerical_transformer,
+                    ('num_cols', self.numerical_cols_pl,
                      dataframeloader.numerical_cols),
-                    ('cat_cols', self.categorical_transformer,
+                    ('cat_cols', self.categorical_cols_pl,
                      dataframeloader.categorical_cols)
                 ])
 
-            self.transformer_type = self.columns_transfomer
+        #set tranformer type
+        self.transformer_type = self.columns_transfomer
 
         return self

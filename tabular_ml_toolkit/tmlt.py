@@ -60,6 +60,7 @@ class TMLT:
         self.model = None
         self.spl = None
         self.transformer_type = None
+        self.problem_type = None
         self.has_n_jobs = self.create_has_n_jobs()
         self.IDEAL_CPU_CORES = self.find_ideal_cpu_cores()
 
@@ -105,12 +106,14 @@ class TMLT:
                                   test_file_path:str,
                                   idx_col:str, target:str,
                                   random_state:int,
-                                  model:object):
-
+                                  model:object,
+                                 problem_type="regression"):
+        #set problem type
+        self.problem_type = problem_type
         # check if given model supports n_jobs aka cpu core based Parallelism
         estimator_name = model.__class__.__name__
-        # print(estimator_name)
-        # print(self.has_n_jobs)
+        # logger.info(estimator_name)
+        # logger.info((self.has_n_jobs)
         if estimator_name in self.has_n_jobs :
             # In order to OS not to kill the job, leave one processor out
             model.n_jobs = self.IDEAL_CPU_CORES
@@ -128,7 +131,7 @@ class TMLT:
             random_state=random_state)
 
         # call PreProcessor module
-        self.pp = PreProcessor().preprocess_all_cols(dataframeloader=self.dfl)
+        self.pp = PreProcessor().preprocess_all_cols(dataframeloader=self.dfl, problem_type=self.problem_type)
 
         # call create final sklearn pipelien method
         self.spl = self.create_final_sklearn_pipeline(transformer_type=self.pp.transformer_type,
@@ -231,11 +234,11 @@ class TMLT:
 
 
     # do k-fold training
-    # metrics has to be sklearn metrics object type mean_absoulte_error, acccuracy
-    def do_k_fold_training(self, n_splits:int, metrics:object, random_state=42):
+    # metrics has to be sklearn metrics object type such as mean_absoulte_error, acccuracy
+    def do_kfold_training(self, n_splits:int, metrics:object, random_state=42):
 
         #create stratified K Folds instance
-        k_fold = StratifiedKFold(n_splits=n_splits,
+        kfold = StratifiedKFold(n_splits=n_splits,
                              random_state=random_state,
                              shuffle=True)
 
@@ -245,7 +248,7 @@ class TMLT:
         # list contains metrics score for each fold
         metrics_score = []
         n=0
-        for train_idx, valid_idx in k_fold.split(self.dfl.X, self.dfl.y):
+        for train_idx, valid_idx in kfold.split(self.dfl.X, self.dfl.y):
             # create X_train
             self.dfl.X_train = self.dfl.X.iloc[train_idx]
             # create X_valid
@@ -267,24 +270,25 @@ class TMLT:
                                                self.spl.predict_proba(self.dfl.X_valid)[:,1]))
                 if self.dfl.X_test is not None:
                     # prediction probabs on test dataset
-                    test_preds += self.spl.predict_proba(self.dfl.X_test)[:,1] / k_fold.n_splits
+                    test_preds += self.spl.predict_proba(self.dfl.X_test)[:,1] / kfold.n_splits
             else:
                 metrics_score.append(metrics(self.dfl.y_valid,
                                                self.spl.predict(self.dfl.X_valid)))
                 if self.dfl.X_test is not None:
                     # predictions on test dataset
-                    test_preds += self.spl.predict(self.dfl.X_test) / k_fold.n_splits
+                    test_preds += self.spl.predict(self.dfl.X_test) / kfold.n_splits
 
             logger.info(f"fold: {n+1} , {str(metrics.__name__)}: {metrics_score[n]}")
             # increment fold counter label
             n += 1
 
-
+        mean_metrics_score = np.mean(metrics_score)
+        logger.info(f" mean metrics score: {mean_metrics_score}")
         return metrics_score, test_preds
 
     # do optuna bases study optimization for hyperparmaeter search
 
-    def do_xgb_optuna_optimization(self, task:str, xgb_eval_metric:str, kfold_metrics:str,
+    def do_xgb_optuna_optimization(self, xgb_eval_metric:str, kfold_metrics:str,
                                    output_dir_path:str, kfold_splits=5, use_gpu=False, opt_trials=100,
                                    opt_timeout=360):
         """
@@ -304,7 +308,7 @@ class TMLT:
         # now call objective instance
 
         # Load the dataset in advance for reusing it each trial execution.
-        objective = Optuna_Objective(dfl=self.dfl, tmlt=self, task=task,
+        objective = Optuna_Objective(dfl=self.dfl, tmlt=self,
                                      xgb_eval_metric=xgb_eval_metric,
                                      kfold_splits=kfold_splits,
                                      kfold_metrics=kfold_metrics,

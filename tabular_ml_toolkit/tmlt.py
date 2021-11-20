@@ -244,6 +244,7 @@ class TMLT:
                              shuffle=True)
 
         # check for test dataset before prediction
+        test_preds = None
         if self.dfl.X_test is not None:
             test_preds = np.zeros(self.dfl.X_test.shape[0])
         # list contains metrics score for each fold

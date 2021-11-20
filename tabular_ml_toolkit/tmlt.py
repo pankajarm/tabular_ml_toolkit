@@ -103,10 +103,10 @@ class TMLT:
 
     # Core methods for Simple Training
     def prepare_data_for_training(self, train_file_path:str,
-                                  test_file_path:str,
                                   idx_col:str, target:str,
                                   random_state:int,
                                   model:object,
+                                  test_file_path:str=None,
                                  problem_type="regression"):
         #set problem type
         self.problem_type = problem_type
@@ -131,6 +131,7 @@ class TMLT:
             random_state=random_state)
 
         # call PreProcessor module
+        #TODO: For problem type classification, encode target using PreProcessor
         self.pp = PreProcessor().preprocess_all_cols(dataframeloader=self.dfl, problem_type=self.problem_type)
 
         # call create final sklearn pipelien method
@@ -254,9 +255,9 @@ class TMLT:
             # create X_valid
             self.dfl.X_valid = self.dfl.X.iloc[valid_idx]
             # create y_train
-            self.dfl.y_train = self.dfl.y.iloc[train_idx].values
+            self.dfl.y_train = self.dfl.y[train_idx]
             # create y_valid
-            self.dfl.y_valid = self.dfl.y.iloc[valid_idx].values
+            self.dfl.y_valid = self.dfl.y[valid_idx]
 
             # fit
             #TODO use early_stopping_rounds = True for XGBoost based Sklearn Pipeline

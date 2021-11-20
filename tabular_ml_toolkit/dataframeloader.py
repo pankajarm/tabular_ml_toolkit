@@ -42,7 +42,7 @@ class DataFrameLoader:
         self.low_card_cat_cols = None
         self.high_card_cat_cols = None
         self.final_cols = None
-        self.cv_cols = None
+        self.target = None
 
     def __str__(self):
         """Returns human readable string reprsentation"""
@@ -111,7 +111,8 @@ class DataFrameLoader:
         # Remove rows with missing target
         self.X = input_df.dropna(axis=0, subset=[target])
         # separate target from predictors
-        self.y = self.X[target]
+        self.y = self.X[target].values
+        self.target = target
         # drop target
         self.X = input_df.drop([target], axis=1)
         return self
@@ -158,12 +159,14 @@ class DataFrameLoader:
     def update_X_train_X_valid_X_test_with_final_cols(self, final_cols:object):
         self.X_train = self.X_train[final_cols]
         self.X_valid = self.X_valid[final_cols]
-        self.X_test = self.X_test[final_cols]
+        if self.X_test is not None:
+            self.X_test = self.X_test[final_cols]
 
 
     def update_X_y_with_final_cols(self,final_cols:object):
         self.X = self.X[final_cols]
-        self.X_test = self.X_test[final_cols]
+        if self.X_test is not None:
+            self.X_test = self.X_test[final_cols]
 
     # split X and y into X_train, y_train, X_valid & y_valid dataframes
     def create_train_valid(self, valid_size:float, random_state=42):
@@ -175,8 +178,8 @@ class DataFrameLoader:
 
     # get train and valid dataframe
     def from_csv(self, train_file_path:str,
-                 test_file_path:str,
                  idx_col:str, target:str,
+                 test_file_path:str=None,
                  use_num_cols:bool=True,
                  use_cat_cols:bool=True,
                  random_state=42):

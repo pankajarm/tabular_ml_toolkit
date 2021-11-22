@@ -32,7 +32,6 @@ class DataFrameLoader:
         self.y = None
         self.X_train = None
         self.X_valid = None
-        self.X_test = None
         self.y_train = None
         self.y_valid = None
         self.use_num_cols = None
@@ -169,10 +168,15 @@ class DataFrameLoader:
             self.X_test = self.X_test[final_cols]
 
     # split X and y into X_train, y_train, X_valid & y_valid dataframes
-    def create_train_valid(self, valid_size:float, random_state=42):
+    def create_train_valid(self, valid_size:float, X=None, y=None, random_state=42):
 
-        self.X_train, self.X_valid, self.y_train, self.y_valid = train_test_split(
-            self.X, self.y, train_size=(1-valid_size), test_size=valid_size, random_state=random_state)
+        if X and y:
+            self.X_train, self.X_valid, self.y_train, self.y_valid = train_test_split(
+                X, y, train_size=(1-valid_size), test_size=valid_size, random_state=random_state)
+
+        else:
+            self.X_train, self.X_valid, self.y_train, self.y_valid = train_test_split(
+                self.X, self.y, train_size=(1-valid_size), test_size=valid_size, random_state=random_state)
 
         self.update_X_train_X_valid_X_test_with_final_cols(self.final_cols)
 
@@ -194,6 +198,7 @@ class DataFrameLoader:
             self.update_X_y_with_final_cols(self.final_cols)
 
         # clean up unused dataframes
-        del self.X_full
+        unused_df_lst = [self.X_full]
+        del unused_df_lst
 
         return self

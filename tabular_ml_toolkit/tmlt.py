@@ -24,7 +24,7 @@ from tune_sklearn import TuneGridSearchCV
 # for Optuna
 import optuna
 #for XGB
-from xgboost import XGBRegressor, XGBClassifier
+import xgboost
 
 
 # for displaying diagram of pipelines
@@ -281,21 +281,24 @@ class TMLT:
                     test_preds += self.spl.predict(self.dfl.X_test) / kfold.n_splits
 
             logger.info(f"fold: {n+1} , {str(metrics.__name__)}: {metrics_score[n]}")
+            # In order to better GC, del X_train, X_valid, y_train, y_valid df after each fold is done,
+            # they will recreate again next time k-fold is called
+            unused_df_lst = [self.dfl.X_train, self.dfl.X_valid, self.dfl.y_train, self.dfl.y_valid]
+            del unused_df_lst
             # increment fold counter label
             n += 1
 
         mean_metrics_score = np.mean(metrics_score)
         logger.info(f" mean metrics score: {mean_metrics_score}")
+
         return metrics_score, test_preds
 
     # do optuna bases study optimization for hyperparmaeter search
 
-    def do_xgb_optuna_optimization(self, xgb_eval_metric:str, kfold_metrics:str,
-                                   output_dir_path:str, kfold_splits=5, use_gpu=False, opt_trials=100,
+    def do_xgb_optuna_optimization(self, metrics, output_dir_path:str, use_gpu=False, opt_trials=100,
                                    opt_timeout=360):
         """
-            This methods do optuna bases study optimization for hyperparmaeter search
-            task could be only "classification" or "regression"
+            This methods returns and do optuna bases study optimization for hyperparmaeter search
             xgb_eval_metric string reprsenting "mae", "rmse", "logloss"
             kfold_metrics need to be sklearn metrics object type some of them are:
                 from sklearn.metrics import mean_absolute_error, roc_auc_score,accuracy_score
@@ -307,27 +310,23 @@ class TMLT:
 
         """
 
-        # now call objective instance
+        # get xgb p
+        xgb_model, use_predict_proba, eval_metric, direction = self.fetch_xgb_model_params()
 
         # Load the dataset in advance for reusing it each trial execution.
         objective = Optuna_Objective(dfl=self.dfl, tmlt=self,
-                                     xgb_eval_metric=xgb_eval_metric,
-                                     kfold_splits=kfold_splits,
-                                     kfold_metrics=kfold_metrics,
+                                     metrics=metrics,
+                                     xgb_model=xgb_model,
+                                     xgb_eval_metric=eval_metric,
+                                     use_predict_proba=use_predict_proba,
                                      use_gpu=use_gpu)
         # create sql db in output directory path
         db_path = os.path.join(output_dir_path, "params.db")
 
-        # choose direction based upon metrics type
-        if "proba" in kfold_metrics.__globals__:
-            metrics_direction = "maximize"
-        else:
-            metrics_direction = "minimize"
-
         # now create study
-        logger.info(f"direction is: {metrics_direction}")
+        logger.info(f"direction is: {direction}")
         study = optuna.create_study(
-            direction=metrics_direction,
+            direction=direction,
             study_name="tmlt_autoxgb",
             storage=f"sqlite:///{db_path}",
             load_if_exists=True,
@@ -336,7 +335,29 @@ class TMLT:
         return study
 
 
-    # helper method for update_preprocessor
+    # Taken from AutoXGB Library, Thanks to https://github.com/abhishekkrthakur
+    def fetch_xgb_model_params(self):
+        if self.problem_type == "classification":
+            xgb_model = xgboost.XGBClassifier
+            use_predict_proba = True
+            direction = "minimize"
+            eval_metric = "logloss"
+        elif self.problem_type == "multi_class_classification":
+            xgb_model = xgboost.XGBClassifier
+            use_predict_proba = True
+            direction = "minimize"
+            eval_metric = "mlogloss"
+        elif self.problem_type == "regression":
+            xgb_model = xgboost.XGBRegressor
+            use_predict_proba = False
+            direction = "minimize"
+            eval_metric = "rmse"
+        else:
+            raise NotImplementedError
+
+        return xgb_model, use_predict_proba, eval_metric, direction
+
+    # helper method for updating preprocessor in pipeline
     # to create params value dict from grid_search object
     def get_preprocessor_best_params_from_grid_search(self, grid_search_object:object):
         pp_best_params = {}

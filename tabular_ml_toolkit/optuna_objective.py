@@ -13,7 +13,7 @@ import pandas as pd
 import numpy as np
 
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import mean_absolute_error, roc_auc_score,accuracy_score
+from sklearn.metrics import mean_absolute_error, roc_auc_score, accuracy_score
 from sklearn.model_selection import cross_val_score, GridSearchCV, StratifiedKFold
 # for Optuna
 import optuna
@@ -42,62 +42,71 @@ class Optuna_Objective:
     Represent Optuna Objective class
 
     Attributes:\n
-    pipeline: An MLPipeline instance \n
+    pl: A tmlt instance \n
     dfl: A DataFrameLoader instance \n
     pp: A PreProcessor Instance \n
     model: The given Model
     """
 
-    def __init__(self, dfl, tmlt, xgb_eval_metric, kfold_splits, kfold_metrics, use_gpu):
+    def __init__(self, dfl, tmlt, metrics, xgb_model, xgb_eval_metric, use_predict_proba, use_gpu):
         self.X = dfl.X
         self.y = dfl.y
         self.use_gpu = use_gpu
         self.tmlt = tmlt
-        self.task = tmlt.problem_type
-        self.xgb_model = None
+        self.xgb_model = xgb_model
         self.trial = None
         self.xgb_eval_metric = xgb_eval_metric
-        self.kfold_splits = kfold_splits
-        self.kfold_metrics = kfold_metrics
+        self.use_predict_proba = use_predict_proba
+        self.metrics = metrics
 
     def __call__(self, trial):
-        x, y = self.X, self.y
         self.trial = trial
 
         #get_params here
-        self.xgb_params = self.get_xgb_params(self.trial, use_gpu=self.use_gpu)
-        early_stopping_rounds = self.xgb_params["early_stopping_rounds"]
-        del self.xgb_params["early_stopping_rounds"]
+        xgb_params = self.get_xgb_params(self.trial, use_gpu=self.use_gpu)
+        #logger.info("Get XGB Params Set!")
+        early_stopping_rounds = xgb_params["early_stopping_rounds"]
+        del xgb_params["early_stopping_rounds"]
 
-        # get xgb model based on task type
-        if self.task == "regression":
-            self.xgb_model = XGBRegressor(eval_metric=self.xgb_eval_metric,random_state=42,
-                                          use_label_encoder=False,**self.xgb_params)
-        if self.task == "classification":
-            self.xgb_model = XGBClassifier(eval_metric=self.xgb_eval_metric,random_state=42,
-                                           use_label_encoder=False,**self.xgb_params)
+        # create xgb ml model
+        model = self.xgb_model(
+            random_state=42,
+            eval_metric=self.xgb_eval_metric,
+            use_label_encoder=False,
+            **xgb_params,
+        )
+        # update the model on pipeline
+        self.tmlt.update_model(model)
+        #logger.info("Model Updated!")
 
-        # update the model here on tmlt pipeline
-        self.tmlt.update_model(self.xgb_model)
+        #create train valid datasets for simple training
+        self.tmlt.dfl.create_train_valid(valid_size=0.2)
+        # Now fit
+        logger.info("Training Started")
+        self.tmlt.spl.fit(self.tmlt.dfl.X_train, self.tmlt.dfl.y_train)
+        logger.info("Training Ended")
 
-#         #rest remains same
-#         xgb_model_params = {
-#             'model__early_stopping_rounds':early_stopping_rounds,
-#             'model__eval_set':[(test_X, test_y)]
-#         }
+        # choose predict type based upon metrics type
+        #TO-DO instead of single metrics use list of metrics and calculate mean using dict
+        if self.use_predict_proba:
+            logger.info("Predicting Probablities!")
+            preds_probs = self.tmlt.spl.predict_proba(self.tmlt.dfl.X_valid)[:, 1]
+            metric_result = self.metrics(self.tmlt.dfl.y_valid, preds_probs)
 
-        score, _ = self.tmlt.do_kfold_training(n_splits=self.kfold_splits,
-                                                metrics=self.kfold_metrics)
-        metrics_mean_score = np.mean(score)
+        else:
+            logger.info("Predicting Score!")
+            preds = self.tmlt.spl.predict(self.tmlt.dfl.X_valid)
+            metric_result = self.metrics(self.tmlt.dfl.y_valid, preds)
 
-        return metrics_mean_score
+
+        return metric_result
 
 
 
     def __str__(self):
         """Returns human readable string reprsentation"""
         attr_str = ("X, y, task, use_gpu, tmlt, xgb_model")
-        return ("Training Pipeline object with attributes:"+attr_str)
+        return ("Optuna Objective object with attributes:"+attr_str)
 
     def __repr__(self):
         return self.__str__()

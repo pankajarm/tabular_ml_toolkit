@@ -4,10 +4,20 @@ __all__ = ['DataFrameLoader']
 
 # Cell
 # hide
-from .logger import *
-import pandas as pd
+
+#settings for modin
+import ray
+ray.init()
+import os
+os.environ["MODIN_ENGINE"] = "ray"
+import modin.pandas as pd
+
+# Cell
+# hide
+# import pandas as pd
 from sklearn.model_selection import train_test_split
 import numpy as np
+from .logger import *
 
 # Cell
 
@@ -87,16 +97,16 @@ class DataFrameLoader:
 
     # CORE METHODS
     # load data from csv
-    def read_csv(self,train_file_path:str,test_file_path:str, idx_col:str):
+    def read_csv(self,train_file_path:str,test_file_path:str, idx_col:str, nrows:int):
         # Read the csv files using pandas
         if train_file_path is not None:
-            self.X_full = pd.read_csv(train_file_path, index_col=idx_col)
+            self.X_full = pd.read_csv(train_file_path, index_col=idx_col, nrows=nrows)
             self.shape_X_full = self.X_full.shape
             self.X_full = self.reduce_num_dtype_mem_usage(self.X_full, verbose=True)
         else:
             logger.info(f"Not valid train_file_path, input provided: {train_file_path}")
         if test_file_path is not None:
-            self.X_test = pd.read_csv(test_file_path, index_col=idx_col)
+            self.X_test = pd.read_csv(test_file_path, index_col=idx_col, nrows=nrows)
             self.shape_X_test = self.X_test.shape
             self.X_test = self.reduce_num_dtype_mem_usage(self.X_test, verbose=True)
 
@@ -183,13 +193,14 @@ class DataFrameLoader:
     # get train and valid dataframe
     def from_csv(self, train_file_path:str,
                  idx_col:str, target:str,
+                 nrows:int=None,
                  test_file_path:str=None,
                  use_num_cols:bool=True,
                  use_cat_cols:bool=True,
                  random_state=42):
 
         # read csv and load dataframes using pandas
-        self.read_csv(train_file_path,test_file_path, idx_col)
+        self.read_csv(train_file_path,test_file_path, idx_col, nrows)
         if self.X_full is not None:
             self.prepare_X_y(self.X_full, target)
         # create final columns based upon type of columns

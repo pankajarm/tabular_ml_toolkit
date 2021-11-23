@@ -1,13 +1,13 @@
 ---
 
-title: Tabular ML Toolkit
+title: Getting Started Tutorial with TMLT (Tabular ML Toolkit)
 
 
 keywords: fastai
 sidebar: home_sidebar
 
-summary: "A super fast helper library to jumpstart your machine learning project based on tabular or structured data."
-description: "A super fast helper library to jumpstart your machine learning project based on tabular or structured data."
+summary: "A tutorial on getting started with TMLT (Tabular ML Toolkit)"
+description: "A tutorial on getting started with TMLT (Tabular ML Toolkit)"
 nb_path: "index.ipynb"
 ---
 <!--
@@ -44,21 +44,20 @@ nb_path: "index.ipynb"
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="How-to-use">How to use<a class="anchor-link" href="#How-to-use"> </a></h2>
+<h2 id="How-to-Best-Use-tabular_ml_toolkit">How to Best Use tabular_ml_toolkit<a class="anchor-link" href="#How-to-Best-Use-tabular_ml_toolkit"> </a></h2>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Start with your favorite model and then just simply create MLPipeline with one API.</p>
+<p>Start with your favorite model and then just simply create tmlt with one API</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><em>For example, Here we are using RandomForestRegressor from Scikit-Learn, on  <a href="https://www.kaggle.com/estrotococo/home-data-for-ml-course">Melbourne Home Sale price data</a></em></p>
-<p><em>No need to install scikit-learn as it comes preinstall with Tabular_ML_Toolkit</em></p>
+<p><em>For example, Here we are using XGBRegressor on  <a href="https://www.kaggle.com/estrotococo/home-data-for-ml-course">Melbourne Home Sale price data</a></em></p>
 
 </div>
 </div>
@@ -70,10 +69,11 @@ nb_path: "index.ipynb"
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">tabular_ml_toolkit.MLPipeline</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">sklearn.ensemble</span> <span class="kn">import</span> <span class="n">RandomForestRegressor</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">tabular_ml_toolkit.tmlt</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">mean_absolute_error</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># Just to compare fit times</span>
 <span class="kn">import</span> <span class="nn">time</span>
 </pre></div>
 
@@ -91,86 +91,14 @@ nb_path: "index.ipynb"
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">DIRECTORY_PATH</span> <span class="o">=</span> <span class="s2">&quot;https://raw.githubusercontent.com/psmathur/tabular_ml_toolkit/master/input/home_data/&quot;</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">DIRECTORY_PATH</span> <span class="o">=</span> <span class="s2">&quot;input/home_data/&quot;</span>
 <span class="n">TRAIN_FILE</span> <span class="o">=</span> <span class="s2">&quot;train.csv&quot;</span>
 <span class="n">TEST_FILE</span> <span class="o">=</span> <span class="s2">&quot;test.csv&quot;</span>
 <span class="n">SAMPLE_SUB_FILE</span> <span class="o">=</span> <span class="s2">&quot;sample_submission.csv&quot;</span>
+<span class="n">OUTPUT_PATH</span> <span class="o">=</span> <span class="s2">&quot;output/&quot;</span>
 </pre></div>
 
     </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">scikit_model</span> <span class="o">=</span> <span class="n">RandomForestRegressor</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
-
-<span class="c1"># createm ml pipeline for scikit-learn model</span>
-<span class="n">tmlt</span> <span class="o">=</span> <span class="n">MLPipeline</span><span class="p">()</span><span class="o">.</span><span class="n">prepare_data_for_training</span><span class="p">(</span>
-    <span class="n">train_file_path</span><span class="o">=</span> <span class="n">DIRECTORY_PATH</span><span class="o">+</span><span class="n">TRAIN_FILE</span><span class="p">,</span>
-    <span class="n">test_file_path</span><span class="o">=</span> <span class="n">DIRECTORY_PATH</span><span class="o">+</span><span class="n">TEST_FILE</span><span class="p">,</span>
-    <span class="n">idx_col</span><span class="o">=</span><span class="s2">&quot;Id&quot;</span><span class="p">,</span>
-    <span class="n">target</span><span class="o">=</span><span class="s2">&quot;SalePrice&quot;</span><span class="p">,</span>
-    <span class="n">model</span><span class="o">=</span><span class="n">scikit_model</span><span class="p">,</span>
-    <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
-
-<span class="c1"># visualize scikit-pipeline</span>
-<span class="c1"># tmlt.spl</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-
-<span class="c1"># Now do cross_validation</span>
-<span class="n">scores</span> <span class="o">=</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">do_cross_validation</span><span class="p">(</span><span class="n">cv</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;neg_mean_absolute_error&#39;</span><span class="p">)</span>
-
-<span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cross Validation Time:&quot;</span><span class="p">,</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;scores:&quot;</span><span class="p">,</span> <span class="n">scores</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Average MAE score:&quot;</span><span class="p">,</span> <span class="n">scores</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Cross Validation Time: 14.697277069091797
-scores: [16871.87979452 18135.86726027 16032.48842466 19186.10719178
- 19341.86143836 14970.44808219 15863.47123288 16053.91267123
- 20180.36609589 17375.76856164]
-Average MAE score: 17401.217075342465
-</pre>
-</div>
-</div>
-
 </div>
 </div>
 
@@ -179,29 +107,10 @@ Average MAE score: 17401.217075342465
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="You-can-also-use-XGBoost-model-on-same-pipeline">You can also use XGBoost model on same pipeline<a class="anchor-link" href="#You-can-also-use-XGBoost-model-on-same-pipeline"> </a></h4><p><em>Just make sure to install XGBooost first depending upon your OS.</em></p>
-<p><em>After that all steps remains same. Here is example using XGBRegressor with <a href="https://www.kaggle.com/estrotococo/home-data-for-ml-course">Melbourne Home Sale price data</a></em></p>
-
+<h5 id="Create-a-base-xgb-classifier-model-with-your-best-guess-params">Create a base xgb classifier model with your best guess params<a class="anchor-link" href="#Create-a-base-xgb-classifier-model-with-your-best-guess-params"> </a></h5>
 </div>
 </div>
 </div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span> 
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -211,15 +120,15 @@ Average MAE score: 17401.217075342465
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">xgboost</span> <span class="kn">import</span> <span class="n">XGBRegressor</span>
 <span class="n">xgb_params</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;n_estimators&#39;</span><span class="p">:</span><span class="mi">250</span><span class="p">,</span>
-    <span class="s1">&#39;learning_rate&#39;</span><span class="p">:</span><span class="mf">0.05</span><span class="p">,</span>
+    <span class="s1">&#39;learning_rate&#39;</span><span class="p">:</span><span class="mf">0.1</span><span class="p">,</span>
+    <span class="s1">&#39;use_label_encoder&#39;</span><span class="p">:</span><span class="kc">False</span><span class="p">,</span>
+    <span class="s1">&#39;eval_metric&#39;</span><span class="p">:</span><span class="s1">&#39;rmse&#39;</span><span class="p">,</span>
     <span class="s1">&#39;random_state&#39;</span><span class="p">:</span><span class="mi">42</span><span class="p">,</span>
     <span class="c1"># for GPU</span>
 <span class="c1">#     &#39;tree_method&#39;: &#39;gpu_hist&#39;,</span>
 <span class="c1">#     &#39;predictor&#39;: &#39;gpu_predictor&#39;,</span>
 <span class="p">}</span>
-
-<span class="c1"># create xgb model</span>
+<span class="c1"># create xgb ml model</span>
 <span class="n">xgb_model</span> <span class="o">=</span> <span class="n">XGBRegressor</span><span class="p">(</span><span class="o">**</span><span class="n">xgb_params</span><span class="p">)</span>
 </pre></div>
 
@@ -230,91 +139,9 @@ Average MAE score: 17401.217075342465
 </div>
     {% endraw %}
 
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tmlt</span><span class="o">.</span><span class="n">update_model</span><span class="p">(</span><span class="n">xgb_model</span><span class="p">)</span>
-
-<span class="c1"># visualize scikit-pipeline</span>
-<span class="c1"># tmlt.spl</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-
-<span class="c1"># Now do cross_validation</span>
-<span class="n">scores</span> <span class="o">=</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">do_cross_validation</span><span class="p">(</span><span class="n">cv</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;neg_mean_absolute_error&#39;</span><span class="p">)</span>
-
-<span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cross Validation Time:&quot;</span><span class="p">,</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;scores:&quot;</span><span class="p">,</span> <span class="n">scores</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Average MAE score:&quot;</span><span class="p">,</span> <span class="n">scores</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>Cross Validation Time: 6.754866123199463
-scores: [14655.50866866 15914.2911494  15265.50021404 17544.02900257
- 18052.48084332 15120.70601455 14776.67005565 13291.54387842
- 17425.94231592 16157.00203339]
-Average MAE score: 15820.36741759418
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>XGB model looks more promising!</strong></p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>In background <code>prepare_data_for_training</code> method loads your input data into Pandas DataFrame, seprates X(features) and y(target),</p>
-<p>Then it preprocess all numerical and categorical type data found in these dataframes.</p>
-<p>Then it bundle preprocessed data with your given model and return an MLPipeline object which contains dataframeloader, preprocessor and scikit-learn pipeline.</p>
-<p>Please see tutorials for more features from ML Tabular Toolkit.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Let's-do-Hyper-Parameters-Optimization-and-find-the-best-params-for-XGB-Model">Let's do Hyper Parameters Optimization and find the best params for XGB Model<a class="anchor-link" href="#Let's-do-Hyper-Parameters-Optimization-and-find-the-best-params-for-XGB-Model"> </a></h4><p>Let's give our Grid Search 2 minute time budget, Because you don't have eternity to wait for hyperparam tunning!</p>
-
+<h5 id="Just-point-in-the-direction-of-your-data,-let-tmlt-know-what-are-idx-and-target-columns-in-your-tabular-data-and-what-kind-of-problem-type-you-are-trying-to-resolve">Just point in the direction of your data, let tmlt know what are idx and target columns in your tabular data and what kind of problem type you are trying to resolve<a class="anchor-link" href="#Just-point-in-the-direction-of-your-data,-let-tmlt-know-what-are-idx-and-target-columns-in-your-tabular-data-and-what-kind-of-problem-type-you-are-trying-to-resolve"> </a></h5>
 </div>
 </div>
 </div>
@@ -325,34 +152,13 @@ Average MAE score: 15820.36741759418
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span><span class="p">,</span> <span class="n">MinMaxScaler</span>
-<span class="kn">from</span> <span class="nn">sklearn.impute</span> <span class="kn">import</span> <span class="n">SimpleImputer</span>
-
-
-<span class="c1"># let&#39;s tune data preprocessing and model hyperparams</span>
-<span class="n">param_grid</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;preprocessor__num_cols__scaler&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">StandardScaler</span><span class="p">(),</span> <span class="n">MinMaxScaler</span><span class="p">()],</span>
-    <span class="s2">&quot;preprocessor__cat_cols__imputer&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">SimpleImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;constant&#39;</span><span class="p">),</span>
-                                                 <span class="n">SimpleImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;most_frequent&#39;</span><span class="p">)],</span>
-    <span class="s1">&#39;model__n_estimators&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">500</span><span class="p">,</span><span class="mi">1000</span><span class="p">],</span>
-    <span class="s1">&#39;model__learning_rate&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.02</span><span class="p">,</span><span class="mf">0.05</span><span class="p">],</span>
-    <span class="s1">&#39;model__max_depth&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">10</span><span class="p">]</span>
-<span class="p">}</span>
-
-<span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-<span class="c1"># Now do tune grid search</span>
-<span class="n">tune_search</span> <span class="o">=</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">do_tune_grid_search</span><span class="p">(</span><span class="n">param_grid</span><span class="o">=</span><span class="n">param_grid</span><span class="p">,</span>
-                                       <span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
-                                       <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;neg_mean_absolute_error&#39;</span><span class="p">,</span>
-                                      <span class="n">early_stopping</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                                      <span class="n">time_budget_s</span><span class="o">=</span><span class="mi">120</span><span class="p">)</span>
-<span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Grid Search Time:&quot;</span><span class="p">,</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Best params:&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">tune_search</span><span class="o">.</span><span class="n">best_params_</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Internal CV Metrics score: </span><span class="si">{</span><span class="o">-</span><span class="mi">1</span><span class="o">*</span><span class="p">(</span><span class="n">tune_search</span><span class="o">.</span><span class="n">best_score_</span><span class="p">)</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tmlt</span> <span class="o">=</span> <span class="n">TMLT</span><span class="p">()</span><span class="o">.</span><span class="n">prepare_data_for_training</span><span class="p">(</span>
+    <span class="n">train_file_path</span><span class="o">=</span> <span class="n">DIRECTORY_PATH</span><span class="o">+</span><span class="n">TRAIN_FILE</span><span class="p">,</span>
+    <span class="n">test_file_path</span><span class="o">=</span> <span class="n">DIRECTORY_PATH</span><span class="o">+</span><span class="n">TEST_FILE</span><span class="p">,</span>
+    <span class="n">idx_col</span><span class="o">=</span><span class="s2">&quot;Id&quot;</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s2">&quot;SalePrice&quot;</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">xgb_model</span><span class="p">,</span>
+    <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>
+    <span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;regression&quot;</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -365,10 +171,55 @@ Average MAE score: 15820.36741759418
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>/Users/pamathur/miniconda3/envs/nbdev_env/lib/python3.9/site-packages/tune_sklearn/tune_basesearch.py:400: UserWarning: max_iters is set &gt; 1 but incremental/partial training is not enabled. To enable partial training, ensure the estimator has `partial_fit` or `warm_start` and set `early_stopping=True`. Automatically setting max_iters=1.
-  warnings.warn(
-/Users/pamathur/miniconda3/envs/nbdev_env/lib/python3.9/site-packages/ray/tune/tune.py:368: UserWarning: The `loggers` argument is deprecated. Please pass the respective `LoggerCallback` classes to the `callbacks` argument instead. See https://docs.ray.io/en/latest/tune/api_docs/logging.html
-  warnings.warn(
+<pre>2021-11-23 01:06:20,944 INFO 12 cores found, model and data parallel processing should worked!
+UserWarning: `read_*` implementation has mismatches with pandas:
+Data types of partitions are different! Please refer to the troubleshooting section of the Modin documentation to fix this issue.
+UserWarning: Distributing &lt;class &#39;int&#39;&gt; object. This may take some time.
+2021-11-23 01:06:26,974 INFO DataFrame Memory usage decreased to 0.58 Mb (35.5% reduction)
+2021-11-23 01:06:32,382 INFO DataFrame Memory usage decreased to 0.58 Mb (34.8% reduction)
+2021-11-23 01:06:39,877 INFO Both Numerical &amp; Categorical columns found, Preprocessing will done accordingly!
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">create_train_valid</span><span class="p">(</span><span class="n">valid_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+
+<span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="c1"># Now fit</span>
+<span class="n">tmlt</span><span class="o">.</span><span class="n">spl</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_train</span><span class="p">,</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_train</span><span class="p">)</span>
+<span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Fit Time:&quot;</span><span class="p">,</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
+
+<span class="c1">#predict</span>
+<span class="n">preds</span> <span class="o">=</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">spl</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_valid</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;X_valid MAE:&#39;</span><span class="p">,</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">preds</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Fit Time: 0.5916149616241455
+X_valid MAE: 15936.53249411387
 </pre>
 </div>
 </div>
@@ -381,22 +232,24 @@ Average MAE score: 15820.36741759418
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>If you want to customize data and preprocessing steps you can do so by using <a href="/tabular_ml_toolkit/DataFrameLoader.html#DataFrameLoader"><code>DataFrameLoader</code></a> and <code>PreProessor</code> classes. Please Check other Tutorials and detail documentations for these classes for more options.</p>
+<p>In background <code>prepare_data_for_training</code> method loads your input data into Pandas DataFrame, seprates X(features) and y(target).</p>
+<p>The <code>prepare_data_for_training</code> methods prepare X and y DataFrames, preprocess all numerical and categorical type data found in these DataFrames using scikit-learn pipelines. Then it bundle preprocessed data with your given model and return an MLPipeline object, this class instance has dataframeloader, preprocessor and scikit-lean pipeline instances.</p>
+<p>The <code>create_train_valid</code> method use valid_size to split X(features) into X_train, y_train, X_valid and y_valid DataFrames, so you can call fit methods on X_train and y_train and predict methods on X_valid or X_test.</p>
+<p>Please check detail documentation and source code for more details.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>**Amazing our 5 Fold CV MAE has reduced to 15700.401 within 2 minutes by HyperParamss tunning!</p>
-<p>If we can continue doing hyperparmas tunning, may be we can even do better, You can also try early_stopping, take that as challenge!</p>
-<h6 id="Let's-use-our-newly-found-params-for-k-fold-training-and-update-preprocessor-and-model">Let's use our newly found params for k-fold training and update preprocessor and model<a class="anchor-link" href="#Let's-use-our-newly-found-params-for-k-fold-training-and-update-preprocessor-and-model"> </a></h6>
+<p><em>NOTE: If you want to customize data and preprocessing steps you can do so by using <a href="/tabular_ml_toolkit/dataframeloader.html#DataFrameLoader"><code>DataFrameLoader</code></a> and <code>PreProessor</code> classes. Check detail documentations for these classes for more options.</em></p>
+
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h5 id="Update-PreProcessor-on-MLPipeline">Update PreProcessor on MLPipeline<a class="anchor-link" href="#Update-PreProcessor-on-MLPipeline"> </a></h5>
+<h4 id="To-see-more-clear-picture-of-model-performance,-Let's-do-a-quick-Cross-Validation-on-our-Pipeline">To see more clear picture of model performance, Let's do a quick Cross Validation on our Pipeline<a class="anchor-link" href="#To-see-more-clear-picture-of-model-performance,-Let's-do-a-quick-Cross-Validation-on-our-Pipeline"> </a></h4>
 </div>
 </div>
 </div>
@@ -407,11 +260,70 @@ Average MAE score: 15820.36741759418
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pp_params</span> <span class="o">=</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">get_preprocessor_best_params</span><span class="p">(</span><span class="n">tune_search</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="c1"># Now do cross_validation</span>
+<span class="n">scores</span> <span class="o">=</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">do_cross_validation</span><span class="p">(</span><span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;neg_mean_absolute_error&#39;</span><span class="p">)</span>
+<span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cross Validation Time:&quot;</span><span class="p">,</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
 
-<span class="c1"># Update pipeline with updated preprocessor</span>
-<span class="n">tmlt</span><span class="o">.</span><span class="n">update_preprocessor</span><span class="p">(</span><span class="o">**</span><span class="n">pp_params</span><span class="p">)</span>
-<span class="n">tmlt</span><span class="o">.</span><span class="n">spl</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;scores:&quot;</span><span class="p">,</span> <span class="n">scores</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Average MAE score:&quot;</span><span class="p">,</span> <span class="n">scores</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Cross Validation Time: 3.3441898822784424
+scores: [15752.16827643 16405.26146458 16676.95384739 14588.82684075
+ 17320.45218857]
+Average MAE score: 16148.73252354452
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><em>MAE did came out slightly bad with cross validation</em></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><em>Let's see if we can improve our cross validation score with hyperparams tunning</em></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><strong>we are using optuna based hyperparameter search here, make sure to supply a new directory path so search is saved</strong></p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">study</span> <span class="o">=</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">do_xgb_optuna_optimization</span><span class="p">(</span><span class="n">optuna_db_path</span><span class="o">=</span><span class="n">OUTPUT_PATH</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">study</span><span class="o">.</span><span class="n">best_trial</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -423,7 +335,7 @@ Average MAE score: 15820.36741759418
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h5 id="Update-Model-on-MLPipeline">Update Model on MLPipeline<a class="anchor-link" href="#Update-Model-on-MLPipeline"> </a></h5>
+<h4 id="Let's-use-our-newly-found-best-params-to-update-the-model-on-sklearn-pipeline">Let's use our newly found best params to update the model on sklearn pipeline<a class="anchor-link" href="#Let's-use-our-newly-found-best-params-to-update-the-model-on-sklearn-pipeline"> </a></h4>
 </div>
 </div>
 </div>
@@ -434,12 +346,9 @@ Average MAE score: 15820.36741759418
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">xgb_params</span> <span class="o">=</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">get_model_best_params</span><span class="p">(</span><span class="n">tune_search</span><span class="p">)</span>
-
-<span class="c1"># create xgb ml model</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">xgb_params</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">study</span><span class="o">.</span><span class="n">best_trial</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;xgb_params&quot;</span><span class="p">,</span> <span class="n">xgb_params</span><span class="p">)</span>
 <span class="n">xgb_model</span> <span class="o">=</span> <span class="n">XGBRegressor</span><span class="p">(</span><span class="o">**</span><span class="n">xgb_params</span><span class="p">)</span>
-
-<span class="c1"># Update pipeline with xgb model</span>
 <span class="n">tmlt</span><span class="o">.</span><span class="n">update_model</span><span class="p">(</span><span class="n">xgb_model</span><span class="p">)</span>
 <span class="n">tmlt</span><span class="o">.</span><span class="n">spl</span>
 </pre></div>
@@ -451,6 +360,12 @@ Average MAE score: 15820.36741759418
 </div>
     {% endraw %}
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Now,-Let's-use-5-K-Fold-Training-on-this-Updated-XGB-model-with-best-params-found-from-Optuna-search">Now, Let's use 5 K-Fold Training on this Updated XGB model with best params found from Optuna search<a class="anchor-link" href="#Now,-Let's-use-5-K-Fold-Training-on-this-Updated-XGB-model-with-best-params-found-from-Optuna-search"> </a></h4>
+</div>
+</div>
+</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -458,8 +373,25 @@ Average MAE score: 15820.36741759418
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">xgb_model_k_fold</span><span class="p">,</span> <span class="n">xgb_model_metrics_score</span> <span class="o">=</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">do_k_fold_training</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="n">mean_absolute_error</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;mean metrics score:&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">xgb_model_metrics_score</span><span class="p">))</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">xgb_model_metrics_score</span><span class="p">,</span> <span class="n">xgb_model_test_preds</span> <span class="o">=</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">do_kfold_training</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">test_preds_metric</span><span class="o">=</span><span class="n">mean_absolute_error</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">if</span> <span class="n">xgb_model_test_preds</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">xgb_model_test_preds</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -471,29 +403,10 @@ Average MAE score: 15820.36741759418
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Yay, we have much better 10 K-Fold MAE</strong></p>
-
+<h5 id="You-can-even-improve-metrics-score-further-by-running-Optuna-search-for-longer-time-or-rerunning-the-study,-check-documentation-for-more-details">You can even improve metrics score further by running Optuna search for longer time or rerunning the study, check documentation for more details<a class="anchor-link" href="#You-can-even-improve-metrics-score-further-by-running-Optuna-search-for-longer-time-or-rerunning-the-study,-check-documentation-for-more-details"> </a></h5>
 </div>
 </div>
 </div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">xgb_model_preds</span> <span class="o">=</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">do_k_fold_prediction</span><span class="p">(</span><span class="n">k_fold</span><span class="o">=</span><span class="n">xgb_model_k_fold</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">xgb_model_preds</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
 </div>
  
 

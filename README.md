@@ -1,112 +1,112 @@
-# Tabular ML Toolkit
-> A super fast helper library to jumpstart your machine learning project based on tabular or structured data.
+# Getting Started Tutorial with TMLT (Tabular ML Toolkit)
+> A tutorial on getting started with TMLT (Tabular ML Toolkit)
 
 
 ## Install
 
 `pip install -U tabular_ml_toolkit`
 
-## How to use
+## How to Best Use tabular_ml_toolkit
 
-Start with your favorite model and then just simply create MLPipeline with one API.
+Start with your favorite model and then just simply create tmlt with one API
 
-*For example, Here we are using RandomForestRegressor from Scikit-Learn, on  [Melbourne Home Sale price data](https://www.kaggle.com/estrotococo/home-data-for-ml-course)*
-
-
-*No need to install scikit-learn as it comes preinstall with Tabular_ML_Toolkit*
+*For example, Here we are using XGBRegressor on  [Melbourne Home Sale price data](https://www.kaggle.com/estrotococo/home-data-for-ml-course)*
 
 ```
-from tabular_ml_toolkit.MLPipeline import *
-from sklearn.ensemble import RandomForestRegressor
+from tabular_ml_toolkit.tmlt import *
 from sklearn.metrics import mean_absolute_error
 import numpy as np
+
+# Just to compare fit times
 import time
 ```
 
 ```
 # Dataset file names and Paths
-DIRECTORY_PATH = "https://raw.githubusercontent.com/psmathur/tabular_ml_toolkit/master/input/home_data/"
+DIRECTORY_PATH = "input/home_data/"
 TRAIN_FILE = "train.csv"
 TEST_FILE = "test.csv"
 SAMPLE_SUB_FILE = "sample_submission.csv"
+OUTPUT_PATH = "output/"
 ```
 
-```
-# create scikit-learn ml model
-scikit_model = RandomForestRegressor(random_state=42)
-
-# createm ml pipeline for scikit-learn model
-tmlt = MLPipeline().prepare_data_for_training(
-    train_file_path= DIRECTORY_PATH+TRAIN_FILE,
-    test_file_path= DIRECTORY_PATH+TEST_FILE,
-    idx_col="Id",
-    target="SalePrice",
-    model=scikit_model,
-    random_state=42)
-
-# visualize scikit-pipeline
-# tmlt.spl
-```
-
-```
-start = time.time()
-
-# Now do cross_validation
-scores = tmlt.do_cross_validation(cv=10, scoring='neg_mean_absolute_error')
-
-end = time.time()
-print("Cross Validation Time:", end - start)
-
-print("scores:", scores)
-print("Average MAE score:", scores.mean())
-```
-
-    Cross Validation Time: 14.697277069091797
-    scores: [16871.87979452 18135.86726027 16032.48842466 19186.10719178
-     19341.86143836 14970.44808219 15863.47123288 16053.91267123
-     20180.36609589 17375.76856164]
-    Average MAE score: 17401.217075342465
-
-
-#### You can also use XGBoost model on same pipeline
-
-*Just make sure to install XGBooost first depending upon your OS.*
-
-*After that all steps remains same. Here is example using XGBRegressor with [Melbourne Home Sale price data](https://www.kaggle.com/estrotococo/home-data-for-ml-course)*
-
-```
-#!pip install -U xgboost
-```
+##### Create a base xgb classifier model with your best guess params
 
 ```
 from xgboost import XGBRegressor
 xgb_params = {
-    'n_estimators':250,
-    'learning_rate':0.05,
+    'learning_rate':0.1,
+    'use_label_encoder':False,
+    'eval_metric':'rmse',
     'random_state':42,
     # for GPU
 #     'tree_method': 'gpu_hist',
 #     'predictor': 'gpu_predictor',
 }
-
-# create xgb model
+# create xgb ml model
 xgb_model = XGBRegressor(**xgb_params)
 ```
 
-```
-# Make sure to update pipeline with xgb model
-tmlt.update_model(xgb_model)
+##### Just point in the direction of your data, let tmlt know what are idx and target columns in your tabular data and what kind of problem type you are trying to resolve
 
-# visualize scikit-pipeline
-# tmlt.spl
 ```
+# tmlt
+tmlt = TMLT().prepare_data_for_training(
+    train_file_path= DIRECTORY_PATH+TRAIN_FILE,
+    test_file_path= DIRECTORY_PATH+TEST_FILE,
+    idx_col="Id", target="SalePrice",
+    model=xgb_model,
+    random_state=42,
+    problem_type="regression")
+```
+
+    2021-11-23 01:06:20,944 INFO 12 cores found, model and data parallel processing should worked!
+    UserWarning: `read_*` implementation has mismatches with pandas:
+    Data types of partitions are different! Please refer to the troubleshooting section of the Modin documentation to fix this issue.
+    UserWarning: Distributing <class 'int'> object. This may take some time.
+    2021-11-23 01:06:26,974 INFO DataFrame Memory usage decreased to 0.58 Mb (35.5% reduction)
+    2021-11-23 01:06:32,382 INFO DataFrame Memory usage decreased to 0.58 Mb (34.8% reduction)
+    2021-11-23 01:06:39,877 INFO Both Numerical & Categorical columns found, Preprocessing will done accordingly!
+
+
+```
+# create train, valid split to evaulate model on valid dataset
+tmlt.dfl.create_train_valid(valid_size=0.2)
+
+start = time.time()
+# Now fit
+tmlt.spl.fit(tmlt.dfl.X_train, tmlt.dfl.y_train)
+end = time.time()
+print("Fit Time:", end - start)
+
+#predict
+preds = tmlt.spl.predict(tmlt.dfl.X_valid)
+print('X_valid MAE:', mean_absolute_error(tmlt.dfl.y_valid, preds))
+```
+
+    Fit Time: 0.5916149616241455
+    X_valid MAE: 15936.53249411387
+
+
+In background `prepare_data_for_training` method loads your input data into Pandas DataFrame, seprates X(features) and y(target).
+
+The `prepare_data_for_training` methods prepare X and y DataFrames, preprocess all numerical and categorical type data found in these DataFrames using scikit-learn pipelines. Then it bundle preprocessed data with your given model and return an MLPipeline object, this class instance has dataframeloader, preprocessor and scikit-lean pipeline instances.
+
+The `create_train_valid` method use valid_size to split X(features) into X_train, y_train, X_valid and y_valid DataFrames, so you can call fit methods on X_train and y_train and predict methods on X_valid or X_test.
+
+
+Please check detail documentation and source code for more details.
+
+*NOTE: If you want to customize data and preprocessing steps you can do so by using `DataFrameLoader` and `PreProessor` classes. Check detail documentations for these classes for more options.*
+
+
+
+#### To see more clear picture of model performance, Let's do a quick Cross Validation on our Pipeline
 
 ```
 start = time.time()
-
 # Now do cross_validation
-scores = tmlt.do_cross_validation(cv=10, scoring='neg_mean_absolute_error')
-
+scores = tmlt.do_cross_validation(cv=5, scoring='neg_mean_absolute_error')
 end = time.time()
 print("Cross Validation Time:", end - start)
 
@@ -114,108 +114,45 @@ print("scores:", scores)
 print("Average MAE score:", scores.mean())
 ```
 
-    Cross Validation Time: 6.754866123199463
-    scores: [14655.50866866 15914.2911494  15265.50021404 17544.02900257
-     18052.48084332 15120.70601455 14776.67005565 13291.54387842
-     17425.94231592 16157.00203339]
-    Average MAE score: 15820.36741759418
+    Cross Validation Time: 3.3441898822784424
+    scores: [15752.16827643 16405.26146458 16676.95384739 14588.82684075
+     17320.45218857]
+    Average MAE score: 16148.73252354452
 
 
-**XGB model looks more promising!**
+*MAE did came out slightly bad with cross validation*
 
-In background `prepare_data_for_training` method loads your input data into Pandas DataFrame, seprates X(features) and y(target), 
+*Let's see if we can improve our cross validation score with hyperparams tunning*
 
-Then it preprocess all numerical and categorical type data found in these dataframes.
-
-Then it bundle preprocessed data with your given model and return an MLPipeline object which contains dataframeloader, preprocessor and scikit-learn pipeline.
-
-
-Please see tutorials for more features from ML Tabular Toolkit.
-
-#### Let's do Hyper Parameters Optimization and find the best params for XGB Model
-
- Let's give our Grid Search 2 minute time budget, Because you don't have eternity to wait for hyperparam tunning!
+**we are using optuna based hyperparameter search here, make sure to supply a new directory path so search is saved**
 
 ```
-# let's do tune grid search for faster hyperparams tuning for data preprocessing and model
-
-from sklearn.preprocessing import StandardScaler, MinMaxScaler
-from sklearn.impute import SimpleImputer
-
-
-# let's tune data preprocessing and model hyperparams
-param_grid = {
-    "preprocessor__num_cols__scaler": [StandardScaler(), MinMaxScaler()],
-    "preprocessor__cat_cols__imputer": [SimpleImputer(strategy='constant'),
-                                                 SimpleImputer(strategy='most_frequent')],
-    'model__n_estimators': [500,1000],
-    'model__learning_rate': [0.02,0.05],
-    'model__max_depth': [5,10]
-}
-
-start = time.time()
-# Now do tune grid search
-tune_search = tmlt.do_tune_grid_search(param_grid=param_grid,
-                                       cv=5,
-                                       scoring='neg_mean_absolute_error',
-                                      early_stopping=False,
-                                      time_budget_s=120)
-end = time.time()
-print("Grid Search Time:", end - start)
-
-print("Best params:")
-print(tune_search.best_params_)
-
-print(f"Internal CV Metrics score: {-1*(tune_search.best_score_):.3f}")
+study = tmlt.do_xgb_optuna_optimization(optuna_db_path=OUTPUT_PATH)
+print(study.best_trial)
 ```
 
-    /Users/pamathur/miniconda3/envs/nbdev_env/lib/python3.9/site-packages/tune_sklearn/tune_basesearch.py:400: UserWarning: max_iters is set > 1 but incremental/partial training is not enabled. To enable partial training, ensure the estimator has `partial_fit` or `warm_start` and set `early_stopping=True`. Automatically setting max_iters=1.
-      warnings.warn(
-    /Users/pamathur/miniconda3/envs/nbdev_env/lib/python3.9/site-packages/ray/tune/tune.py:368: UserWarning: The `loggers` argument is deprecated. Please pass the respective `LoggerCallback` classes to the `callbacks` argument instead. See https://docs.ray.io/en/latest/tune/api_docs/logging.html
-      warnings.warn(
-
-
-If you want to customize data and preprocessing steps you can do so by using `DataFrameLoader` and `PreProessor` classes. Please Check other Tutorials and detail documentations for these classes for more options. 
-
-**Amazing our 5 Fold CV MAE has reduced to 15700.401 within 2 minutes by HyperParamss tunning!
-
-If we can continue doing hyperparmas tunning, may be we can even do better, You can also try early_stopping, take that as challenge!
-
-###### Let's use our newly found params for k-fold training and update preprocessor and model
-
-##### Update PreProcessor on MLPipeline
+#### Let's use our newly found best params to update the model on sklearn pipeline
 
 ```
-pp_params = tmlt.get_preprocessor_best_params(tune_search)
-
-# Update pipeline with updated preprocessor
-tmlt.update_preprocessor(**pp_params)
-tmlt.spl
-```
-
-##### Update Model on MLPipeline
-
-```
-xgb_params = tmlt.get_model_best_params(tune_search)
-
-# create xgb ml model
+xgb_params.update(study.best_trial.params)
+print("xgb_params", xgb_params)
 xgb_model = XGBRegressor(**xgb_params)
-
-# Update pipeline with xgb model
 tmlt.update_model(xgb_model)
 tmlt.spl
 ```
 
+#### Now, Let's use 5 K-Fold Training on this Updated XGB model with best params found from Optuna search
+
 ```
 # k-fold training
-xgb_model_k_fold, xgb_model_metrics_score = tmlt.do_k_fold_training(n_splits=10, metrics=mean_absolute_error)
-print("mean metrics score:", np.mean(xgb_model_metrics_score))
+xgb_model_metrics_score, xgb_model_test_preds = tmlt.do_kfold_training(n_splits=5, test_preds_metric=mean_absolute_error)
 ```
 
-**Yay, we have much better 10 K-Fold MAE**
+```
+# predict on test dataset
+if xgb_model_test_preds is not None:
+    print(xgb_model_test_preds.shape)
+```
 
-```
-# predict on test dataset which was given initially
-xgb_model_preds = tmlt.do_k_fold_prediction(k_fold=xgb_model_k_fold)
-print(xgb_model_preds.shape)
-```
+
+##### You can even improve metrics score further by running Optuna search for longer time or rerunning the study, check documentation for more details

@@ -9,12 +9,11 @@ from .logger import *
 
 # Cell
 # hide
-import pandas as pd
 import numpy as np
 
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import mean_absolute_error, roc_auc_score, accuracy_score
-from sklearn.model_selection import cross_val_score, GridSearchCV, StratifiedKFold
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+from sklearn.metrics import roc_auc_score, accuracy_score, log_loss, f1_score, precision_score, recall_score
 # for Optuna
 import optuna
 #for XGB
@@ -48,7 +47,7 @@ class Optuna_Objective:
     model: The given Model
     """
 
-    def __init__(self, dfl, tmlt, metrics, xgb_model, xgb_eval_metric, use_predict_proba, use_gpu):
+    def __init__(self, dfl, tmlt, val_preds_metrics, xgb_model, xgb_eval_metric, use_gpu):
         self.X = dfl.X
         self.y = dfl.y
         self.use_gpu = use_gpu
@@ -56,15 +55,13 @@ class Optuna_Objective:
         self.xgb_model = xgb_model
         self.trial = None
         self.xgb_eval_metric = xgb_eval_metric
-        self.use_predict_proba = use_predict_proba
-        self.metrics = metrics
+        self.val_preds_metrics = val_preds_metrics
 
     def __call__(self, trial):
         self.trial = trial
 
         #get_params here
         xgb_params = self.get_xgb_params(self.trial, use_gpu=self.use_gpu)
-        #logger.info("Get XGB Params Set!")
         early_stopping_rounds = xgb_params["early_stopping_rounds"]
         del xgb_params["early_stopping_rounds"]
 
@@ -77,30 +74,42 @@ class Optuna_Objective:
         )
         # update the model on pipeline
         self.tmlt.update_model(model)
-        #logger.info("Model Updated!")
 
         #create train valid datasets for simple training
         self.tmlt.dfl.create_train_valid(valid_size=0.2)
         # Now fit
-        logger.info("Training Started")
+        logger.info("Training Started!")
         self.tmlt.spl.fit(self.tmlt.dfl.X_train, self.tmlt.dfl.y_train)
-        logger.info("Training Ended")
+        logger.info("Training Ended!")
+
 
         # choose predict type based upon metrics type
         #TO-DO instead of single metrics use list of metrics and calculate mean using dict
-        if self.use_predict_proba:
-            logger.info("Predicting Probablities!")
-            preds_probs = self.tmlt.spl.predict_proba(self.tmlt.dfl.X_valid)[:, 1]
-            metric_result = self.metrics(self.tmlt.dfl.y_valid, preds_probs)
+        metric_result = {}
+        for metric in self.val_preds_metrics:
+            if ("log_loss" in str(metric.__name__)) or ("roc_auc_score" in str(metric.__name__)):
+                #logger.info("Predicting Probablities!")
+                preds_probs = self.tmlt.spl.predict_proba(self.tmlt.dfl.X_valid)[:, 1]
+                metric_result[str(metric.__name__)] = metric(self.tmlt.dfl.y_valid, preds_probs)
 
+            else:
+                #logger.info("Predicting Score!")
+                preds = self.tmlt.spl.predict(self.tmlt.dfl.X_valid)
+                metric_result[str(metric.__name__)] = metric(self.tmlt.dfl.y_valid, preds)
+
+        #now show value of all the given metrics
+        for metric_name, metric_value in metric_result.items():
+            logger.info(f"{metric_name}: {metric_value}")
+
+        # choose return result for Optuna Optimization based upon metric type
+        if self.xgb_eval_metric == "logloss":
+            return metric_result["log_loss"]
+        elif self.xgb_eval_metric == "mlogloss":
+            return metric_result["log_loss"]
+        elif self.xgb_eval_metric == "rmse":
+            return metric_result["mean_squared_error"]
         else:
-            logger.info("Predicting Score!")
-            preds = self.tmlt.spl.predict(self.tmlt.dfl.X_valid)
-            metric_result = self.metrics(self.tmlt.dfl.y_valid, preds)
-
-
-        return metric_result
-
+            return None
 
 
     def __str__(self):

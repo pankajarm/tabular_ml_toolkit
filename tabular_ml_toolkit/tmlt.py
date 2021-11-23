@@ -16,11 +16,9 @@ from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder, StandardScaler, MinMaxScaler
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import mean_absolute_error, roc_auc_score,accuracy_score
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+from sklearn.metrics import roc_auc_score, accuracy_score, log_loss, f1_score, precision_score, recall_score
 from sklearn.model_selection import cross_val_score, GridSearchCV, StratifiedKFold
-# for tune based GridSearch
-from tune_sklearn import TuneGridSearchCV
 # for Optuna
 import optuna
 #for XGB
@@ -77,10 +75,10 @@ class TMLT:
     def find_ideal_cpu_cores(self):
         if os.cpu_count() > 2:
             ideal_cpu_cores = os.cpu_count()-1
-            logger.info(f"{os.cpu_count()} cores found, parallel processing is enabled!")
+            logger.info(f"{os.cpu_count()} cores found, model and data parallel processing should worked!")
         else:
             ideal_cpu_cores = None
-            logger.info(f"{os.cpu_count()} cores found, parallel processing NOT enabled!")
+            logger.info(f"{os.cpu_count()} cores found, model and data parallel processing may NOT worked!")
         return ideal_cpu_cores
 
     #Helper method to find all sklearn estimators with support for parallelism aka n_jobs
@@ -107,7 +105,8 @@ class TMLT:
                                   random_state:int,
                                   model:object,
                                   test_file_path:str=None,
-                                 problem_type="regression"):
+                                  problem_type="regression",
+                                  nrows=None):
         #set problem type
         self.problem_type = problem_type
         # check if given model supports n_jobs aka cpu core based Parallelism
@@ -128,16 +127,16 @@ class TMLT:
             test_file_path=test_file_path,
             idx_col=idx_col,
             target=target,
-            random_state=random_state)
+            random_state=random_state,
+            nrows=nrows)
 
         # call PreProcessor module
-        #TODO: For problem type classification, encode target using PreProcessor
         self.pp = PreProcessor().preprocess_all_cols(dataframeloader=self.dfl, problem_type=self.problem_type)
 
         # call create final sklearn pipelien method
         self.spl = self.create_final_sklearn_pipeline(transformer_type=self.pp.transformer_type,
                                      model = model)
-        # return MLPipeline
+        # return tmlt
         return self
 
     # Force to update the preprocessor in pipeline
@@ -196,47 +195,12 @@ class TMLT:
         grid_search.fit(self.dfl.X, self.dfl.y)
         return grid_search
 
-    # Core methods for Tune SK-Learn GridSearch
-    def do_tune_grid_search(self,
-                            param_grid:object,
-                            scoring:str=None,
-                            mode:str='max',
-                            cv:int=5,
-                            early_stopping=True,
-                            time_budget_s:int=None,
-                            name:str=None,
-                            use_gpu:bool=False,
-                            stopper:object=None,
-                            max_iters:int=10,
-                            n_jobs=None):
-
-        if n_jobs is None:
-            n_jobs = self.IDEAL_CPU_CORES
-
-        # create GridSeachCV instance
-        tune_search = TuneGridSearchCV(
-            estimator=self.spl,
-            param_grid=param_grid,
-            scoring=scoring,
-            mode=mode,
-            cv=cv,
-            time_budget_s=time_budget_s,
-            name=name,
-            use_gpu=use_gpu,
-            early_stopping=early_stopping,
-            stopper=stopper,
-            max_iters=max_iters,
-            n_jobs=n_jobs,
-            pipeline_auto_early_stop=True)
-
-        # now call fit
-        tune_search.fit(self.dfl.X, self.dfl.y)
-        return tune_search
-
-
     # do k-fold training
     # metrics has to be sklearn metrics object type such as mean_absoulte_error, acccuracy
-    def do_kfold_training(self, n_splits:int, metrics:object, random_state=42):
+    def do_kfold_training(self, n_splits:int, test_preds_metric=None, random_state=42):
+
+        #fetch problem type params
+        _, val_preds_metrics, _, _ = self.fetch_problem_type_params()
 
         #create stratified K Folds instance
         kfold = StratifiedKFold(n_splits=n_splits,
@@ -248,7 +212,7 @@ class TMLT:
         if self.dfl.X_test is not None:
             test_preds = np.zeros(self.dfl.X_test.shape[0])
         # list contains metrics score for each fold
-        metrics_score = []
+        kfold_metrics_results = []
         n=0
         for train_idx, valid_idx in kfold.split(self.dfl.X, self.dfl.y):
             # create X_train
@@ -264,45 +228,56 @@ class TMLT:
             #TODO use early_stopping_rounds = True for XGBoost based Sklearn Pipeline
             self.spl.fit(self.dfl.X_train, self.dfl.y_train)
 
-            #TODO CHANGE HERE FOR multi metrics calculation, i.e. metrics provided in list
-            #evaluate metrics based upon input
-            if "proba" in metrics.__globals__:
-                # predictions on valid dataset
-                metrics_score.append(metrics(self.dfl.y_valid,
-                                               self.spl.predict_proba(self.dfl.X_valid)[:,1]))
-                if self.dfl.X_test is not None:
-                    # prediction probabs on test dataset
+
+            #TO-DO instead of single metrics use list of metrics and calculate mean using dict
+            metric_result = {}
+            for metric in val_preds_metrics:
+                if ("log_loss" in str(metric.__name__)) or ("roc_auc_score" in str(metric.__name__)):
+                    #logger.info("Predicting Probablities!")
+                    preds_probs = self.spl.predict_proba(self.dfl.X_valid)[:, 1]
+                    metric_result[str(metric.__name__)] = metric(self.dfl.y_valid, preds_probs)
+
+                else:
+                    #logger.info("Predicting Score!")
+                    preds = self.spl.predict(self.dfl.X_valid)
+                    metric_result[str(metric.__name__)] = metric(self.dfl.y_valid, preds)
+
+            #now show value of all the given metrics
+            for metric_name, metric_value in metric_result.items():
+                logger.info(f"fold: {n+1} {metric_name} : {metric_value}")
+
+            #now append each kfold metric_result dict to list
+            kfold_metrics_results.append(metric_result)
+
+            #logger.info(f"fold: {n+1} , {str(metrics.__name__)}: {kfold_metrics_results[n]}")
+
+            # for test preds
+            if self.dfl.X_test is not None and test_preds_metric is not None:
+                if ("log_loss" in str(test_preds_metric.__name__)) or ("roc_auc_score" in str(test_preds_metric.__name__)):
+                    logger.info("Predicting Test Preds Probablities!")
                     test_preds += self.spl.predict_proba(self.dfl.X_test)[:,1] / kfold.n_splits
-            else:
-                metrics_score.append(metrics(self.dfl.y_valid,
-                                               self.spl.predict(self.dfl.X_valid)))
-                if self.dfl.X_test is not None:
-                    # predictions on test dataset
+                else:
                     test_preds += self.spl.predict(self.dfl.X_test) / kfold.n_splits
 
-            logger.info(f"fold: {n+1} , {str(metrics.__name__)}: {metrics_score[n]}")
             # In order to better GC, del X_train, X_valid, y_train, y_valid df after each fold is done,
             # they will recreate again next time k-fold is called
             unused_df_lst = [self.dfl.X_train, self.dfl.X_valid, self.dfl.y_train, self.dfl.y_valid]
             del unused_df_lst
+
             # increment fold counter label
             n += 1
 
-        mean_metrics_score = np.mean(metrics_score)
-        logger.info(f" mean metrics score: {mean_metrics_score}")
+        logger.info(f"kfold_metrics_results: {kfold_metrics_results} ")
+        #mean_metrics_score = np.mean(metrics_score)
+        #logger.info(f" mean metrics score: {mean_metrics_score}")
 
-        return metrics_score, test_preds
+        return kfold_metrics_results, test_preds
 
     # do optuna bases study optimization for hyperparmaeter search
-
-    def do_xgb_optuna_optimization(self, metrics, output_dir_path:str, use_gpu=False, opt_trials=100,
+    def do_xgb_optuna_optimization(self, optuna_db_path:str, use_gpu=False, opt_trials=100,
                                    opt_timeout=360):
         """
             This methods returns and do optuna bases study optimization for hyperparmaeter search
-            xgb_eval_metric string reprsenting "mae", "rmse", "logloss"
-            kfold_metrics need to be sklearn metrics object type some of them are:
-                from sklearn.metrics import mean_absolute_error, roc_auc_score,accuracy_score
-            kfold_splits should be int, default is 5
             output_dir_path is output directory you want to use for storing sql db used for optuna
             use_gpu=False by default, make it True if running on gpu machine
             opt_trials=100 by default, change it based upon need
@@ -310,21 +285,20 @@ class TMLT:
 
         """
 
-        # get xgb p
-        xgb_model, use_predict_proba, eval_metric, direction = self.fetch_xgb_model_params()
+        # get params based on problem type
+        xgb_model, val_preds_metrics, eval_metric, direction = self.fetch_problem_type_params()
 
         # Load the dataset in advance for reusing it each trial execution.
         objective = Optuna_Objective(dfl=self.dfl, tmlt=self,
-                                     metrics=metrics,
+                                     val_preds_metrics=val_preds_metrics,
                                      xgb_model=xgb_model,
                                      xgb_eval_metric=eval_metric,
-                                     use_predict_proba=use_predict_proba,
                                      use_gpu=use_gpu)
-        # create sql db in output directory path
-        db_path = os.path.join(output_dir_path, "params.db")
+        # create sql db in optuna db path
+        db_path = os.path.join(optuna_db_path, "params.db")
 
         # now create study
-        logger.info(f"direction is: {direction}")
+        logger.info(f"Optimization Direction is: {direction}")
         study = optuna.create_study(
             direction=direction,
             study_name="tmlt_autoxgb",
@@ -335,27 +309,30 @@ class TMLT:
         return study
 
 
-    # Taken from AutoXGB Library, Thanks to https://github.com/abhishekkrthakur
-    def fetch_xgb_model_params(self):
+    # Idea taken from AutoXGB Library, Thanks to https://github.com/abhishekkrthakur
+    def fetch_problem_type_params(self):
         if self.problem_type == "classification":
             xgb_model = xgboost.XGBClassifier
-            use_predict_proba = True
             direction = "minimize"
             eval_metric = "logloss"
+            val_preds_metrics = [log_loss, roc_auc_score, accuracy_score, f1_score, precision_score, recall_score]
+
+
         elif self.problem_type == "multi_class_classification":
             xgb_model = xgboost.XGBClassifier
-            use_predict_proba = True
             direction = "minimize"
             eval_metric = "mlogloss"
+            val_preds_metrics = [log_loss, roc_auc_score, accuracy_score, f1_score, precision_score, recall_score]
+
         elif self.problem_type == "regression":
             xgb_model = xgboost.XGBRegressor
-            use_predict_proba = False
             direction = "minimize"
             eval_metric = "rmse"
+            val_preds_metrics = [mean_absolute_error, mean_squared_error, r2_score]
         else:
             raise NotImplementedError
 
-        return xgb_model, use_predict_proba, eval_metric, direction
+        return xgb_model, val_preds_metrics, eval_metric, direction
 
     # helper method for updating preprocessor in pipeline
     # to create params value dict from grid_search object

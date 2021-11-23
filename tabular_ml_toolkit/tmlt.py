@@ -7,6 +7,7 @@ from .dataframeloader import *
 from .preprocessor import *
 from .logger import *
 from .optuna_objective import *
+from .utility import *
 
 # Cell
 # hide
@@ -23,11 +24,6 @@ from sklearn.model_selection import cross_val_score, GridSearchCV, StratifiedKFo
 import optuna
 #for XGB
 import xgboost
-
-
-# for displaying diagram of pipelines
-from sklearn import set_config
-set_config(display="diagram")
 
 # for finding n_jobs in all sklearn estimators
 from sklearn.utils import all_estimators
@@ -59,8 +55,8 @@ class TMLT:
         self.spl = None
         self.transformer_type = None
         self.problem_type = None
-        self.has_n_jobs = self.create_has_n_jobs()
-        self.IDEAL_CPU_CORES = self.find_ideal_cpu_cores()
+        self.has_n_jobs = check_has_n_jobs()
+        self.IDEAL_CPU_CORES = find_ideal_cpu_cores()
 
 
     def __str__(self):
@@ -71,26 +67,7 @@ class TMLT:
     def __repr__(self):
         return self.__str__()
 
-    #helper method to find ideal cpu cores
-    def find_ideal_cpu_cores(self):
-        if os.cpu_count() > 2:
-            ideal_cpu_cores = os.cpu_count()-1
-            logger.info(f"{os.cpu_count()} cores found, model and data parallel processing should worked!")
-        else:
-            ideal_cpu_cores = None
-            logger.info(f"{os.cpu_count()} cores found, model and data parallel processing may NOT worked!")
-        return ideal_cpu_cores
-
-    #Helper method to find all sklearn estimators with support for parallelism aka n_jobs
-    def create_has_n_jobs(self):
-        self.has_n_jobs = ['XGBRegressor', 'XGBClassifier']
-        for est in all_estimators():
-            s = inspect.signature(est[1])
-            if 'n_jobs' in s.parameters:
-                self.has_n_jobs.append(est[0])
-        return self.has_n_jobs
-
-    # core methods
+    ## All Core Methods ##
 
     # Bundle preprocessing and modeling code in a training pipeline
     def create_final_sklearn_pipeline(self, transformer_type, model):
@@ -99,7 +76,7 @@ class TMLT:
                    ('model', model)])
         return self.spl
 
-    # Core methods for Simple Training
+    # Main Method to create, load, preprocessed data based upon problem type
     def prepare_data_for_training(self, train_file_path:str,
                                   idx_col:str, target:str,
                                   random_state:int,
@@ -164,7 +141,6 @@ class TMLT:
         self.spl = self.create_final_sklearn_pipeline(transformer_type=self.pp.transformer_type,
                                      model = self.model)
 
-    # HELPER METHODS
     # cross validation
     def do_cross_validation(self, cv:int, scoring:str):
         scores = cross_val_score(
@@ -178,7 +154,7 @@ class TMLT:
             scores = -1 * scores
         return scores
 
-    # Core methods for GridSearch
+    # GridSearch
     def do_grid_search(self, param_grid:object, cv:int,
                        scoring:str, n_jobs=None):
 
@@ -196,11 +172,19 @@ class TMLT:
         return grid_search
 
     # do k-fold training
-    # metrics has to be sklearn metrics object type such as mean_absoulte_error, acccuracy
+    # test_preds_metric has to be a single sklearn metrics object type such as mean_absoulte_error, acccuracy
     def do_kfold_training(self, n_splits:int, test_preds_metric=None, random_state=42):
 
+        """
+            This methods returns kfold_metrics_results and test_preds by doing kfold training
+            test_preds_metric=None by default, takes only single SKLearn Metrics for your test dataset
+            n_splits=5 by default, takes only int value
+            random_sate=42, takes only int value
+
+        """
+
         #fetch problem type params
-        _, val_preds_metrics, _, _ = self.fetch_problem_type_params()
+        _, val_preds_metrics, _, _ = fetch_params_for_problem_type(self.problem_type)
 
         #create stratified K Folds instance
         kfold = StratifiedKFold(n_splits=n_splits,
@@ -211,7 +195,8 @@ class TMLT:
         test_preds = None
         if self.dfl.X_test is not None:
             test_preds = np.zeros(self.dfl.X_test.shape[0])
-        # list contains metrics score for each fold
+
+        # list contains metrics results for each fold
         kfold_metrics_results = []
         n=0
         for train_idx, valid_idx in kfold.split(self.dfl.X, self.dfl.y):
@@ -249,7 +234,6 @@ class TMLT:
             #now append each kfold metric_result dict to list
             kfold_metrics_results.append(metric_result)
 
-            #logger.info(f"fold: {n+1} , {str(metrics.__name__)}: {kfold_metrics_results[n]}")
 
             # for test preds
             if self.dfl.X_test is not None and test_preds_metric is not None:
@@ -258,6 +242,8 @@ class TMLT:
                     test_preds += self.spl.predict_proba(self.dfl.X_test)[:,1] / kfold.n_splits
                 else:
                     test_preds += self.spl.predict(self.dfl.X_test) / kfold.n_splits
+            elif self.dfl.X_test is None:
+                logger.warn(f"Trying to do Test Predictions but No Test Dataset Provided!")
 
             # In order to better GC, del X_train, X_valid, y_train, y_valid df after each fold is done,
             # they will recreate again next time k-fold is called
@@ -267,18 +253,18 @@ class TMLT:
             # increment fold counter label
             n += 1
 
-        logger.info(f"kfold_metrics_results: {kfold_metrics_results} ")
-        #mean_metrics_score = np.mean(metrics_score)
-        #logger.info(f" mean metrics score: {mean_metrics_score}")
+        #logger.info(f"kfold_metrics_results: {kfold_metrics_results} ")
+        mean_metrics_results = kfold_dict_mean(kfold_metrics_results)
+        logger.info(f" Mean Metrics Results from all Folds are: {mean_metrics_results}")
 
-        return kfold_metrics_results, test_preds
+        return mean_metrics_results, test_preds
 
-    # do optuna bases study optimization for hyperparmaeter search
+    # Do optuna bases study optimization for hyperparmaeter search
     def do_xgb_optuna_optimization(self, optuna_db_path:str, use_gpu=False, opt_trials=100,
                                    opt_timeout=360):
         """
             This methods returns and do optuna bases study optimization for hyperparmaeter search
-            output_dir_path is output directory you want to use for storing sql db used for optuna
+            optuna_db_path is output directory you want to use for storing sql db used for optuna
             use_gpu=False by default, make it True if running on gpu machine
             opt_trials=100 by default, change it based upon need
             opt_timeout=360 by default, timeout value in seconds
@@ -286,7 +272,7 @@ class TMLT:
         """
 
         # get params based on problem type
-        xgb_model, val_preds_metrics, eval_metric, direction = self.fetch_problem_type_params()
+        xgb_model, val_preds_metrics, eval_metric, direction = fetch_params_for_problem_type(self.problem_type)
 
         # Load the dataset in advance for reusing it each trial execution.
         objective = Optuna_Objective(dfl=self.dfl, tmlt=self,
@@ -309,33 +295,7 @@ class TMLT:
         return study
 
 
-    # Idea taken from AutoXGB Library, Thanks to https://github.com/abhishekkrthakur
-    def fetch_problem_type_params(self):
-        if self.problem_type == "classification":
-            xgb_model = xgboost.XGBClassifier
-            direction = "minimize"
-            eval_metric = "logloss"
-            val_preds_metrics = [log_loss, roc_auc_score, accuracy_score, f1_score, precision_score, recall_score]
-
-
-        elif self.problem_type == "multi_class_classification":
-            xgb_model = xgboost.XGBClassifier
-            direction = "minimize"
-            eval_metric = "mlogloss"
-            val_preds_metrics = [log_loss, roc_auc_score, accuracy_score, f1_score, precision_score, recall_score]
-
-        elif self.problem_type == "regression":
-            xgb_model = xgboost.XGBRegressor
-            direction = "minimize"
-            eval_metric = "rmse"
-            val_preds_metrics = [mean_absolute_error, mean_squared_error, r2_score]
-        else:
-            raise NotImplementedError
-
-        return xgb_model, val_preds_metrics, eval_metric, direction
-
-    # helper method for updating preprocessor in pipeline
-    # to create params value dict from grid_search object
+    # helper methods for users before updating preprocessor in pipeline
     def get_preprocessor_best_params_from_grid_search(self, grid_search_object:object):
         pp_best_params = {}
         for k in grid_search_object.best_params_:
@@ -345,7 +305,7 @@ class TMLT:
                 pp_best_params[key] = grid_search_object.best_params_[k]
         return pp_best_params
 
-    # helper method for update_model
+    # helper methods for users before updating model in pipeline
     def get_model_best_params_from_grid_search(self, grid_search_object:object):
         model_best_params = {}
         for k in grid_search_object.best_params_:

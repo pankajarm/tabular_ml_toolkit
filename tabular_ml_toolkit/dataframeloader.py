@@ -4,6 +4,13 @@ __all__ = ['DataFrameLoader']
 
 # Cell
 # hide
+# import pandas as pd
+from sklearn.model_selection import train_test_split
+import numpy as np
+from .logger import *
+
+# Cell
+# hide
 
 #settings for modin
 import ray
@@ -11,13 +18,6 @@ ray.init()
 import os
 os.environ["MODIN_ENGINE"] = "ray"
 import modin.pandas as pd
-
-# Cell
-# hide
-# import pandas as pd
-from sklearn.model_selection import train_test_split
-import numpy as np
-from .logger import *
 
 # Cell
 
@@ -104,7 +104,8 @@ class DataFrameLoader:
             self.shape_X_full = self.X_full.shape
             self.X_full = self.reduce_num_dtype_mem_usage(self.X_full, verbose=True)
         else:
-            logger.info(f"Not valid train_file_path, input provided: {train_file_path}")
+            logger.warn(f"No valid train_file_path provided: {train_file_path}")
+
         if test_file_path is not None:
             self.X_test = pd.read_csv(test_file_path, index_col=idx_col, nrows=nrows)
             self.shape_X_test = self.X_test.shape

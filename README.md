@@ -60,15 +60,6 @@ tmlt = TMLT().prepare_data_for_training(
     problem_type="regression")
 ```
 
-    2021-11-23 01:06:20,944 INFO 12 cores found, model and data parallel processing should worked!
-    UserWarning: `read_*` implementation has mismatches with pandas:
-    Data types of partitions are different! Please refer to the troubleshooting section of the Modin documentation to fix this issue.
-    UserWarning: Distributing <class 'int'> object. This may take some time.
-    2021-11-23 01:06:26,974 INFO DataFrame Memory usage decreased to 0.58 Mb (35.5% reduction)
-    2021-11-23 01:06:32,382 INFO DataFrame Memory usage decreased to 0.58 Mb (34.8% reduction)
-    2021-11-23 01:06:39,877 INFO Both Numerical & Categorical columns found, Preprocessing will done accordingly!
-
-
 ```
 # create train, valid split to evaulate model on valid dataset
 tmlt.dfl.create_train_valid(valid_size=0.2)
@@ -83,10 +74,6 @@ print("Fit Time:", end - start)
 preds = tmlt.spl.predict(tmlt.dfl.X_valid)
 print('X_valid MAE:', mean_absolute_error(tmlt.dfl.y_valid, preds))
 ```
-
-    Fit Time: 0.5916149616241455
-    X_valid MAE: 15936.53249411387
-
 
 In background `prepare_data_for_training` method loads your input data into Pandas DataFrame, seprates X(features) and y(target).
 
@@ -113,12 +100,6 @@ print("Cross Validation Time:", end - start)
 print("scores:", scores)
 print("Average MAE score:", scores.mean())
 ```
-
-    Cross Validation Time: 3.3441898822784424
-    scores: [15752.16827643 16405.26146458 16676.95384739 14588.82684075
-     17320.45218857]
-    Average MAE score: 16148.73252354452
-
 
 *MAE did came out slightly bad with cross validation*
 

@@ -7,13 +7,18 @@ index = {"DataFrameLoader": "00_dataframeloader.ipynb",
          "TMLT": "02_tmlt.ipynb",
          "Optuna_Objective": "04_optuna_objective.ipynb",
          "handler": "logger.ipynb",
-         "logger": "logger.ipynb"}
+         "logger": "logger.ipynb",
+         "find_ideal_cpu_cores": "utility.ipynb",
+         "check_has_n_jobs": "utility.ipynb",
+         "fetch_params_for_problem_type": "utility.ipynb",
+         "kfold_dict_mean": "utility.ipynb"}
 
 modules = ["dataframeloader.py",
            "preprocessor.py",
            "tmlt.py",
            "optuna_objective.py",
-           "logger.py"]
+           "logger.py",
+           "utility.py"]
 
 doc_url = "https://psmathur.github.io/tabular_ml_toolkit/"
 

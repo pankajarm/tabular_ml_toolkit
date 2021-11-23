@@ -95,6 +95,23 @@ nb_path: "13_Kaggle_TPS_Tutorial.ipynb"
 
 <div class="inner_cell">
     <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">roc_auc_score</span><span class="p">,</span> <span class="n">accuracy_score</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">DIRECTORY_PATH</span> <span class="o">=</span> <span class="s2">&quot;/Users/pamathur/kaggle_datasets/tps_nov_2021/&quot;</span>
 <span class="n">TRAIN_FILE</span> <span class="o">=</span> <span class="s2">&quot;train.csv&quot;</span>
 <span class="n">TEST_FILE</span> <span class="o">=</span> <span class="s2">&quot;test.csv&quot;</span>
@@ -173,10 +190,8 @@ nb_path: "13_Kaggle_TPS_Tutorial.ipynb"
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-23 00:58:11,440 INFO 12 cores found, model and data parallel processing should worked!
+<pre>2021-11-23 12:31:18,593 INFO 12 cores found, model and data parallel processing should worked!
 UserWarning: Distributing &lt;class &#39;int&#39;&gt; object. This may take some time.
-2021-11-23 00:58:28,221 INFO DataFrame Memory usage decreased to 0.80 Mb (74.4% reduction)
-2021-11-23 00:58:28,221 INFO No test_file_path given, so training will continue without it!
 </pre>
 </div>
 </div>
@@ -184,9 +199,7 @@ UserWarning: Distributing &lt;class &#39;int&#39;&gt; object. This may take some
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre><span class="ansi-cyan-fg">(apply_list_of_funcs pid=96618)</span> 
-<span class="ansi-cyan-fg">(compute_sliced_len pid=96615)</span> 
-<span class="ansi-cyan-fg">(apply_func pid=96617)</span> 
+<pre><span class="ansi-cyan-fg">(apply_func pid=11568)</span> 
 </pre>
 </div>
 </div>
@@ -194,8 +207,25 @@ UserWarning: Distributing &lt;class &#39;int&#39;&gt; object. This may take some
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-23 00:58:37,460 INFO PreProcessing will include target(s) encoding!
-2021-11-23 00:58:37,461 INFO categorical columns are None, Preprocessing will done accordingly!
+<pre>2021-11-23 12:31:35,384 INFO DataFrame Memory usage decreased to 0.80 Mb (74.4% reduction)
+2021-11-23 12:31:35,384 INFO No test_file_path given, so training will continue without it!
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre><span class="ansi-cyan-fg">(compute_sliced_len pid=11577)</span> 
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>2021-11-23 12:31:44,619 INFO PreProcessing will include target(s) encoding!
+2021-11-23 12:31:44,620 INFO categorical columns are None, Preprocessing will done accordingly!
 </pre>
 </div>
 </div>
@@ -227,7 +257,7 @@ UserWarning: Distributing &lt;class &#39;int&#39;&gt; object. This may take some
 
 
 <div class="output_html rendered_html output_subarea output_execute_result">
-<style>#sk-c745d731-9528-4eb5-9634-7f7204c519fb {color: black;background-color: white;}#sk-c745d731-9528-4eb5-9634-7f7204c519fb pre{padding: 0;}#sk-c745d731-9528-4eb5-9634-7f7204c519fb div.sk-toggleable {background-color: white;}#sk-c745d731-9528-4eb5-9634-7f7204c519fb label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.3em;box-sizing: border-box;text-align: center;}#sk-c745d731-9528-4eb5-9634-7f7204c519fb div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}#sk-c745d731-9528-4eb5-9634-7f7204c519fb div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}#sk-c745d731-9528-4eb5-9634-7f7204c519fb input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}#sk-c745d731-9528-4eb5-9634-7f7204c519fb div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-c745d731-9528-4eb5-9634-7f7204c519fb div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-c745d731-9528-4eb5-9634-7f7204c519fb input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}#sk-c745d731-9528-4eb5-9634-7f7204c519fb div.sk-estimator {font-family: monospace;background-color: #f0f8ff;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;margin-bottom: 0.5em;}#sk-c745d731-9528-4eb5-9634-7f7204c519fb div.sk-estimator:hover {background-color: #d4ebff;}#sk-c745d731-9528-4eb5-9634-7f7204c519fb div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}#sk-c745d731-9528-4eb5-9634-7f7204c519fb div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}#sk-c745d731-9528-4eb5-9634-7f7204c519fb div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}#sk-c745d731-9528-4eb5-9634-7f7204c519fb div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;padding-right: 0.2em;padding-left: 0.2em;}#sk-c745d731-9528-4eb5-9634-7f7204c519fb div.sk-item {z-index: 1;}#sk-c745d731-9528-4eb5-9634-7f7204c519fb div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}#sk-c745d731-9528-4eb5-9634-7f7204c519fb div.sk-parallel::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}#sk-c745d731-9528-4eb5-9634-7f7204c519fb div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}#sk-c745d731-9528-4eb5-9634-7f7204c519fb div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}#sk-c745d731-9528-4eb5-9634-7f7204c519fb div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}#sk-c745d731-9528-4eb5-9634-7f7204c519fb div.sk-parallel-item:only-child::after {width: 0;}#sk-c745d731-9528-4eb5-9634-7f7204c519fb div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0 0.4em 0.5em 0.4em;box-sizing: border-box;padding-bottom: 0.4em;background-color: white;position: relative;}#sk-c745d731-9528-4eb5-9634-7f7204c519fb div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}#sk-c745d731-9528-4eb5-9634-7f7204c519fb div.sk-label-container {position: relative;z-index: 2;text-align: center;}#sk-c745d731-9528-4eb5-9634-7f7204c519fb div.sk-container {display: inline-block;position: relative;}</style><div id="sk-c745d731-9528-4eb5-9634-7f7204c519fb" class"sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="219ed3b2-b4db-492b-b33c-1641199b2894" type="checkbox" ><label class="sk-toggleable__label" for="219ed3b2-b4db-492b-b33c-1641199b2894">Pipeline</label><div class="sk-toggleable__content"><pre>Pipeline(steps=[('preprocessor',
+<style>#sk-268cd50d-1260-416a-8b9f-445aab6f50c5 {color: black;background-color: white;}#sk-268cd50d-1260-416a-8b9f-445aab6f50c5 pre{padding: 0;}#sk-268cd50d-1260-416a-8b9f-445aab6f50c5 div.sk-toggleable {background-color: white;}#sk-268cd50d-1260-416a-8b9f-445aab6f50c5 label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.3em;box-sizing: border-box;text-align: center;}#sk-268cd50d-1260-416a-8b9f-445aab6f50c5 div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}#sk-268cd50d-1260-416a-8b9f-445aab6f50c5 div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}#sk-268cd50d-1260-416a-8b9f-445aab6f50c5 input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}#sk-268cd50d-1260-416a-8b9f-445aab6f50c5 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-268cd50d-1260-416a-8b9f-445aab6f50c5 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-268cd50d-1260-416a-8b9f-445aab6f50c5 input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}#sk-268cd50d-1260-416a-8b9f-445aab6f50c5 div.sk-estimator {font-family: monospace;background-color: #f0f8ff;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;margin-bottom: 0.5em;}#sk-268cd50d-1260-416a-8b9f-445aab6f50c5 div.sk-estimator:hover {background-color: #d4ebff;}#sk-268cd50d-1260-416a-8b9f-445aab6f50c5 div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}#sk-268cd50d-1260-416a-8b9f-445aab6f50c5 div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}#sk-268cd50d-1260-416a-8b9f-445aab6f50c5 div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}#sk-268cd50d-1260-416a-8b9f-445aab6f50c5 div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;padding-right: 0.2em;padding-left: 0.2em;}#sk-268cd50d-1260-416a-8b9f-445aab6f50c5 div.sk-item {z-index: 1;}#sk-268cd50d-1260-416a-8b9f-445aab6f50c5 div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}#sk-268cd50d-1260-416a-8b9f-445aab6f50c5 div.sk-parallel::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}#sk-268cd50d-1260-416a-8b9f-445aab6f50c5 div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}#sk-268cd50d-1260-416a-8b9f-445aab6f50c5 div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}#sk-268cd50d-1260-416a-8b9f-445aab6f50c5 div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}#sk-268cd50d-1260-416a-8b9f-445aab6f50c5 div.sk-parallel-item:only-child::after {width: 0;}#sk-268cd50d-1260-416a-8b9f-445aab6f50c5 div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0 0.4em 0.5em 0.4em;box-sizing: border-box;padding-bottom: 0.4em;background-color: white;position: relative;}#sk-268cd50d-1260-416a-8b9f-445aab6f50c5 div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}#sk-268cd50d-1260-416a-8b9f-445aab6f50c5 div.sk-label-container {position: relative;z-index: 2;text-align: center;}#sk-268cd50d-1260-416a-8b9f-445aab6f50c5 div.sk-container {display: inline-block;position: relative;}</style><div id="sk-268cd50d-1260-416a-8b9f-445aab6f50c5" class"sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="1460e4a4-8162-496c-9dcf-2139be5d3ba0" type="checkbox" ><label class="sk-toggleable__label" for="1460e4a4-8162-496c-9dcf-2139be5d3ba0">Pipeline</label><div class="sk-toggleable__content"><pre>Pipeline(steps=[('preprocessor',
                  ColumnTransformer(transformers=[('num_cols',
                                                   Pipeline(steps=[('imputer',
                                                                    SimpleImputer(strategy='constant')),
@@ -250,7 +280,7 @@ UserWarning: Distributing &lt;class &#39;int&#39;&gt; object. This may take some
                                reg_lambda=None, scale_pos_weight=None,
                                subsample=None, tree_method=None,
                                use_label_encoder=False,
-                               validate_parameters=None, verbosity=None))])</pre></div></div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="725715b8-d2a9-47e9-bcce-1d75cccc603f" type="checkbox" ><label class="sk-toggleable__label" for="725715b8-d2a9-47e9-bcce-1d75cccc603f">preprocessor: ColumnTransformer</label><div class="sk-toggleable__content"><pre>ColumnTransformer(transformers=[('num_cols',
+                               validate_parameters=None, verbosity=None))])</pre></div></div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="233f9429-846d-4fbf-a023-ce07c76432d8" type="checkbox" ><label class="sk-toggleable__label" for="233f9429-846d-4fbf-a023-ce07c76432d8">preprocessor: ColumnTransformer</label><div class="sk-toggleable__content"><pre>ColumnTransformer(transformers=[('num_cols',
                                  Pipeline(steps=[('imputer',
                                                   SimpleImputer(strategy='constant')),
                                                  ('scaler', StandardScaler())]),
@@ -258,7 +288,7 @@ UserWarning: Distributing &lt;class &#39;int&#39;&gt; object. This may take some
                                   'f7', 'f8', 'f9', 'f10', 'f11', 'f12', 'f13',
                                   'f14', 'f15', 'f16', 'f17', 'f18', 'f19',
                                   'f20', 'f21', 'f22', 'f23', 'f24', 'f25',
-                                  'f26', 'f27', 'f28', 'f29', ...])])</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="c0440855-b9a3-428a-832a-9f0a19e34e2f" type="checkbox" ><label class="sk-toggleable__label" for="c0440855-b9a3-428a-832a-9f0a19e34e2f">num_cols</label><div class="sk-toggleable__content"><pre>['f0', 'f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8', 'f9', 'f10', 'f11', 'f12', 'f13', 'f14', 'f15', 'f16', 'f17', 'f18', 'f19', 'f20', 'f21', 'f22', 'f23', 'f24', 'f25', 'f26', 'f27', 'f28', 'f29', 'f30', 'f31', 'f32', 'f33', 'f34', 'f35', 'f36', 'f37', 'f38', 'f39', 'f40', 'f41', 'f42', 'f43', 'f44', 'f45', 'f46', 'f47', 'f48', 'f49', 'f50', 'f51', 'f52', 'f53', 'f54', 'f55', 'f56', 'f57', 'f58', 'f59', 'f60', 'f61', 'f62', 'f63', 'f64', 'f65', 'f66', 'f67', 'f68', 'f69', 'f70', 'f71', 'f72', 'f73', 'f74', 'f75', 'f76', 'f77', 'f78', 'f79', 'f80', 'f81', 'f82', 'f83', 'f84', 'f85', 'f86', 'f87', 'f88', 'f89', 'f90', 'f91', 'f92', 'f93', 'f94', 'f95', 'f96', 'f97', 'f98', 'f99']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="9aae87fe-f4b6-4882-b33c-2831778a7696" type="checkbox" ><label class="sk-toggleable__label" for="9aae87fe-f4b6-4882-b33c-2831778a7696">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(strategy='constant')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="d2c32da5-e994-4f06-a8f9-bcd5344b72e9" type="checkbox" ><label class="sk-toggleable__label" for="d2c32da5-e994-4f06-a8f9-bcd5344b72e9">StandardScaler</label><div class="sk-toggleable__content"><pre>StandardScaler()</pre></div></div></div></div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="7957a211-1998-4cc0-b5a2-118e3518c44a" type="checkbox" ><label class="sk-toggleable__label" for="7957a211-1998-4cc0-b5a2-118e3518c44a">XGBClassifier</label><div class="sk-toggleable__content"><pre>XGBClassifier(base_score=None, booster=None, colsample_bylevel=None,
+                                  'f26', 'f27', 'f28', 'f29', ...])])</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="a5a8d952-949f-4d96-a81d-aa0c07d28039" type="checkbox" ><label class="sk-toggleable__label" for="a5a8d952-949f-4d96-a81d-aa0c07d28039">num_cols</label><div class="sk-toggleable__content"><pre>['f0', 'f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8', 'f9', 'f10', 'f11', 'f12', 'f13', 'f14', 'f15', 'f16', 'f17', 'f18', 'f19', 'f20', 'f21', 'f22', 'f23', 'f24', 'f25', 'f26', 'f27', 'f28', 'f29', 'f30', 'f31', 'f32', 'f33', 'f34', 'f35', 'f36', 'f37', 'f38', 'f39', 'f40', 'f41', 'f42', 'f43', 'f44', 'f45', 'f46', 'f47', 'f48', 'f49', 'f50', 'f51', 'f52', 'f53', 'f54', 'f55', 'f56', 'f57', 'f58', 'f59', 'f60', 'f61', 'f62', 'f63', 'f64', 'f65', 'f66', 'f67', 'f68', 'f69', 'f70', 'f71', 'f72', 'f73', 'f74', 'f75', 'f76', 'f77', 'f78', 'f79', 'f80', 'f81', 'f82', 'f83', 'f84', 'f85', 'f86', 'f87', 'f88', 'f89', 'f90', 'f91', 'f92', 'f93', 'f94', 'f95', 'f96', 'f97', 'f98', 'f99']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="37884e8b-6d3a-42f4-809b-ebb1bcb4a3ae" type="checkbox" ><label class="sk-toggleable__label" for="37884e8b-6d3a-42f4-809b-ebb1bcb4a3ae">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(strategy='constant')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="f4ee246b-8c3f-440f-8327-1326b886c164" type="checkbox" ><label class="sk-toggleable__label" for="f4ee246b-8c3f-440f-8327-1326b886c164">StandardScaler</label><div class="sk-toggleable__content"><pre>StandardScaler()</pre></div></div></div></div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="a787a942-9532-4af1-8d7f-27176aa4b7ab" type="checkbox" ><label class="sk-toggleable__label" for="a787a942-9532-4af1-8d7f-27176aa4b7ab">XGBClassifier</label><div class="sk-toggleable__content"><pre>XGBClassifier(base_score=None, booster=None, colsample_bylevel=None,
               colsample_bynode=None, colsample_bytree=None,
               enable_categorical=False, eval_metric='auc', gamma=None,
               gpu_id=None, importance_type=None, interaction_constraints=None,
@@ -296,6 +326,20 @@ UserWarning: Distributing &lt;class &#39;int&#39;&gt; object. This may take some
 </pre></div>
 
     </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre><span class="ansi-cyan-fg">(apply_list_of_funcs pid=11577)</span> 
+</pre>
+</div>
+</div>
+
 </div>
 </div>
 
@@ -346,23 +390,6 @@ y_valid shape is (800,)
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <span class="n">roc_auc_score</span><span class="p">,</span> <span class="n">accuracy_score</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
 <span class="c1"># Now fit</span>
 <span class="n">tmlt</span><span class="o">.</span><span class="n">spl</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_train</span><span class="p">,</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_train</span><span class="p">)</span>
@@ -390,9 +417,12 @@ y_valid shape is (800,)
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre><span class="ansi-cyan-fg">(apply_list_of_funcs pid=96613)</span> 
-Fit Time: 6.31636905670166
-<span class="ansi-cyan-fg">(compute_sliced_len pid=96613)</span> 
+<pre><span class="ansi-cyan-fg">(apply_list_of_funcs pid=11577)</span> 
+Fit Time: 6.2348151206970215
+<span class="ansi-cyan-fg">(compute_sliced_len pid=11578)</span> 
+<span class="ansi-cyan-fg">(compute_sliced_len pid=11574)</span> 
+<span class="ansi-cyan-fg">(apply_list_of_funcs pid=11574)</span> 
+<span class="ansi-cyan-fg">(apply_list_of_funcs pid=11574)</span> 
 AUC is : 0.6137947418435223 while Accuracy is : 0.6175 
 </pre>
 </div>
@@ -484,7 +514,7 @@ AUC is : 0.6137947418435223 while Accuracy is : 0.6175
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">xgb_model_preds_metrics_score</span><span class="p">,</span> <span class="n">xgb_model_test_preds</span><span class="o">=</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">do_kfold_training</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">xgb_model_mean_metrics_results</span><span class="p">,</span> <span class="n">xgb_model_test_preds</span><span class="o">=</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">do_kfold_training</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
                                                                             <span class="n">test_preds_metric</span><span class="o">=</span><span class="n">roc_auc_score</span><span class="p">)</span>
 <span class="k">if</span> <span class="n">xgb_model_test_preds</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">xgb_model_test_preds</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
@@ -500,10 +530,14 @@ AUC is : 0.6137947418435223 while Accuracy is : 0.6175
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre><span class="ansi-cyan-fg">(apply_list_of_funcs pid=96615)</span> 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=96617)</span> 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=96618)</span> 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=96609)</span> 
+<pre><span class="ansi-cyan-fg">(apply_list_of_funcs pid=11574)</span> 
+<span class="ansi-cyan-fg">(apply_list_of_funcs pid=11569)</span> 
+<span class="ansi-cyan-fg">(apply_list_of_funcs pid=11572)</span> 
+<span class="ansi-cyan-fg">(apply_list_of_funcs pid=11573)</span> 
+<span class="ansi-cyan-fg">(apply_list_of_funcs pid=11569)</span> 
+<span class="ansi-cyan-fg">(apply_list_of_funcs pid=11575)</span> 
+<span class="ansi-cyan-fg">(apply_list_of_funcs pid=11569)</span> 
+<span class="ansi-cyan-fg">(apply_list_of_funcs pid=11578)</span> 
 </pre>
 </div>
 </div>
@@ -511,12 +545,13 @@ AUC is : 0.6137947418435223 while Accuracy is : 0.6175
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-23 00:59:45,633 INFO fold: 1 log_loss : 0.6621403547748923
-2021-11-23 00:59:45,634 INFO fold: 1 roc_auc_score : 0.6182978723404255
-2021-11-23 00:59:45,635 INFO fold: 1 accuracy_score : 0.605
-2021-11-23 00:59:45,635 INFO fold: 1 f1_score : 0.3629032258064516
-2021-11-23 00:59:45,636 INFO fold: 1 precision_score : 0.5421686746987951
-2021-11-23 00:59:45,637 INFO fold: 1 recall_score : 0.2727272727272727
+<pre>2021-11-23 12:32:21,719 INFO fold: 1 log_loss : 0.6621403547748923
+2021-11-23 12:32:21,720 INFO fold: 1 roc_auc_score : 0.6182978723404255
+2021-11-23 12:32:21,721 INFO fold: 1 accuracy_score : 0.605
+2021-11-23 12:32:21,721 INFO fold: 1 f1_score : 0.3629032258064516
+2021-11-23 12:32:21,722 INFO fold: 1 precision_score : 0.5421686746987951
+2021-11-23 12:32:21,723 INFO fold: 1 recall_score : 0.2727272727272727
+2021-11-23 12:32:21,724 WARNING Trying to do Test Predictions but No Test Dataset Provided!
 </pre>
 </div>
 </div>
@@ -524,9 +559,10 @@ AUC is : 0.6137947418435223 while Accuracy is : 0.6175
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre><span class="ansi-cyan-fg">(apply_list_of_funcs pid=96614)</span> 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=96608)</span> 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=96612)</span> 
+<pre><span class="ansi-cyan-fg">(apply_list_of_funcs pid=11568)</span> 
+<span class="ansi-cyan-fg">(apply_list_of_funcs pid=11570)</span> 
+<span class="ansi-cyan-fg">(apply_list_of_funcs pid=11572)</span> 
+<span class="ansi-cyan-fg">(apply_list_of_funcs pid=11573)</span> 
 </pre>
 </div>
 </div>
@@ -534,12 +570,13 @@ AUC is : 0.6137947418435223 while Accuracy is : 0.6175
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-23 01:00:03,036 INFO fold: 2 log_loss : 0.6640257256105542
-2021-11-23 01:00:03,037 INFO fold: 2 roc_auc_score : 0.6078916827852998
-2021-11-23 01:00:03,037 INFO fold: 2 accuracy_score : 0.61875
-2021-11-23 01:00:03,038 INFO fold: 2 f1_score : 0.38383838383838387
-2021-11-23 01:00:03,039 INFO fold: 2 precision_score : 0.5757575757575758
-2021-11-23 01:00:03,040 INFO fold: 2 recall_score : 0.2878787878787879
+<pre>2021-11-23 12:32:38,363 INFO fold: 2 log_loss : 0.6640257256105542
+2021-11-23 12:32:38,364 INFO fold: 2 roc_auc_score : 0.6078916827852998
+2021-11-23 12:32:38,365 INFO fold: 2 accuracy_score : 0.61875
+2021-11-23 12:32:38,365 INFO fold: 2 f1_score : 0.38383838383838387
+2021-11-23 12:32:38,366 INFO fold: 2 precision_score : 0.5757575757575758
+2021-11-23 12:32:38,367 INFO fold: 2 recall_score : 0.2878787878787879
+2021-11-23 12:32:38,368 WARNING Trying to do Test Predictions but No Test Dataset Provided!
 </pre>
 </div>
 </div>
@@ -547,13 +584,9 @@ AUC is : 0.6137947418435223 while Accuracy is : 0.6175
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre><span class="ansi-cyan-fg">(apply_list_of_funcs pid=96615)</span> 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=96613)</span> 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=96613)</span> 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=96611)</span> 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=96613)</span> 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=96609)</span> 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=96612)</span> 
+<pre><span class="ansi-cyan-fg">(apply_list_of_funcs pid=11570)</span> 
+<span class="ansi-cyan-fg">(apply_list_of_funcs pid=11568)</span> 
+<span class="ansi-cyan-fg">(apply_list_of_funcs pid=11571)</span> 
 </pre>
 </div>
 </div>
@@ -561,12 +594,13 @@ AUC is : 0.6137947418435223 while Accuracy is : 0.6175
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-23 01:00:19,239 INFO fold: 3 log_loss : 0.662113243713975
-2021-11-23 01:00:19,240 INFO fold: 3 roc_auc_score : 0.6047582205029014
-2021-11-23 01:00:19,241 INFO fold: 3 accuracy_score : 0.6225
-2021-11-23 01:00:19,242 INFO fold: 3 f1_score : 0.37860082304526754
-2021-11-23 01:00:19,242 INFO fold: 3 precision_score : 0.5897435897435898
-2021-11-23 01:00:19,243 INFO fold: 3 recall_score : 0.2787878787878788
+<pre>2021-11-23 12:32:54,770 INFO fold: 3 log_loss : 0.662113243713975
+2021-11-23 12:32:54,771 INFO fold: 3 roc_auc_score : 0.6047582205029014
+2021-11-23 12:32:54,772 INFO fold: 3 accuracy_score : 0.6225
+2021-11-23 12:32:54,772 INFO fold: 3 f1_score : 0.37860082304526754
+2021-11-23 12:32:54,773 INFO fold: 3 precision_score : 0.5897435897435898
+2021-11-23 12:32:54,774 INFO fold: 3 recall_score : 0.2787878787878788
+2021-11-23 12:32:54,775 WARNING Trying to do Test Predictions but No Test Dataset Provided!
 </pre>
 </div>
 </div>
@@ -574,9 +608,11 @@ AUC is : 0.6137947418435223 while Accuracy is : 0.6175
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre><span class="ansi-cyan-fg">(apply_list_of_funcs pid=96613)</span> 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=96616)</span> 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=96609)</span> 
+<pre><span class="ansi-cyan-fg">(apply_list_of_funcs pid=11576)</span> 
+<span class="ansi-cyan-fg">(apply_list_of_funcs pid=11576)</span> 
+<span class="ansi-cyan-fg">(apply_list_of_funcs pid=11568)</span> 
+<span class="ansi-cyan-fg">(apply_list_of_funcs pid=11579)</span> 
+<span class="ansi-cyan-fg">(apply_list_of_funcs pid=11570)</span> 
 </pre>
 </div>
 </div>
@@ -584,12 +620,13 @@ AUC is : 0.6137947418435223 while Accuracy is : 0.6175
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-23 01:00:36,864 INFO fold: 4 log_loss : 0.6577297036349773
-2021-11-23 01:00:36,864 INFO fold: 4 roc_auc_score : 0.6376876944582225
-2021-11-23 01:00:36,865 INFO fold: 4 accuracy_score : 0.63375
-2021-11-23 01:00:36,866 INFO fold: 4 f1_score : 0.40325865580448067
-2021-11-23 01:00:36,867 INFO fold: 4 precision_score : 0.61875
-2021-11-23 01:00:36,868 INFO fold: 4 recall_score : 0.2990936555891239
+<pre>2021-11-23 12:33:12,233 INFO fold: 4 log_loss : 0.6577297036349773
+2021-11-23 12:33:12,233 INFO fold: 4 roc_auc_score : 0.6376876944582225
+2021-11-23 12:33:12,234 INFO fold: 4 accuracy_score : 0.63375
+2021-11-23 12:33:12,235 INFO fold: 4 f1_score : 0.40325865580448067
+2021-11-23 12:33:12,235 INFO fold: 4 precision_score : 0.61875
+2021-11-23 12:33:12,236 INFO fold: 4 recall_score : 0.2990936555891239
+2021-11-23 12:33:12,237 WARNING Trying to do Test Predictions but No Test Dataset Provided!
 </pre>
 </div>
 </div>
@@ -597,8 +634,11 @@ AUC is : 0.6137947418435223 while Accuracy is : 0.6175
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre><span class="ansi-cyan-fg">(apply_list_of_funcs pid=96608)</span> 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=96608)</span> 
+<pre><span class="ansi-cyan-fg">(apply_list_of_funcs pid=11574)</span> 
+<span class="ansi-cyan-fg">(apply_list_of_funcs pid=11570)</span> 
+<span class="ansi-cyan-fg">(apply_list_of_funcs pid=11568)</span> 
+<span class="ansi-cyan-fg">(apply_list_of_funcs pid=11569)</span> 
+<span class="ansi-cyan-fg">(apply_list_of_funcs pid=11570)</span> 
 </pre>
 </div>
 </div>
@@ -606,21 +646,14 @@ AUC is : 0.6137947418435223 while Accuracy is : 0.6175
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-23 01:00:54,497 INFO fold: 5 log_loss : 0.6580264708772302
-2021-11-23 01:00:54,498 INFO fold: 5 roc_auc_score : 0.6333331186106584
-2021-11-23 01:00:54,499 INFO fold: 5 accuracy_score : 0.60875
-2021-11-23 01:00:54,499 INFO fold: 5 f1_score : 0.37274549098196397
-2021-11-23 01:00:54,500 INFO fold: 5 precision_score : 0.5535714285714286
-2021-11-23 01:00:54,501 INFO fold: 5 recall_score : 0.2809667673716012
-2021-11-23 01:00:54,502 INFO kfold_metrics_results: [{&#39;log_loss&#39;: 0.6621403547748923, &#39;roc_auc_score&#39;: 0.6182978723404255, &#39;accuracy_score&#39;: 0.605, &#39;f1_score&#39;: 0.3629032258064516, &#39;precision_score&#39;: 0.5421686746987951, &#39;recall_score&#39;: 0.2727272727272727}, {&#39;log_loss&#39;: 0.6640257256105542, &#39;roc_auc_score&#39;: 0.6078916827852998, &#39;accuracy_score&#39;: 0.61875, &#39;f1_score&#39;: 0.38383838383838387, &#39;precision_score&#39;: 0.5757575757575758, &#39;recall_score&#39;: 0.2878787878787879}, {&#39;log_loss&#39;: 0.662113243713975, &#39;roc_auc_score&#39;: 0.6047582205029014, &#39;accuracy_score&#39;: 0.6225, &#39;f1_score&#39;: 0.37860082304526754, &#39;precision_score&#39;: 0.5897435897435898, &#39;recall_score&#39;: 0.2787878787878788}, {&#39;log_loss&#39;: 0.6577297036349773, &#39;roc_auc_score&#39;: 0.6376876944582225, &#39;accuracy_score&#39;: 0.63375, &#39;f1_score&#39;: 0.40325865580448067, &#39;precision_score&#39;: 0.61875, &#39;recall_score&#39;: 0.2990936555891239}, {&#39;log_loss&#39;: 0.6580264708772302, &#39;roc_auc_score&#39;: 0.6333331186106584, &#39;accuracy_score&#39;: 0.60875, &#39;f1_score&#39;: 0.37274549098196397, &#39;precision_score&#39;: 0.5535714285714286, &#39;recall_score&#39;: 0.2809667673716012}] 
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre><span class="ansi-cyan-fg">(apply_list_of_funcs pid=96608)</span> 
+<pre>2021-11-23 12:33:30,304 INFO fold: 5 log_loss : 0.6580264708772302
+2021-11-23 12:33:30,305 INFO fold: 5 roc_auc_score : 0.6333331186106584
+2021-11-23 12:33:30,305 INFO fold: 5 accuracy_score : 0.60875
+2021-11-23 12:33:30,306 INFO fold: 5 f1_score : 0.37274549098196397
+2021-11-23 12:33:30,307 INFO fold: 5 precision_score : 0.5535714285714286
+2021-11-23 12:33:30,308 INFO fold: 5 recall_score : 0.2809667673716012
+2021-11-23 12:33:30,310 WARNING Trying to do Test Predictions but No Test Dataset Provided!
+2021-11-23 12:33:30,312 INFO  mean metrics results are: {&#39;log_loss&#39;: 0.6608070997223257, &#39;roc_auc_score&#39;: 0.6203937177395016, &#39;accuracy_score&#39;: 0.61775, &#39;f1_score&#39;: 0.38026931589530955, &#39;precision_score&#39;: 0.5759982537542779, &#39;recall_score&#39;: 0.2838908724709329}
 </pre>
 </div>
 </div>

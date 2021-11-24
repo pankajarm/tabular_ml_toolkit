@@ -171,6 +171,79 @@ class TMLT:
         grid_search.fit(self.dfl.X, self.dfl.y)
         return grid_search
 
+    # do oof predictions using k-fold training
+    # current supported model type is LinearSVM
+    def do_oof_kfold_train_preds(self, n_splits:int, oof_model:object, random_state=42):
+        """
+            This methods returns oof_preds and test_preds by doing kfold training using givne model_type
+            oof_model has to be SKLearn estimator type
+            n_splits=5 by default, takes only int value
+            random_sate=42, takes only int value
+
+        """
+        #fetch problem type params
+        #_, val_preds_metrics, _, _ = fetch_params_for_problem_type(self.problem_type)
+
+        #create stratified K Folds instance
+        kfold = StratifiedKFold(n_splits=n_splits,
+                             random_state=random_state,
+                             shuffle=True)
+
+        # for oof preds
+        oof_preds = np.zeros(self.dfl.X.shape[0])
+
+        # check whether test dataset exist before test preds
+        oof_test_preds = None
+        if self.dfl.X_test is not None:
+            oof_test_preds = np.zeros(self.dfl.X_test.shape[0])
+
+        # k-fold training and predictions for oof predictions
+        oof_model_auc_mean = 0
+        n=0
+        for train_idx, valid_idx in kfold.split(self.dfl.X, self.dfl.y):
+            # create X_train
+            self.dfl.X_train = self.dfl.X.iloc[train_idx]
+            # create X_valid
+            self.dfl.X_valid = self.dfl.X.iloc[valid_idx]
+            # create y_train
+            self.dfl.y_train = self.dfl.y[train_idx]
+            # create y_valid
+            self.dfl.y_valid = self.dfl.y[valid_idx]
+
+            # fit
+            #oof_model = LinearSVC(tol=1e-7, penalty='l2', dual=False, max_iter=2000, random_state=42)
+            oof_model.fit(self.dfl.X_train, self.dfl.y_train)
+            oof_preds[valid_idx] = oof_model.decision_function(self.dfl.X_valid)
+
+            # Getting linear model metric results for each fold
+            oof_model_auc = roc_auc_score(self.dfl.y_valid, oof_preds[valid_idx])
+            logger.info(f"fold: {n+1} OOF Model ROC AUC: {oof_model_auc}!")
+            # for mean score
+            oof_model_auc_mean += (oof_model_auc / kfold.n_splits)
+
+
+            # for test preds
+            # appending mean test data predictions
+            # i.e. for each fold trained model get average test prediction and add them
+            if self.dfl.X_test is not None:
+                oof_test_preds += oof_model.decision_function(self.dfl.X_test) / kfold.n_splits
+            else:
+                logger.warn(f"Trying to do OOF Test Predictions but No Test Dataset Provided!")
+
+            # In order to better GC, del X_train, X_valid, y_train, y_valid df after each fold is done,
+            # they will recreate again next time k-fold is called
+            unused_df_lst = [self.dfl.X_train, self.dfl.X_valid, self.dfl.y_train, self.dfl.y_valid]
+            del unused_df_lst
+
+            # increment fold counter label
+            n += 1
+
+        #oof_model_auc_mean = (oof_model_auc / kfold.n_splits)
+        logger.info(f"Mean OOF Model ROC AUC: {oof_model_auc_mean}!")
+
+        return oof_preds, oof_test_preds
+
+
     # do k-fold training
     # test_preds_metric has to be a single sklearn metrics object type such as mean_absoulte_error, acccuracy
     def do_kfold_training(self, n_splits:int, test_preds_metric=None, random_state=42):
@@ -213,18 +286,17 @@ class TMLT:
             #TODO use early_stopping_rounds = True for XGBoost based Sklearn Pipeline
             self.spl.fit(self.dfl.X_train, self.dfl.y_train)
 
-
             #TO-DO instead of single metrics use list of metrics and calculate mean using dict
             metric_result = {}
             for metric in val_preds_metrics:
                 if ("log_loss" in str(metric.__name__)) or ("roc_auc_score" in str(metric.__name__)):
                     #logger.info("Predicting Probablities!")
-                    preds_probs = self.spl.predict_proba(self.dfl.X_valid)[:, 1]
+                    preds_probs = self.spl.predict_proba(self.dfl.X_valid)[:, 1] # CAN BE USE FOR OOF PREDS
                     metric_result[str(metric.__name__)] = metric(self.dfl.y_valid, preds_probs)
 
                 else:
                     #logger.info("Predicting Score!")
-                    preds = self.spl.predict(self.dfl.X_valid)
+                    preds = self.spl.predict(self.dfl.X_valid) # CAN BE USE FOR OOF PREDS
                     metric_result[str(metric.__name__)] = metric(self.dfl.y_valid, preds)
 
             #now show value of all the given metrics
@@ -233,7 +305,6 @@ class TMLT:
 
             #now append each kfold metric_result dict to list
             kfold_metrics_results.append(metric_result)
-
 
             # for test preds
             if self.dfl.X_test is not None and test_preds_metric is not None:

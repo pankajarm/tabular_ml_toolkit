@@ -70,6 +70,7 @@ nb_path: "13_Kaggle_TPS_Tutorial.ipynb"
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">tabular_ml_toolkit.tmlt</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="kn">import</span> <span class="n">LinearSVC</span>
 <span class="kn">from</span> <span class="nn">xgboost</span> <span class="kn">import</span> <span class="n">XGBClassifier</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
@@ -190,7 +191,7 @@ nb_path: "13_Kaggle_TPS_Tutorial.ipynb"
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">tmlt</span> <span class="o">=</span> <span class="n">TMLT</span><span class="p">()</span><span class="o">.</span><span class="n">prepare_data_for_training</span><span class="p">(</span>
     <span class="n">train_file_path</span><span class="o">=</span> <span class="n">DIRECTORY_PATH</span> <span class="o">+</span> <span class="n">TRAIN_FILE</span><span class="p">,</span>
-    <span class="c1">#test_file_path= DIRECTORY_PATH + TEST_FILE,</span>
+    <span class="n">test_file_path</span><span class="o">=</span> <span class="n">DIRECTORY_PATH</span> <span class="o">+</span> <span class="n">TEST_FILE</span><span class="p">,</span>
     <span class="c1">#make sure to use right index and target columns</span>
     <span class="n">idx_col</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">,</span>
     <span class="n">target</span><span class="o">=</span><span class="s2">&quot;target&quot;</span><span class="p">,</span>
@@ -216,44 +217,10 @@ nb_path: "13_Kaggle_TPS_Tutorial.ipynb"
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-23 14:07:20,402 INFO 12 cores found, model and data parallel processing should worked!
-UserWarning: Distributing &lt;class &#39;int&#39;&gt; object. This may take some time.
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre><span class="ansi-cyan-fg">(apply_list_of_funcs pid=19472)</span> 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=19469)</span> 
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-23 14:07:39,201 INFO DataFrame Memory usage decreased to 0.80 Mb (74.4% reduction)
-2021-11-23 14:07:39,201 INFO No test_file_path given, so training will continue without it!
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre><span class="ansi-cyan-fg">(apply_func pid=19469)</span> 
-<span class="ansi-cyan-fg">(compute_sliced_len pid=19470)</span> 
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-23 14:07:49,152 INFO PreProcessing will include target(s) encoding!
-2021-11-23 14:07:49,153 INFO categorical columns are None, Preprocessing will done accordingly!
+<pre>2021-11-24 11:53:15,358 INFO 12 cores found, model and data parallel processing should worked!
+2021-11-24 11:53:15,477 INFO DataFrame Memory usage decreased to 0.80 Mb (74.4% reduction)
+2021-11-24 11:53:15,601 INFO DataFrame Memory usage decreased to 0.79 Mb (74.3% reduction)
+2021-11-24 11:53:15,655 INFO categorical columns are None, Preprocessing will done accordingly!
 </pre>
 </div>
 </div>
@@ -285,7 +252,7 @@ UserWarning: Distributing &lt;class &#39;int&#39;&gt; object. This may take some
 
 
 <div class="output_html rendered_html output_subarea output_execute_result">
-<style>#sk-ae5d1120-980e-4253-afa3-093df19cbf85 {color: black;background-color: white;}#sk-ae5d1120-980e-4253-afa3-093df19cbf85 pre{padding: 0;}#sk-ae5d1120-980e-4253-afa3-093df19cbf85 div.sk-toggleable {background-color: white;}#sk-ae5d1120-980e-4253-afa3-093df19cbf85 label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.3em;box-sizing: border-box;text-align: center;}#sk-ae5d1120-980e-4253-afa3-093df19cbf85 div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}#sk-ae5d1120-980e-4253-afa3-093df19cbf85 div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}#sk-ae5d1120-980e-4253-afa3-093df19cbf85 input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}#sk-ae5d1120-980e-4253-afa3-093df19cbf85 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-ae5d1120-980e-4253-afa3-093df19cbf85 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-ae5d1120-980e-4253-afa3-093df19cbf85 input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}#sk-ae5d1120-980e-4253-afa3-093df19cbf85 div.sk-estimator {font-family: monospace;background-color: #f0f8ff;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;margin-bottom: 0.5em;}#sk-ae5d1120-980e-4253-afa3-093df19cbf85 div.sk-estimator:hover {background-color: #d4ebff;}#sk-ae5d1120-980e-4253-afa3-093df19cbf85 div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}#sk-ae5d1120-980e-4253-afa3-093df19cbf85 div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}#sk-ae5d1120-980e-4253-afa3-093df19cbf85 div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}#sk-ae5d1120-980e-4253-afa3-093df19cbf85 div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;padding-right: 0.2em;padding-left: 0.2em;}#sk-ae5d1120-980e-4253-afa3-093df19cbf85 div.sk-item {z-index: 1;}#sk-ae5d1120-980e-4253-afa3-093df19cbf85 div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}#sk-ae5d1120-980e-4253-afa3-093df19cbf85 div.sk-parallel::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}#sk-ae5d1120-980e-4253-afa3-093df19cbf85 div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}#sk-ae5d1120-980e-4253-afa3-093df19cbf85 div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}#sk-ae5d1120-980e-4253-afa3-093df19cbf85 div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}#sk-ae5d1120-980e-4253-afa3-093df19cbf85 div.sk-parallel-item:only-child::after {width: 0;}#sk-ae5d1120-980e-4253-afa3-093df19cbf85 div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0 0.4em 0.5em 0.4em;box-sizing: border-box;padding-bottom: 0.4em;background-color: white;position: relative;}#sk-ae5d1120-980e-4253-afa3-093df19cbf85 div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}#sk-ae5d1120-980e-4253-afa3-093df19cbf85 div.sk-label-container {position: relative;z-index: 2;text-align: center;}#sk-ae5d1120-980e-4253-afa3-093df19cbf85 div.sk-container {display: inline-block;position: relative;}</style><div id="sk-ae5d1120-980e-4253-afa3-093df19cbf85" class"sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="8153eb20-27f2-493d-afac-91098f7cf92a" type="checkbox" ><label class="sk-toggleable__label" for="8153eb20-27f2-493d-afac-91098f7cf92a">Pipeline</label><div class="sk-toggleable__content"><pre>Pipeline(steps=[('preprocessor',
+<style>#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f {color: black;background-color: white;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f pre{padding: 0;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f div.sk-toggleable {background-color: white;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.3em;box-sizing: border-box;text-align: center;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f div.sk-estimator {font-family: monospace;background-color: #f0f8ff;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;margin-bottom: 0.5em;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f div.sk-estimator:hover {background-color: #d4ebff;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;padding-right: 0.2em;padding-left: 0.2em;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f div.sk-item {z-index: 1;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f div.sk-parallel::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f div.sk-parallel-item:only-child::after {width: 0;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0 0.4em 0.5em 0.4em;box-sizing: border-box;padding-bottom: 0.4em;background-color: white;position: relative;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f div.sk-label-container {position: relative;z-index: 2;text-align: center;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f div.sk-container {display: inline-block;position: relative;}</style><div id="sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f" class"sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="bdb61398-edeb-4680-ac20-7c9b4b5f1126" type="checkbox" ><label class="sk-toggleable__label" for="bdb61398-edeb-4680-ac20-7c9b4b5f1126">Pipeline</label><div class="sk-toggleable__content"><pre>Pipeline(steps=[('preprocessor',
                  ColumnTransformer(transformers=[('num_cols',
                                                   Pipeline(steps=[('imputer',
                                                                    SimpleImputer(strategy='constant')),
@@ -308,7 +275,7 @@ UserWarning: Distributing &lt;class &#39;int&#39;&gt; object. This may take some
                                reg_lambda=None, scale_pos_weight=None,
                                subsample=None, tree_method=None,
                                use_label_encoder=False,
-                               validate_parameters=None, verbosity=None))])</pre></div></div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="8f20cc2d-256e-4d34-8e88-a6c512070f2d" type="checkbox" ><label class="sk-toggleable__label" for="8f20cc2d-256e-4d34-8e88-a6c512070f2d">preprocessor: ColumnTransformer</label><div class="sk-toggleable__content"><pre>ColumnTransformer(transformers=[('num_cols',
+                               validate_parameters=None, verbosity=None))])</pre></div></div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="6208ceaa-4ecc-4797-b09e-901cb5346095" type="checkbox" ><label class="sk-toggleable__label" for="6208ceaa-4ecc-4797-b09e-901cb5346095">preprocessor: ColumnTransformer</label><div class="sk-toggleable__content"><pre>ColumnTransformer(transformers=[('num_cols',
                                  Pipeline(steps=[('imputer',
                                                   SimpleImputer(strategy='constant')),
                                                  ('scaler', StandardScaler())]),
@@ -316,7 +283,7 @@ UserWarning: Distributing &lt;class &#39;int&#39;&gt; object. This may take some
                                   'f7', 'f8', 'f9', 'f10', 'f11', 'f12', 'f13',
                                   'f14', 'f15', 'f16', 'f17', 'f18', 'f19',
                                   'f20', 'f21', 'f22', 'f23', 'f24', 'f25',
-                                  'f26', 'f27', 'f28', 'f29', ...])])</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="a73b5ff0-b7fb-4cbe-8c22-f867294688f2" type="checkbox" ><label class="sk-toggleable__label" for="a73b5ff0-b7fb-4cbe-8c22-f867294688f2">num_cols</label><div class="sk-toggleable__content"><pre>['f0', 'f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8', 'f9', 'f10', 'f11', 'f12', 'f13', 'f14', 'f15', 'f16', 'f17', 'f18', 'f19', 'f20', 'f21', 'f22', 'f23', 'f24', 'f25', 'f26', 'f27', 'f28', 'f29', 'f30', 'f31', 'f32', 'f33', 'f34', 'f35', 'f36', 'f37', 'f38', 'f39', 'f40', 'f41', 'f42', 'f43', 'f44', 'f45', 'f46', 'f47', 'f48', 'f49', 'f50', 'f51', 'f52', 'f53', 'f54', 'f55', 'f56', 'f57', 'f58', 'f59', 'f60', 'f61', 'f62', 'f63', 'f64', 'f65', 'f66', 'f67', 'f68', 'f69', 'f70', 'f71', 'f72', 'f73', 'f74', 'f75', 'f76', 'f77', 'f78', 'f79', 'f80', 'f81', 'f82', 'f83', 'f84', 'f85', 'f86', 'f87', 'f88', 'f89', 'f90', 'f91', 'f92', 'f93', 'f94', 'f95', 'f96', 'f97', 'f98', 'f99']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="7a1990e5-e74e-4988-9c59-cfa74c5d9e7c" type="checkbox" ><label class="sk-toggleable__label" for="7a1990e5-e74e-4988-9c59-cfa74c5d9e7c">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(strategy='constant')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="f0ac3351-b796-4566-b630-9bdcc87288c2" type="checkbox" ><label class="sk-toggleable__label" for="f0ac3351-b796-4566-b630-9bdcc87288c2">StandardScaler</label><div class="sk-toggleable__content"><pre>StandardScaler()</pre></div></div></div></div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="f3d3cb61-b3ac-4f4a-968e-988db4ae40a1" type="checkbox" ><label class="sk-toggleable__label" for="f3d3cb61-b3ac-4f4a-968e-988db4ae40a1">XGBClassifier</label><div class="sk-toggleable__content"><pre>XGBClassifier(base_score=None, booster=None, colsample_bylevel=None,
+                                  'f26', 'f27', 'f28', 'f29', ...])])</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="ced4ba97-0531-43fe-b4aa-211be94ee847" type="checkbox" ><label class="sk-toggleable__label" for="ced4ba97-0531-43fe-b4aa-211be94ee847">num_cols</label><div class="sk-toggleable__content"><pre>['f0', 'f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8', 'f9', 'f10', 'f11', 'f12', 'f13', 'f14', 'f15', 'f16', 'f17', 'f18', 'f19', 'f20', 'f21', 'f22', 'f23', 'f24', 'f25', 'f26', 'f27', 'f28', 'f29', 'f30', 'f31', 'f32', 'f33', 'f34', 'f35', 'f36', 'f37', 'f38', 'f39', 'f40', 'f41', 'f42', 'f43', 'f44', 'f45', 'f46', 'f47', 'f48', 'f49', 'f50', 'f51', 'f52', 'f53', 'f54', 'f55', 'f56', 'f57', 'f58', 'f59', 'f60', 'f61', 'f62', 'f63', 'f64', 'f65', 'f66', 'f67', 'f68', 'f69', 'f70', 'f71', 'f72', 'f73', 'f74', 'f75', 'f76', 'f77', 'f78', 'f79', 'f80', 'f81', 'f82', 'f83', 'f84', 'f85', 'f86', 'f87', 'f88', 'f89', 'f90', 'f91', 'f92', 'f93', 'f94', 'f95', 'f96', 'f97', 'f98', 'f99']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="e41c7276-4a6f-46d6-bbaf-0e44601a9dfe" type="checkbox" ><label class="sk-toggleable__label" for="e41c7276-4a6f-46d6-bbaf-0e44601a9dfe">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(strategy='constant')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="de1e08e5-80bb-4c75-bab7-52356c67d9f9" type="checkbox" ><label class="sk-toggleable__label" for="de1e08e5-80bb-4c75-bab7-52356c67d9f9">StandardScaler</label><div class="sk-toggleable__content"><pre>StandardScaler()</pre></div></div></div></div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="0d1841ac-6f0b-4a9c-b1e1-3c899ba668d1" type="checkbox" ><label class="sk-toggleable__label" for="0d1841ac-6f0b-4a9c-b1e1-3c899ba668d1">XGBClassifier</label><div class="sk-toggleable__content"><pre>XGBClassifier(base_score=None, booster=None, colsample_bylevel=None,
               colsample_bynode=None, colsample_bytree=None,
               enable_categorical=False, eval_metric='auc', gamma=None,
               gpu_id=None, importance_type=None, interaction_constraints=None,
@@ -350,7 +317,7 @@ UserWarning: Distributing &lt;class &#39;int&#39;&gt; object. This may take some
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span> 
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">create_train_valid</span><span class="p">(</span><span class="n">valid_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -367,13 +334,30 @@ UserWarning: Distributing &lt;class &#39;int&#39;&gt; object. This may take some
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># print(f&quot;X_train shape is {tmlt.dfl.X_train.shape}&quot; )</span>
-<span class="c1"># print(f&quot;X_valid shape is {tmlt.dfl.X_valid.shape}&quot; )</span>
-<span class="c1"># print(f&quot;y_train shape is {tmlt.dfl.y_train.shape}&quot;)</span>
-<span class="c1"># print(f&quot;y_valid shape is {tmlt.dfl.y_valid.shape}&quot;)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;X_train shape is </span><span class="si">{</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span> <span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;X_valid shape is </span><span class="si">{</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_valid</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span> <span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;y_train shape is </span><span class="si">{</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_train</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;y_valid shape is </span><span class="si">{</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_valid</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 
     </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>X_train shape is (3200, 100)
+X_valid shape is (800, 100)
+y_train shape is (3200,)
+y_valid shape is (800,)
+</pre>
+</div>
+</div>
+
 </div>
 </div>
 
@@ -387,24 +371,39 @@ UserWarning: Distributing &lt;class &#39;int&#39;&gt; object. This may take some
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># start = time.time()</span>
-<span class="c1"># # Now fit</span>
-<span class="c1"># tmlt.spl.fit(tmlt.dfl.X_train, tmlt.dfl.y_train)</span>
-<span class="c1"># end = time.time()</span>
-<span class="c1"># print(&quot;Fit Time:&quot;, end - start)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="c1"># Now fit</span>
+<span class="n">tmlt</span><span class="o">.</span><span class="n">spl</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_train</span><span class="p">,</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_train</span><span class="p">)</span>
+<span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Fit Time:&quot;</span><span class="p">,</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
 
-<span class="c1"># #predict</span>
-<span class="c1"># preds = tmlt.spl.predict(tmlt.dfl.X_valid)</span>
-<span class="c1"># preds_probs = tmlt.spl.predict_proba(tmlt.dfl.X_valid)[:, 1]</span>
+<span class="c1">#predict</span>
+<span class="n">preds</span> <span class="o">=</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">spl</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_valid</span><span class="p">)</span>
+<span class="n">preds_probs</span> <span class="o">=</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">spl</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_valid</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
 
-<span class="c1"># # Metrics</span>
-<span class="c1"># auc = roc_auc_score(tmlt.dfl.y_valid, preds_probs)</span>
-<span class="c1"># acc = accuracy_score(tmlt.dfl.y_valid, preds)</span>
+<span class="c1"># Metrics</span>
+<span class="n">auc</span> <span class="o">=</span> <span class="n">roc_auc_score</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">preds_probs</span><span class="p">)</span>
+<span class="n">acc</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">preds</span><span class="p">)</span>
 
-<span class="c1"># print(f&quot;AUC is : {auc} while Accuracy is : {acc} &quot;)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;AUC is : </span><span class="si">{</span><span class="n">auc</span><span class="si">}</span><span class="s2"> while Accuracy is : </span><span class="si">{</span><span class="n">acc</span><span class="si">}</span><span class="s2"> &quot;</span><span class="p">)</span>
 </pre></div>
 
     </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Fit Time: 1.045884132385254
+AUC is : 0.6137947418435223 while Accuracy is : 0.6175 
+</pre>
+</div>
+</div>
+
 </div>
 </div>
 
@@ -413,7 +412,117 @@ UserWarning: Distributing &lt;class &#39;int&#39;&gt; object. This may take some
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Let's-do-Optuna-based-HyperParameter-search-to-get-best-params-for-fit">Let's do Optuna based HyperParameter search to get best params for fit<a class="anchor-link" href="#Let's-do-Optuna-based-HyperParameter-search-to-get-best-params-for-fit"> </a></h3>
+<h4 id="Base-model-For-Meta-Ensemble-Model">Base model For Meta Ensemble Model<a class="anchor-link" href="#Base-model-For-Meta-Ensemble-Model"> </a></h4>
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">linear_oof_model</span> <span class="o">=</span> <span class="n">LinearSVC</span><span class="p">(</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-7</span><span class="p">,</span> <span class="n">penalty</span><span class="o">=</span><span class="s1">&#39;l2&#39;</span><span class="p">,</span> <span class="n">dual</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="n">linear_oof_model_preds</span><span class="p">,</span> <span class="n">linear_oof_model_test_preds</span> <span class="o">=</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">do_oof_kfold_train_preds</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                                                          <span class="n">oof_model</span><span class="o">=</span><span class="n">linear_oof_model</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">linear_oof_model_preds</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">linear_oof_model_preds</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">linear_oof_model_test_preds</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>    
+    <span class="nb">print</span><span class="p">(</span><span class="n">linear_oof_model_test_preds</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>2021-11-24 11:55:33,649 INFO fold: 1 OOF Model ROC AUC: 0.7259767891682785!
+2021-11-24 11:55:34,094 INFO fold: 2 OOF Model ROC AUC: 0.6958091553836234!
+2021-11-24 11:55:34,543 INFO fold: 3 OOF Model ROC AUC: 0.6614764667956157!
+2021-11-24 11:55:35,027 INFO fold: 4 OOF Model ROC AUC: 0.7080050760440353!
+2021-11-24 11:55:35,446 INFO fold: 5 OOF Model ROC AUC: 0.7223571396363027!
+2021-11-24 11:55:35,451 INFO Mean OOF Model ROC AUC: 0.7027249254055712!
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>(4000,)
+(4000,)
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X</span><span class="p">[</span><span class="s2">&quot;linear_preds&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">linear_oof_model_preds</span>
+<span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_test</span><span class="p">[</span><span class="s2">&quot;linear_preds&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">linear_oof_model_test_preds</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_test</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>(4000, 101)
+(4000, 101)
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="For-Meta-Model,-Let's-do-Optuna-based-HyperParameter-search-to-get-best-params-for-fit">For Meta Model, Let's do Optuna based HyperParameter search to get best params for fit<a class="anchor-link" href="#For-Meta-Model,-Let's-do-Optuna-based-HyperParameter-search-to-get-best-params-for-fit"> </a></h4>
 </div>
 </div>
 </div>
@@ -437,8 +546,9 @@ UserWarning: Distributing &lt;class &#39;int&#39;&gt; object. This may take some
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-23 14:25:46,244 INFO Optimization Direction is: minimize
-<span class="ansi-green-fg">[I 2021-11-23 14:25:46,274]</span> Using an existing study with name &#39;tmlt_autoxgb&#39; instead of creating a new one.
+<pre>2021-11-24 11:56:05,611 INFO Optimization Direction is: minimize
+<span class="ansi-green-fg">[I 2021-11-24 11:56:05,674]</span> Using an existing study with name &#39;tmlt_autoxgb&#39; instead of creating a new one.
+2021-11-24 11:56:05,948 INFO Training Started!
 </pre>
 </div>
 </div>
@@ -446,25 +556,7 @@ UserWarning: Distributing &lt;class &#39;int&#39;&gt; object. This may take some
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre><span class="ansi-cyan-fg">(apply_list_of_funcs pid=19463)</span> 
-<span class="ansi-cyan-fg">(compute_sliced_len pid=19464)</span> 
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-23 14:25:49,535 INFO Training Started!
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre><span class="ansi-cyan-fg">(apply_list_of_funcs pid=19463)</span> 
-[14:25:55] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
+<pre>[11:56:05] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
 Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
 
   This could be a false alarm, with some parameters getting used by language bindings but
@@ -479,7 +571,15 @@ Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#3
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-23 14:26:07,809 INFO Training Ended!
+<pre>2021-11-24 11:56:13,976 INFO Training Ended!
+2021-11-24 11:56:14,038 INFO log_loss: 0.6036267434991897
+2021-11-24 11:56:14,039 INFO roc_auc_score: 0.7167207792207793
+2021-11-24 11:56:14,039 INFO accuracy_score: 0.70125
+2021-11-24 11:56:14,040 INFO f1_score: 0.5886402753872634
+2021-11-24 11:56:14,041 INFO precision_score: 0.6263736263736264
+2021-11-24 11:56:14,041 INFO recall_score: 0.5551948051948052
+<span class="ansi-green-fg">[I 2021-11-24 11:56:14,078]</span> Trial 40 finished with value: 0.6036267434991897 and parameters: {&#39;learning_rate&#39;: 0.0467094492253725, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 6.538273265404555e-05, &#39;reg_alpha&#39;: 0.0013117821568648178, &#39;subsample&#39;: 0.5290631340507302, &#39;colsample_bytree&#39;: 0.7582355779106297, &#39;max_depth&#39;: 4, &#39;early_stopping_rounds&#39;: 426, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 20 with value: 0.6023122700396926.
+2021-11-24 11:56:14,250 INFO Training Started!
 </pre>
 </div>
 </div>
@@ -487,155 +587,7 @@ Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#3
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre><span class="ansi-cyan-fg">(apply_list_of_funcs pid=19471)</span> 
-<span class="ansi-cyan-fg">(compute_sliced_len pid=19466)</span> 
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-23 14:26:29,793 INFO log_loss: 0.6051906617963687
-2021-11-23 14:26:29,794 INFO roc_auc_score: 0.7158958927251612
-2021-11-23 14:26:29,794 INFO accuracy_score: 0.695
-2021-11-23 14:26:29,795 INFO f1_score: 0.5836177474402731
-2021-11-23 14:26:29,796 INFO precision_score: 0.6151079136690647
-2021-11-23 14:26:29,797 INFO recall_score: 0.5551948051948052
-<span class="ansi-green-fg">[I 2021-11-23 14:26:29,834]</span> Trial 4 finished with value: 0.6051906617963687 and parameters: {&#39;learning_rate&#39;: 0.07778202222863026, &#39;n_estimators&#39;: 20000, &#39;reg_lambda&#39;: 1.1572194721196033e-05, &#39;reg_alpha&#39;: 3.079971779735798e-08, &#39;subsample&#39;: 0.8566092401661841, &#39;colsample_bytree&#39;: 0.7338078050434531, &#39;max_depth&#39;: 1, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 3 with value: 0.6051832608412951.
-2021-11-23 14:26:33,655 INFO Training Started!
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre><span class="ansi-cyan-fg">(apply_list_of_funcs pid=19470)</span> 
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-23 14:26:56,977 INFO Training Ended!
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre><span class="ansi-cyan-fg">(apply_list_of_funcs pid=19467)</span> 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=19466)</span> 
-<span class="ansi-cyan-fg">(apply_func pid=19463)</span> 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=19470)</span> 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=19474)</span> 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=19467)</span> 
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-23 14:27:18,824 INFO log_loss: 1.3733108584548672
-2021-11-23 14:27:18,826 INFO roc_auc_score: 0.600121423292155
-2021-11-23 14:27:18,826 INFO accuracy_score: 0.59375
-2021-11-23 14:27:18,827 INFO f1_score: 0.4574290484140234
-2021-11-23 14:27:18,828 INFO precision_score: 0.47079037800687284
-2021-11-23 14:27:18,828 INFO recall_score: 0.4448051948051948
-<span class="ansi-green-fg">[I 2021-11-23 14:27:18,860]</span> Trial 5 finished with value: 1.3733108584548672 and parameters: {&#39;learning_rate&#39;: 0.14680037130381238, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 4.211629467291321, &#39;reg_alpha&#39;: 5.624849648423015e-07, &#39;subsample&#39;: 0.11905642392373826, &#39;colsample_bytree&#39;: 0.7166667785774565, &#39;max_depth&#39;: 2, &#39;tree_method&#39;: &#39;hist&#39;, &#39;booster&#39;: &#39;gbtree&#39;, &#39;gamma&#39;: 2.401734572428494e-07, &#39;grow_policy&#39;: &#39;depthwise&#39;}. Best is trial 3 with value: 0.6051832608412951.
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre><span class="ansi-cyan-fg">(compute_sliced_len pid=19465)</span> 
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-23 14:27:22,683 INFO Training Started!
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre><span class="ansi-cyan-fg">(compute_sliced_len pid=19465)</span> 
-<span class="ansi-cyan-fg">(compute_sliced_len pid=19472)</span> 
-<span class="ansi-cyan-fg">(apply_func pid=19473)</span> 
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-23 14:27:50,993 INFO Training Ended!
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre><span class="ansi-cyan-fg">(apply_list_of_funcs pid=19473)</span> 
-<span class="ansi-cyan-fg">(compute_sliced_len pid=19472)</span> 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=19467)</span> 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=19470)</span> 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=19469)</span> 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=19463)</span> 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=19467)</span> 
-<span class="ansi-cyan-fg">(compute_sliced_len pid=19467)</span> 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=19473)</span> 
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-23 14:28:12,915 INFO log_loss: 0.7951592802736559
-2021-11-23 14:28:12,916 INFO roc_auc_score: 0.6458663287931581
-2021-11-23 14:28:12,916 INFO accuracy_score: 0.63875
-2021-11-23 14:28:12,917 INFO f1_score: 0.5025817555938038
-2021-11-23 14:28:12,918 INFO precision_score: 0.5347985347985348
-2021-11-23 14:28:12,919 INFO recall_score: 0.474025974025974
-<span class="ansi-green-fg">[I 2021-11-23 14:28:12,956]</span> Trial 6 finished with value: 0.7951592802736559 and parameters: {&#39;learning_rate&#39;: 0.020919490032178578, &#39;n_estimators&#39;: 7000, &#39;reg_lambda&#39;: 1.0191685617159378e-06, &#39;reg_alpha&#39;: 2.7618753046849175e-08, &#39;subsample&#39;: 0.5364273278094787, &#39;colsample_bytree&#39;: 0.5406269791805867, &#39;max_depth&#39;: 3, &#39;tree_method&#39;: &#39;approx&#39;, &#39;booster&#39;: &#39;gbtree&#39;, &#39;gamma&#39;: 4.48740453005513e-06, &#39;grow_policy&#39;: &#39;depthwise&#39;}. Best is trial 3 with value: 0.6051832608412951.
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre><span class="ansi-cyan-fg">(compute_sliced_len pid=19466)</span> 
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-23 14:28:16,633 INFO Training Started!
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre><span class="ansi-cyan-fg">(apply_list_of_funcs pid=19464)</span> 
-[14:28:21] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
+<pre>[11:56:14] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
 Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
 
   This could be a false alarm, with some parameters getting used by language bindings but
@@ -650,7 +602,26 @@ Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#3
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-23 14:28:35,484 INFO Training Ended!
+<pre>2021-11-24 11:56:17,358 INFO Training Ended!
+/Users/pamathur/miniconda3/envs/nbdev_env/lib/python3.9/site-packages/sklearn/metrics/_classification.py:1308: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+2021-11-24 11:56:17,419 INFO log_loss: 0.6689949867129326
+2021-11-24 11:56:17,420 INFO roc_auc_score: 0.5
+2021-11-24 11:56:17,420 INFO accuracy_score: 0.615
+2021-11-24 11:56:17,421 INFO f1_score: 0.0
+2021-11-24 11:56:17,422 INFO precision_score: 0.0
+2021-11-24 11:56:17,422 INFO recall_score: 0.0
+<span class="ansi-green-fg">[I 2021-11-24 11:56:17,451]</span> Trial 41 finished with value: 0.6689949867129326 and parameters: {&#39;learning_rate&#39;: 0.018704968140364132, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 3.5773118385391564e-06, &#39;reg_alpha&#39;: 0.3568074678915505, &#39;subsample&#39;: 0.5658420728617757, &#39;colsample_bytree&#39;: 0.6677211087049771, &#39;max_depth&#39;: 7, &#39;early_stopping_rounds&#39;: 221, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 20 with value: 0.6023122700396926.
+2021-11-24 11:56:17,645 INFO Training Started!
+2021-11-24 11:56:41,801 INFO Training Ended!
+2021-11-24 11:56:41,994 INFO log_loss: 1.050724998009989
+2021-11-24 11:56:41,995 INFO roc_auc_score: 0.6199714919227115
+2021-11-24 11:56:41,995 INFO accuracy_score: 0.63125
+2021-11-24 11:56:41,996 INFO f1_score: 0.49744463373083475
+2021-11-24 11:56:41,996 INFO precision_score: 0.5232974910394266
+2021-11-24 11:56:41,997 INFO recall_score: 0.474025974025974
+<span class="ansi-green-fg">[I 2021-11-24 11:56:42,022]</span> Trial 42 finished with value: 1.050724998009989 and parameters: {&#39;learning_rate&#39;: 0.03179768331430875, &#39;n_estimators&#39;: 20000, &#39;reg_lambda&#39;: 0.014610606110403544, &#39;reg_alpha&#39;: 1.8406245010316268e-06, &#39;subsample&#39;: 0.9922816502663769, &#39;colsample_bytree&#39;: 0.9972461715670655, &#39;max_depth&#39;: 2, &#39;early_stopping_rounds&#39;: 182, &#39;tree_method&#39;: &#39;hist&#39;, &#39;booster&#39;: &#39;gbtree&#39;, &#39;gamma&#39;: 2.397536369426235e-05, &#39;grow_policy&#39;: &#39;depthwise&#39;}. Best is trial 20 with value: 0.6023122700396926.
+2021-11-24 11:56:42,203 INFO Training Started!
 </pre>
 </div>
 </div>
@@ -658,14 +629,14 @@ Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#3
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre><span class="ansi-cyan-fg">(apply_list_of_funcs pid=19466)</span> 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=19473)</span> 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=19474)</span> 
-<span class="ansi-cyan-fg">(compute_sliced_len pid=19467)</span> 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=19474)</span> 
-<span class="ansi-cyan-fg">(compute_sliced_len pid=19467)</span> 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=19473)</span> 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=19474)</span> 
+<pre>[11:56:42] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
+Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
+
+  This could be a false alarm, with some parameters getting used by language bindings but
+  then being mistakenly passed down to XGBoost core, or some parameter actually being used
+  but getting flagged wrongly here. Please open an issue if you find any such cases.
+
+
 </pre>
 </div>
 </div>
@@ -673,15 +644,17 @@ Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#3
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-23 14:28:56,523 INFO log_loss: 0.6051877725403756
-2021-11-23 14:28:56,524 INFO roc_auc_score: 0.7158958927251612
-2021-11-23 14:28:56,525 INFO accuracy_score: 0.695
-2021-11-23 14:28:56,526 INFO f1_score: 0.5836177474402731
-2021-11-23 14:28:56,527 INFO precision_score: 0.6151079136690647
-2021-11-23 14:28:56,527 INFO recall_score: 0.5551948051948052
-<span class="ansi-green-fg">[I 2021-11-23 14:28:56,560]</span> Trial 7 finished with value: 0.6051877725403756 and parameters: {&#39;learning_rate&#39;: 0.04988928951526494, &#39;n_estimators&#39;: 20000, &#39;reg_lambda&#39;: 1.7238404326454513e-05, &#39;reg_alpha&#39;: 6.60629606464357e-07, &#39;subsample&#39;: 0.2750714764806063, &#39;colsample_bytree&#39;: 0.325291757151274, &#39;max_depth&#39;: 9, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 3 with value: 0.6051832608412951.
-2021-11-23 14:29:00,226 INFO Training Started!
-2021-11-23 14:29:25,026 INFO Training Ended!
+<pre>2021-11-24 11:56:47,668 INFO Training Ended!
+/Users/pamathur/miniconda3/envs/nbdev_env/lib/python3.9/site-packages/sklearn/metrics/_classification.py:1308: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
+  _warn_prf(average, modifier, msg_start, len(result))
+2021-11-24 11:56:47,728 INFO log_loss: 0.6668759831786155
+2021-11-24 11:56:47,729 INFO roc_auc_score: 0.6999458874458875
+2021-11-24 11:56:47,729 INFO accuracy_score: 0.615
+2021-11-24 11:56:47,730 INFO f1_score: 0.0
+2021-11-24 11:56:47,730 INFO precision_score: 0.0
+2021-11-24 11:56:47,731 INFO recall_score: 0.0
+<span class="ansi-green-fg">[I 2021-11-24 11:56:47,762]</span> Trial 43 finished with value: 0.6668759831786155 and parameters: {&#39;learning_rate&#39;: 0.010772643652489347, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 7.224808161071666, &#39;reg_alpha&#39;: 0.016376625092934763, &#39;subsample&#39;: 0.7488614807842593, &#39;colsample_bytree&#39;: 0.5452525070955537, &#39;max_depth&#39;: 5, &#39;early_stopping_rounds&#39;: 458, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 20 with value: 0.6023122700396926.
+2021-11-24 11:56:47,928 INFO Training Started!
 </pre>
 </div>
 </div>
@@ -689,13 +662,791 @@ Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#3
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre><span class="ansi-cyan-fg">(apply_list_of_funcs pid=19472)</span> 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=19474)</span> 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=19472)</span> 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=19470)</span> 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=19467)</span> 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=19464)</span> 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=19468)</span> 
+<pre>[11:56:47] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
+Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
+
+  This could be a false alarm, with some parameters getting used by language bindings but
+  then being mistakenly passed down to XGBoost core, or some parameter actually being used
+  but getting flagged wrongly here. Please open an issue if you find any such cases.
+
+
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>2021-11-24 11:56:57,753 INFO Training Ended!
+2021-11-24 11:56:57,817 INFO log_loss: 0.603700662679039
+2021-11-24 11:56:57,818 INFO roc_auc_score: 0.7165624010136205
+2021-11-24 11:56:57,818 INFO accuracy_score: 0.70125
+2021-11-24 11:56:57,819 INFO f1_score: 0.5886402753872634
+2021-11-24 11:56:57,820 INFO precision_score: 0.6263736263736264
+2021-11-24 11:56:57,820 INFO recall_score: 0.5551948051948052
+<span class="ansi-green-fg">[I 2021-11-24 11:56:57,850]</span> Trial 44 finished with value: 0.603700662679039 and parameters: {&#39;learning_rate&#39;: 0.04764946344564492, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 9.509972809846152e-05, &#39;reg_alpha&#39;: 0.0011806166035534902, &#39;subsample&#39;: 0.535456718198006, &#39;colsample_bytree&#39;: 0.7563055146997821, &#39;max_depth&#39;: 4, &#39;early_stopping_rounds&#39;: 427, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 20 with value: 0.6023122700396926.
+2021-11-24 11:56:58,033 INFO Training Started!
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[11:56:58] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
+Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
+
+  This could be a false alarm, with some parameters getting used by language bindings but
+  then being mistakenly passed down to XGBoost core, or some parameter actually being used
+  but getting flagged wrongly here. Please open an issue if you find any such cases.
+
+
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>2021-11-24 11:57:06,884 INFO Training Ended!
+2021-11-24 11:57:06,947 INFO log_loss: 0.6050223457673565
+2021-11-24 11:57:06,947 INFO roc_auc_score: 0.7159684827367754
+2021-11-24 11:57:06,948 INFO accuracy_score: 0.695
+2021-11-24 11:57:06,949 INFO f1_score: 0.5836177474402731
+2021-11-24 11:57:06,949 INFO precision_score: 0.6151079136690647
+2021-11-24 11:57:06,950 INFO recall_score: 0.5551948051948052
+<span class="ansi-green-fg">[I 2021-11-24 11:57:06,976]</span> Trial 45 finished with value: 0.6050223457673565 and parameters: {&#39;learning_rate&#39;: 0.06732275507944363, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 3.723340173877417e-05, &#39;reg_alpha&#39;: 8.659625516561364e-05, &#39;subsample&#39;: 0.6791973826476483, &#39;colsample_bytree&#39;: 0.7886046588497224, &#39;max_depth&#39;: 3, &#39;early_stopping_rounds&#39;: 328, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 20 with value: 0.6023122700396926.
+2021-11-24 11:57:07,147 INFO Training Started!
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[11:57:07] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
+Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
+
+  This could be a false alarm, with some parameters getting used by language bindings but
+  then being mistakenly passed down to XGBoost core, or some parameter actually being used
+  but getting flagged wrongly here. Please open an issue if you find any such cases.
+
+
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>2021-11-24 11:57:16,694 INFO Training Ended!
+2021-11-24 11:57:16,755 INFO log_loss: 0.6034033725084736
+2021-11-24 11:57:16,756 INFO roc_auc_score: 0.7169055537957977
+2021-11-24 11:57:16,757 INFO accuracy_score: 0.7
+2021-11-24 11:57:16,757 INFO f1_score: 0.5847750865051904
+2021-11-24 11:57:16,758 INFO precision_score: 0.6259259259259259
+2021-11-24 11:57:16,759 INFO recall_score: 0.5487012987012987
+<span class="ansi-green-fg">[I 2021-11-24 11:57:16,785]</span> Trial 46 finished with value: 0.6034033725084736 and parameters: {&#39;learning_rate&#39;: 0.0529560143480222, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 0.0015065052556385249, &#39;reg_alpha&#39;: 0.0015237224036502737, &#39;subsample&#39;: 0.5217391893832076, &#39;colsample_bytree&#39;: 0.9032805892664175, &#39;max_depth&#39;: 4, &#39;early_stopping_rounds&#39;: 471, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 20 with value: 0.6023122700396926.
+2021-11-24 11:57:16,956 INFO Training Started!
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[11:57:16] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
+Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
+
+  This could be a false alarm, with some parameters getting used by language bindings but
+  then being mistakenly passed down to XGBoost core, or some parameter actually being used
+  but getting flagged wrongly here. Please open an issue if you find any such cases.
+
+
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>2021-11-24 11:57:26,324 INFO Training Ended!
+2021-11-24 11:57:26,395 INFO log_loss: 0.6047576112858951
+2021-11-24 11:57:26,396 INFO roc_auc_score: 0.71601467638053
+2021-11-24 11:57:26,396 INFO accuracy_score: 0.695
+2021-11-24 11:57:26,397 INFO f1_score: 0.5836177474402731
+2021-11-24 11:57:26,398 INFO precision_score: 0.6151079136690647
+2021-11-24 11:57:26,398 INFO recall_score: 0.5551948051948052
+<span class="ansi-green-fg">[I 2021-11-24 11:57:26,431]</span> Trial 47 finished with value: 0.6047576112858951 and parameters: {&#39;learning_rate&#39;: 0.07947070726527587, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 0.0016366890028134459, &#39;reg_alpha&#39;: 2.119564883222415e-07, &#39;subsample&#39;: 0.6443051608844637, &#39;colsample_bytree&#39;: 0.9167973472127608, &#39;max_depth&#39;: 6, &#39;early_stopping_rounds&#39;: 473, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 20 with value: 0.6023122700396926.
+2021-11-24 11:57:26,614 INFO Training Started!
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[11:57:26] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
+Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
+
+  This could be a false alarm, with some parameters getting used by language bindings but
+  then being mistakenly passed down to XGBoost core, or some parameter actually being used
+  but getting flagged wrongly here. Please open an issue if you find any such cases.
+
+
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>2021-11-24 11:57:35,304 INFO Training Ended!
+2021-11-24 11:57:35,367 INFO log_loss: 0.6035707989195361
+2021-11-24 11:57:35,368 INFO roc_auc_score: 0.7166547883011297
+2021-11-24 11:57:35,368 INFO accuracy_score: 0.6975
+2021-11-24 11:57:35,369 INFO f1_score: 0.5827586206896551
+2021-11-24 11:57:35,370 INFO precision_score: 0.6213235294117647
+2021-11-24 11:57:35,370 INFO recall_score: 0.5487012987012987
+<span class="ansi-green-fg">[I 2021-11-24 11:57:35,396]</span> Trial 48 finished with value: 0.6035707989195361 and parameters: {&#39;learning_rate&#39;: 0.03614354681363991, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 0.006854957302066931, &#39;reg_alpha&#39;: 0.00019017956747167315, &#39;subsample&#39;: 0.7940986572285533, &#39;colsample_bytree&#39;: 0.8738975570432537, &#39;max_depth&#39;: 5, &#39;early_stopping_rounds&#39;: 261, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 20 with value: 0.6023122700396926.
+2021-11-24 11:57:35,560 INFO Training Started!
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[11:57:35] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
+Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
+
+  This could be a false alarm, with some parameters getting used by language bindings but
+  then being mistakenly passed down to XGBoost core, or some parameter actually being used
+  but getting flagged wrongly here. Please open an issue if you find any such cases.
+
+
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>2021-11-24 11:57:46,493 INFO Training Ended!
+2021-11-24 11:57:46,553 INFO log_loss: 0.6082258519902826
+2021-11-24 11:57:46,554 INFO roc_auc_score: 0.7157573117938971
+2021-11-24 11:57:46,554 INFO accuracy_score: 0.6975
+2021-11-24 11:57:46,555 INFO f1_score: 0.5631768953068592
+2021-11-24 11:57:46,555 INFO precision_score: 0.6341463414634146
+2021-11-24 11:57:46,556 INFO recall_score: 0.5064935064935064
+<span class="ansi-green-fg">[I 2021-11-24 11:57:46,581]</span> Trial 49 finished with value: 0.6082258519902826 and parameters: {&#39;learning_rate&#39;: 0.023182620810535053, &#39;n_estimators&#39;: 20000, &#39;reg_lambda&#39;: 0.00032241286371737795, &#39;reg_alpha&#39;: 0.007504659157311994, &#39;subsample&#39;: 0.7334248177616951, &#39;colsample_bytree&#39;: 0.814394630383725, &#39;max_depth&#39;: 6, &#39;early_stopping_rounds&#39;: 475, &#39;tree_method&#39;: &#39;hist&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 20 with value: 0.6023122700396926.
+2021-11-24 11:57:46,773 INFO Training Started!
+2021-11-24 11:58:29,785 INFO Training Ended!
+2021-11-24 11:58:29,987 INFO log_loss: 1.0698090273351182
+2021-11-24 11:58:29,987 INFO roc_auc_score: 0.6316188892408404
+2021-11-24 11:58:29,988 INFO accuracy_score: 0.6275
+2021-11-24 11:58:29,988 INFO f1_score: 0.47535211267605637
+2021-11-24 11:58:29,989 INFO precision_score: 0.5192307692307693
+2021-11-24 11:58:29,989 INFO recall_score: 0.4383116883116883
+<span class="ansi-green-fg">[I 2021-11-24 11:58:30,014]</span> Trial 50 finished with value: 1.0698090273351182 and parameters: {&#39;learning_rate&#39;: 0.05743163799825103, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 0.03323678493281301, &#39;reg_alpha&#39;: 0.08953916478279868, &#39;subsample&#39;: 0.5050439187221742, &#39;colsample_bytree&#39;: 0.6725276351294994, &#39;max_depth&#39;: 4, &#39;early_stopping_rounds&#39;: 452, &#39;tree_method&#39;: &#39;approx&#39;, &#39;booster&#39;: &#39;gbtree&#39;, &#39;gamma&#39;: 0.0039154527649110146, &#39;grow_policy&#39;: &#39;lossguide&#39;}. Best is trial 20 with value: 0.6023122700396926.
+2021-11-24 11:58:30,187 INFO Training Started!
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[11:58:30] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
+Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
+
+  This could be a false alarm, with some parameters getting used by language bindings but
+  then being mistakenly passed down to XGBoost core, or some parameter actually being used
+  but getting flagged wrongly here. Please open an issue if you find any such cases.
+
+
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>2021-11-24 11:58:38,204 INFO Training Ended!
+2021-11-24 11:58:38,264 INFO log_loss: 0.650817776657641
+2021-11-24 11:58:38,265 INFO roc_auc_score: 0.7190271618625277
+2021-11-24 11:58:38,265 INFO accuracy_score: 0.6175
+2021-11-24 11:58:38,266 INFO f1_score: 0.012903225806451613
+2021-11-24 11:58:38,267 INFO precision_score: 1.0
+2021-11-24 11:58:38,267 INFO recall_score: 0.006493506493506494
+<span class="ansi-green-fg">[I 2021-11-24 11:58:38,292]</span> Trial 51 finished with value: 0.650817776657641 and parameters: {&#39;learning_rate&#39;: 0.027657223103193497, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 1.508834114571624, &#39;reg_alpha&#39;: 3.4286062415028234e-05, &#39;subsample&#39;: 0.5947354543019293, &#39;colsample_bytree&#39;: 0.9528866136619958, &#39;max_depth&#39;: 6, &#39;early_stopping_rounds&#39;: 402, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 20 with value: 0.6023122700396926.
+2021-11-24 11:58:38,464 INFO Training Started!
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[11:58:38] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
+Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
+
+  This could be a false alarm, with some parameters getting used by language bindings but
+  then being mistakenly passed down to XGBoost core, or some parameter actually being used
+  but getting flagged wrongly here. Please open an issue if you find any such cases.
+
+
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>2021-11-24 11:58:50,718 INFO Training Ended!
+2021-11-24 11:58:50,779 INFO log_loss: 0.6160027698986232
+2021-11-24 11:58:50,780 INFO roc_auc_score: 0.7201589061345159
+2021-11-24 11:58:50,780 INFO accuracy_score: 0.70125
+2021-11-24 11:58:50,781 INFO f1_score: 0.5031185031185031
+2021-11-24 11:58:50,781 INFO precision_score: 0.6994219653179191
+2021-11-24 11:58:50,782 INFO recall_score: 0.39285714285714285
+<span class="ansi-green-fg">[I 2021-11-24 11:58:50,808]</span> Trial 52 finished with value: 0.6160027698986232 and parameters: {&#39;learning_rate&#39;: 0.040427227428741906, &#39;n_estimators&#39;: 20000, &#39;reg_lambda&#39;: 0.20535422413974883, &#39;reg_alpha&#39;: 0.0007742171711545045, &#39;subsample&#39;: 0.9306781384312386, &#39;colsample_bytree&#39;: 0.704801485650981, &#39;max_depth&#39;: 3, &#39;early_stopping_rounds&#39;: 373, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 20 with value: 0.6023122700396926.
+2021-11-24 11:58:50,977 INFO Training Started!
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[11:58:51] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
+Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
+
+  This could be a false alarm, with some parameters getting used by language bindings but
+  then being mistakenly passed down to XGBoost core, or some parameter actually being used
+  but getting flagged wrongly here. Please open an issue if you find any such cases.
+
+
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>2021-11-24 11:58:59,456 INFO Training Ended!
+2021-11-24 11:58:59,518 INFO log_loss: 0.6043546871934086
+2021-11-24 11:58:59,519 INFO roc_auc_score: 0.7161664554957239
+2021-11-24 11:58:59,519 INFO accuracy_score: 0.6975
+2021-11-24 11:58:59,520 INFO f1_score: 0.5856164383561645
+2021-11-24 11:58:59,521 INFO precision_score: 0.6195652173913043
+2021-11-24 11:58:59,521 INFO recall_score: 0.5551948051948052
+<span class="ansi-green-fg">[I 2021-11-24 11:58:59,546]</span> Trial 53 finished with value: 0.6043546871934086 and parameters: {&#39;learning_rate&#39;: 0.01320709570376475, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 0.0012834363916561155, &#39;reg_alpha&#39;: 0.00032737946638013767, &#39;subsample&#39;: 0.46474662299651637, &#39;colsample_bytree&#39;: 0.5888590434117638, &#39;max_depth&#39;: 5, &#39;early_stopping_rounds&#39;: 483, &#39;tree_method&#39;: &#39;approx&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 20 with value: 0.6023122700396926.
+2021-11-24 11:58:59,711 INFO Training Started!
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[11:58:59] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
+Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
+
+  This could be a false alarm, with some parameters getting used by language bindings but
+  then being mistakenly passed down to XGBoost core, or some parameter actually being used
+  but getting flagged wrongly here. Please open an issue if you find any such cases.
+
+
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>2021-11-24 11:59:09,200 INFO Training Ended!
+2021-11-24 11:59:09,263 INFO log_loss: 0.603551508737728
+2021-11-24 11:59:09,264 INFO roc_auc_score: 0.7166811846689896
+2021-11-24 11:59:09,265 INFO accuracy_score: 0.6975
+2021-11-24 11:59:09,265 INFO f1_score: 0.5827586206896551
+2021-11-24 11:59:09,266 INFO precision_score: 0.6213235294117647
+2021-11-24 11:59:09,267 INFO recall_score: 0.5487012987012987
+<span class="ansi-green-fg">[I 2021-11-24 11:59:09,294]</span> Trial 54 finished with value: 0.603551508737728 and parameters: {&#39;learning_rate&#39;: 0.03561780446032311, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 0.006387074213889569, &#39;reg_alpha&#39;: 0.00028530228249217134, &#39;subsample&#39;: 0.7873559850797378, &#39;colsample_bytree&#39;: 0.8761284055015803, &#39;max_depth&#39;: 5, &#39;early_stopping_rounds&#39;: 259, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 20 with value: 0.6023122700396926.
+2021-11-24 11:59:09,470 INFO Training Started!
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[11:59:09] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
+Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
+
+  This could be a false alarm, with some parameters getting used by language bindings but
+  then being mistakenly passed down to XGBoost core, or some parameter actually being used
+  but getting flagged wrongly here. Please open an issue if you find any such cases.
+
+
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>2021-11-24 11:59:20,340 INFO Training Ended!
+2021-11-24 11:59:20,400 INFO log_loss: 0.6032781556388364
+2021-11-24 11:59:20,401 INFO roc_auc_score: 0.717354292049414
+2021-11-24 11:59:20,401 INFO accuracy_score: 0.7025
+2021-11-24 11:59:20,402 INFO f1_score: 0.5839160839160839
+2021-11-24 11:59:20,403 INFO precision_score: 0.6325757575757576
+2021-11-24 11:59:20,403 INFO recall_score: 0.5422077922077922
+<span class="ansi-green-fg">[I 2021-11-24 11:59:20,428]</span> Trial 55 finished with value: 0.6032781556388364 and parameters: {&#39;learning_rate&#39;: 0.03052022768504554, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 0.004699701717716409, &#39;reg_alpha&#39;: 0.002530036833028838, &#39;subsample&#39;: 0.7714795451742406, &#39;colsample_bytree&#39;: 0.8871066704803128, &#39;max_depth&#39;: 5, &#39;early_stopping_rounds&#39;: 285, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 20 with value: 0.6023122700396926.
+2021-11-24 11:59:20,596 INFO Training Started!
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[11:59:20] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
+Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
+
+  This could be a false alarm, with some parameters getting used by language bindings but
+  then being mistakenly passed down to XGBoost core, or some parameter actually being used
+  but getting flagged wrongly here. Please open an issue if you find any such cases.
+
+
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>2021-11-24 11:59:31,240 INFO Training Ended!
+2021-11-24 11:59:31,300 INFO log_loss: 0.6033758248761296
+2021-11-24 11:59:31,301 INFO roc_auc_score: 0.7179944039700137
+2021-11-24 11:59:31,301 INFO accuracy_score: 0.7075
+2021-11-24 11:59:31,302 INFO f1_score: 0.5776173285198555
+2021-11-24 11:59:31,303 INFO precision_score: 0.6504065040650406
+2021-11-24 11:59:31,304 INFO recall_score: 0.5194805194805194
+<span class="ansi-green-fg">[I 2021-11-24 11:59:31,328]</span> Trial 56 finished with value: 0.6033758248761296 and parameters: {&#39;learning_rate&#39;: 0.24582923032168152, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 0.02798322204929562, &#39;reg_alpha&#39;: 0.001996383531663444, &#39;subsample&#39;: 0.8521368438304793, &#39;colsample_bytree&#39;: 0.831616878495048, &#39;max_depth&#39;: 6, &#39;early_stopping_rounds&#39;: 235, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 20 with value: 0.6023122700396926.
+2021-11-24 11:59:31,494 INFO Training Started!
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[11:59:31] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
+Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
+
+  This could be a false alarm, with some parameters getting used by language bindings but
+  then being mistakenly passed down to XGBoost core, or some parameter actually being used
+  but getting flagged wrongly here. Please open an issue if you find any such cases.
+
+
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>2021-11-24 11:59:41,075 INFO Training Ended!
+2021-11-24 11:59:41,134 INFO log_loss: 0.6026766263414174
+2021-11-24 11:59:41,135 INFO roc_auc_score: 0.7188456868334918
+2021-11-24 11:59:41,136 INFO accuracy_score: 0.69625
+2021-11-24 11:59:41,136 INFO f1_score: 0.563734290843806
+2021-11-24 11:59:41,137 INFO precision_score: 0.6305220883534136
+2021-11-24 11:59:41,137 INFO recall_score: 0.5097402597402597
+<span class="ansi-green-fg">[I 2021-11-24 11:59:41,162]</span> Trial 57 finished with value: 0.6026766263414174 and parameters: {&#39;learning_rate&#39;: 0.21874272284306231, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 0.048222909125164665, &#39;reg_alpha&#39;: 1.0900267872563438e-08, &#39;subsample&#39;: 0.8517865539316619, &#39;colsample_bytree&#39;: 0.811352597477725, &#39;max_depth&#39;: 6, &#39;early_stopping_rounds&#39;: 276, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 20 with value: 0.6023122700396926.
+2021-11-24 11:59:41,331 INFO Training Started!
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[11:59:41] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
+Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
+
+  This could be a false alarm, with some parameters getting used by language bindings but
+  then being mistakenly passed down to XGBoost core, or some parameter actually being used
+  but getting flagged wrongly here. Please open an issue if you find any such cases.
+
+
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>2021-11-24 11:59:50,815 INFO Training Ended!
+2021-11-24 11:59:50,874 INFO log_loss: 0.6023109186254442
+2021-11-24 11:59:50,875 INFO roc_auc_score: 0.7179614085101891
+2021-11-24 11:59:50,876 INFO accuracy_score: 0.6975
+2021-11-24 11:59:50,877 INFO f1_score: 0.5709219858156028
+2021-11-24 11:59:50,878 INFO precision_score: 0.62890625
+2021-11-24 11:59:50,879 INFO recall_score: 0.5227272727272727
+<span class="ansi-green-fg">[I 2021-11-24 11:59:50,906]</span> Trial 58 finished with value: 0.6023109186254442 and parameters: {&#39;learning_rate&#39;: 0.21692758717644564, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 0.03574312032188266, &#39;reg_alpha&#39;: 1.460032654750016e-08, &#39;subsample&#39;: 0.8548663474176669, &#39;colsample_bytree&#39;: 0.8376473731229855, &#39;max_depth&#39;: 6, &#39;early_stopping_rounds&#39;: 285, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 58 with value: 0.6023109186254442.
+2021-11-24 11:59:51,079 INFO Training Started!
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[11:59:51] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
+Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
+
+  This could be a false alarm, with some parameters getting used by language bindings but
+  then being mistakenly passed down to XGBoost core, or some parameter actually being used
+  but getting flagged wrongly here. Please open an issue if you find any such cases.
+
+
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>2021-11-24 12:00:00,140 INFO Training Ended!
+2021-11-24 12:00:00,202 INFO log_loss: 0.6372257913276553
+2021-11-24 12:00:00,202 INFO roc_auc_score: 0.7198883433639531
+2021-11-24 12:00:00,203 INFO accuracy_score: 0.635
+2021-11-24 12:00:00,204 INFO f1_score: 0.17045454545454547
+2021-11-24 12:00:00,204 INFO precision_score: 0.6818181818181818
+2021-11-24 12:00:00,205 INFO recall_score: 0.09740259740259741
+<span class="ansi-green-fg">[I 2021-11-24 12:00:00,233]</span> Trial 59 finished with value: 0.6372257913276553 and parameters: {&#39;learning_rate&#39;: 0.1621944022986845, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 0.6793826372516385, &#39;reg_alpha&#39;: 1.2840417064710336e-08, &#39;subsample&#39;: 0.8282155214223299, &#39;colsample_bytree&#39;: 0.9577702648852262, &#39;max_depth&#39;: 7, &#39;early_stopping_rounds&#39;: 283, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 58 with value: 0.6023109186254442.
+2021-11-24 12:00:00,395 INFO Training Started!
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[12:00:00] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
+Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
+
+  This could be a false alarm, with some parameters getting used by language bindings but
+  then being mistakenly passed down to XGBoost core, or some parameter actually being used
+  but getting flagged wrongly here. Please open an issue if you find any such cases.
+
+
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>2021-11-24 12:00:10,041 INFO Training Ended!
+2021-11-24 12:00:10,103 INFO log_loss: 0.6044605529028922
+2021-11-24 12:00:10,104 INFO roc_auc_score: 0.719545190581776
+2021-11-24 12:00:10,105 INFO accuracy_score: 0.6975
+2021-11-24 12:00:10,105 INFO f1_score: 0.5535055350553506
+2021-11-24 12:00:10,106 INFO precision_score: 0.6410256410256411
+2021-11-24 12:00:10,107 INFO recall_score: 0.487012987012987
+<span class="ansi-green-fg">[I 2021-11-24 12:00:10,134]</span> Trial 60 finished with value: 0.6044605529028922 and parameters: {&#39;learning_rate&#39;: 0.19279729928507114, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 0.0777448369646114, &#39;reg_alpha&#39;: 4.255513418616447e-08, &#39;subsample&#39;: 0.9151708034700325, &#39;colsample_bytree&#39;: 0.7827978468790364, &#39;max_depth&#39;: 6, &#39;early_stopping_rounds&#39;: 292, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 58 with value: 0.6023109186254442.
+2021-11-24 12:00:10,327 INFO Training Started!
+2021-11-24 12:00:44,139 INFO Training Ended!
+2021-11-24 12:00:44,344 INFO log_loss: 1.0139460768729145
+2021-11-24 12:00:44,345 INFO roc_auc_score: 0.6416165135677332
+2021-11-24 12:00:44,345 INFO accuracy_score: 0.62625
+2021-11-24 12:00:44,346 INFO f1_score: 0.4631956912028726
+2021-11-24 12:00:44,346 INFO precision_score: 0.5180722891566265
+2021-11-24 12:00:44,347 INFO recall_score: 0.41883116883116883
+<span class="ansi-green-fg">[I 2021-11-24 12:00:44,370]</span> Trial 61 finished with value: 1.0139460768729145 and parameters: {&#39;learning_rate&#39;: 0.1140332049886865, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 2.0955532892901076, &#39;reg_alpha&#39;: 1.1438446056822876e-07, &#39;subsample&#39;: 0.6880189658711506, &#39;colsample_bytree&#39;: 0.49414825354145825, &#39;max_depth&#39;: 7, &#39;early_stopping_rounds&#39;: 321, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gbtree&#39;, &#39;gamma&#39;: 6.101263340730402e-07, &#39;grow_policy&#39;: &#39;depthwise&#39;}. Best is trial 58 with value: 0.6023109186254442.
+2021-11-24 12:00:44,550 INFO Training Started!
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[12:00:44] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
+Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
+
+  This could be a false alarm, with some parameters getting used by language bindings but
+  then being mistakenly passed down to XGBoost core, or some parameter actually being used
+  but getting flagged wrongly here. Please open an issue if you find any such cases.
+
+
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>2021-11-24 12:00:53,121 INFO Training Ended!
+2021-11-24 12:00:53,183 INFO log_loss: 0.6093048080988228
+2021-11-24 12:00:53,183 INFO roc_auc_score: 0.7204822616407982
+2021-11-24 12:00:53,184 INFO accuracy_score: 0.695
+2021-11-24 12:00:53,185 INFO f1_score: 0.5196850393700788
+2021-11-24 12:00:53,185 INFO precision_score: 0.66
+2021-11-24 12:00:53,186 INFO recall_score: 0.42857142857142855
+<span class="ansi-green-fg">[I 2021-11-24 12:00:53,211]</span> Trial 62 finished with value: 0.6093048080988228 and parameters: {&#39;learning_rate&#39;: 0.18605366069192236, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 0.13730331363752588, &#39;reg_alpha&#39;: 1.2097579233420072e-08, &#39;subsample&#39;: 0.7245815935454666, &#39;colsample_bytree&#39;: 0.8373210128330251, &#39;max_depth&#39;: 8, &#39;early_stopping_rounds&#39;: 280, &#39;tree_method&#39;: &#39;approx&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 58 with value: 0.6023109186254442.
+2021-11-24 12:00:53,381 INFO Training Started!
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[12:00:53] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
+Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
+
+  This could be a false alarm, with some parameters getting used by language bindings but
+  then being mistakenly passed down to XGBoost core, or some parameter actually being used
+  but getting flagged wrongly here. Please open an issue if you find any such cases.
+
+
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>2021-11-24 12:01:03,115 INFO Training Ended!
+2021-11-24 12:01:03,176 INFO log_loss: 0.6041115773329512
+2021-11-24 12:01:03,177 INFO roc_auc_score: 0.7161532573117939
+2021-11-24 12:01:03,177 INFO accuracy_score: 0.69375
+2021-11-24 12:01:03,178 INFO f1_score: 0.5811965811965812
+2021-11-24 12:01:03,179 INFO precision_score: 0.6137184115523465
+2021-11-24 12:01:03,179 INFO recall_score: 0.551948051948052
+<span class="ansi-green-fg">[I 2021-11-24 12:01:03,205]</span> Trial 63 finished with value: 0.6041115773329512 and parameters: {&#39;learning_rate&#39;: 0.1327708902916091, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 0.004722373106294932, &#39;reg_alpha&#39;: 2.984760758637526e-07, &#39;subsample&#39;: 0.8698983738777526, &#39;colsample_bytree&#39;: 0.9254610813429943, &#39;max_depth&#39;: 6, &#39;early_stopping_rounds&#39;: 226, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 58 with value: 0.6023109186254442.
+2021-11-24 12:01:03,378 INFO Training Started!
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[12:01:03] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
+Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
+
+  This could be a false alarm, with some parameters getting used by language bindings but
+  then being mistakenly passed down to XGBoost core, or some parameter actually being used
+  but getting flagged wrongly here. Please open an issue if you find any such cases.
+
+
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>2021-11-24 12:01:11,935 INFO Training Ended!
+2021-11-24 12:01:11,992 INFO log_loss: 0.602295038830489
+2021-11-24 12:01:11,992 INFO roc_auc_score: 0.7176380530039067
+2021-11-24 12:01:11,993 INFO accuracy_score: 0.7
+2021-11-24 12:01:11,994 INFO f1_score: 0.5789473684210527
+2021-11-24 12:01:11,994 INFO precision_score: 0.6297709923664122
+2021-11-24 12:01:11,995 INFO recall_score: 0.5357142857142857
+<span class="ansi-green-fg">[I 2021-11-24 12:01:12,020]</span> Trial 64 finished with value: 0.602295038830489 and parameters: {&#39;learning_rate&#39;: 0.23448628117471854, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 0.027865211791046604, &#39;reg_alpha&#39;: 3.172600149850677e-08, &#39;subsample&#39;: 0.8286217057166831, &#39;colsample_bytree&#39;: 0.8432116146719373, &#39;max_depth&#39;: 6, &#39;early_stopping_rounds&#39;: 196, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 64 with value: 0.602295038830489.
+2021-11-24 12:01:12,192 INFO Training Started!
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[12:01:12] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
+Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
+
+  This could be a false alarm, with some parameters getting used by language bindings but
+  then being mistakenly passed down to XGBoost core, or some parameter actually being used
+  but getting flagged wrongly here. Please open an issue if you find any such cases.
+
+
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>2021-11-24 12:01:20,680 INFO Training Ended!
+2021-11-24 12:01:20,740 INFO log_loss: 0.6229229770414532
+2021-11-24 12:01:20,741 INFO roc_auc_score: 0.7203964734452539
+2021-11-24 12:01:20,742 INFO accuracy_score: 0.68
+2021-11-24 12:01:20,742 INFO f1_score: 0.3990610328638498
+2021-11-24 12:01:20,743 INFO precision_score: 0.7203389830508474
+2021-11-24 12:01:20,743 INFO recall_score: 0.275974025974026
+<span class="ansi-green-fg">[I 2021-11-24 12:01:20,768]</span> Trial 65 finished with value: 0.6229229770414532 and parameters: {&#39;learning_rate&#39;: 0.20598585186906015, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 0.3278004500249784, &#39;reg_alpha&#39;: 5.7043759713664325e-08, &#39;subsample&#39;: 0.7684286637805158, &#39;colsample_bytree&#39;: 0.8915934405410837, &#39;max_depth&#39;: 6, &#39;early_stopping_rounds&#39;: 191, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 64 with value: 0.602295038830489.
+2021-11-24 12:01:20,936 INFO Training Started!
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[12:01:20] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
+Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
+
+  This could be a false alarm, with some parameters getting used by language bindings but
+  then being mistakenly passed down to XGBoost core, or some parameter actually being used
+  but getting flagged wrongly here. Please open an issue if you find any such cases.
+
+
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>2021-11-24 12:01:30,198 INFO Training Ended!
+2021-11-24 12:01:30,258 INFO log_loss: 0.6024340576445684
+2021-11-24 12:01:30,259 INFO roc_auc_score: 0.7175060711646077
+2021-11-24 12:01:30,259 INFO accuracy_score: 0.6975
+2021-11-24 12:01:30,260 INFO f1_score: 0.578397212543554
+2021-11-24 12:01:30,260 INFO precision_score: 0.6240601503759399
+2021-11-24 12:01:30,261 INFO recall_score: 0.538961038961039
+<span class="ansi-green-fg">[I 2021-11-24 12:01:30,286]</span> Trial 66 finished with value: 0.6024340576445684 and parameters: {&#39;learning_rate&#39;: 0.22501750315420058, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 0.022053556989799886, &#39;reg_alpha&#39;: 2.1093543363044277e-08, &#39;subsample&#39;: 0.8228148089289461, &#39;colsample_bytree&#39;: 0.7865649533128805, &#39;max_depth&#39;: 6, &#39;early_stopping_rounds&#39;: 188, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 64 with value: 0.602295038830489.
+2021-11-24 12:01:30,455 INFO Training Started!
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[12:01:30] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
+Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
+
+  This could be a false alarm, with some parameters getting used by language bindings but
+  then being mistakenly passed down to XGBoost core, or some parameter actually being used
+  but getting flagged wrongly here. Please open an issue if you find any such cases.
+
+
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>2021-11-24 12:01:39,070 INFO Training Ended!
+2021-11-24 12:01:39,131 INFO log_loss: 0.6024603482894599
+2021-11-24 12:01:39,131 INFO roc_auc_score: 0.7174466793369233
+2021-11-24 12:01:39,132 INFO accuracy_score: 0.69625
+2021-11-24 12:01:39,133 INFO f1_score: 0.577391304347826
+2021-11-24 12:01:39,133 INFO precision_score: 0.6217228464419475
+2021-11-24 12:01:39,134 INFO recall_score: 0.538961038961039
+<span class="ansi-green-fg">[I 2021-11-24 12:01:39,160]</span> Trial 67 finished with value: 0.6024603482894599 and parameters: {&#39;learning_rate&#39;: 0.23711085047118874, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 0.021378490262174213, &#39;reg_alpha&#39;: 2.3213765777731845e-08, &#39;subsample&#39;: 0.8247856949056165, &#39;colsample_bytree&#39;: 0.7257348305668477, &#39;max_depth&#39;: 7, &#39;early_stopping_rounds&#39;: 188, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 64 with value: 0.602295038830489.
+2021-11-24 12:01:39,326 INFO Training Started!
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[12:01:39] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
+Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
+
+  This could be a false alarm, with some parameters getting used by language bindings but
+  then being mistakenly passed down to XGBoost core, or some parameter actually being used
+  but getting flagged wrongly here. Please open an issue if you find any such cases.
+
+
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>2021-11-24 12:01:47,788 INFO Training Ended!
+2021-11-24 12:01:47,848 INFO log_loss: 0.6034830134734511
+2021-11-24 12:01:47,849 INFO roc_auc_score: 0.7191888396156689
+2021-11-24 12:01:47,850 INFO accuracy_score: 0.6975
+2021-11-24 12:01:47,850 INFO f1_score: 0.5583941605839416
+2021-11-24 12:01:47,851 INFO precision_score: 0.6375
+2021-11-24 12:01:47,852 INFO recall_score: 0.4967532467532468
+<span class="ansi-green-fg">[I 2021-11-24 12:01:47,880]</span> Trial 68 finished with value: 0.6034830134734511 and parameters: {&#39;learning_rate&#39;: 0.24018034186076134, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 0.06341025893382701, &#39;reg_alpha&#39;: 2.2796329413542294e-08, &#39;subsample&#39;: 0.9599350543076591, &#39;colsample_bytree&#39;: 0.7355242470499104, &#39;max_depth&#39;: 7, &#39;early_stopping_rounds&#39;: 166, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 64 with value: 0.602295038830489.
+2021-11-24 12:01:48,044 INFO Training Started!
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[12:01:48] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
+Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
+
+  This could be a false alarm, with some parameters getting used by language bindings but
+  then being mistakenly passed down to XGBoost core, or some parameter actually being used
+  but getting flagged wrongly here. Please open an issue if you find any such cases.
+
+
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>2021-11-24 12:01:59,873 INFO Training Ended!
+2021-11-24 12:01:59,942 INFO log_loss: 0.6022779347747564
+2021-11-24 12:01:59,942 INFO roc_auc_score: 0.7178690212226798
+2021-11-24 12:01:59,943 INFO accuracy_score: 0.69875
+2021-11-24 12:01:59,944 INFO f1_score: 0.5734513274336284
+2021-11-24 12:01:59,944 INFO precision_score: 0.6303501945525292
+2021-11-24 12:01:59,945 INFO recall_score: 0.525974025974026
+<span class="ansi-green-fg">[I 2021-11-24 12:01:59,974]</span> Trial 69 finished with value: 0.6022779347747564 and parameters: {&#39;learning_rate&#39;: 0.152746085461703, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 0.031987234461410045, &#39;reg_alpha&#39;: 1.3693071141813216e-07, &#39;subsample&#39;: 0.8214620713008292, &#39;colsample_bytree&#39;: 0.8000514536230441, &#39;max_depth&#39;: 7, &#39;early_stopping_rounds&#39;: 147, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 69 with value: 0.6022779347747564.
+2021-11-24 12:02:00,262 INFO Training Started!
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[12:02:00] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
+Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
+
+  This could be a false alarm, with some parameters getting used by language bindings but
+  then being mistakenly passed down to XGBoost core, or some parameter actually being used
+  but getting flagged wrongly here. Please open an issue if you find any such cases.
+
+
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>2021-11-24 12:02:11,425 INFO Training Ended!
+2021-11-24 12:02:11,485 INFO log_loss: 0.6026194911077618
+2021-11-24 12:02:11,486 INFO roc_auc_score: 0.7173410938654842
+2021-11-24 12:02:11,486 INFO accuracy_score: 0.69875
+2021-11-24 12:02:11,487 INFO f1_score: 0.5823223570190641
+2021-11-24 12:02:11,488 INFO precision_score: 0.6245353159851301
+2021-11-24 12:02:11,488 INFO recall_score: 0.5454545454545454
+<span class="ansi-green-fg">[I 2021-11-24 12:02:11,514]</span> Trial 70 finished with value: 0.6026194911077618 and parameters: {&#39;learning_rate&#39;: 0.1630843141366229, &#39;n_estimators&#39;: 20000, &#39;reg_lambda&#39;: 0.018155430643457735, &#39;reg_alpha&#39;: 6.924580799000354e-08, &#39;subsample&#39;: 0.8331594340685916, &#39;colsample_bytree&#39;: 0.7983840960926235, &#39;max_depth&#39;: 7, &#39;early_stopping_rounds&#39;: 131, &#39;tree_method&#39;: &#39;hist&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 69 with value: 0.6022779347747564.
 </pre>
 </div>
 </div>
@@ -720,12 +1471,26 @@ Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#3
 </div>
 </div>
 
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>FrozenTrial(number=69, values=[0.6022779347747564], datetime_start=datetime.datetime(2021, 11, 24, 12, 1, 47, 891300), datetime_complete=datetime.datetime(2021, 11, 24, 12, 1, 59, 946156), params={&#39;booster&#39;: &#39;gblinear&#39;, &#39;colsample_bytree&#39;: 0.8000514536230441, &#39;early_stopping_rounds&#39;: 147, &#39;learning_rate&#39;: 0.152746085461703, &#39;max_depth&#39;: 7, &#39;n_estimators&#39;: 15000, &#39;reg_alpha&#39;: 1.3693071141813216e-07, &#39;reg_lambda&#39;: 0.031987234461410045, &#39;subsample&#39;: 0.8214620713008292, &#39;tree_method&#39;: &#39;exact&#39;}, distributions={&#39;booster&#39;: CategoricalDistribution(choices=(&#39;gbtree&#39;, &#39;gblinear&#39;)), &#39;colsample_bytree&#39;: UniformDistribution(high=1.0, low=0.1), &#39;early_stopping_rounds&#39;: IntUniformDistribution(high=500, low=100, step=1), &#39;learning_rate&#39;: LogUniformDistribution(high=0.25, low=0.01), &#39;max_depth&#39;: IntUniformDistribution(high=9, low=1, step=1), &#39;n_estimators&#39;: CategoricalDistribution(choices=(7000, 15000, 20000)), &#39;reg_alpha&#39;: LogUniformDistribution(high=100.0, low=1e-08), &#39;reg_lambda&#39;: LogUniformDistribution(high=100.0, low=1e-08), &#39;subsample&#39;: UniformDistribution(high=1.0, low=0.1), &#39;tree_method&#39;: CategoricalDistribution(choices=(&#39;exact&#39;, &#39;approx&#39;, &#39;hist&#39;))}, user_attrs={}, system_attrs={}, intermediate_values={}, trial_id=70, state=TrialState.COMPLETE, value=None)
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
 </div>
     {% endraw %}
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h5 id="now-update-the-model-with-best-params-from-study-and-then-update-the-sklearn-pipeline-with-new-model">now update the model with best params from study and then update the sklearn pipeline with new model<a class="anchor-link" href="#now-update-the-model-with-best-params-from-study-and-then-update-the-sklearn-pipeline-with-new-model"> </a></h5>
+<h5 id="now-update-the-meta-model-with-best-params-from-study-and-then-update-the-sklearn-pipeline-with-this-new-model">now update the meta model with best params from study and then update the sklearn pipeline with this new model<a class="anchor-link" href="#now-update-the-meta-model-with-best-params-from-study-and-then-update-the-sklearn-pipeline-with-this-new-model"> </a></h5>
 </div>
 </div>
 </div>
@@ -747,12 +1512,78 @@ Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#3
 </div>
 </div>
 
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Final xgb_params: {&#39;learning_rate&#39;: 0.152746085461703, &#39;eval_metric&#39;: &#39;auc&#39;, &#39;use_label_encoder&#39;: False, &#39;random_state&#39;: 42, &#39;booster&#39;: &#39;gblinear&#39;, &#39;colsample_bytree&#39;: 0.8000514536230441, &#39;early_stopping_rounds&#39;: 147, &#39;max_depth&#39;: 7, &#39;n_estimators&#39;: 15000, &#39;reg_alpha&#39;: 1.3693071141813216e-07, &#39;reg_lambda&#39;: 0.031987234461410045, &#39;subsample&#39;: 0.8214620713008292, &#39;tree_method&#39;: &#39;exact&#39;}
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<style>#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 {color: black;background-color: white;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 pre{padding: 0;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 div.sk-toggleable {background-color: white;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.3em;box-sizing: border-box;text-align: center;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 div.sk-estimator {font-family: monospace;background-color: #f0f8ff;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;margin-bottom: 0.5em;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 div.sk-estimator:hover {background-color: #d4ebff;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;padding-right: 0.2em;padding-left: 0.2em;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 div.sk-item {z-index: 1;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 div.sk-parallel::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 div.sk-parallel-item:only-child::after {width: 0;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0 0.4em 0.5em 0.4em;box-sizing: border-box;padding-bottom: 0.4em;background-color: white;position: relative;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 div.sk-label-container {position: relative;z-index: 2;text-align: center;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 div.sk-container {display: inline-block;position: relative;}</style><div id="sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85" class"sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="99e065de-65e9-4d2e-a6c7-43f5bd306367" type="checkbox" ><label class="sk-toggleable__label" for="99e065de-65e9-4d2e-a6c7-43f5bd306367">Pipeline</label><div class="sk-toggleable__content"><pre>Pipeline(steps=[('preprocessor',
+                 ColumnTransformer(transformers=[('num_cols',
+                                                  Pipeline(steps=[('imputer',
+                                                                   SimpleImputer(strategy='constant')),
+                                                                  ('scaler',
+                                                                   StandardScaler())]),
+                                                  ['f0', 'f1', 'f2', 'f3', 'f4',
+                                                   'f5', 'f6', 'f7', 'f8', 'f9',
+                                                   'f10', 'f11', 'f12', 'f13',
+                                                   'f14', 'f15', 'f16', 'f17',
+                                                   'f18', 'f19', 'f20', 'f21',
+                                                   'f22', 'f23', 'f24', 'f25',
+                                                   'f26', 'f27', 'f28', 'f29', ...])])),
+                (...
+                               max_delta_step=None, max_depth=7,
+                               min_child_weight=None, missing=nan,
+                               monotone_constraints=None, n_estimators=15000,
+                               n_jobs=None, num_parallel_tree=None,
+                               predictor=None, random_state=42,
+                               reg_alpha=1.3693071141813216e-07,
+                               reg_lambda=0.031987234461410045,
+                               scale_pos_weight=None,
+                               subsample=0.8214620713008292,
+                               tree_method='exact', use_label_encoder=False,
+                               validate_parameters=None, ...))])</pre></div></div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="81c16891-a080-4ecf-9f5d-bc83b06c6677" type="checkbox" ><label class="sk-toggleable__label" for="81c16891-a080-4ecf-9f5d-bc83b06c6677">preprocessor: ColumnTransformer</label><div class="sk-toggleable__content"><pre>ColumnTransformer(transformers=[('num_cols',
+                                 Pipeline(steps=[('imputer',
+                                                  SimpleImputer(strategy='constant')),
+                                                 ('scaler', StandardScaler())]),
+                                 ['f0', 'f1', 'f2', 'f3', 'f4', 'f5', 'f6',
+                                  'f7', 'f8', 'f9', 'f10', 'f11', 'f12', 'f13',
+                                  'f14', 'f15', 'f16', 'f17', 'f18', 'f19',
+                                  'f20', 'f21', 'f22', 'f23', 'f24', 'f25',
+                                  'f26', 'f27', 'f28', 'f29', ...])])</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="04789cd2-bc85-4ecb-989b-1fa18eb1c838" type="checkbox" ><label class="sk-toggleable__label" for="04789cd2-bc85-4ecb-989b-1fa18eb1c838">num_cols</label><div class="sk-toggleable__content"><pre>['f0', 'f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8', 'f9', 'f10', 'f11', 'f12', 'f13', 'f14', 'f15', 'f16', 'f17', 'f18', 'f19', 'f20', 'f21', 'f22', 'f23', 'f24', 'f25', 'f26', 'f27', 'f28', 'f29', 'f30', 'f31', 'f32', 'f33', 'f34', 'f35', 'f36', 'f37', 'f38', 'f39', 'f40', 'f41', 'f42', 'f43', 'f44', 'f45', 'f46', 'f47', 'f48', 'f49', 'f50', 'f51', 'f52', 'f53', 'f54', 'f55', 'f56', 'f57', 'f58', 'f59', 'f60', 'f61', 'f62', 'f63', 'f64', 'f65', 'f66', 'f67', 'f68', 'f69', 'f70', 'f71', 'f72', 'f73', 'f74', 'f75', 'f76', 'f77', 'f78', 'f79', 'f80', 'f81', 'f82', 'f83', 'f84', 'f85', 'f86', 'f87', 'f88', 'f89', 'f90', 'f91', 'f92', 'f93', 'f94', 'f95', 'f96', 'f97', 'f98', 'f99']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="3a1ac4ea-26c5-495f-b0dd-69cb00a82429" type="checkbox" ><label class="sk-toggleable__label" for="3a1ac4ea-26c5-495f-b0dd-69cb00a82429">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(strategy='constant')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="41300da2-cd49-433c-8ced-442b3277741b" type="checkbox" ><label class="sk-toggleable__label" for="41300da2-cd49-433c-8ced-442b3277741b">StandardScaler</label><div class="sk-toggleable__content"><pre>StandardScaler()</pre></div></div></div></div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="604c8df1-33e0-4b8c-9292-c73ac6242b6e" type="checkbox" ><label class="sk-toggleable__label" for="604c8df1-33e0-4b8c-9292-c73ac6242b6e">XGBClassifier</label><div class="sk-toggleable__content"><pre>XGBClassifier(base_score=None, booster='gblinear', colsample_bylevel=None,
+              colsample_bynode=None, colsample_bytree=0.8000514536230441,
+              early_stopping_rounds=147, enable_categorical=False,
+              eval_metric='auc', gamma=None, gpu_id=None, importance_type=None,
+              interaction_constraints=None, learning_rate=0.152746085461703,
+              max_delta_step=None, max_depth=7, min_child_weight=None,
+              missing=nan, monotone_constraints=None, n_estimators=15000,
+              n_jobs=None, num_parallel_tree=None, predictor=None,
+              random_state=42, reg_alpha=1.3693071141813216e-07,
+              reg_lambda=0.031987234461410045, scale_pos_weight=None,
+              subsample=0.8214620713008292, tree_method='exact',
+              use_label_encoder=False, validate_parameters=None, ...)</pre></div></div></div></div></div></div></div>
+</div>
+
+</div>
+
+</div>
+</div>
+
 </div>
     {% endraw %}
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Let's-Use-K-Fold-Training">Let's Use K-Fold Training<a class="anchor-link" href="#Let's-Use-K-Fold-Training"> </a></h4>
+<h4 id="Let's-Use-K-Fold-Training-with-best-params">Let's Use K-Fold Training with best params<a class="anchor-link" href="#Let's-Use-K-Fold-Training-with-best-params"> </a></h4>
 </div>
 </div>
 </div>
@@ -779,17 +1610,14 @@ Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#3
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre><span class="ansi-cyan-fg">(apply_list_of_funcs pid=19474)</span> 
-[14:10:03] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
-Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
+<pre>[12:02:11] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
+Parameters: { &#34;colsample_bytree&#34;, &#34;early_stopping_rounds&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
 
   This could be a false alarm, with some parameters getting used by language bindings but
   then being mistakenly passed down to XGBoost core, or some parameter actually being used
   but getting flagged wrongly here. Please open an issue if you find any such cases.
 
 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=19464)</span> 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=19463)</span> 
 </pre>
 </div>
 </div>
@@ -797,13 +1625,13 @@ Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#3
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-23 14:10:23,049 INFO fold: 1 log_loss : 0.6039021413773298
-2021-11-23 14:10:23,050 INFO fold: 1 roc_auc_score : 0.7272275950999355
-2021-11-23 14:10:23,051 INFO fold: 1 accuracy_score : 0.6925
-2021-11-23 14:10:23,051 INFO fold: 1 f1_score : 0.5758620689655173
-2021-11-23 14:10:23,052 INFO fold: 1 precision_score : 0.668
-2021-11-23 14:10:23,053 INFO fold: 1 recall_score : 0.5060606060606061
-2021-11-23 14:10:23,054 WARNING Trying to do Test Predictions but No Test Dataset Provided!
+<pre>2021-11-24 12:02:21,265 INFO fold: 1 log_loss : 0.6044875546731054
+2021-11-24 12:02:21,266 INFO fold: 1 roc_auc_score : 0.7267569310122501
+2021-11-24 12:02:21,266 INFO fold: 1 accuracy_score : 0.69125
+2021-11-24 12:02:21,267 INFO fold: 1 f1_score : 0.5612788632326821
+2021-11-24 12:02:21,267 INFO fold: 1 precision_score : 0.6781115879828327
+2021-11-24 12:02:21,268 INFO fold: 1 recall_score : 0.47878787878787876
+2021-11-24 12:02:21,269 INFO Predicting Test Preds Probablities!
 </pre>
 </div>
 </div>
@@ -811,18 +1639,14 @@ Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#3
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>[14:10:27] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
-Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
+<pre>[12:02:21] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
+Parameters: { &#34;colsample_bytree&#34;, &#34;early_stopping_rounds&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
 
   This could be a false alarm, with some parameters getting used by language bindings but
   then being mistakenly passed down to XGBoost core, or some parameter actually being used
   but getting flagged wrongly here. Please open an issue if you find any such cases.
 
 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=19471)</span> 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=19472)</span> 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=19463)</span> 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=19471)</span> 
 </pre>
 </div>
 </div>
@@ -830,13 +1654,13 @@ Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#3
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-23 14:10:49,192 INFO fold: 2 log_loss : 0.6287158783921041
-2021-11-23 14:10:49,193 INFO fold: 2 roc_auc_score : 0.694635718891038
-2021-11-23 14:10:49,194 INFO fold: 2 accuracy_score : 0.6825
-2021-11-23 14:10:49,195 INFO fold: 2 f1_score : 0.5876623376623378
-2021-11-23 14:10:49,196 INFO fold: 2 precision_score : 0.6328671328671329
-2021-11-23 14:10:49,197 INFO fold: 2 recall_score : 0.5484848484848485
-2021-11-23 14:10:49,198 WARNING Trying to do Test Predictions but No Test Dataset Provided!
+<pre>2021-11-24 12:02:30,239 INFO fold: 2 log_loss : 0.6239040436223149
+2021-11-24 12:02:30,240 INFO fold: 2 roc_auc_score : 0.6955383623468729
+2021-11-24 12:02:30,240 INFO fold: 2 accuracy_score : 0.68875
+2021-11-24 12:02:30,241 INFO fold: 2 f1_score : 0.5815126050420169
+2021-11-24 12:02:30,242 INFO fold: 2 precision_score : 0.6528301886792452
+2021-11-24 12:02:30,243 INFO fold: 2 recall_score : 0.5242424242424243
+2021-11-24 12:02:30,243 INFO Predicting Test Preds Probablities!
 </pre>
 </div>
 </div>
@@ -844,16 +1668,14 @@ Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#3
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>[14:10:54] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
-Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
+<pre>[12:02:30] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
+Parameters: { &#34;colsample_bytree&#34;, &#34;early_stopping_rounds&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
 
   This could be a false alarm, with some parameters getting used by language bindings but
   then being mistakenly passed down to XGBoost core, or some parameter actually being used
   but getting flagged wrongly here. Please open an issue if you find any such cases.
 
 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=19472)</span> 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=19463)</span> 
 </pre>
 </div>
 </div>
@@ -861,13 +1683,13 @@ Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#3
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-23 14:11:12,677 INFO fold: 3 log_loss : 0.65383338053427
-2021-11-23 14:11:12,678 INFO fold: 3 roc_auc_score : 0.6620309477756288
-2021-11-23 14:11:12,679 INFO fold: 3 accuracy_score : 0.6425
-2021-11-23 14:11:12,680 INFO fold: 3 f1_score : 0.5119453924914675
-2021-11-23 14:11:12,680 INFO fold: 3 precision_score : 0.5859375
-2021-11-23 14:11:12,681 INFO fold: 3 recall_score : 0.45454545454545453
-2021-11-23 14:11:12,682 WARNING Trying to do Test Predictions but No Test Dataset Provided!
+<pre>2021-11-24 12:02:39,207 INFO fold: 3 log_loss : 0.6432310473406687
+2021-11-24 12:02:39,208 INFO fold: 3 roc_auc_score : 0.662849774339136
+2021-11-24 12:02:39,209 INFO fold: 3 accuracy_score : 0.64625
+2021-11-24 12:02:39,209 INFO fold: 3 f1_score : 0.4991150442477876
+2021-11-24 12:02:39,210 INFO fold: 3 precision_score : 0.6
+2021-11-24 12:02:39,211 INFO fold: 3 recall_score : 0.42727272727272725
+2021-11-24 12:02:39,211 INFO Predicting Test Preds Probablities!
 </pre>
 </div>
 </div>
@@ -875,17 +1697,14 @@ Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#3
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>[14:11:17] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
-Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
+<pre>[12:02:39] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
+Parameters: { &#34;colsample_bytree&#34;, &#34;early_stopping_rounds&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
 
   This could be a false alarm, with some parameters getting used by language bindings but
   then being mistakenly passed down to XGBoost core, or some parameter actually being used
   but getting flagged wrongly here. Please open an issue if you find any such cases.
 
 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=19471)</span> 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=19463)</span> 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=19465)</span> 
 </pre>
 </div>
 </div>
@@ -893,13 +1712,13 @@ Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#3
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-23 14:11:34,620 INFO fold: 4 log_loss : 0.6231675453111529
-2021-11-23 14:11:34,621 INFO fold: 4 roc_auc_score : 0.7080308427650268
-2021-11-23 14:11:34,621 INFO fold: 4 accuracy_score : 0.69125
-2021-11-23 14:11:34,622 INFO fold: 4 f1_score : 0.5957446808510638
-2021-11-23 14:11:34,623 INFO fold: 4 precision_score : 0.65
-2021-11-23 14:11:34,624 INFO fold: 4 recall_score : 0.5498489425981873
-2021-11-23 14:11:34,625 WARNING Trying to do Test Predictions but No Test Dataset Provided!
+<pre>2021-11-24 12:02:49,262 INFO fold: 4 log_loss : 0.617499795970507
+2021-11-24 12:02:49,262 INFO fold: 4 roc_auc_score : 0.7093964789775765
+2021-11-24 12:02:49,263 INFO fold: 4 accuracy_score : 0.69375
+2021-11-24 12:02:49,264 INFO fold: 4 f1_score : 0.5840407470288624
+2021-11-24 12:02:49,264 INFO fold: 4 precision_score : 0.6666666666666666
+2021-11-24 12:02:49,265 INFO fold: 4 recall_score : 0.5196374622356495
+2021-11-24 12:02:49,265 INFO Predicting Test Preds Probablities!
 </pre>
 </div>
 </div>
@@ -907,20 +1726,14 @@ Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#3
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>[14:11:39] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
-Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
+<pre>[12:02:49] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
+Parameters: { &#34;colsample_bytree&#34;, &#34;early_stopping_rounds&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
 
   This could be a false alarm, with some parameters getting used by language bindings but
   then being mistakenly passed down to XGBoost core, or some parameter actually being used
   but getting flagged wrongly here. Please open an issue if you find any such cases.
 
 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=19464)</span> 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=19466)</span> 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=19468)</span> 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=19470)</span> 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=19467)</span> 
-<span class="ansi-cyan-fg">(apply_list_of_funcs pid=19473)</span> 
 </pre>
 </div>
 </div>
@@ -928,14 +1741,14 @@ Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#3
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-23 14:11:58,562 INFO fold: 5 log_loss : 0.6006386911938898
-2021-11-23 14:11:58,563 INFO fold: 5 roc_auc_score : 0.7226470152474571
-2021-11-23 14:11:58,564 INFO fold: 5 accuracy_score : 0.6775
-2021-11-23 14:11:58,565 INFO fold: 5 f1_score : 0.568561872909699
-2021-11-23 14:11:58,565 INFO fold: 5 precision_score : 0.6367041198501873
-2021-11-23 14:11:58,566 INFO fold: 5 recall_score : 0.513595166163142
-2021-11-23 14:11:58,567 WARNING Trying to do Test Predictions but No Test Dataset Provided!
-2021-11-23 14:11:58,568 INFO  Mean Metrics Results from all Folds are: {&#39;log_loss&#39;: 0.6220515273617493, &#39;roc_auc_score&#39;: 0.7029144239558172, &#39;accuracy_score&#39;: 0.6772500000000001, &#39;f1_score&#39;: 0.5679552705760171, &#39;precision_score&#39;: 0.634701750543464, &#39;recall_score&#39;: 0.5145070035704478}
+<pre>2021-11-24 12:02:58,122 INFO fold: 5 log_loss : 0.6016531882900744
+2021-11-24 12:02:58,123 INFO fold: 5 roc_auc_score : 0.7217580633732503
+2021-11-24 12:02:58,124 INFO fold: 5 accuracy_score : 0.6775
+2021-11-24 12:02:58,124 INFO fold: 5 f1_score : 0.5582191780821918
+2021-11-24 12:02:58,125 INFO fold: 5 precision_score : 0.6442687747035574
+2021-11-24 12:02:58,125 INFO fold: 5 recall_score : 0.49244712990936557
+2021-11-24 12:02:58,126 INFO Predicting Test Preds Probablities!
+2021-11-24 12:02:58,155 INFO  Mean Metrics Results from all Folds are: {&#39;log_loss&#39;: 0.6181551259793341, &#39;roc_auc_score&#39;: 0.7032599220098172, &#39;accuracy_score&#39;: 0.6795, &#39;f1_score&#39;: 0.5568332875267081, &#39;precision_score&#39;: 0.6483754436064604, &#39;recall_score&#39;: 0.48847752448960907}
 </pre>
 </div>
 </div>
@@ -943,7 +1756,7 @@ Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#3
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre><span class="ansi-cyan-fg">(apply_list_of_funcs pid=19464)</span> 
+<pre>(4000,)
 </pre>
 </div>
 </div>

@@ -126,7 +126,7 @@ nb_path: "02_tmlt.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h4 id="TMLT.do_xgb_optuna_optimization" class="doc_header"><code>TMLT.do_xgb_optuna_optimization</code><a href="https://github.com/psmathur/tabular_ml_toolkit/tree/master/tabular_ml_toolkit/tmlt.py#L263" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>TMLT.do_xgb_optuna_optimization</code>(<strong><code>optuna_db_path</code></strong>:<code>str</code>, <strong><code>use_gpu</code></strong>=<em><code>False</code></em>, <strong><code>opt_trials</code></strong>=<em><code>100</code></em>, <strong><code>opt_timeout</code></strong>=<em><code>360</code></em>)</p>
+<h4 id="TMLT.do_xgb_optuna_optimization" class="doc_header"><code>TMLT.do_xgb_optuna_optimization</code><a href="https://github.com/psmathur/tabular_ml_toolkit/tree/master/tabular_ml_toolkit/tmlt.py#L334" class="source_link" style="float:right">[source]</a></h4><blockquote><p><code>TMLT.do_xgb_optuna_optimization</code>(<strong><code>optuna_db_path</code></strong>:<code>str</code>, <strong><code>use_gpu</code></strong>=<em><code>False</code></em>, <strong><code>opt_trials</code></strong>=<em><code>100</code></em>, <strong><code>opt_timeout</code></strong>=<em><code>360</code></em>)</p>
 </blockquote>
 <p>This methods returns and do optuna bases study optimization for hyperparmaeter search
 optuna_db_path is output directory you want to use for storing sql db used for optuna
@@ -144,6 +144,20 @@ opt_timeout=360 by default, timeout value in seconds</p>
 </div>
     {% endraw %}
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>run script to update all files</p>
+<p>make pypi</p>
+<p>reconnect and reinstall tmlt on google colab, restart colab
+use ensembled oof model code from this notebook and add it to google colab
+make sure to comment out nrows=4000
+let it run and wait
+get submissions and download it
+upload it to kaggle to see results</p>
+
+</div>
+</div>
+</div>
 </div>
  
 

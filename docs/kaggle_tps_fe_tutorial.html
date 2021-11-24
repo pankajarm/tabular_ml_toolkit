@@ -191,6 +191,113 @@ nb_path: "kaggle_tps_fe_tutorial.ipynb"
 </div>
 </div>
 
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>2021-11-24 10:14:03,486 INFO 12 cores found, model and data parallel processing should worked!
+2021-11-24 10:14:03,635 INFO DataFrame Memory usage decreased to 0.80 Mb (74.4% reduction)
+2021-11-24 10:14:03,636 INFO No test_file_path given, so training will continue without it!
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>LinearSVC doesn&#39;t support parallelism yet! Training will continue on a single thread.
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>2021-11-24 10:14:03,694 INFO categorical columns are None, Preprocessing will done accordingly!
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tmlt</span><span class="o">.</span><span class="n">spl</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<style>#sk-2be402dd-1686-45ab-bd8b-062d12c84ce4 {color: black;background-color: white;}#sk-2be402dd-1686-45ab-bd8b-062d12c84ce4 pre{padding: 0;}#sk-2be402dd-1686-45ab-bd8b-062d12c84ce4 div.sk-toggleable {background-color: white;}#sk-2be402dd-1686-45ab-bd8b-062d12c84ce4 label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.3em;box-sizing: border-box;text-align: center;}#sk-2be402dd-1686-45ab-bd8b-062d12c84ce4 div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}#sk-2be402dd-1686-45ab-bd8b-062d12c84ce4 div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}#sk-2be402dd-1686-45ab-bd8b-062d12c84ce4 input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}#sk-2be402dd-1686-45ab-bd8b-062d12c84ce4 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-2be402dd-1686-45ab-bd8b-062d12c84ce4 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-2be402dd-1686-45ab-bd8b-062d12c84ce4 input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}#sk-2be402dd-1686-45ab-bd8b-062d12c84ce4 div.sk-estimator {font-family: monospace;background-color: #f0f8ff;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;margin-bottom: 0.5em;}#sk-2be402dd-1686-45ab-bd8b-062d12c84ce4 div.sk-estimator:hover {background-color: #d4ebff;}#sk-2be402dd-1686-45ab-bd8b-062d12c84ce4 div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}#sk-2be402dd-1686-45ab-bd8b-062d12c84ce4 div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}#sk-2be402dd-1686-45ab-bd8b-062d12c84ce4 div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}#sk-2be402dd-1686-45ab-bd8b-062d12c84ce4 div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;padding-right: 0.2em;padding-left: 0.2em;}#sk-2be402dd-1686-45ab-bd8b-062d12c84ce4 div.sk-item {z-index: 1;}#sk-2be402dd-1686-45ab-bd8b-062d12c84ce4 div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}#sk-2be402dd-1686-45ab-bd8b-062d12c84ce4 div.sk-parallel::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}#sk-2be402dd-1686-45ab-bd8b-062d12c84ce4 div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}#sk-2be402dd-1686-45ab-bd8b-062d12c84ce4 div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}#sk-2be402dd-1686-45ab-bd8b-062d12c84ce4 div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}#sk-2be402dd-1686-45ab-bd8b-062d12c84ce4 div.sk-parallel-item:only-child::after {width: 0;}#sk-2be402dd-1686-45ab-bd8b-062d12c84ce4 div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0 0.4em 0.5em 0.4em;box-sizing: border-box;padding-bottom: 0.4em;background-color: white;position: relative;}#sk-2be402dd-1686-45ab-bd8b-062d12c84ce4 div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}#sk-2be402dd-1686-45ab-bd8b-062d12c84ce4 div.sk-label-container {position: relative;z-index: 2;text-align: center;}#sk-2be402dd-1686-45ab-bd8b-062d12c84ce4 div.sk-container {display: inline-block;position: relative;}</style><div id="sk-2be402dd-1686-45ab-bd8b-062d12c84ce4" class"sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="b81834f1-740e-4f8f-82b2-477bf9400156" type="checkbox" ><label class="sk-toggleable__label" for="b81834f1-740e-4f8f-82b2-477bf9400156">Pipeline</label><div class="sk-toggleable__content"><pre>Pipeline(steps=[('preprocessor',
+                 ColumnTransformer(transformers=[('num_cols',
+                                                  Pipeline(steps=[('imputer',
+                                                                   SimpleImputer(strategy='constant')),
+                                                                  ('scaler',
+                                                                   StandardScaler())]),
+                                                  ['f0', 'f1', 'f2', 'f3', 'f4',
+                                                   'f5', 'f6', 'f7', 'f8', 'f9',
+                                                   'f10', 'f11', 'f12', 'f13',
+                                                   'f14', 'f15', 'f16', 'f17',
+                                                   'f18', 'f19', 'f20', 'f21',
+                                                   'f22', 'f23', 'f24', 'f25',
+                                                   'f26', 'f27', 'f28', 'f29', ...])])),
+                ('model',
+                 LinearSVC(dual=False, max_iter=2000, random_state=42,
+                           tol=1e-07))])</pre></div></div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="74f62a1f-57ef-47d2-88f0-fed19dc83f39" type="checkbox" ><label class="sk-toggleable__label" for="74f62a1f-57ef-47d2-88f0-fed19dc83f39">preprocessor: ColumnTransformer</label><div class="sk-toggleable__content"><pre>ColumnTransformer(transformers=[('num_cols',
+                                 Pipeline(steps=[('imputer',
+                                                  SimpleImputer(strategy='constant')),
+                                                 ('scaler', StandardScaler())]),
+                                 ['f0', 'f1', 'f2', 'f3', 'f4', 'f5', 'f6',
+                                  'f7', 'f8', 'f9', 'f10', 'f11', 'f12', 'f13',
+                                  'f14', 'f15', 'f16', 'f17', 'f18', 'f19',
+                                  'f20', 'f21', 'f22', 'f23', 'f24', 'f25',
+                                  'f26', 'f27', 'f28', 'f29', ...])])</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="db6771e9-827f-4af2-b345-adf4ba9c70e0" type="checkbox" ><label class="sk-toggleable__label" for="db6771e9-827f-4af2-b345-adf4ba9c70e0">num_cols</label><div class="sk-toggleable__content"><pre>['f0', 'f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8', 'f9', 'f10', 'f11', 'f12', 'f13', 'f14', 'f15', 'f16', 'f17', 'f18', 'f19', 'f20', 'f21', 'f22', 'f23', 'f24', 'f25', 'f26', 'f27', 'f28', 'f29', 'f30', 'f31', 'f32', 'f33', 'f34', 'f35', 'f36', 'f37', 'f38', 'f39', 'f40', 'f41', 'f42', 'f43', 'f44', 'f45', 'f46', 'f47', 'f48', 'f49', 'f50', 'f51', 'f52', 'f53', 'f54', 'f55', 'f56', 'f57', 'f58', 'f59', 'f60', 'f61', 'f62', 'f63', 'f64', 'f65', 'f66', 'f67', 'f68', 'f69', 'f70', 'f71', 'f72', 'f73', 'f74', 'f75', 'f76', 'f77', 'f78', 'f79', 'f80', 'f81', 'f82', 'f83', 'f84', 'f85', 'f86', 'f87', 'f88', 'f89', 'f90', 'f91', 'f92', 'f93', 'f94', 'f95', 'f96', 'f97', 'f98', 'f99']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="c29ebd3f-fbca-4a5a-9739-6e479baa8e1e" type="checkbox" ><label class="sk-toggleable__label" for="c29ebd3f-fbca-4a5a-9739-6e479baa8e1e">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(strategy='constant')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="b5ab070f-62ad-4e15-8c52-3ed86f575bf4" type="checkbox" ><label class="sk-toggleable__label" for="b5ab070f-62ad-4e15-8c52-3ed86f575bf4">StandardScaler</label><div class="sk-toggleable__content"><pre>StandardScaler()</pre></div></div></div></div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="d0e4aa3f-35ec-46c1-a325-1e140d8c2b23" type="checkbox" ><label class="sk-toggleable__label" for="d0e4aa3f-35ec-46c1-a325-1e140d8c2b23">LinearSVC</label><div class="sk-toggleable__content"><pre>LinearSVC(dual=False, max_iter=2000, random_state=42, tol=1e-07)</pre></div></div></div></div></div></div></div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># k-fold supporting svm decision function</span>
+<span class="c1"># k-fold supporting multi label classification means calculation, instead of [:,1] for binary we need to do all labels</span>
+<span class="c1"># k-fold taking input_datasets as an option to support oof val results</span>
+<span class="c1"># during each fold predict on val then append results to oof_preds, like start with np.zero, then += preds/k_split </span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
 </div>
     {% endraw %}
 
@@ -237,15 +344,15 @@ nb_path: "kaggle_tps_fe_tutorial.ipynb"
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tmlt</span> <span class="o">=</span> <span class="n">TMLT</span><span class="p">()</span><span class="o">.</span><span class="n">prepare_data_for_training</span><span class="p">(</span>
-    <span class="n">train_file_path</span><span class="o">=</span> <span class="n">DIRECTORY_PATH</span> <span class="o">+</span> <span class="n">TRAIN_FILE</span><span class="p">,</span>
-    <span class="c1">#test_file_path= DIRECTORY_PATH + TEST_FILE,</span>
-    <span class="c1">#make sure to use right index and target columns</span>
-    <span class="n">idx_col</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">,</span>
-    <span class="n">target</span><span class="o">=</span><span class="s2">&quot;target&quot;</span><span class="p">,</span>
-    <span class="n">model</span><span class="o">=</span><span class="n">xgb_model</span><span class="p">,</span>
-    <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>
-    <span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;classification&quot;</span><span class="p">,</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">4000</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># tmlt = TMLT().prepare_data_for_training(</span>
+<span class="c1">#     train_file_path= DIRECTORY_PATH + TRAIN_FILE,</span>
+<span class="c1">#     #test_file_path= DIRECTORY_PATH + TEST_FILE,</span>
+<span class="c1">#     #make sure to use right index and target columns</span>
+<span class="c1">#     idx_col=&quot;id&quot;,</span>
+<span class="c1">#     target=&quot;target&quot;,</span>
+<span class="c1">#     model=xgb_model,</span>
+<span class="c1">#     random_state=42,</span>
+<span class="c1">#     problem_type=&quot;classification&quot;, nrows=4000)</span>
 </pre></div>
 
     </div>

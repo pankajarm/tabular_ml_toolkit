@@ -4,7 +4,7 @@ __all__ = ['DataFrameLoader']
 
 # Cell
 # hide
-# import pandas as pd
+import pandas as pd
 from sklearn.model_selection import train_test_split
 import numpy as np
 from .logger import *
@@ -12,12 +12,12 @@ from .logger import *
 # Cell
 # hide
 
-#settings for modin
-import ray
-ray.init()
-import os
-os.environ["MODIN_ENGINE"] = "ray"
-import modin.pandas as pd
+# #settings for modin
+# import ray
+# ray.init()
+# import os
+# os.environ["MODIN_ENGINE"] = "ray"
+# import modin.pandas as pd
 
 # Cell
 

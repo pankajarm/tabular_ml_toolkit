@@ -21,6 +21,10 @@ import numpy as np
 import time
 ```
 
+    /Users/pankajmathur/anaconda3/envs/nbdev_env/lib/python3.9/site-packages/redis/connection.py:77: UserWarning: redis-py works best with hiredis. Please consider installing
+      warnings.warn(msg)
+
+
 ```
 # Dataset file names and Paths
 DIRECTORY_PATH = "input/home_data/"
@@ -58,7 +62,20 @@ tmlt = TMLT().prepare_data_for_training(
     model=xgb_model,
     random_state=42,
     problem_type="regression")
+
+# TMLT currently only supports below problem_type:
+
+# "binary_classification"
+# "multi_label_classification"
+# "multi_class_classification"
+# "regression"
 ```
+
+    2021-11-23 21:17:45,075 INFO 8 cores found, model and data parallel processing should worked!
+    2021-11-23 21:17:45,112 INFO DataFrame Memory usage decreased to 0.58 Mb (35.5% reduction)
+    2021-11-23 21:17:45,148 INFO DataFrame Memory usage decreased to 0.58 Mb (34.8% reduction)
+    2021-11-23 21:17:45,172 INFO Both Numerical & Categorical columns found, Preprocessing will done accordingly!
+
 
 ```
 # create train, valid split to evaulate model on valid dataset
@@ -74,6 +91,10 @@ print("Fit Time:", end - start)
 preds = tmlt.spl.predict(tmlt.dfl.X_valid)
 print('X_valid MAE:', mean_absolute_error(tmlt.dfl.y_valid, preds))
 ```
+
+    Fit Time: 0.23742175102233887
+    X_valid MAE: 15936.53249411387
+
 
 In background `prepare_data_for_training` method loads your input data into Pandas DataFrame, seprates X(features) and y(target).
 
@@ -128,6 +149,26 @@ tmlt.spl
 # k-fold training
 xgb_model_metrics_score, xgb_model_test_preds = tmlt.do_kfold_training(n_splits=5, test_preds_metric=mean_absolute_error)
 ```
+
+    /Users/pankajmathur/anaconda3/envs/nbdev_env/lib/python3.9/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 1 members, which is less than n_splits=5.
+      warnings.warn(
+    2021-11-23 21:17:59,130 INFO fold: 1 mean_absolute_error : 19024.810065282534
+    2021-11-23 21:17:59,131 INFO fold: 1 mean_squared_error : 1751242762.4598274
+    2021-11-23 21:17:59,132 INFO fold: 1 r2_score : 0.6977529569233543
+    2021-11-23 21:17:59,474 INFO fold: 2 mean_absolute_error : 15865.40580854024
+    2021-11-23 21:17:59,475 INFO fold: 2 mean_squared_error : 999468295.7551991
+    2021-11-23 21:17:59,476 INFO fold: 2 r2_score : 0.8218766594977651
+    2021-11-23 21:17:59,829 INFO fold: 3 mean_absolute_error : 16107.65785530822
+    2021-11-23 21:17:59,830 INFO fold: 3 mean_squared_error : 800398659.0890251
+    2021-11-23 21:17:59,831 INFO fold: 3 r2_score : 0.894853077195726
+    2021-11-23 21:18:00,192 INFO fold: 4 mean_absolute_error : 15299.691553403254
+    2021-11-23 21:18:00,193 INFO fold: 4 mean_squared_error : 566410890.4061956
+    2021-11-23 21:18:00,193 INFO fold: 4 r2_score : 0.8984592069829627
+    2021-11-23 21:18:00,559 INFO fold: 5 mean_absolute_error : 17103.836445847603
+    2021-11-23 21:18:00,560 INFO fold: 5 mean_squared_error : 962383122.8550748
+    2021-11-23 21:18:00,560 INFO fold: 5 r2_score : 0.8596639193010006
+    2021-11-23 21:18:00,622 INFO  Mean Metrics Results from all Folds are: {'mean_absolute_error': 16680.28034567637, 'mean_squared_error': 1015980746.1130643, 'r2_score': 0.8345211639801617}
+
 
 ```
 # predict on test dataset

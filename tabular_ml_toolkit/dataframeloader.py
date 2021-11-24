@@ -12,6 +12,7 @@ from .logger import *
 # Cell
 # hide
 
+# make sure to pip install modin[ray]>=0.11.3
 # #settings for modin
 # import ray
 # ray.init()

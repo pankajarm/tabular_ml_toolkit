@@ -61,12 +61,17 @@ def check_has_n_jobs():
 # Inspired from AutoXGB Library, Thanks to https://github.com/abhishekkrthakur
 
 def fetch_params_for_problem_type(problem_type):
-    if problem_type == "classification":
+    if problem_type == "binary_classification":
         xgb_model = xgboost.XGBClassifier
         direction = "minimize"
         eval_metric = "logloss"
         val_preds_metrics = [log_loss, roc_auc_score, accuracy_score, f1_score, precision_score, recall_score]
 
+    elif problem_type == "multi_label_classification":
+        xgb_model = xgboost.XGBClassifier
+        direction = "minimize"
+        eval_metric = "logloss"
+        val_preds_metrics = [log_loss, roc_auc_score, accuracy_score, f1_score, precision_score, recall_score]
 
     elif problem_type == "multi_class_classification":
         xgb_model = xgboost.XGBClassifier

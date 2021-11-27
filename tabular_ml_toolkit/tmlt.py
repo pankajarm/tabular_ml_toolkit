@@ -6,7 +6,7 @@ __all__ = ['TMLT']
 from .dataframeloader import *
 from .preprocessor import *
 from .logger import *
-from .optuna_objective import *
+from .xgb_optuna_objective import *
 from .utility import *
 
 # Cell
@@ -78,11 +78,11 @@ class TMLT:
 
     # Main Method to create, load, preprocessed data based upon problem type
     def prepare_data_for_training(self, train_file_path:str,
+                                  problem_type:str,
                                   idx_col:str, target:str,
                                   random_state:int,
                                   model:object,
                                   test_file_path:str=None,
-                                  problem_type="regression",
                                   nrows=None):
         #set problem type
         self.problem_type = problem_type
@@ -182,7 +182,7 @@ class TMLT:
 
         """
         #fetch problem type params
-        #_, val_preds_metrics, _, _ = fetch_params_for_problem_type(self.problem_type)
+        #_, val_preds_metrics, _, _ = fetch_xgb_params_for_problem_type(self.problem_type)
 
         #create stratified K Folds instance
         kfold = StratifiedKFold(n_splits=n_splits,
@@ -211,9 +211,11 @@ class TMLT:
             self.dfl.y_valid = self.dfl.y[valid_idx]
 
             # fit
-            #oof_model = LinearSVC(tol=1e-7, penalty='l2', dual=False, max_iter=2000, random_state=42)
             oof_model.fit(self.dfl.X_train, self.dfl.y_train)
-            oof_preds[valid_idx] = oof_model.decision_function(self.dfl.X_valid)
+            if "svm" in str(oof_model.__class__):
+                oof_preds[valid_idx] = oof_model.decision_function(self.dfl.X_valid)
+            else:
+                oof_preds[valid_idx] = oof_model.predict_proba(self.dfl.X_valid)[:,1]
 
             # Getting linear model metric results for each fold
             oof_model_auc = roc_auc_score(self.dfl.y_valid, oof_preds[valid_idx])
@@ -226,7 +228,10 @@ class TMLT:
             # appending mean test data predictions
             # i.e. for each fold trained model get average test prediction and add them
             if self.dfl.X_test is not None:
-                oof_test_preds += oof_model.decision_function(self.dfl.X_test) / kfold.n_splits
+                if "svm" in str(oof_model.__class__):
+                    oof_test_preds += oof_model.decision_function(self.dfl.X_test) / kfold.n_splits
+                else:
+                    oof_test_preds += oof_model.predict_proba(self.dfl.X_test)[:,1] / kfold.n_splits
             else:
                 logger.warn(f"Trying to do OOF Test Predictions but No Test Dataset Provided!")
 
@@ -256,8 +261,16 @@ class TMLT:
 
         """
 
-        #fetch problem type params
-        _, val_preds_metrics, _, _ = fetch_params_for_problem_type(self.problem_type)
+        logger.info(f" model class:{self.model.__class__}")
+
+        #should be better way without string matching
+        if "xgb" in str(self.model.__class__):
+            #fetch problem type params
+            _, val_preds_metrics, eval_metric, _ = fetch_xgb_params_for_problem_type(self.problem_type)
+
+        else:
+            #fetch problem type params
+            val_preds_metrics, _ = fetch_skl_params_for_problem_type(self.problem_type)
 
         #create stratified K Folds instance
         kfold = StratifiedKFold(n_splits=n_splits,
@@ -282,8 +295,20 @@ class TMLT:
             # create y_valid
             self.dfl.y_valid = self.dfl.y[valid_idx]
 
+            # TODO: NEED to change whole approach of not setting up model on pipeline, if this below need to work
+#             `Pipeline.fit(X, y, logisticregression__sample_weight=sample_weight)`.
             # fit
-            #TODO use early_stopping_rounds = True for XGBoost based Sklearn Pipeline
+#             if "xgb" in str(self.model.__class__):
+#                 #use xgb model fit
+#                 self.spl.fit(self.dfl.X_train, self.dfl.y_train,
+#                              model__eval_set=[(self.dfl.X_train, self.dfl.y_train), (self.dfl.X_valid, self.dfl.y_valid)],
+#                              model__eval_metric=eval_metric,
+#                             )
+#             else:
+#                 #simple fit for sklearn
+#                 self.spl.fit(self.dfl.X_train, self.dfl.y_train)
+
+            #simple pipeline fit
             self.spl.fit(self.dfl.X_train, self.dfl.y_train)
 
             #TO-DO instead of single metrics use list of metrics and calculate mean using dict
@@ -343,10 +368,10 @@ class TMLT:
         """
 
         # get params based on problem type
-        xgb_model, val_preds_metrics, eval_metric, direction = fetch_params_for_problem_type(self.problem_type)
+        xgb_model, val_preds_metrics, eval_metric, direction = fetch_xgb_params_for_problem_type(self.problem_type)
 
         # Load the dataset in advance for reusing it each trial execution.
-        objective = Optuna_Objective(dfl=self.dfl, tmlt=self,
+        objective = XGB_Optuna_Objective(dfl=self.dfl, tmlt=self,
                                      val_preds_metrics=val_preds_metrics,
                                      xgb_model=xgb_model,
                                      xgb_eval_metric=eval_metric,

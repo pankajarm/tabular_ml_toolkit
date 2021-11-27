@@ -5,18 +5,19 @@ __all__ = ["index", "modules", "custom_doc_links", "git_url"]
 index = {"DataFrameLoader": "00_dataframeloader.ipynb",
          "PreProcessor": "01_preprocessor.ipynb",
          "TMLT": "02_tmlt.ipynb",
-         "Optuna_Objective": "04_optuna_objective.ipynb",
+         "XGB_Optuna_Objective": "04_xgb_optuna_objective.ipynb",
          "handler": "logger.ipynb",
          "logger": "logger.ipynb",
          "find_ideal_cpu_cores": "utility.ipynb",
          "check_has_n_jobs": "utility.ipynb",
-         "fetch_params_for_problem_type": "utility.ipynb",
+         "fetch_xgb_params_for_problem_type": "utility.ipynb",
+         "fetch_skl_params_for_problem_type": "utility.ipynb",
          "kfold_dict_mean": "utility.ipynb"}
 
 modules = ["dataframeloader.py",
            "preprocessor.py",
            "tmlt.py",
-           "optuna_objective.py",
+           "xgb_optuna_objective.py",
            "logger.py",
            "utility.py"]
 

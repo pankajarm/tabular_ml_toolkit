@@ -27,10 +27,9 @@ class DataFrameLoader:
     Represent DataFrameLoader class
 
     Attributes:
-    X_full: full dataframe load from raw input
-    X_test: full test dataframe load from raw input
-    X: features
-    y: target
+    X_test: test dataframe
+    X: features dataframe
+    y: target series
     """
 
     def __init__(self):
@@ -122,6 +121,7 @@ class DataFrameLoader:
         # Remove rows with missing target
         self.X = input_df.dropna(axis=0, subset=[target])
         # separate target from predictors
+        #TODO: change to to_numpy
         self.y = self.X[target].values
         self.target = target
         # drop target
@@ -213,5 +213,21 @@ class DataFrameLoader:
         # clean up unused dataframes
         unused_df_lst = [self.X_full]
         del unused_df_lst
+
+        return self
+
+        # get train and valid dataframe
+    def regenerate_dfl(self, X:object, y:object, X_test:object, use_num_cols:bool=True,
+                       use_cat_cols:bool=True, random_state=42):
+        # assign X,y and X_test
+        self.X = X
+        self.y = y
+        self.X_test = X_test
+
+        # create final columns based upon dtype of columns
+        self.prepare_final_cols(use_num_cols=use_num_cols, use_cat_cols=use_cat_cols)
+
+        if self.final_cols is not None:
+            self.update_X_y_with_final_cols(self.final_cols)
 
         return self

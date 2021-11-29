@@ -49,23 +49,18 @@ class PreProcessor:
 
     # Create preprocessing pipeline for numerical data
     def create_num_cols_pp_pl(self, num_cols__imputer, num_cols__scaler):
-        self.num_cols_pl = Pipeline(steps=[
-            ('imputer', num_cols__imputer),
-            ('scaler',  num_cols__scaler)
-        ])
+        self.num_cols_pl = Pipeline(steps=[('imputer', num_cols__imputer), ('scaler',  num_cols__scaler)],
+                                   memory="pipeline_cache_dir")
 
     # Create Preprocessing pipeline for categorical data
     def create_cat_cols_pp_pl(self, cat_cols__imputer, cat_cols__encoder):
-        self.cat_cols_pl = Pipeline(steps=[
-        ('imputer', cat_cols__imputer),
-        ('encoder', cat_cols__encoder)
-        ])
+        self.cat_cols_pl = Pipeline(steps=[('imputer', cat_cols__imputer), ('encoder', cat_cols__encoder)],
+                                   memory="pipeline_cache_dir")
 
     # Create Preprocessing pipeline for target cols
     def create_target_cols_pp_pl(self, target_cols__encoder):
-        self.target_cols_pl = Pipeline(steps=[
-        ('encoder', target_cols__encoder)
-        ])
+        self.target_cols_pl = Pipeline(steps=[('encoder', target_cols__encoder)],
+                                      memory="pipeline_cache_dir")
 
     # Bundle preprocessing pipelines based upon types of columns
     def preprocess_all_cols(self, dataframeloader, problem_type="regression",

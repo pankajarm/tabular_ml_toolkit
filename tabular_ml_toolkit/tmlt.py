@@ -43,17 +43,13 @@ class TMLT:
     Represent Tabular ML Toolkit class
 
     Attributes:\n
-    spl: A Scikit MLPipeline instance \n
     dfl: A DataFrameLoader instance \n
     pp: A PreProcessor instance \n
-    model: The given Model
     """
 
     def __init__(self):
         self.dfl = None
         self.pp = None
-        self.model = None
-        self.spl = None
         self.transformer_type = None
         self.problem_type = None
         self.has_n_jobs = check_has_n_jobs()
@@ -62,7 +58,7 @@ class TMLT:
 
     def __str__(self):
         """Returns human readable string reprsentation"""
-        attr_str = ("spl, dfl, pp, model")
+        attr_str = ("dfl, pp")
         return ("Training Pipeline object with attributes:"+attr_str)
 
     def __repr__(self):
@@ -70,34 +66,33 @@ class TMLT:
 
     ## All Core Methods ##
 
-    # Bundle preprocessing and modeling code in a training pipeline
-    def create_final_sklearn_pipeline(self, transformer_type, model):
-        self.spl = Pipeline(
-            steps=[('preprocessor', transformer_type), ('model', model)],
-            memory="pipeline_cache_dir")
-        return self.spl
+#     # Bundle preprocessing and modeling code in a training pipeline
+#     def create_final_sklearn_pipeline(self, transformer_type, model):
+#         self.spl = Pipeline(
+#             steps=[('preprocessor', transformer_type), ('model', model)],
+#             memory="pipeline_cache_dir")
+#         return self.spl
 
     # Main Method to create, load, preprocessed data based upon problem type
     def prepare_data_for_training(self, train_file_path:str,
                                   problem_type:str,
                                   idx_col:str, target:str,
                                   random_state:int,
-                                  model:object,
                                   test_file_path:str=None,
                                   nrows=None):
         #set problem type
         self.problem_type = problem_type
-        # check if given model supports n_jobs aka cpu core based Parallelism
-        estimator_name = model.__class__.__name__
-        # logger.info(estimator_name)
-        # logger.info((self.has_n_jobs)
-        if estimator_name in self.has_n_jobs :
-            # In order to OS not to kill the job, leave one processor out
-            model.n_jobs = self.IDEAL_CPU_CORES
-            self.model = model
-        else:
-            print(f"{estimator_name} doesn't support parallelism yet! Training will continue on a single thread.")
-            self.model = model
+#         # check if given model supports n_jobs aka cpu core based Parallelism
+#         estimator_name = model.__class__.__name__
+#         # logger.info(estimator_name)
+#         # logger.info((self.has_n_jobs)
+#         if estimator_name in self.has_n_jobs :
+#             # In order to OS not to kill the job, leave one processor out
+#             model.n_jobs = self.IDEAL_CPU_CORES
+#             self.model = model
+#         else:
+#             print(f"{estimator_name} doesn't support parallelism yet! Training will continue on a single thread.")
+#             self.model = model
 
         # call DataFrameLoader module
         self.dfl = DataFrameLoader().from_csv(
@@ -111,9 +106,13 @@ class TMLT:
         # call PreProcessor module
         self.pp = PreProcessor().preprocess_all_cols(dataframeloader=self.dfl, problem_type=self.problem_type)
 
-        # call create final sklearn pipelien method
-        self.spl = self.create_final_sklearn_pipeline(transformer_type=self.pp.transformer_type,
-                                     model = model)
+        #fit-tranform X, X_test
+        self.dfl.X = self.pp.fit_transform(self.dfl.X)
+        self.dfl.X_test = self.pp.transform(self.dfl.X_test)
+
+#         # call create final sklearn pipelien method
+#         self.spl = self.create_final_sklearn_pipeline(transformer_type=self.pp.transformer_type,
+#                                      model = model)
         # return tmlt
         return self
 
@@ -137,9 +136,13 @@ class TMLT:
                                                      num_cols__scaler=num_cols__scaler,
                                                      cat_cols__imputer=cat_cols__imputer,
                                                      cat_cols__encoder=cat_cols__encoder)
-        # regenerate create final sklearn pipeline because of model update
-        self.spl = self.create_final_sklearn_pipeline(transformer_type=self.pp.transformer_type,
-                                     model = self.model)
+        # refit-transform
+        self.dfl.X = self.pp.fit_transform(self.dfl.X)
+        self.dfl.X_test = self.pp.transform(self.dfl.X_test)
+
+#         # regenerate create final sklearn pipeline because of model update
+#         self.spl = self.create_final_sklearn_pipeline(transformer_type=self.pp.transformer_type,
+#                                      model = self.model)
         return self
 
     # Force to update the preprocessor in pipeline
@@ -159,25 +162,28 @@ class TMLT:
                                                      num_cols__scaler=num_cols__scaler,
                                                      cat_cols__imputer=cat_cols__imputer,
                                                      cat_cols__encoder=cat_cols__encoder)
-        # recall create final sklearn pipelien method
-        self.spl = self.create_final_sklearn_pipeline(transformer_type=self.pp.transformer_type,
-                                     model = self.model)
+        # refit-transform
+        self.dfl.X = self.pp.fit_transform(self.dfl.X)
+        self.dfl.X_test = self.pp.transform(self.dfl.X_test)
+#         # recall create final sklearn pipelien method
+#         self.spl = self.create_final_sklearn_pipeline(transformer_type=self.pp.transformer_type,
+#                                      model = self.model)
         return self
 
 
-    # Force to update the model in pipeline
-    def update_model(self, model:object):
+#     # Force to update the model in pipeline
+#     def update_model(self, model:object):
 
-        # remove the old pipeline_cach directory
-        if os.path.isdir("pipeline_cache_dir"):
-            rmtree("pipeline_cache_dir")
+#         # remove the old pipeline_cach directory
+#         if os.path.isdir("pipeline_cache_dir"):
+#             rmtree("pipeline_cache_dir")
 
-        #change model
-        self.model = model
+#         #change model
+#         self.model = model
 
-        # regenerate create final sklearn pipeline because of model update
-        self.spl = self.create_final_sklearn_pipeline(transformer_type=self.pp.transformer_type, model = model)
-        return self
+#         # regenerate create final sklearn pipeline because of model update
+#         self.spl = self.create_final_sklearn_pipeline(transformer_type=self.pp.transformer_type, model = model)
+#         return self
 
     # cross validation
     def do_cross_validation(self, scoring:str, cv:int=5):
@@ -215,16 +221,13 @@ class TMLT:
 
     # do oof predictions using k-fold training
     # current supported model type is LinearSVM
-    def do_oof_kfold_train_preds(self, n_splits:int, random_state=42):
+    def do_oof_kfold_train_preds(self, n_splits:int, oof_model:object, random_state=42):
         """
             This methods returns oof_preds and test_preds by doing kfold training on sklearn pipeline
             n_splits=5 by default, takes only int value
             random_sate=42, takes only int value
 
         """
-        #fetch problem type params
-        #_, val_preds_metrics, _, _ = fetch_xgb_params_for_problem_type(self.problem_type)
-
         #create stratified K Folds instance
         kfold = StratifiedKFold(n_splits=n_splits,
                              random_state=random_state,
@@ -253,18 +256,18 @@ class TMLT:
 
             #logger.info(f"self.dfl.X_train.columns.to_list: {self.dfl.X_train.columns.to_list()}")
             #logger.info(f"Training Started!")
-            #simple pipeline fit
-            self.spl.fit(self.dfl.X_train, self.dfl.y_train)
+            #simple model fit
+            oof_model.fit(self.dfl.X_train, self.dfl.y_train)
 
             #logger.info(f"Training Done!")
             # getting either hyperplane distance or probablities from predictions
-            if "svm" in str(self.model.__class__):
+            if "svm" in str(oof_model.__class__):
                 #logger.info(f"Predicting Valid Decision!")
                 #BUG HERE FOR WARNING https://github.com/scikit-learn/scikit-learn/pull/21578
-                oof_preds[valid_idx] = self.model.decision_function(self.dfl.X_valid)
+                oof_preds[valid_idx] = oof_model.decision_function(self.dfl.X_valid)
             else:
                 #logger.info(f"Predicting Valid Proba!")
-                oof_preds[valid_idx] = self.model.predict_proba(self.dfl.X_valid)[:,1]
+                oof_preds[valid_idx] = oof_model.predict_proba(self.dfl.X_valid)[:,1]
 
             # Getting linear model metric results for each fold
             oof_model_auc = roc_auc_score(self.dfl.y_valid, oof_preds[valid_idx])
@@ -277,10 +280,10 @@ class TMLT:
             # appending mean test data predictions
             # i.e. for each fold trained model get average test prediction and add them
             if self.dfl.X_test is not None:
-                if "svm" in str(self.model.__class__):
-                    oof_test_preds += self.model.decision_function(self.dfl.X_test) / kfold.n_splits
+                if "svm" in str(oof_model.__class__):
+                    oof_test_preds += oof_model.decision_function(self.dfl.X_test) / kfold.n_splits
                 else:
-                    oof_test_preds += self.model.predict_proba(self.dfl.X_test)[:,1] / kfold.n_splits
+                    oof_test_preds += oof_model.predict_proba(self.dfl.X_test)[:,1] / kfold.n_splits
             else:
                 logger.warn(f"Trying to do OOF Test Predictions but No Test Dataset Provided!")
 
@@ -300,7 +303,7 @@ class TMLT:
 
     # do k-fold training
     # test_preds_metric has to be a single sklearn metrics object type such as mean_absoulte_error, acccuracy
-    def do_kfold_training(self, n_splits:int, test_preds_metric=None, random_state=42):
+    def do_kfold_training(self, n_splits:int, model:object, test_preds_metric=None, random_state=42):
 
         """
             This methods returns kfold_metrics_results and test_preds by doing kfold training
@@ -310,7 +313,7 @@ class TMLT:
 
         """
 
-        logger.info(f" model class:{self.model.__class__}")
+        logger.info(f" model class:{model.__class__}")
 
         # KNOWN BUG WHILE USING EVAL SET https://github.com/dmlc/xgboost/issues/2334
         #logger.info(f"X_train.columns.values.tolist: {X_train.columns.values.tolist()}")
@@ -319,7 +322,7 @@ class TMLT:
         X, y, X_test = self.dfl.X, self.dfl.y, self.dfl.X_test
 
         #should be better way without string matching
-        if "xgb" in str(self.model.__class__):
+        if "xgb" in str(model.__class__):
             #fetch problem type params
             _, val_preds_metrics, eval_metric, _ = fetch_xgb_params_for_problem_type(self.problem_type)
 
@@ -359,14 +362,14 @@ class TMLT:
                 #                 self.dfl.X_valid = self.dfl.X_valid.to_numpy()
                 #logger.info(f"X_train.columns.values.tolist: {X_train.columns.values.tolist()}")
                 #logger.info(f"X_valid.columns.values.tolist: {X_valid.columns.values.tolist()}")
-                self.spl.fit(X_train, y_train,
+                model.fit(X_train, y_train,
                              #there is known bug with xgboost and sklearn pipeline https://github.com/dmlc/xgboost/issues/2334
-                             #model__eval_set=[(X_train, y_train), (X_valid, y_valid)],
+                             model__eval_set=[(X_train, y_train), (X_valid, y_valid)],
                              model__eval_metric=eval_metric
                             )
             else:
                 #simple fit for sklearn
-                self.spl.fit(X_train, y_train)
+                model.fit(X_train, y_train)
 
             #simple pipeline fit
             #self.spl.fit(X_train, y_train)
@@ -378,18 +381,18 @@ class TMLT:
             for metric in val_preds_metrics:
                 #TO-DO need to test and think about log_loss for SVM
                 if ("log_loss" in str(metric.__name__)) or ("roc_auc_score" in str(metric.__name__)):
-                    if "svm" in str(self.model.__class__):
+                    if "svm" in str(model.__class__):
                         #logger.info("Predicting Decision Function!")
-                        preds_decs_func = self.spl.decision_function(X_valid) # CAN BE USE FOR OOF PREDS
+                        preds_decs_func = model.decision_function(X_valid) # CAN BE USE FOR OOF PREDS
                         metric_result[str(metric.__name__)] = metric(y_valid, preds_decs_func)
                     else:
                         #logger.info("Predicting Probablities!")
-                        preds_probs = self.spl.predict_proba(X_valid)[:, 1] # CAN BE USE FOR OOF PREDS
+                        preds_probs = model.predict_proba(X_valid)[:, 1] # CAN BE USE FOR OOF PREDS
                         metric_result[str(metric.__name__)] = metric(y_valid, preds_probs)
 
                 else:
                     #logger.info("Predicting Score!")
-                    preds = self.spl.predict(X_valid) # CAN BE USE FOR OOF PREDS
+                    preds = model.predict(X_valid) # CAN BE USE FOR OOF PREDS
                     metric_result[str(metric.__name__)] = metric(y_valid, preds)
 
             #now show value of all the given metrics
@@ -403,9 +406,9 @@ class TMLT:
             if X_test is not None and test_preds_metric is not None:
                 if ("log_loss" in str(test_preds_metric.__name__)) or ("roc_auc_score" in str(test_preds_metric.__name__)):
                     logger.info("Predicting Test Preds Probablities!")
-                    test_preds += self.spl.predict_proba(X_test)[:,1] / kfold.n_splits
+                    test_preds += model.predict_proba(X_test)[:,1] / kfold.n_splits
                 else:
-                    test_preds += self.spl.predict(X_test) / kfold.n_splits
+                    test_preds += model.predict(X_test) / kfold.n_splits
             elif self.dfl.X_test is None:
                 logger.warn(f"Trying to do Test Predictions but No Test Dataset Provided!")
 

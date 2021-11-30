@@ -8,7 +8,7 @@ from .logger import *
 
 # Cell
 # hide
-from sklearn.compose import ColumnTransformer
+from sklearn.compose import ColumnTransformer, make_column_transformer
 from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder, StandardScaler, MinMaxScaler, LabelEncoder
@@ -30,8 +30,6 @@ class PreProcessor:
 
     def __init__(self):
         self.columns_transfomer = None
-        self.transformer_type = None
-        self.target_cols_transformer = None
         self.target_cols_pl = None
         self.cat_cols_pl = None
         self.num_cols_pl = None
@@ -74,7 +72,7 @@ class PreProcessor:
 
         #if problem type classification encode target
         # encode target based upon problem type
-        if problem_type == "classification":
+        if "classification" in problem_type:
             logger.info("PreProcessing will include target(s) encoding!")
             #now just call fit tranform on y
             dataframeloader.y = target_cols__encoder.fit_transform(dataframeloader.y)
@@ -87,11 +85,14 @@ class PreProcessor:
             # create scikit-learn pipelines instance
             self.create_num_cols_pp_pl(num_cols__imputer, num_cols__scaler)
             #now setup columns tranformer
-            self.columns_transfomer = ColumnTransformer(
-                transformers=[
-                    ('num_cols', self.num_cols_pl,
-                     dataframeloader.numerical_cols)
-                ])
+            self.columns_transfomer  = make_column_transformer(
+                (self.num_cols_pl, dataframeloader.numerical_cols))
+
+#             self.columns_transfomer = ColumnTransformer(
+#                 transformers=[
+#                     ('num_cols', self.num_cols_pl,
+#                      dataframeloader.numerical_cols)
+#                 ])
 
 
         elif len(dataframeloader.numerical_cols) < 1:
@@ -99,11 +100,14 @@ class PreProcessor:
             # create sklearn pipelines instance
             self.create_cat_cols_pp_pl(cat_cols__imputer, cat_cols__encoder)
             #now setup columns tranformer
-            self.columns_transfomer = ColumnTransformer(
-                transformers=[
-                    ('cat_cols', self.cat_cols_pl,
-                     dataframeloader.categorical_cols)
-                ])
+            self.columns_transfomer = make_column_transformer(
+                (self.cat_cols_pl, dataframeloader.categorical_cols))
+
+#             self.columns_transfomer = ColumnTransformer(
+#                 transformers=[
+#                     ('cat_cols', self.cat_cols_pl,
+#                      dataframeloader.categorical_cols)
+#                 ])
 
 
         else:
@@ -112,17 +116,18 @@ class PreProcessor:
             self.create_num_cols_pp_pl(num_cols__imputer, num_cols__scaler)
             self.create_cat_cols_pp_pl(cat_cols__imputer, cat_cols__encoder)
             #now setup columns tranformer
-            self.columns_transfomer = ColumnTransformer(
-                transformers=[
-                    ('num_cols', self.num_cols_pl,
-                     dataframeloader.numerical_cols),
-                    ('cat_cols', self.cat_cols_pl,
-                     dataframeloader.categorical_cols)
-                ])
+            self.columns_transfomer  = make_column_transformer(
+                (self.num_cols_pl, dataframeloader.numerical_cols),
+                (self.cat_cols_pl, dataframeloader.categorical_cols))
 
 
-        # now setup final tranfomer type
-        self.transformer_type = self.columns_transfomer
+#             self.columns_transfomer = ColumnTransformer(
+#                 transformers=[
+#                     ('num_cols', self.num_cols_pl,
+#                      dataframeloader.numerical_cols),
+#                     ('cat_cols', self.cat_cols_pl,
+#                      dataframeloader.categorical_cols)
+#                 ])
         #logger.info(f"self.transformer_type: {self.transformer_type}")
 
-        return self
+        return self.columns_transfomer

@@ -192,6 +192,8 @@ class DataFrameLoader:
 
         self.update_X_train_X_valid_X_test_with_final_cols(self.final_cols)
 
+        return self.X_train, self.X_valid, self.y_train, self.y_valid
+
     # get train and valid dataframe
     def from_csv(self, train_file_path:str,
                  idx_col:str, target:str,

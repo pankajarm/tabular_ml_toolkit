@@ -15,6 +15,7 @@ from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder, StandardScaler,
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error
 import numpy as np
+import pandas as pd
 
 # Cell
 
@@ -48,17 +49,20 @@ class PreProcessor:
     # Create preprocessing pipeline for numerical data
     def create_num_cols_pp_pl(self, num_cols__imputer, num_cols__scaler):
         self.num_cols_pl = Pipeline(steps=[('imputer', num_cols__imputer), ('scaler',  num_cols__scaler)],
-                                   memory="pipeline_cache_dir")
+                                    #memory="pipeline_cache_dir"
+                                   )
 
     # Create Preprocessing pipeline for categorical data
     def create_cat_cols_pp_pl(self, cat_cols__imputer, cat_cols__encoder):
         self.cat_cols_pl = Pipeline(steps=[('imputer', cat_cols__imputer), ('encoder', cat_cols__encoder)],
-                                   memory="pipeline_cache_dir")
+                                   #memory="pipeline_cache_dir"
+                                   )
 
     # Create Preprocessing pipeline for target cols
     def create_target_cols_pp_pl(self, target_cols__encoder):
         self.target_cols_pl = Pipeline(steps=[('encoder', target_cols__encoder)],
-                                      memory="pipeline_cache_dir")
+                                      #memory="pipeline_cache_dir"
+                                      )
 
     # Bundle preprocessing pipelines based upon types of columns
     def preprocess_all_cols(self, dataframeloader, problem_type="regression",
@@ -86,14 +90,9 @@ class PreProcessor:
             self.create_num_cols_pp_pl(num_cols__imputer, num_cols__scaler)
             #now setup columns tranformer
             self.columns_transfomer  = make_column_transformer(
-                (self.num_cols_pl, dataframeloader.numerical_cols))
-
-#             self.columns_transfomer = ColumnTransformer(
-#                 transformers=[
-#                     ('num_cols', self.num_cols_pl,
-#                      dataframeloader.numerical_cols)
-#                 ])
-
+                (self.num_cols_pl, dataframeloader.numerical_cols),
+                remainder='passthrough', sparse_threshold=0
+            )
 
         elif len(dataframeloader.numerical_cols) < 1:
             logger.info("numerical columns are None, Preprocessing will done accordingly!")
@@ -101,13 +100,9 @@ class PreProcessor:
             self.create_cat_cols_pp_pl(cat_cols__imputer, cat_cols__encoder)
             #now setup columns tranformer
             self.columns_transfomer = make_column_transformer(
-                (self.cat_cols_pl, dataframeloader.categorical_cols))
-
-#             self.columns_transfomer = ColumnTransformer(
-#                 transformers=[
-#                     ('cat_cols', self.cat_cols_pl,
-#                      dataframeloader.categorical_cols)
-#                 ])
+                (self.cat_cols_pl, dataframeloader.categorical_cols),
+                remainder='passthrough', sparse_threshold=0
+            )
 
 
         else:
@@ -118,16 +113,9 @@ class PreProcessor:
             #now setup columns tranformer
             self.columns_transfomer  = make_column_transformer(
                 (self.num_cols_pl, dataframeloader.numerical_cols),
-                (self.cat_cols_pl, dataframeloader.categorical_cols))
-
-
-#             self.columns_transfomer = ColumnTransformer(
-#                 transformers=[
-#                     ('num_cols', self.num_cols_pl,
-#                      dataframeloader.numerical_cols),
-#                     ('cat_cols', self.cat_cols_pl,
-#                      dataframeloader.categorical_cols)
-#                 ])
+                (self.cat_cols_pl, dataframeloader.categorical_cols),
+                remainder='passthrough', sparse_threshold=0
+            )
         #logger.info(f"self.transformer_type: {self.transformer_type}")
 
         return self.columns_transfomer

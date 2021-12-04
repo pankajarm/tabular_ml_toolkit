@@ -113,12 +113,6 @@ class TMLT:
                 second_np = self.pp.transform(second_df)
         return first_np, second_np
 
-    #     def preprocess_data(self, X:object, X_test:object):
-    #         #fit-tranform X, X_test
-    #         X = self.pp.fit_transform(X)
-    #         X_test = self.pp.transform(X_test)
-    #         return X, X_test
-
     # Force to update the dataframeloader in pipeline
     def update_dfl(self, X:object, y:object, X_test:object,
                    num_cols__imputer=SimpleImputer(strategy='median'),
@@ -165,15 +159,19 @@ class TMLT:
     # cross validation
     def do_cross_validation(self, X:object, y:object, model:object, scoring:str, cv:int=5):
         """
-        scoring take str which are predefined here from https://scikit-learn.org/stable/modules/model_evaluation.html
-        cv takes int by default 5
+        X, y
+        model: takes any sklearn compatible model/estimator
+        scoring: take str which are predefined here from https://scikit-learn.org/stable/modules/model_evaluation.html
+        cv: takes int by default 5
         """
         scores = cross_val_score(
             estimator=model,
             X=X,
             y=y,
             scoring=scoring,
-            cv=cv)
+            cv=cv,
+            n_jobs=self.IDEAL_CPU_CORES)
+
         # Multiply by -1 since sklearn calculates *negative* scoring for some of the metrics
         if "neg_" in scoring:
             scores = -1 * scores
@@ -196,6 +194,7 @@ class TMLT:
         grid_search.fit(X, y)
         return grid_search
 
+    #NOTE: OOF with K-Fold and just K-Fold training are 2 different methods because k-fold taking multiple metrics
     # do oof k-fold train and predictions
     def do_oof_kfold_train_preds(self, X:object, y:object, n_splits:int, oof_model:object,
                                  X_test:object=None, random_state=42):
@@ -255,7 +254,6 @@ class TMLT:
                 oof_model.fit(X_train, y_train)
             logger.info(f"Training Finished!")
 
-            #logger.info(f"Training Done!")
             # getting either hyperplane distance or probablities from predictions
             if "svm" in str(oof_model.__class__):
                 #logger.info(f"Predicting Valid Decision!")
@@ -273,7 +271,6 @@ class TMLT:
 
             # for test preds
             # appending mean test data predictions
-            # i.e. for each fold trained model get average test prediction and add them
             if X_test is not None:
                 if "svm" in str(oof_model.__class__):
                     oof_test_preds += oof_model.decision_function(X_test) / kfold.n_splits
@@ -297,12 +294,10 @@ class TMLT:
 
 
     # do k-fold training
-    # test_preds_metric has to be a single sklearn metrics object type such as mean_absoulte_error, acccuracy
-    def do_kfold_training(self, n_splits:int, model:object, test_preds_metric=None, random_state=42):
+    def do_kfold_training(self, X:object, y:object, n_splits:int, model:object, X_test:object=None, random_state=42):
 
         """
             This methods returns kfold_metrics_results and test_preds by doing kfold training
-            test_preds_metric=None by default, takes only single SKLearn Metrics for your test dataset
             n_splits=5 by default, takes only int value
             random_sate=42, takes only int value
 
@@ -310,11 +305,12 @@ class TMLT:
 
         logger.info(f" model class:{model.__class__}")
 
-        #convert X, X_test to numpy
-        X, y, X_test = self.dfl.X, self.dfl.y, self.dfl.X_test
-
         #should be better way without string matching
-        if "xgb" in str(model.__class__):
+        if "tabnet" in str(model.__class__):
+            #fetch problem type params
+            _, val_preds_metrics, eval_metric, _ = fetch_tabnet_params_for_problem_type(self.problem_type)
+
+        elif "xgb" in str(model.__class__):
             #fetch problem type params
             _, val_preds_metrics, eval_metric, _ = fetch_xgb_params_for_problem_type(self.problem_type)
 
@@ -336,49 +332,50 @@ class TMLT:
         kfold_metrics_results = []
         n=0
         for train_idx, valid_idx in kfold.split(X, y):
-            # create X_train
-            X_train = X.iloc[train_idx]
-            # create X_valid
-            X_valid = X.iloc[valid_idx]
-            # create y_train
-            y_train = y[train_idx]
-            # create y_valid
-            y_valid = y[valid_idx]
-
-            #self.update_X_train_X_valid_X_test_with_final_cols(self.final_cols)
-            # fit
-            if "xgb" in str(self.model.__class__):
-                #use xgb model fit
-                # KNOWN BUG WHILE USING EVAL SET https://github.com/dmlc/xgboost/issues/2334
-                #                 self.dfl.X_train = self.dfl.X_train.to_numpy()
-                #                 self.dfl.X_valid = self.dfl.X_valid.to_numpy()
-                #logger.info(f"X_train.columns.values.tolist: {X_train.columns.values.tolist()}")
-                #logger.info(f"X_valid.columns.values.tolist: {X_valid.columns.values.tolist()}")
-                model.fit(X_train, y_train,
-                             #there is known bug with xgboost and sklearn pipeline https://github.com/dmlc/xgboost/issues/2334
-                             model__eval_set=[(X_train, y_train), (X_valid, y_valid)],
-                             model__eval_metric=eval_metric
-                            )
+            if isinstance(X, np.ndarray):
+                # create NUMPY based X_train, X_valid, y_train, y_valid
+                X_train , X_valid, y_train, y_valid = X[train_idx], X[valid_idx], y[train_idx], y[valid_idx]
             else:
-                #simple fit for sklearn
-                model.fit(X_train, y_train)
+                # create PANDAS based X_train, X_valid, y_train, y_valid
+                X_train , X_valid, y_train, y_valid = X.iloc[train_idx], X.iloc[valid_idx], y[train_idx], y[valid_idx]
 
-            #simple pipeline fit
-            #self.spl.fit(X_train, y_train)
+            # fit
+            if "tabnet" in str(model.__class__):
+                # now do tabnet  fit
+                model.fit(
+                    X_train, y_train,
+                    eval_set=[(X_valid, y_valid)],
+                    eval_metric=eval_metric,
+                    max_epochs=50,
+                    patience=10,
+                    batch_size=1024*self.IDEAL_CPU_CORES,
+                    virtual_batch_size=128*self.IDEAL_CPU_CORES)
 
-            #TO-DO instead of single metrics use list of metrics and calculate mean using dict
+            elif "xgb" in str(model.__class__):
+                model.fit(X_train, y_train,
+                          eval_set=[(X_train, y_train), (X_valid, y_valid)],
+                          eval_metric=eval_metric, verbose=False)
+            else:
+                if model in self.has_n_jobs():
+                    model.fit(X_train, y_train, n_jobs=self.IDEAL_CPU_CORES)
+                else:
+                    model.fit(X_train, y_train)
+
+            #TO-DO: Merge OOF_KFold and KFold methods at this level
             metric_result = {}
 
             # predictions
-            if "svm" in str(model.__class__):
-                logger.info("Predicting Decision Function!")
-                preds_decs_func = model.decision_function(X_valid)
-            else:
-                logger.info("Predicting Probablities!")
-                preds_probs = model.predict_proba(X_valid)[:, 1]
+            if "classification" in self.problem_type:
+                if "svm" in str(model.__class__):
+                    logger.info("Predicting Decision Function!")
+                    preds_decs_func = model.decision_function(X_valid)
+                else:
+                    logger.info("Predicting Probablities!")
+                    preds_probs = model.predict_proba(X_valid)[:, 1]
 
-            logger.info("Predicting Score!")
-            preds = model.predict(X_valid)
+            else:
+                logger.info("Predicting Score!")
+                preds = model.predict(X_valid)
 
 
             #metrics
@@ -400,13 +397,14 @@ class TMLT:
             kfold_metrics_results.append(metric_result)
 
             # for test preds
-            if X_test is not None and test_preds_metric is not None:
-                if ("log_loss" in str(test_preds_metric.__name__)) or ("roc_auc_score" in str(test_preds_metric.__name__)):
-                    logger.info("Predicting Test Preds Probablities!")
+            if X_test is not None:
+                if "classification" in self.problem_type:
+                    logger.info("Predicting Test Probablities!")
                     test_preds += model.predict_proba(X_test)[:,1] / kfold.n_splits
                 else:
+                    logger.info("Predicting Test Scores!")
                     test_preds += model.predict(X_test) / kfold.n_splits
-            elif self.dfl.X_test is None:
+            else:
                 logger.warn(f"Trying to do Test Predictions but No Test Dataset Provided!")
 
             # In order to better GC, del X_train, X_valid, y_train, y_valid df after each fold is done,

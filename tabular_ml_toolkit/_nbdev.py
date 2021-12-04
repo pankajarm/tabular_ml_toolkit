@@ -10,6 +10,7 @@ index = {"DataFrameLoader": "00_dataframeloader.ipynb",
          "logger": "Logger.ipynb",
          "find_ideal_cpu_cores": "utility.ipynb",
          "check_has_n_jobs": "utility.ipynb",
+         "fetch_tabnet_params_for_problem_type": "utility.ipynb",
          "fetch_xgb_params_for_problem_type": "utility.ipynb",
          "fetch_skl_params_for_problem_type": "utility.ipynb",
          "kfold_dict_mean": "utility.ipynb"}

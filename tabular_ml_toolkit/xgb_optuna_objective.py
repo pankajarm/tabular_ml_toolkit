@@ -66,23 +66,24 @@ class XGB_Optuna_Objective:
         del xgb_params["early_stopping_rounds"]
 
         #create train valid datasets for simple training
-        self.tmlt.dfl.create_train_valid(valid_size=0.2)
+        X_train, X_valid,  y_train_np, y_valid_np =  self.tmlt.dfl.create_train_valid(valid_size=0.2)
+
+        #preprocess X_train and X_valid
+        X_train_np,  X_valid_np = self.tmlt.pp_fit_transform(X_train, X_valid)
 
         # create xgb ml model
         model = self.xgb_model(
             random_state=42,
-            eval_set=[(self.tmlt.dfl.X_train, self.tmlt.dfl.y_train), (self.tmlt.dfl.X_valid, self.tmlt.dfl.y_valid)],
+            eval_set=[(X_train_np, y_train_np), (X_valid_np, y_valid_np)],
             eval_metric=self.xgb_eval_metric,
             use_label_encoder=False,
             early_stopping_rounds=early_stopping_rounds,
             **xgb_params,
         )
-        # update the model on pipeline
-        self.tmlt.update_model(model)
 
         # Now fit
         logger.info("Training Started!")
-        self.tmlt.spl.fit(self.tmlt.dfl.X_train, self.tmlt.dfl.y_train)
+        model.fit(X_train_np, y_train_np)
         logger.info("Training Ended!")
 
 
@@ -92,13 +93,13 @@ class XGB_Optuna_Objective:
         for metric in self.val_preds_metrics:
             if ("log_loss" in str(metric.__name__)) or ("roc_auc_score" in str(metric.__name__)):
                 #logger.info("Predicting Probablities!")
-                preds_probs = self.tmlt.spl.predict_proba(self.tmlt.dfl.X_valid)[:, 1]
-                metric_result[str(metric.__name__)] = metric(self.tmlt.dfl.y_valid, preds_probs)
+                preds_probs = model.predict_proba(X_valid_np)[:, 1]
+                metric_result[str(metric.__name__)] = metric(y_valid_np, preds_probs)
 
             else:
                 #logger.info("Predicting Score!")
-                preds = self.tmlt.spl.predict(self.tmlt.dfl.X_valid)
-                metric_result[str(metric.__name__)] = metric(self.tmlt.dfl.y_valid, preds)
+                preds = model.predict(X_valid_np)
+                metric_result[str(metric.__name__)] = metric(y_valid_np, preds)
 
         #now show value of all the given metrics
         for metric_name, metric_value in metric_result.items():

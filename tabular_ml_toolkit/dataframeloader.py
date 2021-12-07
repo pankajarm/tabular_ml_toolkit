@@ -129,32 +129,27 @@ class DataFrameLoader:
         return self
 
     # select categorical columns
-    def select_categorical_cols(self):
+    def select_categorical_cols(self, X:object):
         # for low cardinality columns
-        self.low_card_cat_cols = [cname for cname in self.X.columns if
-                    self.X[cname].nunique() < 10 and
-                    self.X[cname].dtype == "object"]
+        self.low_card_cat_cols = [cname for cname in X.columns if
+                    X[cname].nunique() < 10 and
+                    X[cname].dtype == "object"]
         # for high cardinality columns
-        self.high_card_cat_cols = [cname for cname in self.X.columns if
-                    self.X[cname].nunique() > 10 and
-                    self.X[cname].dtype == "object"]
+        self.high_card_cat_cols = [cname for cname in X.columns if
+                    X[cname].nunique() > 10 and
+                    X[cname].dtype == "object"]
         # for all categorical columns
         self.categorical_cols = self.low_card_cat_cols + self.high_card_cat_cols
 
     # select numerical columns
-    def select_numerical_cols(self):
-        self.numerical_cols = [cname for cname in self.X.columns if
-                self.X[cname].dtype in self.numerics]
+    def select_numerical_cols(self, X:object):
+        self.numerical_cols = [cname for cname in X.columns if
+                X[cname].dtype in self.numerics]
 
     # prepare final columns by data type
-    def prepare_final_cols(self, use_num_cols:bool, use_cat_cols:bool):
-        self.use_num_cols = use_num_cols
-        self.use_cat_cols = use_cat_cols
-
-        if self.use_num_cols:
-            self.select_categorical_cols()
-        if self.use_cat_cols:
-            self.select_numerical_cols()
+    def prepare_final_cols(self, X):
+        self.select_categorical_cols(X)
+        self.select_numerical_cols(X)
 
         if (self.numerical_cols is not None) and (self.categorical_cols is not None):
             self.final_cols = self.numerical_cols + self.categorical_cols
@@ -208,7 +203,7 @@ class DataFrameLoader:
         if self.X_full is not None:
             self.prepare_X_y(self.X_full, target)
         # create final columns based upon type of columns
-        self.prepare_final_cols(use_num_cols=use_num_cols, use_cat_cols=use_cat_cols)
+        self.prepare_final_cols(self.X)
         if self.final_cols is not None:
             self.update_X_y_with_final_cols(self.final_cols)
 
@@ -219,15 +214,14 @@ class DataFrameLoader:
         return self
 
         # get train and valid dataframe
-    def regenerate_dfl(self, X:object, y:object, X_test:object, use_num_cols:bool=True,
-                       use_cat_cols:bool=True, random_state=42):
+    def regenerate_dfl(self, X:object, y:object, X_test:object, random_state=42):
         # assign X,y and X_test
         self.X = X
         self.y = y
         self.X_test = X_test
 
         # create final columns based upon dtype of columns
-        self.prepare_final_cols(use_num_cols=use_num_cols, use_cat_cols=use_cat_cols)
+        self.prepare_final_cols(X)
 
         if self.final_cols is not None:
             self.update_X_y_with_final_cols(self.final_cols)

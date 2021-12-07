@@ -340,6 +340,7 @@ class TMLT:
                 X_train , X_valid, y_train, y_valid = X.iloc[train_idx], X.iloc[valid_idx], y[train_idx], y[valid_idx]
 
             # fit
+            logger.info(f"Training Started!")
             if "tabnet" in str(model.__class__):
                 # now do tabnet  fit
                 model.fit(
@@ -360,6 +361,7 @@ class TMLT:
                     model.fit(X_train, y_train, n_jobs=self.IDEAL_CPU_CORES)
                 else:
                     model.fit(X_train, y_train)
+            logger.info(f"Training Finished!")
 
             #TO-DO: Merge OOF_KFold and KFold methods at this level
             metric_result = {}
@@ -367,15 +369,15 @@ class TMLT:
             # predictions
             if "classification" in self.problem_type:
                 if "svm" in str(model.__class__):
-                    logger.info("Predicting Decision Function!")
+                    logger.info("Predicting Val Decision Function!")
                     preds_decs_func = model.decision_function(X_valid)
                 else:
-                    logger.info("Predicting Probablities!")
+                    logger.info("Predicting Val Probablities!")
                     preds_probs = model.predict_proba(X_valid)[:, 1]
 
-            else:
-                logger.info("Predicting Score!")
-                preds = model.predict(X_valid)
+            # predict score on val set for all problem type
+            logger.info("Predicting Val Score!")
+            preds = model.predict(X_valid)
 
 
             #metrics

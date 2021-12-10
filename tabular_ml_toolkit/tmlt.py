@@ -355,7 +355,7 @@ class TMLT:
             elif "xgb" in str(model.__class__):
                 model.fit(X_train, y_train,
                           eval_set=[(X_train, y_train), (X_valid, y_valid)],
-                          eval_metric=eval_metric, verbose=False)
+                          eval_metric=eval_metric)
             else:
                 if model in self.has_n_jobs():
                     model.fit(X_train, y_train, n_jobs=self.IDEAL_CPU_CORES)

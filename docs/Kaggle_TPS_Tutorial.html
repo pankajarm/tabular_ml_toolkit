@@ -70,19 +70,26 @@ nb_path: "13_Kaggle_TPS_Tutorial.ipynb"
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">tabular_ml_toolkit.tmlt</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="kn">import</span> <span class="n">LinearSVC</span>
 <span class="kn">from</span> <span class="nn">xgboost</span> <span class="kn">import</span> <span class="n">XGBClassifier</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-
-<span class="c1"># for visualizing pipeline</span>
-<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">set_config</span>
-<span class="n">set_config</span><span class="p">(</span><span class="n">display</span><span class="o">=</span><span class="s2">&quot;diagram&quot;</span><span class="p">)</span>
-
-<span class="c1"># just to measure fit performance</span>
-<span class="kn">import</span> <span class="nn">time</span>
 </pre></div>
 
     </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>/Users/pankajmathur/anaconda3/envs/nbdev_env/lib/python3.9/site-packages/redis/connection.py:77: UserWarning: redis-py works best with hiredis. Please consider installing
+  warnings.warn(msg)
+</pre>
+</div>
+</div>
+
 </div>
 </div>
 
@@ -113,7 +120,7 @@ nb_path: "13_Kaggle_TPS_Tutorial.ipynb"
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">DIRECTORY_PATH</span> <span class="o">=</span> <span class="s2">&quot;/Users/pamathur/kaggle_datasets/tps_nov_2021/&quot;</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">DIRECTORY_PATH</span> <span class="o">=</span> <span class="s2">&quot;/Users/pankajmathur/kaggle_datasets/tps_nov_2021/&quot;</span>
 <span class="n">TRAIN_FILE</span> <span class="o">=</span> <span class="s2">&quot;train.csv&quot;</span>
 <span class="n">TEST_FILE</span> <span class="o">=</span> <span class="s2">&quot;test.csv&quot;</span>
 <span class="n">SAMPLE_SUB_FILE</span> <span class="o">=</span> <span class="s2">&quot;sample_submission.csv&quot;</span>
@@ -127,6 +134,12 @@ nb_path: "13_Kaggle_TPS_Tutorial.ipynb"
 </div>
     {% endraw %}
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Just-point-tmlt-in-the-direction-of-your-data">Just point tmlt in the direction of your data<a class="anchor-link" href="#Just-point-tmlt-in-the-direction-of-your-data"> </a></h4><h4 id="Let-it-know-what-are-idx-and-target-columns-in-your-tabular-data">Let it know what are idx and target columns in your tabular data<a class="anchor-link" href="#Let-it-know-what-are-idx-and-target-columns-in-your-tabular-data"> </a></h4><h4 id="what-kind-of-problem-type-you-are-trying-to-resolve?">what kind of problem type you are trying to resolve?<a class="anchor-link" href="#what-kind-of-problem-type-you-are-trying-to-resolve?"> </a></h4>
+</div>
+</div>
+</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -134,12 +147,588 @@ nb_path: "13_Kaggle_TPS_Tutorial.ipynb"
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># https://www.kaggle.com/maximkazantsev/tps-11-21-eda-xgboost-optuna</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tmlt</span> <span class="o">=</span> <span class="n">TMLT</span><span class="p">()</span><span class="o">.</span><span class="n">prepare_data</span><span class="p">(</span>
+    <span class="n">train_file_path</span><span class="o">=</span> <span class="n">DIRECTORY_PATH</span> <span class="o">+</span> <span class="n">TRAIN_FILE</span><span class="p">,</span>
+    <span class="n">test_file_path</span><span class="o">=</span> <span class="n">DIRECTORY_PATH</span> <span class="o">+</span> <span class="n">TEST_FILE</span><span class="p">,</span>
+    <span class="c1">#make sure to use right index and target columns</span>
+    <span class="n">idx_col</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">,</span>
+    <span class="n">target</span><span class="o">=</span><span class="s2">&quot;target&quot;</span><span class="p">,</span>
+    <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>
+    <span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;binary_classification&quot;</span><span class="p">,</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">4000</span><span class="p">)</span>
 
-<span class="c1"># ALSO TAKE OUT MODIN OR USE SOME FUNCTIONALITY TO USE BOTH</span>
+
+<span class="c1"># supports only task type</span>
+<span class="c1"># &quot;binary_classification&quot;</span>
+<span class="c1"># &quot;multi_label_classification&quot;</span>
+<span class="c1"># &quot;multi_class_classification&quot;</span>
+<span class="c1"># &quot;regression&quot;</span>
 </pre></div>
 
     </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>2021-12-06 23:20:08,236 INFO 8 cores found, model and data parallel processing should worked!
+2021-12-06 23:20:08,350 INFO DataFrame Memory usage decreased to 0.80 Mb (74.4% reduction)
+2021-12-06 23:20:08,457 INFO DataFrame Memory usage decreased to 0.79 Mb (74.3% reduction)
+2021-12-06 23:20:08,502 INFO PreProcessing will include target(s) encoding!
+2021-12-06 23:20:08,503 INFO categorical columns are None, Preprocessing will done accordingly!
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_test</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_test</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+(4000, 100)
+&lt;class &#39;numpy.ndarray&#39;&gt;
+(4000,)
+&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+(4000, 100)
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>f0</th>
+      <th>f1</th>
+      <th>f2</th>
+      <th>f3</th>
+      <th>f4</th>
+      <th>f5</th>
+      <th>f6</th>
+      <th>f7</th>
+      <th>f8</th>
+      <th>f9</th>
+      <th>...</th>
+      <th>f90</th>
+      <th>f91</th>
+      <th>f92</th>
+      <th>f93</th>
+      <th>f94</th>
+      <th>f95</th>
+      <th>f96</th>
+      <th>f97</th>
+      <th>f98</th>
+      <th>f99</th>
+    </tr>
+    <tr>
+      <th>id</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.106628</td>
+      <td>3.593750</td>
+      <td>132.750000</td>
+      <td>3.183594</td>
+      <td>0.081970</td>
+      <td>1.188477</td>
+      <td>3.732422</td>
+      <td>2.265625</td>
+      <td>2.099609</td>
+      <td>0.012329</td>
+      <td>...</td>
+      <td>0.010742</td>
+      <td>1.098633</td>
+      <td>0.013329</td>
+      <td>-0.011719</td>
+      <td>0.052765</td>
+      <td>0.065430</td>
+      <td>4.210938</td>
+      <td>1.978516</td>
+      <td>0.085999</td>
+      <td>0.240479</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.125000</td>
+      <td>1.673828</td>
+      <td>76.562500</td>
+      <td>3.378906</td>
+      <td>0.099426</td>
+      <td>5.093750</td>
+      <td>1.275391</td>
+      <td>-0.471436</td>
+      <td>4.546875</td>
+      <td>0.037720</td>
+      <td>...</td>
+      <td>0.135864</td>
+      <td>3.460938</td>
+      <td>0.017059</td>
+      <td>0.124878</td>
+      <td>0.154053</td>
+      <td>0.606934</td>
+      <td>-0.267822</td>
+      <td>2.578125</td>
+      <td>-0.020874</td>
+      <td>0.024719</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.036316</td>
+      <td>1.497070</td>
+      <td>233.500000</td>
+      <td>2.195312</td>
+      <td>0.026917</td>
+      <td>3.126953</td>
+      <td>5.058594</td>
+      <td>3.849609</td>
+      <td>1.801758</td>
+      <td>0.057007</td>
+      <td>...</td>
+      <td>0.117310</td>
+      <td>4.882812</td>
+      <td>0.085205</td>
+      <td>0.032410</td>
+      <td>0.116089</td>
+      <td>-0.001689</td>
+      <td>-0.520020</td>
+      <td>2.140625</td>
+      <td>0.124451</td>
+      <td>0.148193</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>-0.014076</td>
+      <td>0.245972</td>
+      <td>780.000000</td>
+      <td>1.890625</td>
+      <td>0.006947</td>
+      <td>1.531250</td>
+      <td>2.697266</td>
+      <td>4.515625</td>
+      <td>4.503906</td>
+      <td>0.123474</td>
+      <td>...</td>
+      <td>-0.015350</td>
+      <td>3.474609</td>
+      <td>-0.017105</td>
+      <td>-0.008102</td>
+      <td>0.062012</td>
+      <td>0.041199</td>
+      <td>0.511719</td>
+      <td>1.968750</td>
+      <td>0.040009</td>
+      <td>0.044861</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>-0.003260</td>
+      <td>3.714844</td>
+      <td>156.125000</td>
+      <td>2.148438</td>
+      <td>0.018280</td>
+      <td>2.097656</td>
+      <td>4.156250</td>
+      <td>-0.038239</td>
+      <td>3.371094</td>
+      <td>0.034180</td>
+      <td>...</td>
+      <td>0.013779</td>
+      <td>1.910156</td>
+      <td>-0.042938</td>
+      <td>0.105591</td>
+      <td>0.125122</td>
+      <td>0.037506</td>
+      <td>1.043945</td>
+      <td>1.075195</td>
+      <td>-0.012817</td>
+      <td>0.072815</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>3995</th>
+      <td>0.242188</td>
+      <td>2.324219</td>
+      <td>-19.109375</td>
+      <td>0.984375</td>
+      <td>0.036438</td>
+      <td>0.424561</td>
+      <td>2.269531</td>
+      <td>3.621094</td>
+      <td>4.062500</td>
+      <td>1.197266</td>
+      <td>...</td>
+      <td>-0.002506</td>
+      <td>3.064453</td>
+      <td>0.112427</td>
+      <td>0.100220</td>
+      <td>0.036530</td>
+      <td>0.451172</td>
+      <td>1.316406</td>
+      <td>4.625000</td>
+      <td>0.056183</td>
+      <td>0.029724</td>
+    </tr>
+    <tr>
+      <th>3996</th>
+      <td>0.138306</td>
+      <td>0.679199</td>
+      <td>37.125000</td>
+      <td>2.736328</td>
+      <td>-0.043549</td>
+      <td>0.514648</td>
+      <td>4.542969</td>
+      <td>3.132812</td>
+      <td>4.972656</td>
+      <td>0.097961</td>
+      <td>...</td>
+      <td>0.060730</td>
+      <td>4.125000</td>
+      <td>-0.031433</td>
+      <td>0.059143</td>
+      <td>0.164673</td>
+      <td>0.058075</td>
+      <td>-0.237427</td>
+      <td>2.123047</td>
+      <td>-0.049316</td>
+      <td>0.050842</td>
+    </tr>
+    <tr>
+      <th>3997</th>
+      <td>0.025436</td>
+      <td>1.316406</td>
+      <td>250.375000</td>
+      <td>3.689453</td>
+      <td>0.015312</td>
+      <td>2.490234</td>
+      <td>1.983398</td>
+      <td>3.556641</td>
+      <td>4.164062</td>
+      <td>0.156860</td>
+      <td>...</td>
+      <td>0.038269</td>
+      <td>4.667969</td>
+      <td>0.157593</td>
+      <td>0.102234</td>
+      <td>1.055664</td>
+      <td>0.031769</td>
+      <td>1.661133</td>
+      <td>1.484375</td>
+      <td>-0.027924</td>
+      <td>0.098083</td>
+    </tr>
+    <tr>
+      <th>3998</th>
+      <td>0.109253</td>
+      <td>2.169922</td>
+      <td>123.062500</td>
+      <td>3.279297</td>
+      <td>0.018204</td>
+      <td>3.630859</td>
+      <td>4.636719</td>
+      <td>4.507812</td>
+      <td>3.585938</td>
+      <td>0.037140</td>
+      <td>...</td>
+      <td>0.083191</td>
+      <td>3.623047</td>
+      <td>0.108765</td>
+      <td>0.111877</td>
+      <td>0.020645</td>
+      <td>0.125122</td>
+      <td>2.648438</td>
+      <td>2.753906</td>
+      <td>0.012726</td>
+      <td>0.035583</td>
+    </tr>
+    <tr>
+      <th>3999</th>
+      <td>-0.032227</td>
+      <td>1.616211</td>
+      <td>171.875000</td>
+      <td>3.207031</td>
+      <td>-0.008675</td>
+      <td>2.208984</td>
+      <td>4.097656</td>
+      <td>1.391602</td>
+      <td>2.486328</td>
+      <td>0.121643</td>
+      <td>...</td>
+      <td>0.074463</td>
+      <td>0.529785</td>
+      <td>0.002768</td>
+      <td>0.098877</td>
+      <td>0.148682</td>
+      <td>0.056061</td>
+      <td>4.210938</td>
+      <td>0.759766</td>
+      <td>0.063538</td>
+      <td>0.097046</td>
+    </tr>
+  </tbody>
+</table>
+<p>4000 rows × 100 columns</p>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Training">Training<a class="anchor-link" href="#Training"> </a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h5 id="create-train-valid-dataframes-for-quick-preprocessing-and-training">create train valid dataframes for quick preprocessing and training<a class="anchor-link" href="#create-train-valid-dataframes-for-quick-preprocessing-and-training"> </a></h5>
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
+<span class="c1"># create train, valid split to evaulate model on valid dataset</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_valid</span><span class="p">,</span>  <span class="n">y_train</span><span class="p">,</span> <span class="n">y_valid</span> <span class="o">=</span>  <span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">create_train_valid</span><span class="p">(</span><span class="n">valid_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>CPU times: user 5.46 ms, sys: 1.46 ms, total: 6.92 ms
+Wall time: 6.05 ms
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">y_train</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">X_valid</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">y_valid</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+<span class="c1"># print(X_train.columns.to_list())</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>(3200, 100)
+(3200,)
+(800, 100)
+(800,)
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h5 id="Now-PreProcess-X_train,-X_valid">Now PreProcess X_train, X_valid<a class="anchor-link" href="#Now-PreProcess-X_train,-X_valid"> </a></h5><p>NOTE: Preprocessing gives back numpy arrays for pandas dataframe</p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
+<span class="n">X_train_np</span><span class="p">,</span>  <span class="n">X_valid_np</span> <span class="o">=</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">pp_fit_transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_valid</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">X_train_np</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">X_train_np</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="c1"># print(X_train_np)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">X_valid_np</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">X_valid_np</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="c1"># print(X_valid_np)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">y_valid</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">y_train</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>&lt;class &#39;numpy.ndarray&#39;&gt;
+(3200, 100)
+&lt;class &#39;numpy.ndarray&#39;&gt;
+(800, 100)
+&lt;class &#39;numpy.ndarray&#39;&gt;
+&lt;class &#39;numpy.ndarray&#39;&gt;
+CPU times: user 24.3 ms, sys: 1.71 ms, total: 26 ms
+Wall time: 24.7 ms
+</pre>
+</div>
+</div>
+
 </div>
 </div>
 
@@ -189,201 +778,23 @@ nb_path: "13_Kaggle_TPS_Tutorial.ipynb"
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tmlt</span> <span class="o">=</span> <span class="n">TMLT</span><span class="p">()</span><span class="o">.</span><span class="n">prepare_data_for_training</span><span class="p">(</span>
-    <span class="n">train_file_path</span><span class="o">=</span> <span class="n">DIRECTORY_PATH</span> <span class="o">+</span> <span class="n">TRAIN_FILE</span><span class="p">,</span>
-    <span class="n">test_file_path</span><span class="o">=</span> <span class="n">DIRECTORY_PATH</span> <span class="o">+</span> <span class="n">TEST_FILE</span><span class="p">,</span>
-    <span class="c1">#make sure to use right index and target columns</span>
-    <span class="n">idx_col</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">,</span>
-    <span class="n">target</span><span class="o">=</span><span class="s2">&quot;target&quot;</span><span class="p">,</span>
-    <span class="n">model</span><span class="o">=</span><span class="n">xgb_model</span><span class="p">,</span>
-    <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>
-    <span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;binary_classification&quot;</span><span class="p">,</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">4000</span><span class="p">)</span>
-
-
-<span class="c1"># supports only task type</span>
-<span class="c1"># &quot;binary_classification&quot;</span>
-<span class="c1"># &quot;multi_label_classification&quot;</span>
-<span class="c1"># &quot;multi_class_classification&quot;</span>
-<span class="c1"># &quot;regression&quot;</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-24 11:53:15,358 INFO 12 cores found, model and data parallel processing should worked!
-2021-11-24 11:53:15,477 INFO DataFrame Memory usage decreased to 0.80 Mb (74.4% reduction)
-2021-11-24 11:53:15,601 INFO DataFrame Memory usage decreased to 0.79 Mb (74.3% reduction)
-2021-11-24 11:53:15,655 INFO categorical columns are None, Preprocessing will done accordingly!
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tmlt</span><span class="o">.</span><span class="n">spl</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_html rendered_html output_subarea output_execute_result">
-<style>#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f {color: black;background-color: white;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f pre{padding: 0;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f div.sk-toggleable {background-color: white;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.3em;box-sizing: border-box;text-align: center;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f div.sk-estimator {font-family: monospace;background-color: #f0f8ff;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;margin-bottom: 0.5em;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f div.sk-estimator:hover {background-color: #d4ebff;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;padding-right: 0.2em;padding-left: 0.2em;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f div.sk-item {z-index: 1;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f div.sk-parallel::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f div.sk-parallel-item:only-child::after {width: 0;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0 0.4em 0.5em 0.4em;box-sizing: border-box;padding-bottom: 0.4em;background-color: white;position: relative;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f div.sk-label-container {position: relative;z-index: 2;text-align: center;}#sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f div.sk-container {display: inline-block;position: relative;}</style><div id="sk-5a37688d-b0ed-49cb-bff7-5bb1a635442f" class"sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="bdb61398-edeb-4680-ac20-7c9b4b5f1126" type="checkbox" ><label class="sk-toggleable__label" for="bdb61398-edeb-4680-ac20-7c9b4b5f1126">Pipeline</label><div class="sk-toggleable__content"><pre>Pipeline(steps=[('preprocessor',
-                 ColumnTransformer(transformers=[('num_cols',
-                                                  Pipeline(steps=[('imputer',
-                                                                   SimpleImputer(strategy='constant')),
-                                                                  ('scaler',
-                                                                   StandardScaler())]),
-                                                  ['f0', 'f1', 'f2', 'f3', 'f4',
-                                                   'f5', 'f6', 'f7', 'f8', 'f9',
-                                                   'f10', 'f11', 'f12', 'f13',
-                                                   'f14', 'f15', 'f16', 'f17',
-                                                   'f18', 'f19', 'f20', 'f21',
-                                                   'f22', 'f23', 'f24', 'f25',
-                                                   'f26', 'f27', 'f28', 'f29', ...])])),
-                (...
-                               interaction_constraints=None, learning_rate=0.01,
-                               max_delta_step=None, max_depth=None,
-                               min_child_weight=None, missing=nan,
-                               monotone_constraints=None, n_estimators=100,
-                               n_jobs=11, num_parallel_tree=None,
-                               predictor=None, random_state=42, reg_alpha=None,
-                               reg_lambda=None, scale_pos_weight=None,
-                               subsample=None, tree_method=None,
-                               use_label_encoder=False,
-                               validate_parameters=None, verbosity=None))])</pre></div></div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="6208ceaa-4ecc-4797-b09e-901cb5346095" type="checkbox" ><label class="sk-toggleable__label" for="6208ceaa-4ecc-4797-b09e-901cb5346095">preprocessor: ColumnTransformer</label><div class="sk-toggleable__content"><pre>ColumnTransformer(transformers=[('num_cols',
-                                 Pipeline(steps=[('imputer',
-                                                  SimpleImputer(strategy='constant')),
-                                                 ('scaler', StandardScaler())]),
-                                 ['f0', 'f1', 'f2', 'f3', 'f4', 'f5', 'f6',
-                                  'f7', 'f8', 'f9', 'f10', 'f11', 'f12', 'f13',
-                                  'f14', 'f15', 'f16', 'f17', 'f18', 'f19',
-                                  'f20', 'f21', 'f22', 'f23', 'f24', 'f25',
-                                  'f26', 'f27', 'f28', 'f29', ...])])</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="ced4ba97-0531-43fe-b4aa-211be94ee847" type="checkbox" ><label class="sk-toggleable__label" for="ced4ba97-0531-43fe-b4aa-211be94ee847">num_cols</label><div class="sk-toggleable__content"><pre>['f0', 'f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8', 'f9', 'f10', 'f11', 'f12', 'f13', 'f14', 'f15', 'f16', 'f17', 'f18', 'f19', 'f20', 'f21', 'f22', 'f23', 'f24', 'f25', 'f26', 'f27', 'f28', 'f29', 'f30', 'f31', 'f32', 'f33', 'f34', 'f35', 'f36', 'f37', 'f38', 'f39', 'f40', 'f41', 'f42', 'f43', 'f44', 'f45', 'f46', 'f47', 'f48', 'f49', 'f50', 'f51', 'f52', 'f53', 'f54', 'f55', 'f56', 'f57', 'f58', 'f59', 'f60', 'f61', 'f62', 'f63', 'f64', 'f65', 'f66', 'f67', 'f68', 'f69', 'f70', 'f71', 'f72', 'f73', 'f74', 'f75', 'f76', 'f77', 'f78', 'f79', 'f80', 'f81', 'f82', 'f83', 'f84', 'f85', 'f86', 'f87', 'f88', 'f89', 'f90', 'f91', 'f92', 'f93', 'f94', 'f95', 'f96', 'f97', 'f98', 'f99']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="e41c7276-4a6f-46d6-bbaf-0e44601a9dfe" type="checkbox" ><label class="sk-toggleable__label" for="e41c7276-4a6f-46d6-bbaf-0e44601a9dfe">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(strategy='constant')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="de1e08e5-80bb-4c75-bab7-52356c67d9f9" type="checkbox" ><label class="sk-toggleable__label" for="de1e08e5-80bb-4c75-bab7-52356c67d9f9">StandardScaler</label><div class="sk-toggleable__content"><pre>StandardScaler()</pre></div></div></div></div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="0d1841ac-6f0b-4a9c-b1e1-3c899ba668d1" type="checkbox" ><label class="sk-toggleable__label" for="0d1841ac-6f0b-4a9c-b1e1-3c899ba668d1">XGBClassifier</label><div class="sk-toggleable__content"><pre>XGBClassifier(base_score=None, booster=None, colsample_bylevel=None,
-              colsample_bynode=None, colsample_bytree=None,
-              enable_categorical=False, eval_metric='auc', gamma=None,
-              gpu_id=None, importance_type=None, interaction_constraints=None,
-              learning_rate=0.01, max_delta_step=None, max_depth=None,
-              min_child_weight=None, missing=nan, monotone_constraints=None,
-              n_estimators=100, n_jobs=11, num_parallel_tree=None,
-              predictor=None, random_state=42, reg_alpha=None, reg_lambda=None,
-              scale_pos_weight=None, subsample=None, tree_method=None,
-              use_label_encoder=False, validate_parameters=None,
-              verbosity=None)</pre></div></div></div></div></div></div></div>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Let's-do-a-quick-round-of-training">Let's do a quick round of training<a class="anchor-link" href="#Let's-do-a-quick-round-of-training"> </a></h4>
-</div>
-</div>
-</div>
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">create_train_valid</span><span class="p">(</span><span class="n">valid_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;X_train shape is </span><span class="si">{</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span> <span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;X_valid shape is </span><span class="si">{</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_valid</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span> <span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;y_train shape is </span><span class="si">{</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_train</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;y_valid shape is </span><span class="si">{</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_valid</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>X_train shape is (3200, 100)
-X_valid shape is (800, 100)
-y_train shape is (3200,)
-y_valid shape is (800,)
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-<span class="c1"># Now fit</span>
-<span class="n">tmlt</span><span class="o">.</span><span class="n">spl</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_train</span><span class="p">,</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_train</span><span class="p">)</span>
-<span class="n">end</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Fit Time:&quot;</span><span class="p">,</span> <span class="n">end</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
+<span class="c1"># Now do model training</span>
+<span class="n">xgb_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_np</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span>
+              <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+              <span class="c1">#detect &amp; avoid overfitting</span>
+              <span class="n">eval_set</span><span class="o">=</span><span class="p">[(</span><span class="n">X_train_np</span><span class="p">,</span> <span class="n">y_train</span><span class="p">),</span> <span class="p">(</span><span class="n">X_valid_np</span><span class="p">,</span> <span class="n">y_valid</span><span class="p">)],</span>
+              <span class="n">eval_metric</span><span class="o">=</span><span class="s2">&quot;auc&quot;</span><span class="p">,</span>
+              <span class="n">early_stopping_rounds</span><span class="o">=</span><span class="mi">300</span>
+             <span class="p">)</span>
 
 <span class="c1">#predict</span>
-<span class="n">preds</span> <span class="o">=</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">spl</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_valid</span><span class="p">)</span>
-<span class="n">preds_probs</span> <span class="o">=</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">spl</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_valid</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">preds</span> <span class="o">=</span> <span class="n">xgb_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_valid_np</span><span class="p">)</span>
+<span class="n">preds_probs</span> <span class="o">=</span> <span class="n">xgb_model</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_valid_np</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
 
 <span class="c1"># Metrics</span>
-<span class="n">auc</span> <span class="o">=</span> <span class="n">roc_auc_score</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">preds_probs</span><span class="p">)</span>
-<span class="n">acc</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">preds</span><span class="p">)</span>
+<span class="n">auc</span> <span class="o">=</span> <span class="n">roc_auc_score</span><span class="p">(</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">preds_probs</span><span class="p">)</span>
+<span class="n">acc</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">preds</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;AUC is : </span><span class="si">{</span><span class="n">auc</span><span class="si">}</span><span class="s2"> while Accuracy is : </span><span class="si">{</span><span class="n">acc</span><span class="si">}</span><span class="s2"> &quot;</span><span class="p">)</span>
 </pre></div>
@@ -398,8 +809,9 @@ y_valid shape is (800,)
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Fit Time: 1.045884132385254
-AUC is : 0.6137947418435223 while Accuracy is : 0.6175 
+<pre>AUC is : 0.6142302819132088 while Accuracy is : 0.6175 
+CPU times: user 10.9 s, sys: 167 ms, total: 11.1 s
+Wall time: 1.73 s
 </pre>
 </div>
 </div>
@@ -412,7 +824,13 @@ AUC is : 0.6137947418435223 while Accuracy is : 0.6175
 
 <div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="Base-model-For-Meta-Ensemble-Model">Base model For Meta Ensemble Model<a class="anchor-link" href="#Base-model-For-Meta-Ensemble-Model"> </a></h4>
+<h3 id="For-Meta-Ensemble-Models-Training">For Meta Ensemble Models Training<a class="anchor-link" href="#For-Meta-Ensemble-Models-Training"> </a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h5 id="Make-sure-to-PreProcess-the-data">Make sure to PreProcess the data<a class="anchor-link" href="#Make-sure-to-PreProcess-the-data"> </a></h5>
 </div>
 </div>
 </div>
@@ -423,10 +841,76 @@ AUC is : 0.6137947418435223 while Accuracy is : 0.6175
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">linear_oof_model</span> <span class="o">=</span> <span class="n">LinearSVC</span><span class="p">(</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-7</span><span class="p">,</span> <span class="n">penalty</span><span class="o">=</span><span class="s1">&#39;l2&#39;</span><span class="p">,</span> <span class="n">dual</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
+<span class="n">X_np</span><span class="p">,</span> <span class="n">X_test_np</span> <span class="o">=</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">pp_fit_transform</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_test</span><span class="p">)</span>
+<span class="n">y_np</span> <span class="o">=</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y</span>
+</pre></div>
 
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>CPU times: user 273 ms, sys: 19.2 ms, total: 292 ms
+Wall time: 45.2 ms
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Base-Model-1:-linear-SVM-model">Base Model 1: linear SVM model<a class="anchor-link" href="#Base-Model-1:-linear-SVM-model"> </a></h4>
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.svm</span> <span class="kn">import</span> <span class="n">LinearSVC</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
+
+<span class="c1"># OOF training and prediction on both train and test dataset by a given model</span>
+<span class="c1">#choose model</span>
+<span class="n">linear_oof_model</span> <span class="o">=</span> <span class="n">LinearSVC</span><span class="p">(</span><span class="n">tol</span><span class="o">=</span><span class="mf">1e-7</span><span class="p">,</span> <span class="n">penalty</span><span class="o">=</span><span class="s1">&#39;l2&#39;</span><span class="p">,</span> <span class="n">dual</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="c1">#fit and predict</span>
 <span class="n">linear_oof_model_preds</span><span class="p">,</span> <span class="n">linear_oof_model_test_preds</span> <span class="o">=</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">do_oof_kfold_train_preds</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
-                                                          <span class="n">oof_model</span><span class="o">=</span><span class="n">linear_oof_model</span><span class="p">)</span>
+                                                                                    <span class="n">oof_model</span><span class="o">=</span><span class="n">linear_oof_model</span><span class="p">,</span>
+                                                                                    <span class="n">X</span> <span class="o">=</span> <span class="n">X_np</span><span class="p">,</span>
+                                                                                    <span class="n">y</span> <span class="o">=</span> <span class="n">y_np</span><span class="p">,</span>
+                                                                                    <span class="n">X_test</span> <span class="o">=</span> <span class="n">X_test_np</span><span class="p">)</span>
+
 <span class="k">if</span> <span class="n">linear_oof_model_preds</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">linear_oof_model_preds</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 
@@ -444,12 +928,22 @@ AUC is : 0.6137947418435223 while Accuracy is : 0.6175
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-24 11:55:33,649 INFO fold: 1 OOF Model ROC AUC: 0.7259767891682785!
-2021-11-24 11:55:34,094 INFO fold: 2 OOF Model ROC AUC: 0.6958091553836234!
-2021-11-24 11:55:34,543 INFO fold: 3 OOF Model ROC AUC: 0.6614764667956157!
-2021-11-24 11:55:35,027 INFO fold: 4 OOF Model ROC AUC: 0.7080050760440353!
-2021-11-24 11:55:35,446 INFO fold: 5 OOF Model ROC AUC: 0.7223571396363027!
-2021-11-24 11:55:35,451 INFO Mean OOF Model ROC AUC: 0.7027249254055712!
+<pre>2021-12-06 23:20:10,385 INFO Training Started!
+2021-12-06 23:20:10,418 INFO Training Finished!
+2021-12-06 23:20:10,421 INFO fold: 1 OOF Model ROC AUC: 0.7257962604771115!
+2021-12-06 23:20:10,426 INFO Training Started!
+2021-12-06 23:20:10,453 INFO Training Finished!
+2021-12-06 23:20:10,456 INFO fold: 2 OOF Model ROC AUC: 0.6957833655705996!
+2021-12-06 23:20:10,461 INFO Training Started!
+2021-12-06 23:20:10,492 INFO Training Finished!
+2021-12-06 23:20:10,495 INFO fold: 3 OOF Model ROC AUC: 0.6616956802063185!
+2021-12-06 23:20:10,500 INFO Training Started!
+2021-12-06 23:20:10,538 INFO Training Finished!
+2021-12-06 23:20:10,541 INFO fold: 4 OOF Model ROC AUC: 0.7076379002699064!
+2021-12-06 23:20:10,546 INFO Training Started!
+2021-12-06 23:20:10,580 INFO Training Finished!
+2021-12-06 23:20:10,584 INFO fold: 5 OOF Model ROC AUC: 0.7227243154104317!
+2021-12-06 23:20:10,588 INFO Mean OOF Model ROC AUC: 0.7027275043868735!
 </pre>
 </div>
 </div>
@@ -459,6 +953,8 @@ AUC is : 0.6137947418435223 while Accuracy is : 0.6175
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>(4000,)
 (4000,)
+CPU times: user 793 ms, sys: 186 ms, total: 979 ms
+Wall time: 206 ms
 </pre>
 </div>
 </div>
@@ -469,6 +965,12 @@ AUC is : 0.6137947418435223 while Accuracy is : 0.6175
 </div>
     {% endraw %}
 
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Base-Model-2:-Logistic-Regression-Model">Base Model 2: Logistic Regression Model<a class="anchor-link" href="#Base-Model-2:-Logistic-Regression-Model"> </a></h4>
+</div>
+</div>
+</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -476,8 +978,7 @@ AUC is : 0.6137947418435223 while Accuracy is : 0.6175
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X</span><span class="p">[</span><span class="s2">&quot;linear_preds&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">linear_oof_model_preds</span>
-<span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_test</span><span class="p">[</span><span class="s2">&quot;linear_preds&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">linear_oof_model_test_preds</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LogisticRegression</span>
 </pre></div>
 
     </div>
@@ -494,7 +995,375 @@ AUC is : 0.6137947418435223 while Accuracy is : 0.6175
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
+
+<span class="c1"># OOF training and prediction on both train and test dataset by a given model</span>
+
+<span class="c1">#choose model</span>
+<span class="n">log_oof_model</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">solver</span><span class="o">=</span><span class="s1">&#39;liblinear&#39;</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="c1">#fit and predict</span>
+<span class="n">log_oof_model_preds</span><span class="p">,</span> <span class="n">log_oof_model_test_preds</span> <span class="o">=</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">do_oof_kfold_train_preds</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                                                                                    <span class="n">oof_model</span><span class="o">=</span><span class="n">log_oof_model</span><span class="p">,</span>
+                                                                                    <span class="n">X</span> <span class="o">=</span> <span class="n">X_np</span><span class="p">,</span>
+                                                                                    <span class="n">y</span> <span class="o">=</span> <span class="n">y_np</span><span class="p">,</span>
+                                                                                    <span class="n">X_test</span> <span class="o">=</span> <span class="n">X_test_np</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">log_oof_model_preds</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">log_oof_model_preds</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">log_oof_model_test_preds</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>    
+    <span class="nb">print</span><span class="p">(</span><span class="n">log_oof_model_test_preds</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>2021-12-06 23:20:10,605 INFO Training Started!
+2021-12-06 23:20:10,630 INFO Training Finished!
+2021-12-06 23:20:10,633 INFO fold: 1 OOF Model ROC AUC: 0.7271695680206318!
+2021-12-06 23:20:10,637 INFO Training Started!
+2021-12-06 23:20:10,665 INFO Training Finished!
+2021-12-06 23:20:10,667 INFO fold: 2 OOF Model ROC AUC: 0.694622823984526!
+2021-12-06 23:20:10,672 INFO Training Started!
+2021-12-06 23:20:10,699 INFO Training Finished!
+2021-12-06 23:20:10,703 INFO fold: 3 OOF Model ROC AUC: 0.662114764667956!
+2021-12-06 23:20:10,707 INFO Training Started!
+2021-12-06 23:20:10,730 INFO Training Finished!
+2021-12-06 23:20:10,733 INFO fold: 4 OOF Model ROC AUC: 0.7080501678057705!
+2021-12-06 23:20:10,737 INFO Training Started!
+2021-12-06 23:20:10,762 INFO Training Finished!
+2021-12-06 23:20:10,764 INFO fold: 5 OOF Model ROC AUC: 0.7226276902067136!
+2021-12-06 23:20:10,768 INFO Mean OOF Model ROC AUC: 0.7029170029371196!
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>(4000,)
+(4000,)
+CPU times: user 503 ms, sys: 116 ms, total: 618 ms
+Wall time: 167 ms
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Base-Model-3:-SKLearn-MLP">Base Model 3: SKLearn MLP<a class="anchor-link" href="#Base-Model-3:-SKLearn-MLP"> </a></h4>
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.neural_network</span> <span class="kn">import</span> <span class="n">MLPClassifier</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
+
+<span class="c1"># OOF training and prediction on both train and test dataset by a given model</span>
+
+<span class="c1">#choose model</span>
+<span class="n">mlp_oof_model</span> <span class="o">=</span> <span class="n">MLPClassifier</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">early_stopping</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1">#update the model on sklearn pipeline</span>
+<span class="c1"># tmlt = tmlt.update_model(mlp_oof_model)</span>
+
+<span class="c1"># # lets see updated sklearn pipeline with new model</span>
+<span class="c1"># tmlt.spl</span>
+
+<span class="c1">#fit and predict</span>
+<span class="n">mlp_oof_model_preds</span><span class="p">,</span> <span class="n">mlp_oof_model_test_preds</span> <span class="o">=</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">do_oof_kfold_train_preds</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                                                                                    <span class="n">oof_model</span><span class="o">=</span><span class="n">mlp_oof_model</span><span class="p">,</span>
+                                                                                    <span class="n">X</span> <span class="o">=</span> <span class="n">X_np</span><span class="p">,</span>
+                                                                                    <span class="n">y</span> <span class="o">=</span> <span class="n">y_np</span><span class="p">,</span>
+                                                                                    <span class="n">X_test</span> <span class="o">=</span> <span class="n">X_test_np</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">mlp_oof_model_preds</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">mlp_oof_model_preds</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">mlp_oof_model_test_preds</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>    
+    <span class="nb">print</span><span class="p">(</span><span class="n">mlp_oof_model_test_preds</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>2021-12-06 23:20:10,782 INFO Training Started!
+2021-12-06 23:20:11,064 INFO Training Finished!
+2021-12-06 23:20:11,067 INFO fold: 1 OOF Model ROC AUC: 0.7153836234687297!
+2021-12-06 23:20:11,076 INFO Training Started!
+2021-12-06 23:20:11,294 INFO Training Finished!
+2021-12-06 23:20:11,297 INFO fold: 2 OOF Model ROC AUC: 0.6823726627981948!
+2021-12-06 23:20:11,306 INFO Training Started!
+2021-12-06 23:20:11,476 INFO Training Finished!
+2021-12-06 23:20:11,479 INFO fold: 3 OOF Model ROC AUC: 0.6245067698259188!
+2021-12-06 23:20:11,487 INFO Training Started!
+2021-12-06 23:20:11,916 INFO Training Finished!
+2021-12-06 23:20:11,920 INFO fold: 4 OOF Model ROC AUC: 0.6928606857812791!
+2021-12-06 23:20:11,928 INFO Training Started!
+2021-12-06 23:20:12,115 INFO Training Finished!
+2021-12-06 23:20:12,119 INFO fold: 5 OOF Model ROC AUC: 0.6891696029992462!
+2021-12-06 23:20:12,127 INFO Mean OOF Model ROC AUC: 0.6808586689746737!
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>(4000,)
+(4000,)
+CPU times: user 4.5 s, sys: 730 ms, total: 5.23 s
+Wall time: 1.35 s
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Base-Model-4:-TabNet">Base Model 4: TabNet<a class="anchor-link" href="#Base-Model-4:-TabNet"> </a></h4>
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pytorch_tabnet.tab_model</span> <span class="kn">import</span> <span class="n">TabNetClassifier</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
+
+<span class="c1"># OOF training and prediction on both train and test dataset by a given model</span>
+
+<span class="c1">#choose model</span>
+<span class="n">tabnet_oof_model</span> <span class="o">=</span> <span class="n">TabNetClassifier</span><span class="p">(</span><span class="n">optimizer_params</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="mf">0.02</span><span class="p">),</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1">#fit and predict</span>
+<span class="n">tabnet_oof_model_preds</span><span class="p">,</span> <span class="n">tabnet_oof_model_test_preds</span> <span class="o">=</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">do_oof_kfold_train_preds</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                                                                                    <span class="n">oof_model</span><span class="o">=</span><span class="n">tabnet_oof_model</span><span class="p">,</span>
+                                                                                    <span class="n">X</span> <span class="o">=</span> <span class="n">X_np</span><span class="p">,</span>
+                                                                                    <span class="n">y</span> <span class="o">=</span> <span class="n">y_np</span><span class="p">,</span>
+                                                                                    <span class="n">X_test</span> <span class="o">=</span> <span class="n">X_test_np</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">tabnet_oof_model_preds</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">tabnet_oof_model_preds</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">tabnet_oof_model_test_preds</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">tabnet_oof_model_test_preds</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>2021-12-06 23:20:12,142 INFO Training Started!
+2021-12-06 23:20:20,277 INFO Training Finished!
+2021-12-06 23:20:20,308 INFO fold: 1 OOF Model ROC AUC: 0.558401031592521!
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Stop training because you reached max_epochs = 50 with best_epoch = 44 and best_val_0_auc = 0.5584
+Best weights from best epoch are automatically used!
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>2021-12-06 23:20:20,423 INFO Training Started!
+2021-12-06 23:20:22,374 INFO Training Finished!
+2021-12-06 23:20:22,405 INFO fold: 2 OOF Model ROC AUC: 0.6584655061250806!
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+Early stopping occurred at epoch 11 with best_epoch = 1 and best_val_0_auc = 0.65847
+Best weights from best epoch are automatically used!
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>2021-12-06 23:20:22,518 INFO Training Started!
+2021-12-06 23:20:24,393 INFO Training Finished!
+2021-12-06 23:20:24,425 INFO fold: 3 OOF Model ROC AUC: 0.6677756286266925!
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+Early stopping occurred at epoch 10 with best_epoch = 0 and best_val_0_auc = 0.66778
+Best weights from best epoch are automatically used!
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>2021-12-06 23:20:24,539 INFO Training Started!
+2021-12-06 23:20:26,372 INFO Training Finished!
+2021-12-06 23:20:26,403 INFO fold: 4 OOF Model ROC AUC: 0.6324828168179388!
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+Early stopping occurred at epoch 10 with best_epoch = 0 and best_val_0_auc = 0.63248
+Best weights from best epoch are automatically used!
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>2021-12-06 23:20:26,520 INFO Training Started!
+2021-12-06 23:20:28,385 INFO Training Finished!
+2021-12-06 23:20:28,416 INFO fold: 5 OOF Model ROC AUC: 0.6354975231739447!
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+Early stopping occurred at epoch 10 with best_epoch = 0 and best_val_0_auc = 0.6355
+Best weights from best epoch are automatically used!
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>2021-12-06 23:20:28,533 INFO Mean OOF Model ROC AUC: 0.6305245012672356!
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>(4000,)
+(4000,)
+CPU times: user 17.6 s, sys: 5.93 s, total: 23.6 s
+Wall time: 16.4 s
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Now-add-back-based-models-predictions-to-X-and-X_test">Now add back based models predictions to X and X_test<a class="anchor-link" href="#Now-add-back-based-models-predictions-to-X-and-X_test"> </a></h4>
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X</span><span class="p">[</span><span class="s2">&quot;linear_preds&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">linear_oof_model_preds</span>
+<span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_test</span><span class="p">[</span><span class="s2">&quot;linear_preds&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">linear_oof_model_test_preds</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_test</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 </pre></div>
 
@@ -520,12 +1389,6 @@ AUC is : 0.6137947418435223 while Accuracy is : 0.6175
 </div>
     {% endraw %}
 
-<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="For-Meta-Model,-Let's-do-Optuna-based-HyperParameter-search-to-get-best-params-for-fit">For Meta Model, Let's do Optuna based HyperParameter search to get best params for fit<a class="anchor-link" href="#For-Meta-Model,-Let's-do-Optuna-based-HyperParameter-search-to-get-best-params-for-fit"> </a></h4>
-</div>
-</div>
-</div>
     {% raw %}
     
 <div class="cell border-box-sizing code_cell rendered">
@@ -533,7 +1396,11 @@ AUC is : 0.6137947418435223 while Accuracy is : 0.6175
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">study</span> <span class="o">=</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">do_xgb_optuna_optimization</span><span class="p">(</span><span class="n">optuna_db_path</span><span class="o">=</span><span class="n">OUTPUT_PATH</span><span class="p">,</span> <span class="n">opt_timeout</span><span class="o">=</span><span class="mi">360</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X</span><span class="p">[</span><span class="s2">&quot;log_reg_preds&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">log_oof_model_preds</span>
+<span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_test</span><span class="p">[</span><span class="s2">&quot;log_reg_preds&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">log_oof_model_test_preds</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_test</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -545,908 +1412,9 @@ AUC is : 0.6137947418435223 while Accuracy is : 0.6175
 
 <div class="output_area">
 
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-24 11:56:05,611 INFO Optimization Direction is: minimize
-<span class="ansi-green-fg">[I 2021-11-24 11:56:05,674]</span> Using an existing study with name &#39;tmlt_autoxgb&#39; instead of creating a new one.
-2021-11-24 11:56:05,948 INFO Training Started!
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>[11:56:05] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
-Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
-
-  This could be a false alarm, with some parameters getting used by language bindings but
-  then being mistakenly passed down to XGBoost core, or some parameter actually being used
-  but getting flagged wrongly here. Please open an issue if you find any such cases.
-
-
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-24 11:56:13,976 INFO Training Ended!
-2021-11-24 11:56:14,038 INFO log_loss: 0.6036267434991897
-2021-11-24 11:56:14,039 INFO roc_auc_score: 0.7167207792207793
-2021-11-24 11:56:14,039 INFO accuracy_score: 0.70125
-2021-11-24 11:56:14,040 INFO f1_score: 0.5886402753872634
-2021-11-24 11:56:14,041 INFO precision_score: 0.6263736263736264
-2021-11-24 11:56:14,041 INFO recall_score: 0.5551948051948052
-<span class="ansi-green-fg">[I 2021-11-24 11:56:14,078]</span> Trial 40 finished with value: 0.6036267434991897 and parameters: {&#39;learning_rate&#39;: 0.0467094492253725, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 6.538273265404555e-05, &#39;reg_alpha&#39;: 0.0013117821568648178, &#39;subsample&#39;: 0.5290631340507302, &#39;colsample_bytree&#39;: 0.7582355779106297, &#39;max_depth&#39;: 4, &#39;early_stopping_rounds&#39;: 426, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 20 with value: 0.6023122700396926.
-2021-11-24 11:56:14,250 INFO Training Started!
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>[11:56:14] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
-Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
-
-  This could be a false alarm, with some parameters getting used by language bindings but
-  then being mistakenly passed down to XGBoost core, or some parameter actually being used
-  but getting flagged wrongly here. Please open an issue if you find any such cases.
-
-
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-24 11:56:17,358 INFO Training Ended!
-/Users/pamathur/miniconda3/envs/nbdev_env/lib/python3.9/site-packages/sklearn/metrics/_classification.py:1308: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, msg_start, len(result))
-2021-11-24 11:56:17,419 INFO log_loss: 0.6689949867129326
-2021-11-24 11:56:17,420 INFO roc_auc_score: 0.5
-2021-11-24 11:56:17,420 INFO accuracy_score: 0.615
-2021-11-24 11:56:17,421 INFO f1_score: 0.0
-2021-11-24 11:56:17,422 INFO precision_score: 0.0
-2021-11-24 11:56:17,422 INFO recall_score: 0.0
-<span class="ansi-green-fg">[I 2021-11-24 11:56:17,451]</span> Trial 41 finished with value: 0.6689949867129326 and parameters: {&#39;learning_rate&#39;: 0.018704968140364132, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 3.5773118385391564e-06, &#39;reg_alpha&#39;: 0.3568074678915505, &#39;subsample&#39;: 0.5658420728617757, &#39;colsample_bytree&#39;: 0.6677211087049771, &#39;max_depth&#39;: 7, &#39;early_stopping_rounds&#39;: 221, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 20 with value: 0.6023122700396926.
-2021-11-24 11:56:17,645 INFO Training Started!
-2021-11-24 11:56:41,801 INFO Training Ended!
-2021-11-24 11:56:41,994 INFO log_loss: 1.050724998009989
-2021-11-24 11:56:41,995 INFO roc_auc_score: 0.6199714919227115
-2021-11-24 11:56:41,995 INFO accuracy_score: 0.63125
-2021-11-24 11:56:41,996 INFO f1_score: 0.49744463373083475
-2021-11-24 11:56:41,996 INFO precision_score: 0.5232974910394266
-2021-11-24 11:56:41,997 INFO recall_score: 0.474025974025974
-<span class="ansi-green-fg">[I 2021-11-24 11:56:42,022]</span> Trial 42 finished with value: 1.050724998009989 and parameters: {&#39;learning_rate&#39;: 0.03179768331430875, &#39;n_estimators&#39;: 20000, &#39;reg_lambda&#39;: 0.014610606110403544, &#39;reg_alpha&#39;: 1.8406245010316268e-06, &#39;subsample&#39;: 0.9922816502663769, &#39;colsample_bytree&#39;: 0.9972461715670655, &#39;max_depth&#39;: 2, &#39;early_stopping_rounds&#39;: 182, &#39;tree_method&#39;: &#39;hist&#39;, &#39;booster&#39;: &#39;gbtree&#39;, &#39;gamma&#39;: 2.397536369426235e-05, &#39;grow_policy&#39;: &#39;depthwise&#39;}. Best is trial 20 with value: 0.6023122700396926.
-2021-11-24 11:56:42,203 INFO Training Started!
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>[11:56:42] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
-Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
-
-  This could be a false alarm, with some parameters getting used by language bindings but
-  then being mistakenly passed down to XGBoost core, or some parameter actually being used
-  but getting flagged wrongly here. Please open an issue if you find any such cases.
-
-
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-24 11:56:47,668 INFO Training Ended!
-/Users/pamathur/miniconda3/envs/nbdev_env/lib/python3.9/site-packages/sklearn/metrics/_classification.py:1308: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 due to no predicted samples. Use `zero_division` parameter to control this behavior.
-  _warn_prf(average, modifier, msg_start, len(result))
-2021-11-24 11:56:47,728 INFO log_loss: 0.6668759831786155
-2021-11-24 11:56:47,729 INFO roc_auc_score: 0.6999458874458875
-2021-11-24 11:56:47,729 INFO accuracy_score: 0.615
-2021-11-24 11:56:47,730 INFO f1_score: 0.0
-2021-11-24 11:56:47,730 INFO precision_score: 0.0
-2021-11-24 11:56:47,731 INFO recall_score: 0.0
-<span class="ansi-green-fg">[I 2021-11-24 11:56:47,762]</span> Trial 43 finished with value: 0.6668759831786155 and parameters: {&#39;learning_rate&#39;: 0.010772643652489347, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 7.224808161071666, &#39;reg_alpha&#39;: 0.016376625092934763, &#39;subsample&#39;: 0.7488614807842593, &#39;colsample_bytree&#39;: 0.5452525070955537, &#39;max_depth&#39;: 5, &#39;early_stopping_rounds&#39;: 458, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 20 with value: 0.6023122700396926.
-2021-11-24 11:56:47,928 INFO Training Started!
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>[11:56:47] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
-Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
-
-  This could be a false alarm, with some parameters getting used by language bindings but
-  then being mistakenly passed down to XGBoost core, or some parameter actually being used
-  but getting flagged wrongly here. Please open an issue if you find any such cases.
-
-
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-24 11:56:57,753 INFO Training Ended!
-2021-11-24 11:56:57,817 INFO log_loss: 0.603700662679039
-2021-11-24 11:56:57,818 INFO roc_auc_score: 0.7165624010136205
-2021-11-24 11:56:57,818 INFO accuracy_score: 0.70125
-2021-11-24 11:56:57,819 INFO f1_score: 0.5886402753872634
-2021-11-24 11:56:57,820 INFO precision_score: 0.6263736263736264
-2021-11-24 11:56:57,820 INFO recall_score: 0.5551948051948052
-<span class="ansi-green-fg">[I 2021-11-24 11:56:57,850]</span> Trial 44 finished with value: 0.603700662679039 and parameters: {&#39;learning_rate&#39;: 0.04764946344564492, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 9.509972809846152e-05, &#39;reg_alpha&#39;: 0.0011806166035534902, &#39;subsample&#39;: 0.535456718198006, &#39;colsample_bytree&#39;: 0.7563055146997821, &#39;max_depth&#39;: 4, &#39;early_stopping_rounds&#39;: 427, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 20 with value: 0.6023122700396926.
-2021-11-24 11:56:58,033 INFO Training Started!
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>[11:56:58] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
-Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
-
-  This could be a false alarm, with some parameters getting used by language bindings but
-  then being mistakenly passed down to XGBoost core, or some parameter actually being used
-  but getting flagged wrongly here. Please open an issue if you find any such cases.
-
-
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-24 11:57:06,884 INFO Training Ended!
-2021-11-24 11:57:06,947 INFO log_loss: 0.6050223457673565
-2021-11-24 11:57:06,947 INFO roc_auc_score: 0.7159684827367754
-2021-11-24 11:57:06,948 INFO accuracy_score: 0.695
-2021-11-24 11:57:06,949 INFO f1_score: 0.5836177474402731
-2021-11-24 11:57:06,949 INFO precision_score: 0.6151079136690647
-2021-11-24 11:57:06,950 INFO recall_score: 0.5551948051948052
-<span class="ansi-green-fg">[I 2021-11-24 11:57:06,976]</span> Trial 45 finished with value: 0.6050223457673565 and parameters: {&#39;learning_rate&#39;: 0.06732275507944363, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 3.723340173877417e-05, &#39;reg_alpha&#39;: 8.659625516561364e-05, &#39;subsample&#39;: 0.6791973826476483, &#39;colsample_bytree&#39;: 0.7886046588497224, &#39;max_depth&#39;: 3, &#39;early_stopping_rounds&#39;: 328, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 20 with value: 0.6023122700396926.
-2021-11-24 11:57:07,147 INFO Training Started!
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>[11:57:07] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
-Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
-
-  This could be a false alarm, with some parameters getting used by language bindings but
-  then being mistakenly passed down to XGBoost core, or some parameter actually being used
-  but getting flagged wrongly here. Please open an issue if you find any such cases.
-
-
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-24 11:57:16,694 INFO Training Ended!
-2021-11-24 11:57:16,755 INFO log_loss: 0.6034033725084736
-2021-11-24 11:57:16,756 INFO roc_auc_score: 0.7169055537957977
-2021-11-24 11:57:16,757 INFO accuracy_score: 0.7
-2021-11-24 11:57:16,757 INFO f1_score: 0.5847750865051904
-2021-11-24 11:57:16,758 INFO precision_score: 0.6259259259259259
-2021-11-24 11:57:16,759 INFO recall_score: 0.5487012987012987
-<span class="ansi-green-fg">[I 2021-11-24 11:57:16,785]</span> Trial 46 finished with value: 0.6034033725084736 and parameters: {&#39;learning_rate&#39;: 0.0529560143480222, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 0.0015065052556385249, &#39;reg_alpha&#39;: 0.0015237224036502737, &#39;subsample&#39;: 0.5217391893832076, &#39;colsample_bytree&#39;: 0.9032805892664175, &#39;max_depth&#39;: 4, &#39;early_stopping_rounds&#39;: 471, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 20 with value: 0.6023122700396926.
-2021-11-24 11:57:16,956 INFO Training Started!
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>[11:57:16] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
-Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
-
-  This could be a false alarm, with some parameters getting used by language bindings but
-  then being mistakenly passed down to XGBoost core, or some parameter actually being used
-  but getting flagged wrongly here. Please open an issue if you find any such cases.
-
-
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-24 11:57:26,324 INFO Training Ended!
-2021-11-24 11:57:26,395 INFO log_loss: 0.6047576112858951
-2021-11-24 11:57:26,396 INFO roc_auc_score: 0.71601467638053
-2021-11-24 11:57:26,396 INFO accuracy_score: 0.695
-2021-11-24 11:57:26,397 INFO f1_score: 0.5836177474402731
-2021-11-24 11:57:26,398 INFO precision_score: 0.6151079136690647
-2021-11-24 11:57:26,398 INFO recall_score: 0.5551948051948052
-<span class="ansi-green-fg">[I 2021-11-24 11:57:26,431]</span> Trial 47 finished with value: 0.6047576112858951 and parameters: {&#39;learning_rate&#39;: 0.07947070726527587, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 0.0016366890028134459, &#39;reg_alpha&#39;: 2.119564883222415e-07, &#39;subsample&#39;: 0.6443051608844637, &#39;colsample_bytree&#39;: 0.9167973472127608, &#39;max_depth&#39;: 6, &#39;early_stopping_rounds&#39;: 473, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 20 with value: 0.6023122700396926.
-2021-11-24 11:57:26,614 INFO Training Started!
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>[11:57:26] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
-Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
-
-  This could be a false alarm, with some parameters getting used by language bindings but
-  then being mistakenly passed down to XGBoost core, or some parameter actually being used
-  but getting flagged wrongly here. Please open an issue if you find any such cases.
-
-
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-24 11:57:35,304 INFO Training Ended!
-2021-11-24 11:57:35,367 INFO log_loss: 0.6035707989195361
-2021-11-24 11:57:35,368 INFO roc_auc_score: 0.7166547883011297
-2021-11-24 11:57:35,368 INFO accuracy_score: 0.6975
-2021-11-24 11:57:35,369 INFO f1_score: 0.5827586206896551
-2021-11-24 11:57:35,370 INFO precision_score: 0.6213235294117647
-2021-11-24 11:57:35,370 INFO recall_score: 0.5487012987012987
-<span class="ansi-green-fg">[I 2021-11-24 11:57:35,396]</span> Trial 48 finished with value: 0.6035707989195361 and parameters: {&#39;learning_rate&#39;: 0.03614354681363991, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 0.006854957302066931, &#39;reg_alpha&#39;: 0.00019017956747167315, &#39;subsample&#39;: 0.7940986572285533, &#39;colsample_bytree&#39;: 0.8738975570432537, &#39;max_depth&#39;: 5, &#39;early_stopping_rounds&#39;: 261, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 20 with value: 0.6023122700396926.
-2021-11-24 11:57:35,560 INFO Training Started!
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>[11:57:35] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
-Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
-
-  This could be a false alarm, with some parameters getting used by language bindings but
-  then being mistakenly passed down to XGBoost core, or some parameter actually being used
-  but getting flagged wrongly here. Please open an issue if you find any such cases.
-
-
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-24 11:57:46,493 INFO Training Ended!
-2021-11-24 11:57:46,553 INFO log_loss: 0.6082258519902826
-2021-11-24 11:57:46,554 INFO roc_auc_score: 0.7157573117938971
-2021-11-24 11:57:46,554 INFO accuracy_score: 0.6975
-2021-11-24 11:57:46,555 INFO f1_score: 0.5631768953068592
-2021-11-24 11:57:46,555 INFO precision_score: 0.6341463414634146
-2021-11-24 11:57:46,556 INFO recall_score: 0.5064935064935064
-<span class="ansi-green-fg">[I 2021-11-24 11:57:46,581]</span> Trial 49 finished with value: 0.6082258519902826 and parameters: {&#39;learning_rate&#39;: 0.023182620810535053, &#39;n_estimators&#39;: 20000, &#39;reg_lambda&#39;: 0.00032241286371737795, &#39;reg_alpha&#39;: 0.007504659157311994, &#39;subsample&#39;: 0.7334248177616951, &#39;colsample_bytree&#39;: 0.814394630383725, &#39;max_depth&#39;: 6, &#39;early_stopping_rounds&#39;: 475, &#39;tree_method&#39;: &#39;hist&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 20 with value: 0.6023122700396926.
-2021-11-24 11:57:46,773 INFO Training Started!
-2021-11-24 11:58:29,785 INFO Training Ended!
-2021-11-24 11:58:29,987 INFO log_loss: 1.0698090273351182
-2021-11-24 11:58:29,987 INFO roc_auc_score: 0.6316188892408404
-2021-11-24 11:58:29,988 INFO accuracy_score: 0.6275
-2021-11-24 11:58:29,988 INFO f1_score: 0.47535211267605637
-2021-11-24 11:58:29,989 INFO precision_score: 0.5192307692307693
-2021-11-24 11:58:29,989 INFO recall_score: 0.4383116883116883
-<span class="ansi-green-fg">[I 2021-11-24 11:58:30,014]</span> Trial 50 finished with value: 1.0698090273351182 and parameters: {&#39;learning_rate&#39;: 0.05743163799825103, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 0.03323678493281301, &#39;reg_alpha&#39;: 0.08953916478279868, &#39;subsample&#39;: 0.5050439187221742, &#39;colsample_bytree&#39;: 0.6725276351294994, &#39;max_depth&#39;: 4, &#39;early_stopping_rounds&#39;: 452, &#39;tree_method&#39;: &#39;approx&#39;, &#39;booster&#39;: &#39;gbtree&#39;, &#39;gamma&#39;: 0.0039154527649110146, &#39;grow_policy&#39;: &#39;lossguide&#39;}. Best is trial 20 with value: 0.6023122700396926.
-2021-11-24 11:58:30,187 INFO Training Started!
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>[11:58:30] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
-Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
-
-  This could be a false alarm, with some parameters getting used by language bindings but
-  then being mistakenly passed down to XGBoost core, or some parameter actually being used
-  but getting flagged wrongly here. Please open an issue if you find any such cases.
-
-
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-24 11:58:38,204 INFO Training Ended!
-2021-11-24 11:58:38,264 INFO log_loss: 0.650817776657641
-2021-11-24 11:58:38,265 INFO roc_auc_score: 0.7190271618625277
-2021-11-24 11:58:38,265 INFO accuracy_score: 0.6175
-2021-11-24 11:58:38,266 INFO f1_score: 0.012903225806451613
-2021-11-24 11:58:38,267 INFO precision_score: 1.0
-2021-11-24 11:58:38,267 INFO recall_score: 0.006493506493506494
-<span class="ansi-green-fg">[I 2021-11-24 11:58:38,292]</span> Trial 51 finished with value: 0.650817776657641 and parameters: {&#39;learning_rate&#39;: 0.027657223103193497, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 1.508834114571624, &#39;reg_alpha&#39;: 3.4286062415028234e-05, &#39;subsample&#39;: 0.5947354543019293, &#39;colsample_bytree&#39;: 0.9528866136619958, &#39;max_depth&#39;: 6, &#39;early_stopping_rounds&#39;: 402, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 20 with value: 0.6023122700396926.
-2021-11-24 11:58:38,464 INFO Training Started!
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>[11:58:38] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
-Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
-
-  This could be a false alarm, with some parameters getting used by language bindings but
-  then being mistakenly passed down to XGBoost core, or some parameter actually being used
-  but getting flagged wrongly here. Please open an issue if you find any such cases.
-
-
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-24 11:58:50,718 INFO Training Ended!
-2021-11-24 11:58:50,779 INFO log_loss: 0.6160027698986232
-2021-11-24 11:58:50,780 INFO roc_auc_score: 0.7201589061345159
-2021-11-24 11:58:50,780 INFO accuracy_score: 0.70125
-2021-11-24 11:58:50,781 INFO f1_score: 0.5031185031185031
-2021-11-24 11:58:50,781 INFO precision_score: 0.6994219653179191
-2021-11-24 11:58:50,782 INFO recall_score: 0.39285714285714285
-<span class="ansi-green-fg">[I 2021-11-24 11:58:50,808]</span> Trial 52 finished with value: 0.6160027698986232 and parameters: {&#39;learning_rate&#39;: 0.040427227428741906, &#39;n_estimators&#39;: 20000, &#39;reg_lambda&#39;: 0.20535422413974883, &#39;reg_alpha&#39;: 0.0007742171711545045, &#39;subsample&#39;: 0.9306781384312386, &#39;colsample_bytree&#39;: 0.704801485650981, &#39;max_depth&#39;: 3, &#39;early_stopping_rounds&#39;: 373, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 20 with value: 0.6023122700396926.
-2021-11-24 11:58:50,977 INFO Training Started!
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>[11:58:51] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
-Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
-
-  This could be a false alarm, with some parameters getting used by language bindings but
-  then being mistakenly passed down to XGBoost core, or some parameter actually being used
-  but getting flagged wrongly here. Please open an issue if you find any such cases.
-
-
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-24 11:58:59,456 INFO Training Ended!
-2021-11-24 11:58:59,518 INFO log_loss: 0.6043546871934086
-2021-11-24 11:58:59,519 INFO roc_auc_score: 0.7161664554957239
-2021-11-24 11:58:59,519 INFO accuracy_score: 0.6975
-2021-11-24 11:58:59,520 INFO f1_score: 0.5856164383561645
-2021-11-24 11:58:59,521 INFO precision_score: 0.6195652173913043
-2021-11-24 11:58:59,521 INFO recall_score: 0.5551948051948052
-<span class="ansi-green-fg">[I 2021-11-24 11:58:59,546]</span> Trial 53 finished with value: 0.6043546871934086 and parameters: {&#39;learning_rate&#39;: 0.01320709570376475, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 0.0012834363916561155, &#39;reg_alpha&#39;: 0.00032737946638013767, &#39;subsample&#39;: 0.46474662299651637, &#39;colsample_bytree&#39;: 0.5888590434117638, &#39;max_depth&#39;: 5, &#39;early_stopping_rounds&#39;: 483, &#39;tree_method&#39;: &#39;approx&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 20 with value: 0.6023122700396926.
-2021-11-24 11:58:59,711 INFO Training Started!
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>[11:58:59] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
-Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
-
-  This could be a false alarm, with some parameters getting used by language bindings but
-  then being mistakenly passed down to XGBoost core, or some parameter actually being used
-  but getting flagged wrongly here. Please open an issue if you find any such cases.
-
-
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-24 11:59:09,200 INFO Training Ended!
-2021-11-24 11:59:09,263 INFO log_loss: 0.603551508737728
-2021-11-24 11:59:09,264 INFO roc_auc_score: 0.7166811846689896
-2021-11-24 11:59:09,265 INFO accuracy_score: 0.6975
-2021-11-24 11:59:09,265 INFO f1_score: 0.5827586206896551
-2021-11-24 11:59:09,266 INFO precision_score: 0.6213235294117647
-2021-11-24 11:59:09,267 INFO recall_score: 0.5487012987012987
-<span class="ansi-green-fg">[I 2021-11-24 11:59:09,294]</span> Trial 54 finished with value: 0.603551508737728 and parameters: {&#39;learning_rate&#39;: 0.03561780446032311, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 0.006387074213889569, &#39;reg_alpha&#39;: 0.00028530228249217134, &#39;subsample&#39;: 0.7873559850797378, &#39;colsample_bytree&#39;: 0.8761284055015803, &#39;max_depth&#39;: 5, &#39;early_stopping_rounds&#39;: 259, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 20 with value: 0.6023122700396926.
-2021-11-24 11:59:09,470 INFO Training Started!
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>[11:59:09] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
-Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
-
-  This could be a false alarm, with some parameters getting used by language bindings but
-  then being mistakenly passed down to XGBoost core, or some parameter actually being used
-  but getting flagged wrongly here. Please open an issue if you find any such cases.
-
-
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-24 11:59:20,340 INFO Training Ended!
-2021-11-24 11:59:20,400 INFO log_loss: 0.6032781556388364
-2021-11-24 11:59:20,401 INFO roc_auc_score: 0.717354292049414
-2021-11-24 11:59:20,401 INFO accuracy_score: 0.7025
-2021-11-24 11:59:20,402 INFO f1_score: 0.5839160839160839
-2021-11-24 11:59:20,403 INFO precision_score: 0.6325757575757576
-2021-11-24 11:59:20,403 INFO recall_score: 0.5422077922077922
-<span class="ansi-green-fg">[I 2021-11-24 11:59:20,428]</span> Trial 55 finished with value: 0.6032781556388364 and parameters: {&#39;learning_rate&#39;: 0.03052022768504554, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 0.004699701717716409, &#39;reg_alpha&#39;: 0.002530036833028838, &#39;subsample&#39;: 0.7714795451742406, &#39;colsample_bytree&#39;: 0.8871066704803128, &#39;max_depth&#39;: 5, &#39;early_stopping_rounds&#39;: 285, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 20 with value: 0.6023122700396926.
-2021-11-24 11:59:20,596 INFO Training Started!
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>[11:59:20] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
-Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
-
-  This could be a false alarm, with some parameters getting used by language bindings but
-  then being mistakenly passed down to XGBoost core, or some parameter actually being used
-  but getting flagged wrongly here. Please open an issue if you find any such cases.
-
-
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-24 11:59:31,240 INFO Training Ended!
-2021-11-24 11:59:31,300 INFO log_loss: 0.6033758248761296
-2021-11-24 11:59:31,301 INFO roc_auc_score: 0.7179944039700137
-2021-11-24 11:59:31,301 INFO accuracy_score: 0.7075
-2021-11-24 11:59:31,302 INFO f1_score: 0.5776173285198555
-2021-11-24 11:59:31,303 INFO precision_score: 0.6504065040650406
-2021-11-24 11:59:31,304 INFO recall_score: 0.5194805194805194
-<span class="ansi-green-fg">[I 2021-11-24 11:59:31,328]</span> Trial 56 finished with value: 0.6033758248761296 and parameters: {&#39;learning_rate&#39;: 0.24582923032168152, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 0.02798322204929562, &#39;reg_alpha&#39;: 0.001996383531663444, &#39;subsample&#39;: 0.8521368438304793, &#39;colsample_bytree&#39;: 0.831616878495048, &#39;max_depth&#39;: 6, &#39;early_stopping_rounds&#39;: 235, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 20 with value: 0.6023122700396926.
-2021-11-24 11:59:31,494 INFO Training Started!
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>[11:59:31] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
-Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
-
-  This could be a false alarm, with some parameters getting used by language bindings but
-  then being mistakenly passed down to XGBoost core, or some parameter actually being used
-  but getting flagged wrongly here. Please open an issue if you find any such cases.
-
-
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-24 11:59:41,075 INFO Training Ended!
-2021-11-24 11:59:41,134 INFO log_loss: 0.6026766263414174
-2021-11-24 11:59:41,135 INFO roc_auc_score: 0.7188456868334918
-2021-11-24 11:59:41,136 INFO accuracy_score: 0.69625
-2021-11-24 11:59:41,136 INFO f1_score: 0.563734290843806
-2021-11-24 11:59:41,137 INFO precision_score: 0.6305220883534136
-2021-11-24 11:59:41,137 INFO recall_score: 0.5097402597402597
-<span class="ansi-green-fg">[I 2021-11-24 11:59:41,162]</span> Trial 57 finished with value: 0.6026766263414174 and parameters: {&#39;learning_rate&#39;: 0.21874272284306231, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 0.048222909125164665, &#39;reg_alpha&#39;: 1.0900267872563438e-08, &#39;subsample&#39;: 0.8517865539316619, &#39;colsample_bytree&#39;: 0.811352597477725, &#39;max_depth&#39;: 6, &#39;early_stopping_rounds&#39;: 276, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 20 with value: 0.6023122700396926.
-2021-11-24 11:59:41,331 INFO Training Started!
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>[11:59:41] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
-Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
-
-  This could be a false alarm, with some parameters getting used by language bindings but
-  then being mistakenly passed down to XGBoost core, or some parameter actually being used
-  but getting flagged wrongly here. Please open an issue if you find any such cases.
-
-
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-24 11:59:50,815 INFO Training Ended!
-2021-11-24 11:59:50,874 INFO log_loss: 0.6023109186254442
-2021-11-24 11:59:50,875 INFO roc_auc_score: 0.7179614085101891
-2021-11-24 11:59:50,876 INFO accuracy_score: 0.6975
-2021-11-24 11:59:50,877 INFO f1_score: 0.5709219858156028
-2021-11-24 11:59:50,878 INFO precision_score: 0.62890625
-2021-11-24 11:59:50,879 INFO recall_score: 0.5227272727272727
-<span class="ansi-green-fg">[I 2021-11-24 11:59:50,906]</span> Trial 58 finished with value: 0.6023109186254442 and parameters: {&#39;learning_rate&#39;: 0.21692758717644564, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 0.03574312032188266, &#39;reg_alpha&#39;: 1.460032654750016e-08, &#39;subsample&#39;: 0.8548663474176669, &#39;colsample_bytree&#39;: 0.8376473731229855, &#39;max_depth&#39;: 6, &#39;early_stopping_rounds&#39;: 285, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 58 with value: 0.6023109186254442.
-2021-11-24 11:59:51,079 INFO Training Started!
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>[11:59:51] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
-Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
-
-  This could be a false alarm, with some parameters getting used by language bindings but
-  then being mistakenly passed down to XGBoost core, or some parameter actually being used
-  but getting flagged wrongly here. Please open an issue if you find any such cases.
-
-
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-24 12:00:00,140 INFO Training Ended!
-2021-11-24 12:00:00,202 INFO log_loss: 0.6372257913276553
-2021-11-24 12:00:00,202 INFO roc_auc_score: 0.7198883433639531
-2021-11-24 12:00:00,203 INFO accuracy_score: 0.635
-2021-11-24 12:00:00,204 INFO f1_score: 0.17045454545454547
-2021-11-24 12:00:00,204 INFO precision_score: 0.6818181818181818
-2021-11-24 12:00:00,205 INFO recall_score: 0.09740259740259741
-<span class="ansi-green-fg">[I 2021-11-24 12:00:00,233]</span> Trial 59 finished with value: 0.6372257913276553 and parameters: {&#39;learning_rate&#39;: 0.1621944022986845, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 0.6793826372516385, &#39;reg_alpha&#39;: 1.2840417064710336e-08, &#39;subsample&#39;: 0.8282155214223299, &#39;colsample_bytree&#39;: 0.9577702648852262, &#39;max_depth&#39;: 7, &#39;early_stopping_rounds&#39;: 283, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 58 with value: 0.6023109186254442.
-2021-11-24 12:00:00,395 INFO Training Started!
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>[12:00:00] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
-Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
-
-  This could be a false alarm, with some parameters getting used by language bindings but
-  then being mistakenly passed down to XGBoost core, or some parameter actually being used
-  but getting flagged wrongly here. Please open an issue if you find any such cases.
-
-
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-24 12:00:10,041 INFO Training Ended!
-2021-11-24 12:00:10,103 INFO log_loss: 0.6044605529028922
-2021-11-24 12:00:10,104 INFO roc_auc_score: 0.719545190581776
-2021-11-24 12:00:10,105 INFO accuracy_score: 0.6975
-2021-11-24 12:00:10,105 INFO f1_score: 0.5535055350553506
-2021-11-24 12:00:10,106 INFO precision_score: 0.6410256410256411
-2021-11-24 12:00:10,107 INFO recall_score: 0.487012987012987
-<span class="ansi-green-fg">[I 2021-11-24 12:00:10,134]</span> Trial 60 finished with value: 0.6044605529028922 and parameters: {&#39;learning_rate&#39;: 0.19279729928507114, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 0.0777448369646114, &#39;reg_alpha&#39;: 4.255513418616447e-08, &#39;subsample&#39;: 0.9151708034700325, &#39;colsample_bytree&#39;: 0.7827978468790364, &#39;max_depth&#39;: 6, &#39;early_stopping_rounds&#39;: 292, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 58 with value: 0.6023109186254442.
-2021-11-24 12:00:10,327 INFO Training Started!
-2021-11-24 12:00:44,139 INFO Training Ended!
-2021-11-24 12:00:44,344 INFO log_loss: 1.0139460768729145
-2021-11-24 12:00:44,345 INFO roc_auc_score: 0.6416165135677332
-2021-11-24 12:00:44,345 INFO accuracy_score: 0.62625
-2021-11-24 12:00:44,346 INFO f1_score: 0.4631956912028726
-2021-11-24 12:00:44,346 INFO precision_score: 0.5180722891566265
-2021-11-24 12:00:44,347 INFO recall_score: 0.41883116883116883
-<span class="ansi-green-fg">[I 2021-11-24 12:00:44,370]</span> Trial 61 finished with value: 1.0139460768729145 and parameters: {&#39;learning_rate&#39;: 0.1140332049886865, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 2.0955532892901076, &#39;reg_alpha&#39;: 1.1438446056822876e-07, &#39;subsample&#39;: 0.6880189658711506, &#39;colsample_bytree&#39;: 0.49414825354145825, &#39;max_depth&#39;: 7, &#39;early_stopping_rounds&#39;: 321, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gbtree&#39;, &#39;gamma&#39;: 6.101263340730402e-07, &#39;grow_policy&#39;: &#39;depthwise&#39;}. Best is trial 58 with value: 0.6023109186254442.
-2021-11-24 12:00:44,550 INFO Training Started!
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>[12:00:44] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
-Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
-
-  This could be a false alarm, with some parameters getting used by language bindings but
-  then being mistakenly passed down to XGBoost core, or some parameter actually being used
-  but getting flagged wrongly here. Please open an issue if you find any such cases.
-
-
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-24 12:00:53,121 INFO Training Ended!
-2021-11-24 12:00:53,183 INFO log_loss: 0.6093048080988228
-2021-11-24 12:00:53,183 INFO roc_auc_score: 0.7204822616407982
-2021-11-24 12:00:53,184 INFO accuracy_score: 0.695
-2021-11-24 12:00:53,185 INFO f1_score: 0.5196850393700788
-2021-11-24 12:00:53,185 INFO precision_score: 0.66
-2021-11-24 12:00:53,186 INFO recall_score: 0.42857142857142855
-<span class="ansi-green-fg">[I 2021-11-24 12:00:53,211]</span> Trial 62 finished with value: 0.6093048080988228 and parameters: {&#39;learning_rate&#39;: 0.18605366069192236, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 0.13730331363752588, &#39;reg_alpha&#39;: 1.2097579233420072e-08, &#39;subsample&#39;: 0.7245815935454666, &#39;colsample_bytree&#39;: 0.8373210128330251, &#39;max_depth&#39;: 8, &#39;early_stopping_rounds&#39;: 280, &#39;tree_method&#39;: &#39;approx&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 58 with value: 0.6023109186254442.
-2021-11-24 12:00:53,381 INFO Training Started!
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>[12:00:53] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
-Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
-
-  This could be a false alarm, with some parameters getting used by language bindings but
-  then being mistakenly passed down to XGBoost core, or some parameter actually being used
-  but getting flagged wrongly here. Please open an issue if you find any such cases.
-
-
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-24 12:01:03,115 INFO Training Ended!
-2021-11-24 12:01:03,176 INFO log_loss: 0.6041115773329512
-2021-11-24 12:01:03,177 INFO roc_auc_score: 0.7161532573117939
-2021-11-24 12:01:03,177 INFO accuracy_score: 0.69375
-2021-11-24 12:01:03,178 INFO f1_score: 0.5811965811965812
-2021-11-24 12:01:03,179 INFO precision_score: 0.6137184115523465
-2021-11-24 12:01:03,179 INFO recall_score: 0.551948051948052
-<span class="ansi-green-fg">[I 2021-11-24 12:01:03,205]</span> Trial 63 finished with value: 0.6041115773329512 and parameters: {&#39;learning_rate&#39;: 0.1327708902916091, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 0.004722373106294932, &#39;reg_alpha&#39;: 2.984760758637526e-07, &#39;subsample&#39;: 0.8698983738777526, &#39;colsample_bytree&#39;: 0.9254610813429943, &#39;max_depth&#39;: 6, &#39;early_stopping_rounds&#39;: 226, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 58 with value: 0.6023109186254442.
-2021-11-24 12:01:03,378 INFO Training Started!
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>[12:01:03] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
-Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
-
-  This could be a false alarm, with some parameters getting used by language bindings but
-  then being mistakenly passed down to XGBoost core, or some parameter actually being used
-  but getting flagged wrongly here. Please open an issue if you find any such cases.
-
-
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-24 12:01:11,935 INFO Training Ended!
-2021-11-24 12:01:11,992 INFO log_loss: 0.602295038830489
-2021-11-24 12:01:11,992 INFO roc_auc_score: 0.7176380530039067
-2021-11-24 12:01:11,993 INFO accuracy_score: 0.7
-2021-11-24 12:01:11,994 INFO f1_score: 0.5789473684210527
-2021-11-24 12:01:11,994 INFO precision_score: 0.6297709923664122
-2021-11-24 12:01:11,995 INFO recall_score: 0.5357142857142857
-<span class="ansi-green-fg">[I 2021-11-24 12:01:12,020]</span> Trial 64 finished with value: 0.602295038830489 and parameters: {&#39;learning_rate&#39;: 0.23448628117471854, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 0.027865211791046604, &#39;reg_alpha&#39;: 3.172600149850677e-08, &#39;subsample&#39;: 0.8286217057166831, &#39;colsample_bytree&#39;: 0.8432116146719373, &#39;max_depth&#39;: 6, &#39;early_stopping_rounds&#39;: 196, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 64 with value: 0.602295038830489.
-2021-11-24 12:01:12,192 INFO Training Started!
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>[12:01:12] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
-Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
-
-  This could be a false alarm, with some parameters getting used by language bindings but
-  then being mistakenly passed down to XGBoost core, or some parameter actually being used
-  but getting flagged wrongly here. Please open an issue if you find any such cases.
-
-
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-24 12:01:20,680 INFO Training Ended!
-2021-11-24 12:01:20,740 INFO log_loss: 0.6229229770414532
-2021-11-24 12:01:20,741 INFO roc_auc_score: 0.7203964734452539
-2021-11-24 12:01:20,742 INFO accuracy_score: 0.68
-2021-11-24 12:01:20,742 INFO f1_score: 0.3990610328638498
-2021-11-24 12:01:20,743 INFO precision_score: 0.7203389830508474
-2021-11-24 12:01:20,743 INFO recall_score: 0.275974025974026
-<span class="ansi-green-fg">[I 2021-11-24 12:01:20,768]</span> Trial 65 finished with value: 0.6229229770414532 and parameters: {&#39;learning_rate&#39;: 0.20598585186906015, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 0.3278004500249784, &#39;reg_alpha&#39;: 5.7043759713664325e-08, &#39;subsample&#39;: 0.7684286637805158, &#39;colsample_bytree&#39;: 0.8915934405410837, &#39;max_depth&#39;: 6, &#39;early_stopping_rounds&#39;: 191, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 64 with value: 0.602295038830489.
-2021-11-24 12:01:20,936 INFO Training Started!
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>[12:01:20] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
-Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
-
-  This could be a false alarm, with some parameters getting used by language bindings but
-  then being mistakenly passed down to XGBoost core, or some parameter actually being used
-  but getting flagged wrongly here. Please open an issue if you find any such cases.
-
-
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-24 12:01:30,198 INFO Training Ended!
-2021-11-24 12:01:30,258 INFO log_loss: 0.6024340576445684
-2021-11-24 12:01:30,259 INFO roc_auc_score: 0.7175060711646077
-2021-11-24 12:01:30,259 INFO accuracy_score: 0.6975
-2021-11-24 12:01:30,260 INFO f1_score: 0.578397212543554
-2021-11-24 12:01:30,260 INFO precision_score: 0.6240601503759399
-2021-11-24 12:01:30,261 INFO recall_score: 0.538961038961039
-<span class="ansi-green-fg">[I 2021-11-24 12:01:30,286]</span> Trial 66 finished with value: 0.6024340576445684 and parameters: {&#39;learning_rate&#39;: 0.22501750315420058, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 0.022053556989799886, &#39;reg_alpha&#39;: 2.1093543363044277e-08, &#39;subsample&#39;: 0.8228148089289461, &#39;colsample_bytree&#39;: 0.7865649533128805, &#39;max_depth&#39;: 6, &#39;early_stopping_rounds&#39;: 188, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 64 with value: 0.602295038830489.
-2021-11-24 12:01:30,455 INFO Training Started!
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>[12:01:30] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
-Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
-
-  This could be a false alarm, with some parameters getting used by language bindings but
-  then being mistakenly passed down to XGBoost core, or some parameter actually being used
-  but getting flagged wrongly here. Please open an issue if you find any such cases.
-
-
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-24 12:01:39,070 INFO Training Ended!
-2021-11-24 12:01:39,131 INFO log_loss: 0.6024603482894599
-2021-11-24 12:01:39,131 INFO roc_auc_score: 0.7174466793369233
-2021-11-24 12:01:39,132 INFO accuracy_score: 0.69625
-2021-11-24 12:01:39,133 INFO f1_score: 0.577391304347826
-2021-11-24 12:01:39,133 INFO precision_score: 0.6217228464419475
-2021-11-24 12:01:39,134 INFO recall_score: 0.538961038961039
-<span class="ansi-green-fg">[I 2021-11-24 12:01:39,160]</span> Trial 67 finished with value: 0.6024603482894599 and parameters: {&#39;learning_rate&#39;: 0.23711085047118874, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 0.021378490262174213, &#39;reg_alpha&#39;: 2.3213765777731845e-08, &#39;subsample&#39;: 0.8247856949056165, &#39;colsample_bytree&#39;: 0.7257348305668477, &#39;max_depth&#39;: 7, &#39;early_stopping_rounds&#39;: 188, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 64 with value: 0.602295038830489.
-2021-11-24 12:01:39,326 INFO Training Started!
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>[12:01:39] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
-Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
-
-  This could be a false alarm, with some parameters getting used by language bindings but
-  then being mistakenly passed down to XGBoost core, or some parameter actually being used
-  but getting flagged wrongly here. Please open an issue if you find any such cases.
-
-
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-24 12:01:47,788 INFO Training Ended!
-2021-11-24 12:01:47,848 INFO log_loss: 0.6034830134734511
-2021-11-24 12:01:47,849 INFO roc_auc_score: 0.7191888396156689
-2021-11-24 12:01:47,850 INFO accuracy_score: 0.6975
-2021-11-24 12:01:47,850 INFO f1_score: 0.5583941605839416
-2021-11-24 12:01:47,851 INFO precision_score: 0.6375
-2021-11-24 12:01:47,852 INFO recall_score: 0.4967532467532468
-<span class="ansi-green-fg">[I 2021-11-24 12:01:47,880]</span> Trial 68 finished with value: 0.6034830134734511 and parameters: {&#39;learning_rate&#39;: 0.24018034186076134, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 0.06341025893382701, &#39;reg_alpha&#39;: 2.2796329413542294e-08, &#39;subsample&#39;: 0.9599350543076591, &#39;colsample_bytree&#39;: 0.7355242470499104, &#39;max_depth&#39;: 7, &#39;early_stopping_rounds&#39;: 166, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 64 with value: 0.602295038830489.
-2021-11-24 12:01:48,044 INFO Training Started!
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>[12:01:48] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
-Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
-
-  This could be a false alarm, with some parameters getting used by language bindings but
-  then being mistakenly passed down to XGBoost core, or some parameter actually being used
-  but getting flagged wrongly here. Please open an issue if you find any such cases.
-
-
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-24 12:01:59,873 INFO Training Ended!
-2021-11-24 12:01:59,942 INFO log_loss: 0.6022779347747564
-2021-11-24 12:01:59,942 INFO roc_auc_score: 0.7178690212226798
-2021-11-24 12:01:59,943 INFO accuracy_score: 0.69875
-2021-11-24 12:01:59,944 INFO f1_score: 0.5734513274336284
-2021-11-24 12:01:59,944 INFO precision_score: 0.6303501945525292
-2021-11-24 12:01:59,945 INFO recall_score: 0.525974025974026
-<span class="ansi-green-fg">[I 2021-11-24 12:01:59,974]</span> Trial 69 finished with value: 0.6022779347747564 and parameters: {&#39;learning_rate&#39;: 0.152746085461703, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 0.031987234461410045, &#39;reg_alpha&#39;: 1.3693071141813216e-07, &#39;subsample&#39;: 0.8214620713008292, &#39;colsample_bytree&#39;: 0.8000514536230441, &#39;max_depth&#39;: 7, &#39;early_stopping_rounds&#39;: 147, &#39;tree_method&#39;: &#39;exact&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 69 with value: 0.6022779347747564.
-2021-11-24 12:02:00,262 INFO Training Started!
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>[12:02:00] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
-Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
-
-  This could be a false alarm, with some parameters getting used by language bindings but
-  then being mistakenly passed down to XGBoost core, or some parameter actually being used
-  but getting flagged wrongly here. Please open an issue if you find any such cases.
-
-
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-24 12:02:11,425 INFO Training Ended!
-2021-11-24 12:02:11,485 INFO log_loss: 0.6026194911077618
-2021-11-24 12:02:11,486 INFO roc_auc_score: 0.7173410938654842
-2021-11-24 12:02:11,486 INFO accuracy_score: 0.69875
-2021-11-24 12:02:11,487 INFO f1_score: 0.5823223570190641
-2021-11-24 12:02:11,488 INFO precision_score: 0.6245353159851301
-2021-11-24 12:02:11,488 INFO recall_score: 0.5454545454545454
-<span class="ansi-green-fg">[I 2021-11-24 12:02:11,514]</span> Trial 70 finished with value: 0.6026194911077618 and parameters: {&#39;learning_rate&#39;: 0.1630843141366229, &#39;n_estimators&#39;: 20000, &#39;reg_lambda&#39;: 0.018155430643457735, &#39;reg_alpha&#39;: 6.924580799000354e-08, &#39;subsample&#39;: 0.8331594340685916, &#39;colsample_bytree&#39;: 0.7983840960926235, &#39;max_depth&#39;: 7, &#39;early_stopping_rounds&#39;: 131, &#39;tree_method&#39;: &#39;hist&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 69 with value: 0.6022779347747564.
+<pre>(4000, 102)
+(4000, 102)
 </pre>
 </div>
 </div>
@@ -1464,7 +1432,11 @@ Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#3
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">study</span><span class="o">.</span><span class="n">best_trial</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X</span><span class="p">[</span><span class="s2">&quot;mlp_preds&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mlp_oof_model_preds</span>
+<span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_test</span><span class="p">[</span><span class="s2">&quot;mlp_preds&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mlp_oof_model_test_preds</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_test</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -1477,7 +1449,436 @@ Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#3
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>FrozenTrial(number=69, values=[0.6022779347747564], datetime_start=datetime.datetime(2021, 11, 24, 12, 1, 47, 891300), datetime_complete=datetime.datetime(2021, 11, 24, 12, 1, 59, 946156), params={&#39;booster&#39;: &#39;gblinear&#39;, &#39;colsample_bytree&#39;: 0.8000514536230441, &#39;early_stopping_rounds&#39;: 147, &#39;learning_rate&#39;: 0.152746085461703, &#39;max_depth&#39;: 7, &#39;n_estimators&#39;: 15000, &#39;reg_alpha&#39;: 1.3693071141813216e-07, &#39;reg_lambda&#39;: 0.031987234461410045, &#39;subsample&#39;: 0.8214620713008292, &#39;tree_method&#39;: &#39;exact&#39;}, distributions={&#39;booster&#39;: CategoricalDistribution(choices=(&#39;gbtree&#39;, &#39;gblinear&#39;)), &#39;colsample_bytree&#39;: UniformDistribution(high=1.0, low=0.1), &#39;early_stopping_rounds&#39;: IntUniformDistribution(high=500, low=100, step=1), &#39;learning_rate&#39;: LogUniformDistribution(high=0.25, low=0.01), &#39;max_depth&#39;: IntUniformDistribution(high=9, low=1, step=1), &#39;n_estimators&#39;: CategoricalDistribution(choices=(7000, 15000, 20000)), &#39;reg_alpha&#39;: LogUniformDistribution(high=100.0, low=1e-08), &#39;reg_lambda&#39;: LogUniformDistribution(high=100.0, low=1e-08), &#39;subsample&#39;: UniformDistribution(high=1.0, low=0.1), &#39;tree_method&#39;: CategoricalDistribution(choices=(&#39;exact&#39;, &#39;approx&#39;, &#39;hist&#39;))}, user_attrs={}, system_attrs={}, intermediate_values={}, trial_id=70, state=TrialState.COMPLETE, value=None)
+<pre>(4000, 103)
+(4000, 103)
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X</span><span class="p">[</span><span class="s2">&quot;tabnet_preds&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tabnet_oof_model_preds</span>
+<span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_test</span><span class="p">[</span><span class="s2">&quot;tabnet_preds&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tabnet_oof_model_test_preds</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_test</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>(4000, 104)
+(4000, 104)
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span> 
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tmlt</span> <span class="o">=</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">update_dfl</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">X_test</span><span class="o">=</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_test</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>2021-12-06 23:20:28,605 INFO categorical columns are None, Preprocessing will done accordingly!
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="For-META-Model-Training">For META Model Training<a class="anchor-link" href="#For-META-Model-Training"> </a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h5 id="create-train-valid-dataframes-for-quick-preprocessing-and-training">create train valid dataframes for quick preprocessing and training<a class="anchor-link" href="#create-train-valid-dataframes-for-quick-preprocessing-and-training"> </a></h5>
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
+<span class="c1"># create train, valid split to evaulate model on valid dataset</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_valid</span><span class="p">,</span>  <span class="n">y_train</span><span class="p">,</span> <span class="n">y_valid</span> <span class="o">=</span>  <span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">create_train_valid</span><span class="p">(</span><span class="n">valid_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">y_train</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">X_valid</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">y_valid</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+<span class="c1"># print(X_train.columns.to_list())</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>(3200, 104)
+(3200,)
+(800, 104)
+(800,)
+CPU times: user 6.7 ms, sys: 1.61 ms, total: 8.31 ms
+Wall time: 7.1 ms
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h5 id="Now-PreProcess-X_train,-X_valid">Now PreProcess X_train, X_valid<a class="anchor-link" href="#Now-PreProcess-X_train,-X_valid"> </a></h5><p>NOTE: Preprocessing gives back numpy arrays for pandas dataframe</p>
+
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
+<span class="n">X_train_np</span><span class="p">,</span>  <span class="n">X_valid_np</span> <span class="o">=</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">pp_fit_transform</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_valid</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">X_train_np</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">X_train_np</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="c1"># print(X_train_np)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">X_valid_np</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">X_valid_np</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="c1"># print(X_valid_np)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">y_valid</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">y_train</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>&lt;class &#39;numpy.ndarray&#39;&gt;
+(3200, 104)
+&lt;class &#39;numpy.ndarray&#39;&gt;
+(800, 104)
+&lt;class &#39;numpy.ndarray&#39;&gt;
+&lt;class &#39;numpy.ndarray&#39;&gt;
+CPU times: user 40 ms, sys: 3.39 ms, total: 43.4 ms
+Wall time: 42.7 ms
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#     &#39;objective&#39;: &#39;binary:logistic&#39;, </span>
+<span class="c1">#     &#39;use_label_encoder&#39;: False,</span>
+<span class="c1">#     &#39;n_estimators&#39;: 40000,</span>
+<span class="c1">#     &#39;learning_rate&#39;: 0.18515462875481553,</span>
+<span class="c1">#     &#39;subsample&#39;: 0.97, </span>
+<span class="c1">#     &#39;colsample_bytree&#39;: 0.32,</span>
+<span class="c1">#     &#39;max_depth&#39;: 1,</span>
+<span class="c1">#     &#39;booster&#39;: &#39;gbtree&#39;,</span>
+<span class="c1">#     &#39;gamma&#39;: 0.2, </span>
+<span class="c1">#     &#39;tree_method&#39;: &#39;gpu_hist&#39;,</span>
+<span class="c1">#     &#39;reg_lambda&#39;: 0.11729916523488974, </span>
+<span class="c1">#     &#39;reg_alpha&#39;: 0.6318827156945853,</span>
+<span class="c1">#     &#39;random_state&#39;: 42,</span>
+<span class="c1">#     &#39;n_jobs&#39;: 4, </span>
+<span class="c1">#     &#39;min_child_weight&#39;: 256,</span>
+<span class="c1">#     #for GPU</span>
+<span class="c1"># #     &#39;tree_method&#39;: &#39;gpu_hist&#39;,</span>
+<span class="c1"># #     &#39;predictor&#39;: &#39;gpu_predictor&#39;,</span>
+<span class="c1">#     }</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
+<span class="c1"># Now do model training</span>
+<span class="n">xgb_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_np</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span>
+              <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+              <span class="c1">#detect &amp; avoid overfitting</span>
+              <span class="n">eval_set</span><span class="o">=</span><span class="p">[(</span><span class="n">X_train_np</span><span class="p">,</span> <span class="n">y_train</span><span class="p">),</span> <span class="p">(</span><span class="n">X_valid_np</span><span class="p">,</span> <span class="n">y_valid</span><span class="p">)],</span>
+              <span class="n">eval_metric</span><span class="o">=</span><span class="s2">&quot;auc&quot;</span><span class="p">,</span>
+              <span class="n">early_stopping_rounds</span><span class="o">=</span><span class="mi">300</span>
+             <span class="p">)</span>
+
+<span class="c1">#predict</span>
+<span class="n">preds</span> <span class="o">=</span> <span class="n">xgb_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_valid_np</span><span class="p">)</span>
+<span class="n">preds_probs</span> <span class="o">=</span> <span class="n">xgb_model</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">X_valid_np</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
+
+<span class="c1"># Metrics</span>
+<span class="n">auc</span> <span class="o">=</span> <span class="n">roc_auc_score</span><span class="p">(</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">preds_probs</span><span class="p">)</span>
+<span class="n">acc</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">preds</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;AUC is : </span><span class="si">{</span><span class="n">auc</span><span class="si">}</span><span class="s2"> while Accuracy is : </span><span class="si">{</span><span class="n">acc</span><span class="si">}</span><span class="s2"> &quot;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>AUC is : 0.6986887604265654 while Accuracy is : 0.6825 
+CPU times: user 11 s, sys: 121 ms, total: 11.1 s
+Wall time: 1.56 s
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="WOW!!!!">WOW!!!!<a class="anchor-link" href="#WOW!!!!"> </a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="For-Meta-Model,-Let's-do-Optuna-based-HyperParameter-search-to-get-best-params-for-fit">For Meta Model, Let's do Optuna based HyperParameter search to get best params for fit<a class="anchor-link" href="#For-Meta-Model,-Let's-do-Optuna-based-HyperParameter-search-to-get-best-params-for-fit"> </a></h4>
+</div>
+</div>
+</div>
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">study</span> <span class="o">=</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">do_xgb_optuna_optimization</span><span class="p">(</span><span class="n">optuna_db_path</span><span class="o">=</span><span class="n">OUTPUT_PATH</span><span class="p">,</span> <span class="n">opt_timeout</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">study</span><span class="o">.</span><span class="n">best_trial</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>2021-12-06 23:20:30,245 INFO Optimization Direction is: maximize
+<span class="ansi-green-fg">[I 2021-12-06 23:20:30,307]</span> Using an existing study with name &#39;tmlt_autoxgb&#39; instead of creating a new one.
+2021-12-06 23:20:30,497 INFO Training Started!
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[23:20:30] WARNING: /Users/travis/build/dmlc/xgboost/src/learner.cc:541: 
+Parameters: { colsample_bytree, early_stopping_rounds, eval_set, max_depth, subsample, tree_method } might not be used.
+
+  This may not be accurate due to some parameters are only used in language bindings but
+  passed down to XGBoost core.  Or some parameters are not used but slip through this
+  verification. Please open an issue if you find above cases.
+
+
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>2021-12-06 23:20:37,693 INFO Training Ended!
+2021-12-06 23:20:37,706 INFO roc_auc_score: 0.7720541653468482
+2021-12-06 23:20:37,706 INFO log_loss: 0.5504097771365195
+2021-12-06 23:20:37,707 INFO accuracy_score: 0.72375
+2021-12-06 23:20:37,707 INFO f1_score: 0.6285714285714287
+2021-12-06 23:20:37,708 INFO precision_score: 0.6515679442508711
+2021-12-06 23:20:37,708 INFO recall_score: 0.6071428571428571
+<span class="ansi-green-fg">[I 2021-12-06 23:20:37,741]</span> Trial 35 finished with value: 0.7720541653468482 and parameters: {&#39;learning_rate&#39;: 0.06917055652243276, &#39;n_estimators&#39;: 7000, &#39;reg_lambda&#39;: 0.0005717720260170862, &#39;reg_alpha&#39;: 6.546458405891649e-07, &#39;subsample&#39;: 0.6290090458891053, &#39;colsample_bytree&#39;: 0.9155898469768312, &#39;max_depth&#39;: 7, &#39;early_stopping_rounds&#39;: 139, &#39;tree_method&#39;: &#39;approx&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 18 with value: 0.7734399746594869.
+2021-12-06 23:20:37,923 INFO Training Started!
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[23:20:37] WARNING: /Users/travis/build/dmlc/xgboost/src/learner.cc:541: 
+Parameters: { early_stopping_rounds, eval_set } might not be used.
+
+  This may not be accurate due to some parameters are only used in language bindings but
+  passed down to XGBoost core.  Or some parameters are not used but slip through this
+  verification. Please open an issue if you find above cases.
+
+
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>2021-12-06 23:21:17,526 INFO Training Ended!
+2021-12-06 23:21:17,594 INFO roc_auc_score: 0.6885426565304614
+2021-12-06 23:21:17,595 INFO log_loss: 0.6858780123793986
+2021-12-06 23:21:17,595 INFO accuracy_score: 0.66875
+2021-12-06 23:21:17,595 INFO f1_score: 0.5190562613430126
+2021-12-06 23:21:17,596 INFO precision_score: 0.588477366255144
+2021-12-06 23:21:17,596 INFO recall_score: 0.4642857142857143
+<span class="ansi-green-fg">[I 2021-12-06 23:21:17,637]</span> Trial 36 finished with value: 0.6885426565304614 and parameters: {&#39;learning_rate&#39;: 0.02265165070501582, &#39;n_estimators&#39;: 7000, &#39;reg_lambda&#39;: 2.624192127564028e-07, &#39;reg_alpha&#39;: 0.00036391611478680695, &#39;subsample&#39;: 0.5915030624370501, &#39;colsample_bytree&#39;: 0.23237799890226452, &#39;max_depth&#39;: 9, &#39;early_stopping_rounds&#39;: 164, &#39;tree_method&#39;: &#39;hist&#39;, &#39;booster&#39;: &#39;gbtree&#39;, &#39;gamma&#39;: 0.740465140416424, &#39;grow_policy&#39;: &#39;depthwise&#39;}. Best is trial 18 with value: 0.7734399746594869.
+2021-12-06 23:21:17,776 INFO Training Started!
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[23:21:17] WARNING: /Users/travis/build/dmlc/xgboost/src/learner.cc:541: 
+Parameters: { colsample_bytree, early_stopping_rounds, eval_set, max_depth, subsample, tree_method } might not be used.
+
+  This may not be accurate due to some parameters are only used in language bindings but
+  passed down to XGBoost core.  Or some parameters are not used but slip through this
+  verification. Please open an issue if you find above cases.
+
+
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>2021-12-06 23:21:32,413 INFO Training Ended!
+2021-12-06 23:21:32,425 INFO roc_auc_score: 0.7444303663815859
+2021-12-06 23:21:32,426 INFO log_loss: 0.5777584500750527
+2021-12-06 23:21:32,426 INFO accuracy_score: 0.7
+2021-12-06 23:21:32,427 INFO f1_score: 0.574468085106383
+2021-12-06 23:21:32,428 INFO precision_score: 0.6328125
+2021-12-06 23:21:32,428 INFO recall_score: 0.525974025974026
+<span class="ansi-green-fg">[I 2021-12-06 23:21:32,452]</span> Trial 37 finished with value: 0.7444303663815859 and parameters: {&#39;learning_rate&#39;: 0.056158497794197924, &#39;n_estimators&#39;: 20000, &#39;reg_lambda&#39;: 0.010294961570250994, &#39;reg_alpha&#39;: 1.7037741384478345e-05, &#39;subsample&#39;: 0.4147626780645989, &#39;colsample_bytree&#39;: 0.397278539868545, &#39;max_depth&#39;: 6, &#39;early_stopping_rounds&#39;: 185, &#39;tree_method&#39;: &#39;approx&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 18 with value: 0.7734399746594869.
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>FrozenTrial(number=18, values=[0.7734399746594869], datetime_start=datetime.datetime(2021, 12, 6, 21, 57, 0, 88637), datetime_complete=datetime.datetime(2021, 12, 6, 21, 57, 4, 336934), params={&#39;booster&#39;: &#39;gblinear&#39;, &#39;colsample_bytree&#39;: 0.1027132584989078, &#39;early_stopping_rounds&#39;: 171, &#39;learning_rate&#39;: 0.21761562020600114, &#39;max_depth&#39;: 6, &#39;n_estimators&#39;: 7000, &#39;reg_alpha&#39;: 9.583579660175245e-06, &#39;reg_lambda&#39;: 9.238315962782784e-05, &#39;subsample&#39;: 0.4464473710560276, &#39;tree_method&#39;: &#39;approx&#39;}, distributions={&#39;booster&#39;: CategoricalDistribution(choices=(&#39;gbtree&#39;, &#39;gblinear&#39;)), &#39;colsample_bytree&#39;: UniformDistribution(high=1.0, low=0.1), &#39;early_stopping_rounds&#39;: IntUniformDistribution(high=500, low=100, step=1), &#39;learning_rate&#39;: LogUniformDistribution(high=0.25, low=0.01), &#39;max_depth&#39;: IntUniformDistribution(high=9, low=1, step=1), &#39;n_estimators&#39;: CategoricalDistribution(choices=(7000, 15000, 20000)), &#39;reg_alpha&#39;: LogUniformDistribution(high=100.0, low=1e-08), &#39;reg_lambda&#39;: LogUniformDistribution(high=100.0, low=1e-08), &#39;subsample&#39;: UniformDistribution(high=1.0, low=0.1), &#39;tree_method&#39;: CategoricalDistribution(choices=(&#39;exact&#39;, &#39;approx&#39;, &#39;hist&#39;))}, user_attrs={}, system_attrs={}, intermediate_values={}, trial_id=19, state=TrialState.COMPLETE, value=None)
 </pre>
 </div>
 </div>
@@ -1502,10 +1903,8 @@ Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#3
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">xgb_params</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">study</span><span class="o">.</span><span class="n">best_trial</span><span class="o">.</span><span class="n">params</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Final xgb_params:&quot;</span><span class="p">,</span> <span class="n">xgb_params</span><span class="p">)</span>
-<span class="n">xgb_model</span> <span class="o">=</span> <span class="n">XGBClassifier</span><span class="p">(</span><span class="o">**</span><span class="n">xgb_params</span><span class="p">)</span>
-<span class="n">tmlt</span><span class="o">.</span><span class="n">update_model</span><span class="p">(</span><span class="n">xgb_model</span><span class="p">)</span>
-<span class="n">tmlt</span><span class="o">.</span><span class="n">spl</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;xgb_params&quot;</span><span class="p">,</span> <span class="n">xgb_params</span><span class="p">)</span>
+<span class="n">updated_xgb_model</span> <span class="o">=</span> <span class="n">XGBClassifier</span><span class="p">(</span><span class="o">**</span><span class="n">xgb_params</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -1518,61 +1917,9 @@ Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#3
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Final xgb_params: {&#39;learning_rate&#39;: 0.152746085461703, &#39;eval_metric&#39;: &#39;auc&#39;, &#39;use_label_encoder&#39;: False, &#39;random_state&#39;: 42, &#39;booster&#39;: &#39;gblinear&#39;, &#39;colsample_bytree&#39;: 0.8000514536230441, &#39;early_stopping_rounds&#39;: 147, &#39;max_depth&#39;: 7, &#39;n_estimators&#39;: 15000, &#39;reg_alpha&#39;: 1.3693071141813216e-07, &#39;reg_lambda&#39;: 0.031987234461410045, &#39;subsample&#39;: 0.8214620713008292, &#39;tree_method&#39;: &#39;exact&#39;}
+<pre>xgb_params {&#39;learning_rate&#39;: 0.21761562020600114, &#39;eval_metric&#39;: &#39;auc&#39;, &#39;use_label_encoder&#39;: False, &#39;random_state&#39;: 42, &#39;booster&#39;: &#39;gblinear&#39;, &#39;colsample_bytree&#39;: 0.1027132584989078, &#39;early_stopping_rounds&#39;: 171, &#39;max_depth&#39;: 6, &#39;n_estimators&#39;: 7000, &#39;reg_alpha&#39;: 9.583579660175245e-06, &#39;reg_lambda&#39;: 9.238315962782784e-05, &#39;subsample&#39;: 0.4464473710560276, &#39;tree_method&#39;: &#39;approx&#39;}
 </pre>
 </div>
-</div>
-
-<div class="output_area">
-
-
-<div class="output_html rendered_html output_subarea output_execute_result">
-<style>#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 {color: black;background-color: white;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 pre{padding: 0;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 div.sk-toggleable {background-color: white;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.3em;box-sizing: border-box;text-align: center;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 div.sk-estimator {font-family: monospace;background-color: #f0f8ff;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;margin-bottom: 0.5em;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 div.sk-estimator:hover {background-color: #d4ebff;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;padding-right: 0.2em;padding-left: 0.2em;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 div.sk-item {z-index: 1;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 div.sk-parallel::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 div.sk-parallel-item:only-child::after {width: 0;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0 0.4em 0.5em 0.4em;box-sizing: border-box;padding-bottom: 0.4em;background-color: white;position: relative;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 div.sk-label-container {position: relative;z-index: 2;text-align: center;}#sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85 div.sk-container {display: inline-block;position: relative;}</style><div id="sk-ae40e502-4c3b-44a4-95ad-76394d7e8d85" class"sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="99e065de-65e9-4d2e-a6c7-43f5bd306367" type="checkbox" ><label class="sk-toggleable__label" for="99e065de-65e9-4d2e-a6c7-43f5bd306367">Pipeline</label><div class="sk-toggleable__content"><pre>Pipeline(steps=[('preprocessor',
-                 ColumnTransformer(transformers=[('num_cols',
-                                                  Pipeline(steps=[('imputer',
-                                                                   SimpleImputer(strategy='constant')),
-                                                                  ('scaler',
-                                                                   StandardScaler())]),
-                                                  ['f0', 'f1', 'f2', 'f3', 'f4',
-                                                   'f5', 'f6', 'f7', 'f8', 'f9',
-                                                   'f10', 'f11', 'f12', 'f13',
-                                                   'f14', 'f15', 'f16', 'f17',
-                                                   'f18', 'f19', 'f20', 'f21',
-                                                   'f22', 'f23', 'f24', 'f25',
-                                                   'f26', 'f27', 'f28', 'f29', ...])])),
-                (...
-                               max_delta_step=None, max_depth=7,
-                               min_child_weight=None, missing=nan,
-                               monotone_constraints=None, n_estimators=15000,
-                               n_jobs=None, num_parallel_tree=None,
-                               predictor=None, random_state=42,
-                               reg_alpha=1.3693071141813216e-07,
-                               reg_lambda=0.031987234461410045,
-                               scale_pos_weight=None,
-                               subsample=0.8214620713008292,
-                               tree_method='exact', use_label_encoder=False,
-                               validate_parameters=None, ...))])</pre></div></div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="81c16891-a080-4ecf-9f5d-bc83b06c6677" type="checkbox" ><label class="sk-toggleable__label" for="81c16891-a080-4ecf-9f5d-bc83b06c6677">preprocessor: ColumnTransformer</label><div class="sk-toggleable__content"><pre>ColumnTransformer(transformers=[('num_cols',
-                                 Pipeline(steps=[('imputer',
-                                                  SimpleImputer(strategy='constant')),
-                                                 ('scaler', StandardScaler())]),
-                                 ['f0', 'f1', 'f2', 'f3', 'f4', 'f5', 'f6',
-                                  'f7', 'f8', 'f9', 'f10', 'f11', 'f12', 'f13',
-                                  'f14', 'f15', 'f16', 'f17', 'f18', 'f19',
-                                  'f20', 'f21', 'f22', 'f23', 'f24', 'f25',
-                                  'f26', 'f27', 'f28', 'f29', ...])])</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="04789cd2-bc85-4ecb-989b-1fa18eb1c838" type="checkbox" ><label class="sk-toggleable__label" for="04789cd2-bc85-4ecb-989b-1fa18eb1c838">num_cols</label><div class="sk-toggleable__content"><pre>['f0', 'f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8', 'f9', 'f10', 'f11', 'f12', 'f13', 'f14', 'f15', 'f16', 'f17', 'f18', 'f19', 'f20', 'f21', 'f22', 'f23', 'f24', 'f25', 'f26', 'f27', 'f28', 'f29', 'f30', 'f31', 'f32', 'f33', 'f34', 'f35', 'f36', 'f37', 'f38', 'f39', 'f40', 'f41', 'f42', 'f43', 'f44', 'f45', 'f46', 'f47', 'f48', 'f49', 'f50', 'f51', 'f52', 'f53', 'f54', 'f55', 'f56', 'f57', 'f58', 'f59', 'f60', 'f61', 'f62', 'f63', 'f64', 'f65', 'f66', 'f67', 'f68', 'f69', 'f70', 'f71', 'f72', 'f73', 'f74', 'f75', 'f76', 'f77', 'f78', 'f79', 'f80', 'f81', 'f82', 'f83', 'f84', 'f85', 'f86', 'f87', 'f88', 'f89', 'f90', 'f91', 'f92', 'f93', 'f94', 'f95', 'f96', 'f97', 'f98', 'f99']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="3a1ac4ea-26c5-495f-b0dd-69cb00a82429" type="checkbox" ><label class="sk-toggleable__label" for="3a1ac4ea-26c5-495f-b0dd-69cb00a82429">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(strategy='constant')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="41300da2-cd49-433c-8ced-442b3277741b" type="checkbox" ><label class="sk-toggleable__label" for="41300da2-cd49-433c-8ced-442b3277741b">StandardScaler</label><div class="sk-toggleable__content"><pre>StandardScaler()</pre></div></div></div></div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="604c8df1-33e0-4b8c-9292-c73ac6242b6e" type="checkbox" ><label class="sk-toggleable__label" for="604c8df1-33e0-4b8c-9292-c73ac6242b6e">XGBClassifier</label><div class="sk-toggleable__content"><pre>XGBClassifier(base_score=None, booster='gblinear', colsample_bylevel=None,
-              colsample_bynode=None, colsample_bytree=0.8000514536230441,
-              early_stopping_rounds=147, enable_categorical=False,
-              eval_metric='auc', gamma=None, gpu_id=None, importance_type=None,
-              interaction_constraints=None, learning_rate=0.152746085461703,
-              max_delta_step=None, max_depth=7, min_child_weight=None,
-              missing=nan, monotone_constraints=None, n_estimators=15000,
-              n_jobs=None, num_parallel_tree=None, predictor=None,
-              random_state=42, reg_alpha=1.3693071141813216e-07,
-              reg_lambda=0.031987234461410045, scale_pos_weight=None,
-              subsample=0.8214620713008292, tree_method='exact',
-              use_label_encoder=False, validate_parameters=None, ...)</pre></div></div></div></div></div></div></div>
-</div>
-
 </div>
 
 </div>
@@ -1594,10 +1941,9 @@ Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#3
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">xgb_model_mean_metrics_results</span><span class="p">,</span> <span class="n">xgb_model_test_preds</span><span class="o">=</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">do_kfold_training</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
-                                                                            <span class="n">test_preds_metric</span><span class="o">=</span><span class="n">roc_auc_score</span><span class="p">)</span>
-<span class="k">if</span> <span class="n">xgb_model_test_preds</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">xgb_model_test_preds</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
+<span class="n">X_np</span><span class="p">,</span> <span class="n">X_test_np</span> <span class="o">=</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">pp_fit_transform</span><span class="p">(</span><span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X</span><span class="p">,</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_test</span><span class="p">)</span>
+<span class="n">y_np</span> <span class="o">=</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">dfl</span><span class="o">.</span><span class="n">y</span>
 </pre></div>
 
     </div>
@@ -1610,28 +1956,46 @@ Parameters: { &#34;colsample_bytree&#34;, &#34;max_depth&#34;, &#34;subsample&#3
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>[12:02:11] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
-Parameters: { &#34;colsample_bytree&#34;, &#34;early_stopping_rounds&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
-
-  This could be a false alarm, with some parameters getting used by language bindings but
-  then being mistakenly passed down to XGBoost core, or some parameter actually being used
-  but getting flagged wrongly here. Please open an issue if you find any such cases.
-
-
+<pre>CPU times: user 493 ms, sys: 43.3 ms, total: 536 ms
+Wall time: 83.6 ms
 </pre>
 </div>
 </div>
 
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
+<span class="c1"># k-fold training</span>
+<span class="n">xgb_model_metrics_score</span><span class="p">,</span> <span class="n">xgb_model_test_preds</span> <span class="o">=</span> <span class="n">tmlt</span><span class="o">.</span><span class="n">do_kfold_training</span><span class="p">(</span><span class="n">X_np</span><span class="p">,</span>
+                                                                       <span class="n">y_np</span><span class="p">,</span>
+                                                                       <span class="n">X_test</span><span class="o">=</span><span class="n">X_test_np</span><span class="p">,</span>
+                                                                       <span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                                                                       <span class="n">model</span><span class="o">=</span><span class="n">updated_xgb_model</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-24 12:02:21,265 INFO fold: 1 log_loss : 0.6044875546731054
-2021-11-24 12:02:21,266 INFO fold: 1 roc_auc_score : 0.7267569310122501
-2021-11-24 12:02:21,266 INFO fold: 1 accuracy_score : 0.69125
-2021-11-24 12:02:21,267 INFO fold: 1 f1_score : 0.5612788632326821
-2021-11-24 12:02:21,267 INFO fold: 1 precision_score : 0.6781115879828327
-2021-11-24 12:02:21,268 INFO fold: 1 recall_score : 0.47878787878787876
-2021-11-24 12:02:21,269 INFO Predicting Test Preds Probablities!
+<pre>2021-12-06 23:21:32,574 INFO  model class:&lt;class &#39;xgboost.sklearn.XGBClassifier&#39;&gt;
+2021-12-06 23:21:32,578 INFO Training Started!
 </pre>
 </div>
 </div>
@@ -1639,12 +2003,12 @@ Parameters: { &#34;colsample_bytree&#34;, &#34;early_stopping_rounds&#34;, &#34;
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>[12:02:21] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
-Parameters: { &#34;colsample_bytree&#34;, &#34;early_stopping_rounds&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
+<pre>[23:21:32] WARNING: /Users/travis/build/dmlc/xgboost/src/learner.cc:541: 
+Parameters: { colsample_bytree, early_stopping_rounds, max_depth, subsample, tree_method } might not be used.
 
-  This could be a false alarm, with some parameters getting used by language bindings but
-  then being mistakenly passed down to XGBoost core, or some parameter actually being used
-  but getting flagged wrongly here. Please open an issue if you find any such cases.
+  This may not be accurate due to some parameters are only used in language bindings but
+  passed down to XGBoost core.  Or some parameters are not used but slip through this
+  verification. Please open an issue if you find above cases.
 
 
 </pre>
@@ -1654,13 +2018,17 @@ Parameters: { &#34;colsample_bytree&#34;, &#34;early_stopping_rounds&#34;, &#34;
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-24 12:02:30,239 INFO fold: 2 log_loss : 0.6239040436223149
-2021-11-24 12:02:30,240 INFO fold: 2 roc_auc_score : 0.6955383623468729
-2021-11-24 12:02:30,240 INFO fold: 2 accuracy_score : 0.68875
-2021-11-24 12:02:30,241 INFO fold: 2 f1_score : 0.5815126050420169
-2021-11-24 12:02:30,242 INFO fold: 2 precision_score : 0.6528301886792452
-2021-11-24 12:02:30,243 INFO fold: 2 recall_score : 0.5242424242424243
-2021-11-24 12:02:30,243 INFO Predicting Test Preds Probablities!
+<pre>2021-12-06 23:21:42,349 INFO Training Finished!
+2021-12-06 23:21:42,350 INFO Predicting Val Probablities!
+2021-12-06 23:21:42,352 INFO Predicting Val Score!
+2021-12-06 23:21:42,360 INFO fold: 1 roc_auc_score : 0.7861895551257254
+2021-12-06 23:21:42,361 INFO fold: 1 log_loss : 0.5517830674474681
+2021-12-06 23:21:42,361 INFO fold: 1 accuracy_score : 0.72125
+2021-12-06 23:21:42,362 INFO fold: 1 f1_score : 0.6626323751891074
+2021-12-06 23:21:42,363 INFO fold: 1 precision_score : 0.6616314199395771
+2021-12-06 23:21:42,363 INFO fold: 1 recall_score : 0.6636363636363637
+2021-12-06 23:21:42,364 INFO Predicting Test Probablities!
+2021-12-06 23:21:42,370 INFO Training Started!
 </pre>
 </div>
 </div>
@@ -1668,12 +2036,12 @@ Parameters: { &#34;colsample_bytree&#34;, &#34;early_stopping_rounds&#34;, &#34;
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>[12:02:30] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
-Parameters: { &#34;colsample_bytree&#34;, &#34;early_stopping_rounds&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
+<pre>[23:21:42] WARNING: /Users/travis/build/dmlc/xgboost/src/learner.cc:541: 
+Parameters: { colsample_bytree, early_stopping_rounds, max_depth, subsample, tree_method } might not be used.
 
-  This could be a false alarm, with some parameters getting used by language bindings but
-  then being mistakenly passed down to XGBoost core, or some parameter actually being used
-  but getting flagged wrongly here. Please open an issue if you find any such cases.
+  This may not be accurate due to some parameters are only used in language bindings but
+  passed down to XGBoost core.  Or some parameters are not used but slip through this
+  verification. Please open an issue if you find above cases.
 
 
 </pre>
@@ -1683,13 +2051,17 @@ Parameters: { &#34;colsample_bytree&#34;, &#34;early_stopping_rounds&#34;, &#34;
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-24 12:02:39,207 INFO fold: 3 log_loss : 0.6432310473406687
-2021-11-24 12:02:39,208 INFO fold: 3 roc_auc_score : 0.662849774339136
-2021-11-24 12:02:39,209 INFO fold: 3 accuracy_score : 0.64625
-2021-11-24 12:02:39,209 INFO fold: 3 f1_score : 0.4991150442477876
-2021-11-24 12:02:39,210 INFO fold: 3 precision_score : 0.6
-2021-11-24 12:02:39,211 INFO fold: 3 recall_score : 0.42727272727272725
-2021-11-24 12:02:39,211 INFO Predicting Test Preds Probablities!
+<pre>2021-12-06 23:21:51,670 INFO Training Finished!
+2021-12-06 23:21:51,670 INFO Predicting Val Probablities!
+2021-12-06 23:21:51,672 INFO Predicting Val Score!
+2021-12-06 23:21:51,679 INFO fold: 2 roc_auc_score : 0.7962733720180528
+2021-12-06 23:21:51,680 INFO fold: 2 log_loss : 0.5342360259930138
+2021-12-06 23:21:51,680 INFO fold: 2 accuracy_score : 0.74125
+2021-12-06 23:21:51,681 INFO fold: 2 f1_score : 0.6532663316582914
+2021-12-06 23:21:51,682 INFO fold: 2 precision_score : 0.7303370786516854
+2021-12-06 23:21:51,682 INFO fold: 2 recall_score : 0.5909090909090909
+2021-12-06 23:21:51,683 INFO Predicting Test Probablities!
+2021-12-06 23:21:51,688 INFO Training Started!
 </pre>
 </div>
 </div>
@@ -1697,12 +2069,12 @@ Parameters: { &#34;colsample_bytree&#34;, &#34;early_stopping_rounds&#34;, &#34;
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>[12:02:39] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
-Parameters: { &#34;colsample_bytree&#34;, &#34;early_stopping_rounds&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
+<pre>[23:21:51] WARNING: /Users/travis/build/dmlc/xgboost/src/learner.cc:541: 
+Parameters: { colsample_bytree, early_stopping_rounds, max_depth, subsample, tree_method } might not be used.
 
-  This could be a false alarm, with some parameters getting used by language bindings but
-  then being mistakenly passed down to XGBoost core, or some parameter actually being used
-  but getting flagged wrongly here. Please open an issue if you find any such cases.
+  This may not be accurate due to some parameters are only used in language bindings but
+  passed down to XGBoost core.  Or some parameters are not used but slip through this
+  verification. Please open an issue if you find above cases.
 
 
 </pre>
@@ -1712,13 +2084,19 @@ Parameters: { &#34;colsample_bytree&#34;, &#34;early_stopping_rounds&#34;, &#34;
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-24 12:02:49,262 INFO fold: 4 log_loss : 0.617499795970507
-2021-11-24 12:02:49,262 INFO fold: 4 roc_auc_score : 0.7093964789775765
-2021-11-24 12:02:49,263 INFO fold: 4 accuracy_score : 0.69375
-2021-11-24 12:02:49,264 INFO fold: 4 f1_score : 0.5840407470288624
-2021-11-24 12:02:49,264 INFO fold: 4 precision_score : 0.6666666666666666
-2021-11-24 12:02:49,265 INFO fold: 4 recall_score : 0.5196374622356495
-2021-11-24 12:02:49,265 INFO Predicting Test Preds Probablities!
+<pre>2021-12-06 23:22:01,036 INFO Training Finished!
+2021-12-06 23:22:01,037 INFO Predicting Val Probablities!
+2021-12-06 23:22:01,038 INFO Predicting Val Score!
+/Users/pankajmathur/anaconda3/envs/nbdev_env/lib/python3.9/site-packages/sklearn/metrics/_classification.py:2403: RuntimeWarning: divide by zero encountered in log
+  loss = -(transformed_labels * np.log(y_pred)).sum(axis=1)
+2021-12-06 23:22:01,047 INFO fold: 3 roc_auc_score : 0.7733784655061251
+2021-12-06 23:22:01,048 INFO fold: 3 log_loss : inf
+2021-12-06 23:22:01,048 INFO fold: 3 accuracy_score : 0.72
+2021-12-06 23:22:01,049 INFO fold: 3 f1_score : 0.643312101910828
+2021-12-06 23:22:01,049 INFO fold: 3 precision_score : 0.6778523489932886
+2021-12-06 23:22:01,050 INFO fold: 3 recall_score : 0.6121212121212121
+2021-12-06 23:22:01,050 INFO Predicting Test Probablities!
+2021-12-06 23:22:01,056 INFO Training Started!
 </pre>
 </div>
 </div>
@@ -1726,12 +2104,12 @@ Parameters: { &#34;colsample_bytree&#34;, &#34;early_stopping_rounds&#34;, &#34;
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>[12:02:49] WARNING: /Users/runner/miniforge3/conda-bld/xgboost-split_1634712680264/work/src/learner.cc:576: 
-Parameters: { &#34;colsample_bytree&#34;, &#34;early_stopping_rounds&#34;, &#34;max_depth&#34;, &#34;subsample&#34;, &#34;tree_method&#34; } might not be used.
+<pre>[23:22:01] WARNING: /Users/travis/build/dmlc/xgboost/src/learner.cc:541: 
+Parameters: { colsample_bytree, early_stopping_rounds, max_depth, subsample, tree_method } might not be used.
 
-  This could be a false alarm, with some parameters getting used by language bindings but
-  then being mistakenly passed down to XGBoost core, or some parameter actually being used
-  but getting flagged wrongly here. Please open an issue if you find any such cases.
+  This may not be accurate due to some parameters are only used in language bindings but
+  passed down to XGBoost core.  Or some parameters are not used but slip through this
+  verification. Please open an issue if you find above cases.
 
 
 </pre>
@@ -1741,17 +2119,86 @@ Parameters: { &#34;colsample_bytree&#34;, &#34;early_stopping_rounds&#34;, &#34;
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-24 12:02:58,122 INFO fold: 5 log_loss : 0.6016531882900744
-2021-11-24 12:02:58,123 INFO fold: 5 roc_auc_score : 0.7217580633732503
-2021-11-24 12:02:58,124 INFO fold: 5 accuracy_score : 0.6775
-2021-11-24 12:02:58,124 INFO fold: 5 f1_score : 0.5582191780821918
-2021-11-24 12:02:58,125 INFO fold: 5 precision_score : 0.6442687747035574
-2021-11-24 12:02:58,125 INFO fold: 5 recall_score : 0.49244712990936557
-2021-11-24 12:02:58,126 INFO Predicting Test Preds Probablities!
-2021-11-24 12:02:58,155 INFO  Mean Metrics Results from all Folds are: {&#39;log_loss&#39;: 0.6181551259793341, &#39;roc_auc_score&#39;: 0.7032599220098172, &#39;accuracy_score&#39;: 0.6795, &#39;f1_score&#39;: 0.5568332875267081, &#39;precision_score&#39;: 0.6483754436064604, &#39;recall_score&#39;: 0.48847752448960907}
+<pre>2021-12-06 23:22:09,796 INFO Training Finished!
+2021-12-06 23:22:09,797 INFO Predicting Val Probablities!
+2021-12-06 23:22:09,799 INFO Predicting Val Score!
+2021-12-06 23:22:09,806 INFO fold: 4 roc_auc_score : 0.789911040395777
+2021-12-06 23:22:09,807 INFO fold: 4 log_loss : 0.5406639995649312
+2021-12-06 23:22:09,808 INFO fold: 4 accuracy_score : 0.7425
+2021-12-06 23:22:09,808 INFO fold: 4 f1_score : 0.6644951140065146
+2021-12-06 23:22:09,809 INFO fold: 4 precision_score : 0.7208480565371025
+2021-12-06 23:22:09,810 INFO fold: 4 recall_score : 0.6163141993957704
+2021-12-06 23:22:09,810 INFO Predicting Test Probablities!
+2021-12-06 23:22:09,816 INFO Training Started!
 </pre>
 </div>
 </div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[23:22:09] WARNING: /Users/travis/build/dmlc/xgboost/src/learner.cc:541: 
+Parameters: { colsample_bytree, early_stopping_rounds, max_depth, subsample, tree_method } might not be used.
+
+  This may not be accurate due to some parameters are only used in language bindings but
+  passed down to XGBoost core.  Or some parameters are not used but slip through this
+  verification. Please open an issue if you find above cases.
+
+
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>2021-12-06 23:22:19,205 INFO Training Finished!
+2021-12-06 23:22:19,205 INFO Predicting Val Probablities!
+2021-12-06 23:22:19,207 INFO Predicting Val Score!
+2021-12-06 23:22:19,215 INFO fold: 5 roc_auc_score : 0.7993287769181713
+2021-12-06 23:22:19,215 INFO fold: 5 log_loss : 0.5347861251386348
+2021-12-06 23:22:19,216 INFO fold: 5 accuracy_score : 0.73375
+2021-12-06 23:22:19,216 INFO fold: 5 f1_score : 0.6490939044481056
+2021-12-06 23:22:19,217 INFO fold: 5 precision_score : 0.7137681159420289
+2021-12-06 23:22:19,217 INFO fold: 5 recall_score : 0.595166163141994
+2021-12-06 23:22:19,218 INFO Predicting Test Probablities!
+2021-12-06 23:22:19,224 INFO  Mean Metrics Results from all Folds are: {&#39;roc_auc_score&#39;: 0.7890162419927703, &#39;log_loss&#39;: inf, &#39;accuracy_score&#39;: 0.7317499999999999, &#39;f1_score&#39;: 0.6545599654425693, &#39;precision_score&#39;: 0.7008874040127365, &#39;recall_score&#39;: 0.6156294058408863}
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>CPU times: user 5min 36s, sys: 6.25 s, total: 5min 43s
+Wall time: 46.7 s
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="k">if</span> <span class="n">xgb_model_test_preds</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">xgb_model_test_preds</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
 
 <div class="output_area">
 
@@ -1800,6 +2247,25 @@ Parameters: { &#34;colsample_bytree&#34;, &#34;early_stopping_rounds&#34;, &#34;
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># sub[&#39;target&#39;] = final_preds</span>
 <span class="c1"># sub.to_csv(&#39;submission.csv&#39;, index=False)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># # run the script to build </span>
+
+<span class="c1"># from nbdev.export import notebook2script; notebook2script()</span>
 </pre></div>
 
     </div>

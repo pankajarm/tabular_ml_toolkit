@@ -65,7 +65,7 @@ nb_path: "01_preprocessor.ipynb"
 
 
 <div class="output_markdown rendered_html output_subarea ">
-<h2 id="PreProcessor" class="doc_header"><code>class</code> <code>PreProcessor</code><a href="https://github.com/psmathur/tabular_ml_toolkit/tree/master/tabular_ml_toolkit/preprocessor.py#L21" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>PreProcessor</code>()</p>
+<h2 id="PreProcessor" class="doc_header"><code>class</code> <code>PreProcessor</code><a href="https://github.com/psmathur/tabular_ml_toolkit/tree/master/tabular_ml_toolkit/preprocessor.py#L22" class="source_link" style="float:right">[source]</a></h2><blockquote><p><code>PreProcessor</code>()</p>
 </blockquote>
 <p>Represent PreProcessor class</p>
 <p>Attributes:
@@ -138,8 +138,8 @@ preprocessor: Preprocessor for Columns Tranformer</p>
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-22 14:24:22,822 INFO DataFrame Memory usage decreased to 0.58 Mb (35.5% reduction)
-2021-11-22 14:24:22,861 INFO DataFrame Memory usage decreased to 0.58 Mb (34.8% reduction)
+<pre>2021-11-30 21:17:46,942 INFO DataFrame Memory usage decreased to 0.58 Mb (35.5% reduction)
+2021-11-30 21:17:46,980 INFO DataFrame Memory usage decreased to 0.58 Mb (34.8% reduction)
 </pre>
 </div>
 </div>
@@ -150,6 +150,40 @@ preprocessor: Preprocessor for Columns Tranformer</p>
 
 <div class="output_text output_subarea output_execute_result">
 <pre>DataFrameLoader object with attributes: X_full, X_test, X(features), y(target), X_train, X_valid, y_train and y_valid</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dfl</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span>
+<span class="n">dfl</span><span class="o">.</span><span class="n">X_test</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(1459, 79)</pre>
 </div>
 
 </div>
@@ -198,7 +232,7 @@ preprocessor: Preprocessor for Columns Tranformer</p>
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-11-22 14:24:22,958 INFO Both Numerical &amp; Categorical columns found, Preprocessing will done accordingly!
+<pre>2021-11-30 21:17:47,084 INFO Both Numerical &amp; Categorical columns found, Preprocessing will done accordingly!
 </pre>
 </div>
 </div>
@@ -208,7 +242,26 @@ preprocessor: Preprocessor for Columns Tranformer</p>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>PreProcessor object with attributes:numerical_transformer, categorical_transformer,columns_transfomer</pre>
+<pre>ColumnTransformer(remainder=&#39;passthrough&#39;, sparse_threshold=0,
+                  transformers=[(&#39;pipeline-1&#39;,
+                                 Pipeline(steps=[(&#39;imputer&#39;,
+                                                  SimpleImputer(strategy=&#39;constant&#39;)),
+                                                 (&#39;scaler&#39;, StandardScaler())]),
+                                 [&#39;MSSubClass&#39;, &#39;LotFrontage&#39;, &#39;LotArea&#39;,
+                                  &#39;OverallQual&#39;, &#39;OverallCond&#39;, &#39;YearBuilt&#39;,
+                                  &#39;YearRemodAdd&#39;, &#39;MasVnrArea&#39;, &#39;BsmtFinSF1&#39;,
+                                  &#39;BsmtFinSF2&#39;, &#39;BsmtUnfSF&#39;, &#39;TotalBsmtSF&#39;,
+                                  &#39;1stFlrSF&#39;...
+                                 [&#39;MSZoning&#39;, &#39;Street&#39;, &#39;Alley&#39;, &#39;LotShape&#39;,
+                                  &#39;LandContour&#39;, &#39;Utilities&#39;, &#39;LotConfig&#39;,
+                                  &#39;LandSlope&#39;, &#39;Condition1&#39;, &#39;Condition2&#39;,
+                                  &#39;BldgType&#39;, &#39;HouseStyle&#39;, &#39;RoofStyle&#39;,
+                                  &#39;RoofMatl&#39;, &#39;MasVnrType&#39;, &#39;ExterQual&#39;,
+                                  &#39;ExterCond&#39;, &#39;Foundation&#39;, &#39;BsmtQual&#39;,
+                                  &#39;BsmtCond&#39;, &#39;BsmtExposure&#39;, &#39;BsmtFinType1&#39;,
+                                  &#39;BsmtFinType2&#39;, &#39;Heating&#39;, &#39;HeatingQC&#39;,
+                                  &#39;CentralAir&#39;, &#39;Electrical&#39;, &#39;KitchenQual&#39;,
+                                  &#39;Functional&#39;, &#39;FireplaceQu&#39;, ...])])</pre>
 </div>
 
 </div>
@@ -339,6 +392,481 @@ preprocessor: Preprocessor for Columns Tranformer</p>
 
 <div class="inner_cell">
     <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pp</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>ColumnTransformer(remainder=&#39;passthrough&#39;, sparse_threshold=0,
+                  transformers=[(&#39;pipeline-1&#39;,
+                                 Pipeline(steps=[(&#39;imputer&#39;,
+                                                  SimpleImputer(strategy=&#39;constant&#39;)),
+                                                 (&#39;scaler&#39;, StandardScaler())]),
+                                 [&#39;MSSubClass&#39;, &#39;LotFrontage&#39;, &#39;LotArea&#39;,
+                                  &#39;OverallQual&#39;, &#39;OverallCond&#39;, &#39;YearBuilt&#39;,
+                                  &#39;YearRemodAdd&#39;, &#39;MasVnrArea&#39;, &#39;BsmtFinSF1&#39;,
+                                  &#39;BsmtFinSF2&#39;, &#39;BsmtUnfSF&#39;, &#39;TotalBsmtSF&#39;,
+                                  &#39;1stFlrSF&#39;...
+                                 [&#39;MSZoning&#39;, &#39;Street&#39;, &#39;Alley&#39;, &#39;LotShape&#39;,
+                                  &#39;LandContour&#39;, &#39;Utilities&#39;, &#39;LotConfig&#39;,
+                                  &#39;LandSlope&#39;, &#39;Condition1&#39;, &#39;Condition2&#39;,
+                                  &#39;BldgType&#39;, &#39;HouseStyle&#39;, &#39;RoofStyle&#39;,
+                                  &#39;RoofMatl&#39;, &#39;MasVnrType&#39;, &#39;ExterQual&#39;,
+                                  &#39;ExterCond&#39;, &#39;Foundation&#39;, &#39;BsmtQual&#39;,
+                                  &#39;BsmtCond&#39;, &#39;BsmtExposure&#39;, &#39;BsmtFinType1&#39;,
+                                  &#39;BsmtFinType2&#39;, &#39;Heating&#39;, &#39;HeatingQC&#39;,
+                                  &#39;CentralAir&#39;, &#39;Electrical&#39;, &#39;KitchenQual&#39;,
+                                  &#39;Functional&#39;, &#39;FireplaceQu&#39;, ...])])</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">dfl</span><span class="o">.</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(1460, 79)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_np</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">dfl</span><span class="o">.</span><span class="n">X</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">X_np</span><span class="p">))</span>
+<span class="n">X_np</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>&lt;class &#39;numpy.ndarray&#39;&gt;
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(1460, 304)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">X_np</span><span class="p">)</span>
+<span class="n">X_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>0</th>
+      <th>1</th>
+      <th>2</th>
+      <th>3</th>
+      <th>4</th>
+      <th>5</th>
+      <th>6</th>
+      <th>7</th>
+      <th>8</th>
+      <th>9</th>
+      <th>...</th>
+      <th>294</th>
+      <th>295</th>
+      <th>296</th>
+      <th>297</th>
+      <th>298</th>
+      <th>299</th>
+      <th>300</th>
+      <th>301</th>
+      <th>302</th>
+      <th>303</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.073375</td>
+      <td>0.212877</td>
+      <td>-0.207142</td>
+      <td>0.651479</td>
+      <td>-0.517200</td>
+      <td>1.050994</td>
+      <td>0.878668</td>
+      <td>0.514104</td>
+      <td>0.575425</td>
+      <td>-0.288653</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-0.872563</td>
+      <td>0.645747</td>
+      <td>-0.091886</td>
+      <td>-0.071836</td>
+      <td>2.179628</td>
+      <td>0.156734</td>
+      <td>-0.429577</td>
+      <td>-0.570750</td>
+      <td>1.171992</td>
+      <td>-0.288653</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.073375</td>
+      <td>0.299451</td>
+      <td>0.073480</td>
+      <td>0.651479</td>
+      <td>-0.517200</td>
+      <td>0.984752</td>
+      <td>0.830215</td>
+      <td>0.325915</td>
+      <td>0.092907</td>
+      <td>-0.288653</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.309859</td>
+      <td>0.068587</td>
+      <td>-0.096897</td>
+      <td>0.651479</td>
+      <td>-0.517200</td>
+      <td>-1.863632</td>
+      <td>-0.720298</td>
+      <td>-0.570750</td>
+      <td>-0.499274</td>
+      <td>-0.288653</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.073375</td>
+      <td>0.761179</td>
+      <td>0.375148</td>
+      <td>1.374795</td>
+      <td>-0.517200</td>
+      <td>0.951632</td>
+      <td>0.733308</td>
+      <td>1.366489</td>
+      <td>0.463568</td>
+      <td>-0.288653</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 304 columns</p>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_test_np</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_test</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">X_test_np</span><span class="p">))</span>
+<span class="n">X_test_np</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>&lt;class &#39;numpy.ndarray&#39;&gt;
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(1459, 304)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_train_np</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_train</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">X_train_np</span><span class="p">))</span>
+<span class="n">X_train_np</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>&lt;class &#39;numpy.ndarray&#39;&gt;
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(1168, 304)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_valid_np</span> <span class="o">=</span> <span class="n">pp</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_valid</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">X_valid_np</span><span class="p">))</span>
+<span class="n">X_valid_np</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>&lt;class &#39;numpy.ndarray&#39;&gt;
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>(292, 304)</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">y_train</span> <span class="o">=</span> <span class="n">dfl</span><span class="o">.</span><span class="n">y_train</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">y_train</span><span class="p">))</span>
+<span class="n">y_valid</span> <span class="o">=</span> <span class="n">dfl</span><span class="o">.</span><span class="n">y_valid</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">y_valid</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">RandomForestRegressor</span><span class="p">(</span><span class="n">n_estimators</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
 <span class="n">model</span>
 </pre></div>
@@ -373,30 +901,8 @@ preprocessor: Preprocessor for Columns Tranformer</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pl</span> <span class="o">=</span> <span class="n">Pipeline</span><span class="p">(</span><span class="n">steps</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;preprocessor&#39;</span><span class="p">,</span> <span class="n">pp</span><span class="o">.</span><span class="n">columns_transfomer</span><span class="p">),</span>
-                      <span class="p">(</span><span class="s1">&#39;model&#39;</span><span class="p">,</span> <span class="n">model</span><span class="p">)</span>
-                     <span class="p">])</span>
-<span class="c1"># pl</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">set_config</span>
-
-<span class="n">set_config</span><span class="p">(</span><span class="n">display</span><span class="o">=</span><span class="s2">&quot;diagram&quot;</span><span class="p">)</span>
-<span class="n">pl</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># model.fit(dfl.X_train, dfl.y_train)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -409,54 +915,9 @@ preprocessor: Preprocessor for Columns Tranformer</p>
 <div class="output_area">
 
 
-<div class="output_html rendered_html output_subarea output_execute_result">
-<style>#sk-7224f415-e1ef-4d01-9f69-d5dce724e1d4 {color: black;background-color: white;}#sk-7224f415-e1ef-4d01-9f69-d5dce724e1d4 pre{padding: 0;}#sk-7224f415-e1ef-4d01-9f69-d5dce724e1d4 div.sk-toggleable {background-color: white;}#sk-7224f415-e1ef-4d01-9f69-d5dce724e1d4 label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.3em;box-sizing: border-box;text-align: center;}#sk-7224f415-e1ef-4d01-9f69-d5dce724e1d4 div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}#sk-7224f415-e1ef-4d01-9f69-d5dce724e1d4 div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}#sk-7224f415-e1ef-4d01-9f69-d5dce724e1d4 input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}#sk-7224f415-e1ef-4d01-9f69-d5dce724e1d4 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-7224f415-e1ef-4d01-9f69-d5dce724e1d4 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-7224f415-e1ef-4d01-9f69-d5dce724e1d4 input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}#sk-7224f415-e1ef-4d01-9f69-d5dce724e1d4 div.sk-estimator {font-family: monospace;background-color: #f0f8ff;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;margin-bottom: 0.5em;}#sk-7224f415-e1ef-4d01-9f69-d5dce724e1d4 div.sk-estimator:hover {background-color: #d4ebff;}#sk-7224f415-e1ef-4d01-9f69-d5dce724e1d4 div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}#sk-7224f415-e1ef-4d01-9f69-d5dce724e1d4 div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}#sk-7224f415-e1ef-4d01-9f69-d5dce724e1d4 div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}#sk-7224f415-e1ef-4d01-9f69-d5dce724e1d4 div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;padding-right: 0.2em;padding-left: 0.2em;}#sk-7224f415-e1ef-4d01-9f69-d5dce724e1d4 div.sk-item {z-index: 1;}#sk-7224f415-e1ef-4d01-9f69-d5dce724e1d4 div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}#sk-7224f415-e1ef-4d01-9f69-d5dce724e1d4 div.sk-parallel::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}#sk-7224f415-e1ef-4d01-9f69-d5dce724e1d4 div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}#sk-7224f415-e1ef-4d01-9f69-d5dce724e1d4 div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}#sk-7224f415-e1ef-4d01-9f69-d5dce724e1d4 div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}#sk-7224f415-e1ef-4d01-9f69-d5dce724e1d4 div.sk-parallel-item:only-child::after {width: 0;}#sk-7224f415-e1ef-4d01-9f69-d5dce724e1d4 div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0 0.4em 0.5em 0.4em;box-sizing: border-box;padding-bottom: 0.4em;background-color: white;position: relative;}#sk-7224f415-e1ef-4d01-9f69-d5dce724e1d4 div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}#sk-7224f415-e1ef-4d01-9f69-d5dce724e1d4 div.sk-label-container {position: relative;z-index: 2;text-align: center;}#sk-7224f415-e1ef-4d01-9f69-d5dce724e1d4 div.sk-container {display: inline-block;position: relative;}</style><div id="sk-7224f415-e1ef-4d01-9f69-d5dce724e1d4" class"sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="7b9a71ff-59f5-466d-9441-9430c6b2958a" type="checkbox" ><label class="sk-toggleable__label" for="7b9a71ff-59f5-466d-9441-9430c6b2958a">Pipeline</label><div class="sk-toggleable__content"><pre>Pipeline(steps=[('preprocessor',
-                 ColumnTransformer(transformers=[('num_cols',
-                                                  Pipeline(steps=[('imputer',
-                                                                   SimpleImputer(strategy='constant')),
-                                                                  ('scaler',
-                                                                   StandardScaler())]),
-                                                  ['MSSubClass', 'LotFrontage',
-                                                   'LotArea', 'OverallQual',
-                                                   'OverallCond', 'YearBuilt',
-                                                   'YearRemodAdd', 'MasVnrArea',
-                                                   'BsmtFinSF1', 'BsmtFinSF2',
-                                                   'BsmtUnfSF', 'TotalBsmtSF',
-                                                   '1stFlrSF', '2ndFlrSF',
-                                                   '...
-                                                   'LotConfig', 'LandSlope',
-                                                   'Condition1', 'Condition2',
-                                                   'BldgType', 'HouseStyle',
-                                                   'RoofStyle', 'RoofMatl',
-                                                   'MasVnrType', 'ExterQual',
-                                                   'ExterCond', 'Foundation',
-                                                   'BsmtQual', 'BsmtCond',
-                                                   'BsmtExposure',
-                                                   'BsmtFinType1',
-                                                   'BsmtFinType2', 'Heating',
-                                                   'HeatingQC', 'CentralAir',
-                                                   'Electrical', 'KitchenQual',
-                                                   'Functional', 'FireplaceQu', ...])])),
-                ('model', RandomForestRegressor(random_state=42))])</pre></div></div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="e0d81e5d-1021-487d-8e53-e337f89dc5d2" type="checkbox" ><label class="sk-toggleable__label" for="e0d81e5d-1021-487d-8e53-e337f89dc5d2">preprocessor: ColumnTransformer</label><div class="sk-toggleable__content"><pre>ColumnTransformer(transformers=[('num_cols',
-                                 Pipeline(steps=[('imputer',
-                                                  SimpleImputer(strategy='constant')),
-                                                 ('scaler', StandardScaler())]),
-                                 ['MSSubClass', 'LotFrontage', 'LotArea',
-                                  'OverallQual', 'OverallCond', 'YearBuilt',
-                                  'YearRemodAdd', 'MasVnrArea', 'BsmtFinSF1',
-                                  'BsmtFinSF2', 'BsmtUnfSF', 'TotalBsmtSF',
-                                  '1stFlrSF', '2ndFlrSF', 'LowQualFinSF',
-                                  'GrLivArea', 'BsmtF...
-                                 ['MSZoning', 'Street', 'Alley', 'LotShape',
-                                  'LandContour', 'Utilities', 'LotConfig',
-                                  'LandSlope', 'Condition1', 'Condition2',
-                                  'BldgType', 'HouseStyle', 'RoofStyle',
-                                  'RoofMatl', 'MasVnrType', 'ExterQual',
-                                  'ExterCond', 'Foundation', 'BsmtQual',
-                                  'BsmtCond', 'BsmtExposure', 'BsmtFinType1',
-                                  'BsmtFinType2', 'Heating', 'HeatingQC',
-                                  'CentralAir', 'Electrical', 'KitchenQual',
-                                  'Functional', 'FireplaceQu', ...])])</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="cd45ee24-5794-4b4a-8208-e2827dd17d75" type="checkbox" ><label class="sk-toggleable__label" for="cd45ee24-5794-4b4a-8208-e2827dd17d75">num_cols</label><div class="sk-toggleable__content"><pre>['MSSubClass', 'LotFrontage', 'LotArea', 'OverallQual', 'OverallCond', 'YearBuilt', 'YearRemodAdd', 'MasVnrArea', 'BsmtFinSF1', 'BsmtFinSF2', 'BsmtUnfSF', 'TotalBsmtSF', '1stFlrSF', '2ndFlrSF', 'LowQualFinSF', 'GrLivArea', 'BsmtFullBath', 'BsmtHalfBath', 'FullBath', 'HalfBath', 'BedroomAbvGr', 'KitchenAbvGr', 'TotRmsAbvGrd', 'Fireplaces', 'GarageYrBlt', 'GarageCars', 'GarageArea', 'WoodDeckSF', 'OpenPorchSF', 'EnclosedPorch', '3SsnPorch', 'ScreenPorch', 'PoolArea', 'MiscVal', 'MoSold', 'YrSold']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="cd264ead-334c-44f8-a28a-177d9a7e4648" type="checkbox" ><label class="sk-toggleable__label" for="cd264ead-334c-44f8-a28a-177d9a7e4648">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(strategy='constant')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="5d63c02e-d302-4170-8e46-8dcd799c1b1e" type="checkbox" ><label class="sk-toggleable__label" for="5d63c02e-d302-4170-8e46-8dcd799c1b1e">StandardScaler</label><div class="sk-toggleable__content"><pre>StandardScaler()</pre></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="e5fcd3b9-0e30-4ae5-9cec-655f56013e6f" type="checkbox" ><label class="sk-toggleable__label" for="e5fcd3b9-0e30-4ae5-9cec-655f56013e6f">cat_cols</label><div class="sk-toggleable__content"><pre>['MSZoning', 'Street', 'Alley', 'LotShape', 'LandContour', 'Utilities', 'LotConfig', 'LandSlope', 'Condition1', 'Condition2', 'BldgType', 'HouseStyle', 'RoofStyle', 'RoofMatl', 'MasVnrType', 'ExterQual', 'ExterCond', 'Foundation', 'BsmtQual', 'BsmtCond', 'BsmtExposure', 'BsmtFinType1', 'BsmtFinType2', 'Heating', 'HeatingQC', 'CentralAir', 'Electrical', 'KitchenQual', 'Functional', 'FireplaceQu', 'GarageType', 'GarageFinish', 'GarageQual', 'GarageCond', 'PavedDrive', 'PoolQC', 'Fence', 'MiscFeature', 'SaleType', 'SaleCondition', 'Neighborhood', 'Exterior1st', 'Exterior2nd']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="97420db0-004d-4a74-ab32-ecf51ba9acf8" type="checkbox" ><label class="sk-toggleable__label" for="97420db0-004d-4a74-ab32-ecf51ba9acf8">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(strategy='constant')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="645d0e95-df78-4c7e-8786-33ccab21e918" type="checkbox" ><label class="sk-toggleable__label" for="645d0e95-df78-4c7e-8786-33ccab21e918">OneHotEncoder</label><div class="sk-toggleable__content"><pre>OneHotEncoder(handle_unknown='ignore')</pre></div></div></div></div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="e538bba4-1b02-4ff8-be32-c3dec27f1a7a" type="checkbox" ><label class="sk-toggleable__label" for="e538bba4-1b02-4ff8-be32-c3dec27f1a7a">RandomForestRegressor</label><div class="sk-toggleable__content"><pre>RandomForestRegressor(random_state=42)</pre></div></div></div></div></div></div></div>
+
+<div class="output_text output_subarea output_execute_result">
+<pre>RandomForestRegressor(random_state=42)</pre>
 </div>
 
 </div>
@@ -474,87 +935,9 @@ preprocessor: Preprocessor for Columns Tranformer</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pl</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_train</span><span class="p">,</span> <span class="n">dfl</span><span class="o">.</span><span class="n">y_train</span><span class="p">)</span>
-</pre></div>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">preds</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_valid</span><span class="p">)</span>
 
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-<div class="output_area">
-
-
-<div class="output_html rendered_html output_subarea output_execute_result">
-<style>#sk-646b5079-3f19-43ae-bddc-8502ce6c73d2 {color: black;background-color: white;}#sk-646b5079-3f19-43ae-bddc-8502ce6c73d2 pre{padding: 0;}#sk-646b5079-3f19-43ae-bddc-8502ce6c73d2 div.sk-toggleable {background-color: white;}#sk-646b5079-3f19-43ae-bddc-8502ce6c73d2 label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.3em;box-sizing: border-box;text-align: center;}#sk-646b5079-3f19-43ae-bddc-8502ce6c73d2 div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}#sk-646b5079-3f19-43ae-bddc-8502ce6c73d2 div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}#sk-646b5079-3f19-43ae-bddc-8502ce6c73d2 input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}#sk-646b5079-3f19-43ae-bddc-8502ce6c73d2 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-646b5079-3f19-43ae-bddc-8502ce6c73d2 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-646b5079-3f19-43ae-bddc-8502ce6c73d2 input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}#sk-646b5079-3f19-43ae-bddc-8502ce6c73d2 div.sk-estimator {font-family: monospace;background-color: #f0f8ff;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;margin-bottom: 0.5em;}#sk-646b5079-3f19-43ae-bddc-8502ce6c73d2 div.sk-estimator:hover {background-color: #d4ebff;}#sk-646b5079-3f19-43ae-bddc-8502ce6c73d2 div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}#sk-646b5079-3f19-43ae-bddc-8502ce6c73d2 div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}#sk-646b5079-3f19-43ae-bddc-8502ce6c73d2 div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}#sk-646b5079-3f19-43ae-bddc-8502ce6c73d2 div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;padding-right: 0.2em;padding-left: 0.2em;}#sk-646b5079-3f19-43ae-bddc-8502ce6c73d2 div.sk-item {z-index: 1;}#sk-646b5079-3f19-43ae-bddc-8502ce6c73d2 div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;}#sk-646b5079-3f19-43ae-bddc-8502ce6c73d2 div.sk-parallel::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 2em;bottom: 0;left: 50%;}#sk-646b5079-3f19-43ae-bddc-8502ce6c73d2 div.sk-parallel-item {display: flex;flex-direction: column;position: relative;background-color: white;}#sk-646b5079-3f19-43ae-bddc-8502ce6c73d2 div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}#sk-646b5079-3f19-43ae-bddc-8502ce6c73d2 div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}#sk-646b5079-3f19-43ae-bddc-8502ce6c73d2 div.sk-parallel-item:only-child::after {width: 0;}#sk-646b5079-3f19-43ae-bddc-8502ce6c73d2 div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0 0.4em 0.5em 0.4em;box-sizing: border-box;padding-bottom: 0.4em;background-color: white;position: relative;}#sk-646b5079-3f19-43ae-bddc-8502ce6c73d2 div.sk-label label {font-family: monospace;font-weight: bold;background-color: white;display: inline-block;line-height: 1.2em;}#sk-646b5079-3f19-43ae-bddc-8502ce6c73d2 div.sk-label-container {position: relative;z-index: 2;text-align: center;}#sk-646b5079-3f19-43ae-bddc-8502ce6c73d2 div.sk-container {display: inline-block;position: relative;}</style><div id="sk-646b5079-3f19-43ae-bddc-8502ce6c73d2" class"sk-top-container"><div class="sk-container"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="ecf8acee-5239-4c8b-8ff0-50a870bf1073" type="checkbox" ><label class="sk-toggleable__label" for="ecf8acee-5239-4c8b-8ff0-50a870bf1073">Pipeline</label><div class="sk-toggleable__content"><pre>Pipeline(steps=[('preprocessor',
-                 ColumnTransformer(transformers=[('num_cols',
-                                                  Pipeline(steps=[('imputer',
-                                                                   SimpleImputer(strategy='constant')),
-                                                                  ('scaler',
-                                                                   StandardScaler())]),
-                                                  ['MSSubClass', 'LotFrontage',
-                                                   'LotArea', 'OverallQual',
-                                                   'OverallCond', 'YearBuilt',
-                                                   'YearRemodAdd', 'MasVnrArea',
-                                                   'BsmtFinSF1', 'BsmtFinSF2',
-                                                   'BsmtUnfSF', 'TotalBsmtSF',
-                                                   '1stFlrSF', '2ndFlrSF',
-                                                   '...
-                                                   'LotConfig', 'LandSlope',
-                                                   'Condition1', 'Condition2',
-                                                   'BldgType', 'HouseStyle',
-                                                   'RoofStyle', 'RoofMatl',
-                                                   'MasVnrType', 'ExterQual',
-                                                   'ExterCond', 'Foundation',
-                                                   'BsmtQual', 'BsmtCond',
-                                                   'BsmtExposure',
-                                                   'BsmtFinType1',
-                                                   'BsmtFinType2', 'Heating',
-                                                   'HeatingQC', 'CentralAir',
-                                                   'Electrical', 'KitchenQual',
-                                                   'Functional', 'FireplaceQu', ...])])),
-                ('model', RandomForestRegressor(random_state=42))])</pre></div></div></div><div class="sk-serial"><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="d2310d46-0bc3-4557-a746-b7f01885cbe5" type="checkbox" ><label class="sk-toggleable__label" for="d2310d46-0bc3-4557-a746-b7f01885cbe5">preprocessor: ColumnTransformer</label><div class="sk-toggleable__content"><pre>ColumnTransformer(transformers=[('num_cols',
-                                 Pipeline(steps=[('imputer',
-                                                  SimpleImputer(strategy='constant')),
-                                                 ('scaler', StandardScaler())]),
-                                 ['MSSubClass', 'LotFrontage', 'LotArea',
-                                  'OverallQual', 'OverallCond', 'YearBuilt',
-                                  'YearRemodAdd', 'MasVnrArea', 'BsmtFinSF1',
-                                  'BsmtFinSF2', 'BsmtUnfSF', 'TotalBsmtSF',
-                                  '1stFlrSF', '2ndFlrSF', 'LowQualFinSF',
-                                  'GrLivArea', 'BsmtF...
-                                 ['MSZoning', 'Street', 'Alley', 'LotShape',
-                                  'LandContour', 'Utilities', 'LotConfig',
-                                  'LandSlope', 'Condition1', 'Condition2',
-                                  'BldgType', 'HouseStyle', 'RoofStyle',
-                                  'RoofMatl', 'MasVnrType', 'ExterQual',
-                                  'ExterCond', 'Foundation', 'BsmtQual',
-                                  'BsmtCond', 'BsmtExposure', 'BsmtFinType1',
-                                  'BsmtFinType2', 'Heating', 'HeatingQC',
-                                  'CentralAir', 'Electrical', 'KitchenQual',
-                                  'Functional', 'FireplaceQu', ...])])</pre></div></div></div><div class="sk-parallel"><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="fa5b1c2e-8bb3-4cab-bb1d-e8688a210855" type="checkbox" ><label class="sk-toggleable__label" for="fa5b1c2e-8bb3-4cab-bb1d-e8688a210855">num_cols</label><div class="sk-toggleable__content"><pre>['MSSubClass', 'LotFrontage', 'LotArea', 'OverallQual', 'OverallCond', 'YearBuilt', 'YearRemodAdd', 'MasVnrArea', 'BsmtFinSF1', 'BsmtFinSF2', 'BsmtUnfSF', 'TotalBsmtSF', '1stFlrSF', '2ndFlrSF', 'LowQualFinSF', 'GrLivArea', 'BsmtFullBath', 'BsmtHalfBath', 'FullBath', 'HalfBath', 'BedroomAbvGr', 'KitchenAbvGr', 'TotRmsAbvGrd', 'Fireplaces', 'GarageYrBlt', 'GarageCars', 'GarageArea', 'WoodDeckSF', 'OpenPorchSF', 'EnclosedPorch', '3SsnPorch', 'ScreenPorch', 'PoolArea', 'MiscVal', 'MoSold', 'YrSold']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="8aea5434-1813-4bec-9630-c038622bb679" type="checkbox" ><label class="sk-toggleable__label" for="8aea5434-1813-4bec-9630-c038622bb679">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(strategy='constant')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="03eaae7e-1c5d-461b-b4ed-de770f8e1d25" type="checkbox" ><label class="sk-toggleable__label" for="03eaae7e-1c5d-461b-b4ed-de770f8e1d25">StandardScaler</label><div class="sk-toggleable__content"><pre>StandardScaler()</pre></div></div></div></div></div></div></div></div><div class="sk-parallel-item"><div class="sk-item"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="ff7cbe0e-b7e8-47fc-9130-ec9768944c81" type="checkbox" ><label class="sk-toggleable__label" for="ff7cbe0e-b7e8-47fc-9130-ec9768944c81">cat_cols</label><div class="sk-toggleable__content"><pre>['MSZoning', 'Street', 'Alley', 'LotShape', 'LandContour', 'Utilities', 'LotConfig', 'LandSlope', 'Condition1', 'Condition2', 'BldgType', 'HouseStyle', 'RoofStyle', 'RoofMatl', 'MasVnrType', 'ExterQual', 'ExterCond', 'Foundation', 'BsmtQual', 'BsmtCond', 'BsmtExposure', 'BsmtFinType1', 'BsmtFinType2', 'Heating', 'HeatingQC', 'CentralAir', 'Electrical', 'KitchenQual', 'Functional', 'FireplaceQu', 'GarageType', 'GarageFinish', 'GarageQual', 'GarageCond', 'PavedDrive', 'PoolQC', 'Fence', 'MiscFeature', 'SaleType', 'SaleCondition', 'Neighborhood', 'Exterior1st', 'Exterior2nd']</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="5baad779-f8aa-4034-b77c-20e7102d22a7" type="checkbox" ><label class="sk-toggleable__label" for="5baad779-f8aa-4034-b77c-20e7102d22a7">SimpleImputer</label><div class="sk-toggleable__content"><pre>SimpleImputer(strategy='constant')</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="d11acb76-e46e-4128-8b4e-11487c5759ce" type="checkbox" ><label class="sk-toggleable__label" for="d11acb76-e46e-4128-8b4e-11487c5759ce">OneHotEncoder</label><div class="sk-toggleable__content"><pre>OneHotEncoder(handle_unknown='ignore')</pre></div></div></div></div></div></div></div></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="524b0dd4-1c67-4990-92f7-d58b04a1a99f" type="checkbox" ><label class="sk-toggleable__label" for="524b0dd4-1c67-4990-92f7-d58b04a1a99f">RandomForestRegressor</label><div class="sk-toggleable__content"><pre>RandomForestRegressor(random_state=42)</pre></div></div></div></div></div></div></div>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-    {% endraw %}
-
-    {% raw %}
-    
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">preds</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">dfl</span><span class="o">.</span><span class="n">X_valid</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;X_valid MAE:&#39;</span><span class="p">,</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">dfl</span><span class="o">.</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">preds</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;X_valid MAE:&#39;</span><span class="p">,</span> <span class="n">mean_absolute_error</span><span class="p">(</span><span class="n">y_valid</span><span class="p">,</span> <span class="n">preds</span><span class="p">))</span>
 </pre></div>
 
     </div>
@@ -567,7 +950,7 @@ preprocessor: Preprocessor for Columns Tranformer</p>
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>X_valid MAE: 17588.3151369863
+<pre>X_valid MAE: 17585.421472602742
 </pre>
 </div>
 </div>

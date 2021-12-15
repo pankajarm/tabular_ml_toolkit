@@ -90,16 +90,16 @@ class XGB_Optuna_Objective:
         # choose predict type based upon metrics type
         #TO-DO instead of single metrics use list of metrics and calculate mean using dict
         metric_result = {}
-        for metric in self.val_preds_metrics:
-            if ("log_loss" in str(metric.__name__)) or ("roc_auc_score" in str(metric.__name__)):
-                #logger.info("Predicting Probablities!")
-                preds_probs = model.predict_proba(X_valid_np)[:, 1]
-                metric_result[str(metric.__name__)] = metric(y_valid_np, preds_probs)
+        metric = self.val_preds_metrics
+        if ("log_loss" in str(metric.__name__)) or ("roc_auc_score" in str(metric.__name__)):
+            #logger.info("Predicting Probablities!")
+            preds_probs = model.predict_proba(X_valid_np)[:, 1]
+            metric_result[str(metric.__name__)] = metric(y_valid_np, preds_probs)
 
-            else:
-                #logger.info("Predicting Score!")
-                preds = model.predict(X_valid_np)
-                metric_result[str(metric.__name__)] = metric(y_valid_np, preds)
+        else:
+            #logger.info("Predicting Score!")
+            preds = model.predict(X_valid_np)
+            metric_result[str(metric.__name__)] = metric(y_valid_np, preds)
 
         #now show value of all the given metrics
         for metric_name, metric_value in metric_result.items():
@@ -111,7 +111,7 @@ class XGB_Optuna_Objective:
         elif self.xgb_eval_metric == "mlogloss":
             return metric_result["log_loss"]
         elif self.xgb_eval_metric == "rmse":
-            return metric_result["mean_squared_error"]
+            return metric_result["mean_absolute_error"]
         elif self.xgb_eval_metric == "auc":
             return metric_result["roc_auc_score"]
         else:

@@ -154,7 +154,9 @@ nb_path: "13_Kaggle_TPS_Tutorial.ipynb"
     <span class="n">idx_col</span><span class="o">=</span><span class="s2">&quot;id&quot;</span><span class="p">,</span>
     <span class="n">target</span><span class="o">=</span><span class="s2">&quot;target&quot;</span><span class="p">,</span>
     <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>
-    <span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;binary_classification&quot;</span><span class="p">,</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">4000</span><span class="p">)</span>
+    <span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;binary_classification&quot;</span><span class="p">,</span>
+    <span class="n">nrows</span><span class="o">=</span><span class="mi">4000</span>
+<span class="p">)</span>
 
 
 <span class="c1"># supports only task type</span>
@@ -174,11 +176,11 @@ nb_path: "13_Kaggle_TPS_Tutorial.ipynb"
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-12-06 23:20:08,236 INFO 8 cores found, model and data parallel processing should worked!
-2021-12-06 23:20:08,350 INFO DataFrame Memory usage decreased to 0.80 Mb (74.4% reduction)
-2021-12-06 23:20:08,457 INFO DataFrame Memory usage decreased to 0.79 Mb (74.3% reduction)
-2021-12-06 23:20:08,502 INFO PreProcessing will include target(s) encoding!
-2021-12-06 23:20:08,503 INFO categorical columns are None, Preprocessing will done accordingly!
+<pre>2021-12-09 23:58:19,951 INFO 8 cores found, model and data parallel processing should worked!
+2021-12-09 23:58:20,069 INFO DataFrame Memory usage decreased to 0.80 Mb (74.4% reduction)
+2021-12-09 23:58:20,176 INFO DataFrame Memory usage decreased to 0.79 Mb (74.3% reduction)
+2021-12-09 23:58:20,222 INFO PreProcessing will include target(s) encoding!
+2021-12-09 23:58:20,222 INFO categorical columns are None, Preprocessing will done accordingly!
 </pre>
 </div>
 </div>
@@ -629,8 +631,8 @@ nb_path: "13_Kaggle_TPS_Tutorial.ipynb"
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>CPU times: user 5.46 ms, sys: 1.46 ms, total: 6.92 ms
-Wall time: 6.05 ms
+<pre>CPU times: user 6.41 ms, sys: 1.83 ms, total: 8.24 ms
+Wall time: 6.76 ms
 </pre>
 </div>
 </div>
@@ -723,7 +725,7 @@ Wall time: 6.05 ms
 (800, 100)
 &lt;class &#39;numpy.ndarray&#39;&gt;
 &lt;class &#39;numpy.ndarray&#39;&gt;
-CPU times: user 24.3 ms, sys: 1.71 ms, total: 26 ms
+CPU times: user 24.3 ms, sys: 1.62 ms, total: 25.9 ms
 Wall time: 24.7 ms
 </pre>
 </div>
@@ -810,8 +812,8 @@ Wall time: 24.7 ms
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>AUC is : 0.6142302819132088 while Accuracy is : 0.6175 
-CPU times: user 10.9 s, sys: 167 ms, total: 11.1 s
-Wall time: 1.73 s
+CPU times: user 10.6 s, sys: 123 ms, total: 10.8 s
+Wall time: 1.51 s
 </pre>
 </div>
 </div>
@@ -856,8 +858,8 @@ Wall time: 1.73 s
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>CPU times: user 273 ms, sys: 19.2 ms, total: 292 ms
-Wall time: 45.2 ms
+<pre>CPU times: user 270 ms, sys: 23.6 ms, total: 293 ms
+Wall time: 46.9 ms
 </pre>
 </div>
 </div>
@@ -928,22 +930,22 @@ Wall time: 45.2 ms
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-12-06 23:20:10,385 INFO Training Started!
-2021-12-06 23:20:10,418 INFO Training Finished!
-2021-12-06 23:20:10,421 INFO fold: 1 OOF Model ROC AUC: 0.7257962604771115!
-2021-12-06 23:20:10,426 INFO Training Started!
-2021-12-06 23:20:10,453 INFO Training Finished!
-2021-12-06 23:20:10,456 INFO fold: 2 OOF Model ROC AUC: 0.6957833655705996!
-2021-12-06 23:20:10,461 INFO Training Started!
-2021-12-06 23:20:10,492 INFO Training Finished!
-2021-12-06 23:20:10,495 INFO fold: 3 OOF Model ROC AUC: 0.6616956802063185!
-2021-12-06 23:20:10,500 INFO Training Started!
-2021-12-06 23:20:10,538 INFO Training Finished!
-2021-12-06 23:20:10,541 INFO fold: 4 OOF Model ROC AUC: 0.7076379002699064!
-2021-12-06 23:20:10,546 INFO Training Started!
-2021-12-06 23:20:10,580 INFO Training Finished!
-2021-12-06 23:20:10,584 INFO fold: 5 OOF Model ROC AUC: 0.7227243154104317!
-2021-12-06 23:20:10,588 INFO Mean OOF Model ROC AUC: 0.7027275043868735!
+<pre>2021-12-09 23:58:25,808 INFO Training Started!
+2021-12-09 23:58:25,840 INFO Training Finished!
+2021-12-09 23:58:25,844 INFO fold: 1 OOF Model ROC AUC: 0.7257962604771115!
+2021-12-09 23:58:25,848 INFO Training Started!
+2021-12-09 23:58:25,881 INFO Training Finished!
+2021-12-09 23:58:25,884 INFO fold: 2 OOF Model ROC AUC: 0.6957833655705996!
+2021-12-09 23:58:25,890 INFO Training Started!
+2021-12-09 23:58:25,920 INFO Training Finished!
+2021-12-09 23:58:25,923 INFO fold: 3 OOF Model ROC AUC: 0.6616956802063185!
+2021-12-09 23:58:25,928 INFO Training Started!
+2021-12-09 23:58:25,963 INFO Training Finished!
+2021-12-09 23:58:25,965 INFO fold: 4 OOF Model ROC AUC: 0.7076379002699064!
+2021-12-09 23:58:25,969 INFO Training Started!
+2021-12-09 23:58:25,994 INFO Training Finished!
+2021-12-09 23:58:25,996 INFO fold: 5 OOF Model ROC AUC: 0.7227243154104317!
+2021-12-09 23:58:26,000 INFO Mean OOF Model ROC AUC: 0.7027275043868735!
 </pre>
 </div>
 </div>
@@ -953,8 +955,8 @@ Wall time: 45.2 ms
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>(4000,)
 (4000,)
-CPU times: user 793 ms, sys: 186 ms, total: 979 ms
-Wall time: 206 ms
+CPU times: user 501 ms, sys: 114 ms, total: 615 ms
+Wall time: 194 ms
 </pre>
 </div>
 </div>
@@ -1025,22 +1027,22 @@ Wall time: 206 ms
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-12-06 23:20:10,605 INFO Training Started!
-2021-12-06 23:20:10,630 INFO Training Finished!
-2021-12-06 23:20:10,633 INFO fold: 1 OOF Model ROC AUC: 0.7271695680206318!
-2021-12-06 23:20:10,637 INFO Training Started!
-2021-12-06 23:20:10,665 INFO Training Finished!
-2021-12-06 23:20:10,667 INFO fold: 2 OOF Model ROC AUC: 0.694622823984526!
-2021-12-06 23:20:10,672 INFO Training Started!
-2021-12-06 23:20:10,699 INFO Training Finished!
-2021-12-06 23:20:10,703 INFO fold: 3 OOF Model ROC AUC: 0.662114764667956!
-2021-12-06 23:20:10,707 INFO Training Started!
-2021-12-06 23:20:10,730 INFO Training Finished!
-2021-12-06 23:20:10,733 INFO fold: 4 OOF Model ROC AUC: 0.7080501678057705!
-2021-12-06 23:20:10,737 INFO Training Started!
-2021-12-06 23:20:10,762 INFO Training Finished!
-2021-12-06 23:20:10,764 INFO fold: 5 OOF Model ROC AUC: 0.7226276902067136!
-2021-12-06 23:20:10,768 INFO Mean OOF Model ROC AUC: 0.7029170029371196!
+<pre>2021-12-09 23:58:27,128 INFO Training Started!
+2021-12-09 23:58:27,157 INFO Training Finished!
+2021-12-09 23:58:27,160 INFO fold: 1 OOF Model ROC AUC: 0.7271695680206318!
+2021-12-09 23:58:27,165 INFO Training Started!
+2021-12-09 23:58:27,196 INFO Training Finished!
+2021-12-09 23:58:27,199 INFO fold: 2 OOF Model ROC AUC: 0.694622823984526!
+2021-12-09 23:58:27,204 INFO Training Started!
+2021-12-09 23:58:27,233 INFO Training Finished!
+2021-12-09 23:58:27,236 INFO fold: 3 OOF Model ROC AUC: 0.662114764667956!
+2021-12-09 23:58:27,241 INFO Training Started!
+2021-12-09 23:58:27,264 INFO Training Finished!
+2021-12-09 23:58:27,267 INFO fold: 4 OOF Model ROC AUC: 0.7080501678057705!
+2021-12-09 23:58:27,271 INFO Training Started!
+2021-12-09 23:58:27,298 INFO Training Finished!
+2021-12-09 23:58:27,301 INFO fold: 5 OOF Model ROC AUC: 0.7226276902067136!
+2021-12-09 23:58:27,304 INFO Mean OOF Model ROC AUC: 0.7029170029371196!
 </pre>
 </div>
 </div>
@@ -1050,8 +1052,8 @@ Wall time: 206 ms
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>(4000,)
 (4000,)
-CPU times: user 503 ms, sys: 116 ms, total: 618 ms
-Wall time: 167 ms
+CPU times: user 469 ms, sys: 102 ms, total: 571 ms
+Wall time: 179 ms
 </pre>
 </div>
 </div>
@@ -1128,22 +1130,22 @@ Wall time: 167 ms
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-12-06 23:20:10,782 INFO Training Started!
-2021-12-06 23:20:11,064 INFO Training Finished!
-2021-12-06 23:20:11,067 INFO fold: 1 OOF Model ROC AUC: 0.7153836234687297!
-2021-12-06 23:20:11,076 INFO Training Started!
-2021-12-06 23:20:11,294 INFO Training Finished!
-2021-12-06 23:20:11,297 INFO fold: 2 OOF Model ROC AUC: 0.6823726627981948!
-2021-12-06 23:20:11,306 INFO Training Started!
-2021-12-06 23:20:11,476 INFO Training Finished!
-2021-12-06 23:20:11,479 INFO fold: 3 OOF Model ROC AUC: 0.6245067698259188!
-2021-12-06 23:20:11,487 INFO Training Started!
-2021-12-06 23:20:11,916 INFO Training Finished!
-2021-12-06 23:20:11,920 INFO fold: 4 OOF Model ROC AUC: 0.6928606857812791!
-2021-12-06 23:20:11,928 INFO Training Started!
-2021-12-06 23:20:12,115 INFO Training Finished!
-2021-12-06 23:20:12,119 INFO fold: 5 OOF Model ROC AUC: 0.6891696029992462!
-2021-12-06 23:20:12,127 INFO Mean OOF Model ROC AUC: 0.6808586689746737!
+<pre>2021-12-09 23:58:30,843 INFO Training Started!
+2021-12-09 23:58:31,114 INFO Training Finished!
+2021-12-09 23:58:31,118 INFO fold: 1 OOF Model ROC AUC: 0.7148613797549968!
+2021-12-09 23:58:31,127 INFO Training Started!
+2021-12-09 23:58:31,448 INFO Training Finished!
+2021-12-09 23:58:31,452 INFO fold: 2 OOF Model ROC AUC: 0.6774081237911025!
+2021-12-09 23:58:31,460 INFO Training Started!
+2021-12-09 23:58:31,653 INFO Training Finished!
+2021-12-09 23:58:31,656 INFO fold: 3 OOF Model ROC AUC: 0.6363958736299162!
+2021-12-09 23:58:31,665 INFO Training Started!
+2021-12-09 23:58:31,868 INFO Training Finished!
+2021-12-09 23:58:31,871 INFO fold: 4 OOF Model ROC AUC: 0.6835524578230986!
+2021-12-09 23:58:31,880 INFO Training Started!
+2021-12-09 23:58:32,085 INFO Training Finished!
+2021-12-09 23:58:32,088 INFO fold: 5 OOF Model ROC AUC: 0.6923646764021928!
+2021-12-09 23:58:32,097 INFO Mean OOF Model ROC AUC: 0.6809165022802615!
 </pre>
 </div>
 </div>
@@ -1153,8 +1155,8 @@ Wall time: 167 ms
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>(4000,)
 (4000,)
-CPU times: user 4.5 s, sys: 730 ms, total: 5.23 s
-Wall time: 1.35 s
+CPU times: user 4.09 s, sys: 708 ms, total: 4.8 s
+Wall time: 1.26 s
 </pre>
 </div>
 </div>
@@ -1226,9 +1228,9 @@ Wall time: 1.35 s
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-12-06 23:20:12,142 INFO Training Started!
-2021-12-06 23:20:20,277 INFO Training Finished!
-2021-12-06 23:20:20,308 INFO fold: 1 OOF Model ROC AUC: 0.558401031592521!
+<pre>2021-12-09 23:58:34,242 INFO Training Started!
+2021-12-09 23:58:42,305 INFO Training Finished!
+2021-12-09 23:58:42,335 INFO fold: 1 OOF Model ROC AUC: 0.558401031592521!
 </pre>
 </div>
 </div>
@@ -1245,9 +1247,9 @@ Best weights from best epoch are automatically used!
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-12-06 23:20:20,423 INFO Training Started!
-2021-12-06 23:20:22,374 INFO Training Finished!
-2021-12-06 23:20:22,405 INFO fold: 2 OOF Model ROC AUC: 0.6584655061250806!
+<pre>2021-12-09 23:58:42,448 INFO Training Started!
+2021-12-09 23:58:44,406 INFO Training Finished!
+2021-12-09 23:58:44,437 INFO fold: 2 OOF Model ROC AUC: 0.6584655061250806!
 </pre>
 </div>
 </div>
@@ -1265,9 +1267,9 @@ Best weights from best epoch are automatically used!
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-12-06 23:20:22,518 INFO Training Started!
-2021-12-06 23:20:24,393 INFO Training Finished!
-2021-12-06 23:20:24,425 INFO fold: 3 OOF Model ROC AUC: 0.6677756286266925!
+<pre>2021-12-09 23:58:44,547 INFO Training Started!
+2021-12-09 23:58:46,455 INFO Training Finished!
+2021-12-09 23:58:46,487 INFO fold: 3 OOF Model ROC AUC: 0.6677756286266925!
 </pre>
 </div>
 </div>
@@ -1285,9 +1287,9 @@ Best weights from best epoch are automatically used!
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-12-06 23:20:24,539 INFO Training Started!
-2021-12-06 23:20:26,372 INFO Training Finished!
-2021-12-06 23:20:26,403 INFO fold: 4 OOF Model ROC AUC: 0.6324828168179388!
+<pre>2021-12-09 23:58:46,604 INFO Training Started!
+2021-12-09 23:58:48,428 INFO Training Finished!
+2021-12-09 23:58:48,458 INFO fold: 4 OOF Model ROC AUC: 0.6324828168179388!
 </pre>
 </div>
 </div>
@@ -1305,9 +1307,9 @@ Best weights from best epoch are automatically used!
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-12-06 23:20:26,520 INFO Training Started!
-2021-12-06 23:20:28,385 INFO Training Finished!
-2021-12-06 23:20:28,416 INFO fold: 5 OOF Model ROC AUC: 0.6354975231739447!
+<pre>2021-12-09 23:58:48,572 INFO Training Started!
+2021-12-09 23:58:50,446 INFO Training Finished!
+2021-12-09 23:58:50,477 INFO fold: 5 OOF Model ROC AUC: 0.6354975231739447!
 </pre>
 </div>
 </div>
@@ -1325,7 +1327,7 @@ Best weights from best epoch are automatically used!
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-12-06 23:20:28,533 INFO Mean OOF Model ROC AUC: 0.6305245012672356!
+<pre>2021-12-09 23:58:50,592 INFO Mean OOF Model ROC AUC: 0.6305245012672356!
 </pre>
 </div>
 </div>
@@ -1335,7 +1337,7 @@ Best weights from best epoch are automatically used!
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>(4000,)
 (4000,)
-CPU times: user 17.6 s, sys: 5.93 s, total: 23.6 s
+CPU times: user 17.5 s, sys: 5.88 s, total: 23.4 s
 Wall time: 16.4 s
 </pre>
 </div>
@@ -1534,7 +1536,7 @@ Wall time: 16.4 s
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-12-06 23:20:28,605 INFO categorical columns are None, Preprocessing will done accordingly!
+<pre>2021-12-09 23:59:07,293 INFO categorical columns are None, Preprocessing will done accordingly!
 </pre>
 </div>
 </div>
@@ -1590,8 +1592,8 @@ Wall time: 16.4 s
 (3200,)
 (800, 104)
 (800,)
-CPU times: user 6.7 ms, sys: 1.61 ms, total: 8.31 ms
-Wall time: 7.1 ms
+CPU times: user 7.03 ms, sys: 1.77 ms, total: 8.81 ms
+Wall time: 7.15 ms
 </pre>
 </div>
 </div>
@@ -1645,8 +1647,8 @@ Wall time: 7.1 ms
 (800, 104)
 &lt;class &#39;numpy.ndarray&#39;&gt;
 &lt;class &#39;numpy.ndarray&#39;&gt;
-CPU times: user 40 ms, sys: 3.39 ms, total: 43.4 ms
-Wall time: 42.7 ms
+CPU times: user 47.8 ms, sys: 4.4 ms, total: 52.2 ms
+Wall time: 50.6 ms
 </pre>
 </div>
 </div>
@@ -1699,6 +1701,40 @@ Wall time: 42.7 ms
 
 <div class="inner_cell">
     <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">xgb_params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;learning_rate&#39;</span><span class="p">:</span> <span class="mf">0.21761562020600114</span><span class="p">,</span>
+    <span class="s1">&#39;eval_metric&#39;</span><span class="p">:</span> <span class="s1">&#39;auc&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;use_label_encoder&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s1">&#39;random_state&#39;</span><span class="p">:</span> <span class="mi">42</span><span class="p">,</span>
+    <span class="s1">&#39;booster&#39;</span><span class="p">:</span> <span class="s1">&#39;gblinear&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;colsample_bytree&#39;</span><span class="p">:</span> <span class="mf">0.1027132584989078</span><span class="p">,</span>
+    <span class="s1">&#39;early_stopping_rounds&#39;</span><span class="p">:</span> <span class="mi">171</span><span class="p">,</span>
+    <span class="s1">&#39;max_depth&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+    <span class="s1">&#39;n_estimators&#39;</span><span class="p">:</span> <span class="mi">7000</span><span class="p">,</span>
+    <span class="s1">&#39;reg_alpha&#39;</span><span class="p">:</span> <span class="mf">9.583579660175245e-06</span><span class="p">,</span>
+    <span class="s1">&#39;reg_lambda&#39;</span><span class="p">:</span> <span class="mf">9.238315962782784e-05</span><span class="p">,</span>
+    <span class="s1">&#39;subsample&#39;</span><span class="p">:</span> <span class="mf">0.4464473710560276</span><span class="p">,</span>
+    <span class="s1">&#39;tree_method&#39;</span><span class="p">:</span> <span class="s1">&#39;approx&#39;</span><span class="p">,</span>
+    <span class="c1">#for GPU</span>
+<span class="c1">#     &#39;tree_method&#39;: &#39;gpu_hist&#39;,</span>
+<span class="c1">#     &#39;predictor&#39;: &#39;gpu_predictor&#39;,</span>
+<span class="p">}</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    {% endraw %}
+
+    {% raw %}
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="o">%%time</span>
 <span class="c1"># Now do model training</span>
 <span class="n">xgb_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_np</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span>
@@ -1730,9 +1766,9 @@ Wall time: 42.7 ms
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>AUC is : 0.6986887604265654 while Accuracy is : 0.6825 
-CPU times: user 11 s, sys: 121 ms, total: 11.1 s
-Wall time: 1.56 s
+<pre>AUC is : 0.6933467954809418 while Accuracy is : 0.67625 
+CPU times: user 10.9 s, sys: 95.7 ms, total: 11 s
+Wall time: 1.48 s
 </pre>
 </div>
 </div>
@@ -1776,9 +1812,9 @@ Wall time: 1.56 s
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-12-06 23:20:30,245 INFO Optimization Direction is: maximize
-<span class="ansi-green-fg">[I 2021-12-06 23:20:30,307]</span> Using an existing study with name &#39;tmlt_autoxgb&#39; instead of creating a new one.
-2021-12-06 23:20:30,497 INFO Training Started!
+<pre>2021-12-09 23:59:37,980 INFO Optimization Direction is: maximize
+<span class="ansi-green-fg">[I 2021-12-09 23:59:38,032]</span> Using an existing study with name &#39;tmlt_autoxgb&#39; instead of creating a new one.
+2021-12-09 23:59:38,210 INFO Training Started!
 </pre>
 </div>
 </div>
@@ -1786,7 +1822,7 @@ Wall time: 1.56 s
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>[23:20:30] WARNING: /Users/travis/build/dmlc/xgboost/src/learner.cc:541: 
+<pre>[23:59:38] WARNING: /Users/travis/build/dmlc/xgboost/src/learner.cc:541: 
 Parameters: { colsample_bytree, early_stopping_rounds, eval_set, max_depth, subsample, tree_method } might not be used.
 
   This may not be accurate due to some parameters are only used in language bindings but
@@ -1801,15 +1837,11 @@ Parameters: { colsample_bytree, early_stopping_rounds, eval_set, max_depth, subs
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-12-06 23:20:37,693 INFO Training Ended!
-2021-12-06 23:20:37,706 INFO roc_auc_score: 0.7720541653468482
-2021-12-06 23:20:37,706 INFO log_loss: 0.5504097771365195
-2021-12-06 23:20:37,707 INFO accuracy_score: 0.72375
-2021-12-06 23:20:37,707 INFO f1_score: 0.6285714285714287
-2021-12-06 23:20:37,708 INFO precision_score: 0.6515679442508711
-2021-12-06 23:20:37,708 INFO recall_score: 0.6071428571428571
-<span class="ansi-green-fg">[I 2021-12-06 23:20:37,741]</span> Trial 35 finished with value: 0.7720541653468482 and parameters: {&#39;learning_rate&#39;: 0.06917055652243276, &#39;n_estimators&#39;: 7000, &#39;reg_lambda&#39;: 0.0005717720260170862, &#39;reg_alpha&#39;: 6.546458405891649e-07, &#39;subsample&#39;: 0.6290090458891053, &#39;colsample_bytree&#39;: 0.9155898469768312, &#39;max_depth&#39;: 7, &#39;early_stopping_rounds&#39;: 139, &#39;tree_method&#39;: &#39;approx&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 18 with value: 0.7734399746594869.
-2021-12-06 23:20:37,923 INFO Training Started!
+<pre>2021-12-09 23:59:47,028 INFO Training Ended!
+2021-12-09 23:59:47,033 INFO roc_auc_score: 0.7741592756836658
+2021-12-09 23:59:47,034 INFO accuracy_score: 0.72625
+<span class="ansi-green-fg">[I 2021-12-09 23:59:47,072]</span> Trial 38 finished with value: 0.7741592756836658 and parameters: {&#39;learning_rate&#39;: 0.07948707900984789, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 7.984356925605064e-06, &#39;reg_alpha&#39;: 2.5216595944303144e-06, &#39;subsample&#39;: 0.9949361731336916, &#39;colsample_bytree&#39;: 0.30017155189532796, &#39;max_depth&#39;: 5, &#39;early_stopping_rounds&#39;: 268, &#39;tree_method&#39;: &#39;approx&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 38 with value: 0.7741592756836658.
+2021-12-09 23:59:47,269 INFO Training Started!
 </pre>
 </div>
 </div>
@@ -1817,7 +1849,7 @@ Parameters: { colsample_bytree, early_stopping_rounds, eval_set, max_depth, subs
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>[23:20:37] WARNING: /Users/travis/build/dmlc/xgboost/src/learner.cc:541: 
+<pre>[23:59:47] WARNING: /Users/travis/build/dmlc/xgboost/src/learner.cc:541: 
 Parameters: { early_stopping_rounds, eval_set } might not be used.
 
   This may not be accurate due to some parameters are only used in language bindings but
@@ -1832,15 +1864,11 @@ Parameters: { early_stopping_rounds, eval_set } might not be used.
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-12-06 23:21:17,526 INFO Training Ended!
-2021-12-06 23:21:17,594 INFO roc_auc_score: 0.6885426565304614
-2021-12-06 23:21:17,595 INFO log_loss: 0.6858780123793986
-2021-12-06 23:21:17,595 INFO accuracy_score: 0.66875
-2021-12-06 23:21:17,595 INFO f1_score: 0.5190562613430126
-2021-12-06 23:21:17,596 INFO precision_score: 0.588477366255144
-2021-12-06 23:21:17,596 INFO recall_score: 0.4642857142857143
-<span class="ansi-green-fg">[I 2021-12-06 23:21:17,637]</span> Trial 36 finished with value: 0.6885426565304614 and parameters: {&#39;learning_rate&#39;: 0.02265165070501582, &#39;n_estimators&#39;: 7000, &#39;reg_lambda&#39;: 2.624192127564028e-07, &#39;reg_alpha&#39;: 0.00036391611478680695, &#39;subsample&#39;: 0.5915030624370501, &#39;colsample_bytree&#39;: 0.23237799890226452, &#39;max_depth&#39;: 9, &#39;early_stopping_rounds&#39;: 164, &#39;tree_method&#39;: &#39;hist&#39;, &#39;booster&#39;: &#39;gbtree&#39;, &#39;gamma&#39;: 0.740465140416424, &#39;grow_policy&#39;: &#39;depthwise&#39;}. Best is trial 18 with value: 0.7734399746594869.
-2021-12-06 23:21:17,776 INFO Training Started!
+<pre>2021-12-10 00:00:17,929 INFO Training Ended!
+2021-12-10 00:00:17,953 INFO roc_auc_score: 0.6579558652729384
+2021-12-10 00:00:17,954 INFO accuracy_score: 0.65375
+<span class="ansi-green-fg">[I 2021-12-10 00:00:17,995]</span> Trial 39 finished with value: 0.6579558652729384 and parameters: {&#39;learning_rate&#39;: 0.08007436447328488, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 5.254743398476762e-06, &#39;reg_alpha&#39;: 6.9699386536621e-08, &#39;subsample&#39;: 0.9322044962669489, &#39;colsample_bytree&#39;: 0.5785734419018447, &#39;max_depth&#39;: 5, &#39;early_stopping_rounds&#39;: 333, &#39;tree_method&#39;: &#39;hist&#39;, &#39;booster&#39;: &#39;gbtree&#39;, &#39;gamma&#39;: 0.034707793715938046, &#39;grow_policy&#39;: &#39;depthwise&#39;}. Best is trial 38 with value: 0.7741592756836658.
+2021-12-10 00:00:18,141 INFO Training Started!
 </pre>
 </div>
 </div>
@@ -1848,7 +1876,7 @@ Parameters: { early_stopping_rounds, eval_set } might not be used.
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>[23:21:17] WARNING: /Users/travis/build/dmlc/xgboost/src/learner.cc:541: 
+<pre>[00:00:18] WARNING: /Users/travis/build/dmlc/xgboost/src/learner.cc:541: 
 Parameters: { colsample_bytree, early_stopping_rounds, eval_set, max_depth, subsample, tree_method } might not be used.
 
   This may not be accurate due to some parameters are only used in language bindings but
@@ -1863,14 +1891,11 @@ Parameters: { colsample_bytree, early_stopping_rounds, eval_set, max_depth, subs
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-12-06 23:21:32,413 INFO Training Ended!
-2021-12-06 23:21:32,425 INFO roc_auc_score: 0.7444303663815859
-2021-12-06 23:21:32,426 INFO log_loss: 0.5777584500750527
-2021-12-06 23:21:32,426 INFO accuracy_score: 0.7
-2021-12-06 23:21:32,427 INFO f1_score: 0.574468085106383
-2021-12-06 23:21:32,428 INFO precision_score: 0.6328125
-2021-12-06 23:21:32,428 INFO recall_score: 0.525974025974026
-<span class="ansi-green-fg">[I 2021-12-06 23:21:32,452]</span> Trial 37 finished with value: 0.7444303663815859 and parameters: {&#39;learning_rate&#39;: 0.056158497794197924, &#39;n_estimators&#39;: 20000, &#39;reg_lambda&#39;: 0.010294961570250994, &#39;reg_alpha&#39;: 1.7037741384478345e-05, &#39;subsample&#39;: 0.4147626780645989, &#39;colsample_bytree&#39;: 0.397278539868545, &#39;max_depth&#39;: 6, &#39;early_stopping_rounds&#39;: 185, &#39;tree_method&#39;: &#39;approx&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 18 with value: 0.7734399746594869.
+<pre>2021-12-10 00:00:27,180 INFO Training Ended!
+2021-12-10 00:00:27,185 INFO roc_auc_score: 0.7741064829479463
+2021-12-10 00:00:27,186 INFO accuracy_score: 0.72625
+<span class="ansi-green-fg">[I 2021-12-10 00:00:27,209]</span> Trial 40 finished with value: 0.7741064829479463 and parameters: {&#39;learning_rate&#39;: 0.03198809904064819, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 1.7499374468232044e-07, &#39;reg_alpha&#39;: 2.6296423826705236e-06, &#39;subsample&#39;: 0.8688234611344541, &#39;colsample_bytree&#39;: 0.32645970885560793, &#39;max_depth&#39;: 5, &#39;early_stopping_rounds&#39;: 219, &#39;tree_method&#39;: &#39;approx&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 38 with value: 0.7741592756836658.
+2021-12-10 00:00:27,385 INFO Training Started!
 </pre>
 </div>
 </div>
@@ -1878,7 +1903,60 @@ Parameters: { colsample_bytree, early_stopping_rounds, eval_set, max_depth, subs
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>FrozenTrial(number=18, values=[0.7734399746594869], datetime_start=datetime.datetime(2021, 12, 6, 21, 57, 0, 88637), datetime_complete=datetime.datetime(2021, 12, 6, 21, 57, 4, 336934), params={&#39;booster&#39;: &#39;gblinear&#39;, &#39;colsample_bytree&#39;: 0.1027132584989078, &#39;early_stopping_rounds&#39;: 171, &#39;learning_rate&#39;: 0.21761562020600114, &#39;max_depth&#39;: 6, &#39;n_estimators&#39;: 7000, &#39;reg_alpha&#39;: 9.583579660175245e-06, &#39;reg_lambda&#39;: 9.238315962782784e-05, &#39;subsample&#39;: 0.4464473710560276, &#39;tree_method&#39;: &#39;approx&#39;}, distributions={&#39;booster&#39;: CategoricalDistribution(choices=(&#39;gbtree&#39;, &#39;gblinear&#39;)), &#39;colsample_bytree&#39;: UniformDistribution(high=1.0, low=0.1), &#39;early_stopping_rounds&#39;: IntUniformDistribution(high=500, low=100, step=1), &#39;learning_rate&#39;: LogUniformDistribution(high=0.25, low=0.01), &#39;max_depth&#39;: IntUniformDistribution(high=9, low=1, step=1), &#39;n_estimators&#39;: CategoricalDistribution(choices=(7000, 15000, 20000)), &#39;reg_alpha&#39;: LogUniformDistribution(high=100.0, low=1e-08), &#39;reg_lambda&#39;: LogUniformDistribution(high=100.0, low=1e-08), &#39;subsample&#39;: UniformDistribution(high=1.0, low=0.1), &#39;tree_method&#39;: CategoricalDistribution(choices=(&#39;exact&#39;, &#39;approx&#39;, &#39;hist&#39;))}, user_attrs={}, system_attrs={}, intermediate_values={}, trial_id=19, state=TrialState.COMPLETE, value=None)
+<pre>[00:00:27] WARNING: /Users/travis/build/dmlc/xgboost/src/learner.cc:541: 
+Parameters: { colsample_bytree, early_stopping_rounds, eval_set, max_depth, subsample, tree_method } might not be used.
+
+  This may not be accurate due to some parameters are only used in language bindings but
+  passed down to XGBoost core.  Or some parameters are not used but slip through this
+  verification. Please open an issue if you find above cases.
+
+
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>2021-12-10 00:00:37,591 INFO Training Ended!
+2021-12-10 00:00:37,596 INFO roc_auc_score: 0.7740338929363321
+2021-12-10 00:00:37,596 INFO accuracy_score: 0.72625
+<span class="ansi-green-fg">[I 2021-12-10 00:00:37,618]</span> Trial 41 finished with value: 0.7740338929363321 and parameters: {&#39;learning_rate&#39;: 0.028897229702683155, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 1.1888881323452074e-07, &#39;reg_alpha&#39;: 2.6601366349662993e-06, &#39;subsample&#39;: 0.9680189654657809, &#39;colsample_bytree&#39;: 0.32353956611499696, &#39;max_depth&#39;: 5, &#39;early_stopping_rounds&#39;: 220, &#39;tree_method&#39;: &#39;approx&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 38 with value: 0.7741592756836658.
+2021-12-10 00:00:37,778 INFO Training Started!
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[00:00:37] WARNING: /Users/travis/build/dmlc/xgboost/src/learner.cc:541: 
+Parameters: { colsample_bytree, early_stopping_rounds, eval_set, max_depth, subsample, tree_method } might not be used.
+
+  This may not be accurate due to some parameters are only used in language bindings but
+  passed down to XGBoost core.  Or some parameters are not used but slip through this
+  verification. Please open an issue if you find above cases.
+
+
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>2021-12-10 00:00:47,908 INFO Training Ended!
+2021-12-10 00:00:47,912 INFO roc_auc_score: 0.7739876992925773
+2021-12-10 00:00:47,912 INFO accuracy_score: 0.72625
+<span class="ansi-green-fg">[I 2021-12-10 00:00:47,937]</span> Trial 42 finished with value: 0.7739876992925773 and parameters: {&#39;learning_rate&#39;: 0.025719759580870857, &#39;n_estimators&#39;: 15000, &#39;reg_lambda&#39;: 4.475205533321173e-08, &#39;reg_alpha&#39;: 1.8902434023049325e-06, &#39;subsample&#39;: 0.9801702965579114, &#39;colsample_bytree&#39;: 0.2874747934370655, &#39;max_depth&#39;: 5, &#39;early_stopping_rounds&#39;: 216, &#39;tree_method&#39;: &#39;approx&#39;, &#39;booster&#39;: &#39;gblinear&#39;}. Best is trial 38 with value: 0.7741592756836658.
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>FrozenTrial(number=38, values=[0.7741592756836658], datetime_start=datetime.datetime(2021, 12, 9, 23, 59, 38, 76564), datetime_complete=datetime.datetime(2021, 12, 9, 23, 59, 47, 35226), params={&#39;booster&#39;: &#39;gblinear&#39;, &#39;colsample_bytree&#39;: 0.30017155189532796, &#39;early_stopping_rounds&#39;: 268, &#39;learning_rate&#39;: 0.07948707900984789, &#39;max_depth&#39;: 5, &#39;n_estimators&#39;: 15000, &#39;reg_alpha&#39;: 2.5216595944303144e-06, &#39;reg_lambda&#39;: 7.984356925605064e-06, &#39;subsample&#39;: 0.9949361731336916, &#39;tree_method&#39;: &#39;approx&#39;}, distributions={&#39;booster&#39;: CategoricalDistribution(choices=(&#39;gbtree&#39;, &#39;gblinear&#39;)), &#39;colsample_bytree&#39;: UniformDistribution(high=1.0, low=0.1), &#39;early_stopping_rounds&#39;: IntUniformDistribution(high=500, low=100, step=1), &#39;learning_rate&#39;: LogUniformDistribution(high=0.25, low=0.01), &#39;max_depth&#39;: IntUniformDistribution(high=9, low=1, step=1), &#39;n_estimators&#39;: CategoricalDistribution(choices=(7000, 15000, 20000)), &#39;reg_alpha&#39;: LogUniformDistribution(high=100.0, low=1e-08), &#39;reg_lambda&#39;: LogUniformDistribution(high=100.0, low=1e-08), &#39;subsample&#39;: UniformDistribution(high=1.0, low=0.1), &#39;tree_method&#39;: CategoricalDistribution(choices=(&#39;exact&#39;, &#39;approx&#39;, &#39;hist&#39;))}, user_attrs={}, system_attrs={}, intermediate_values={}, trial_id=39, state=TrialState.COMPLETE, value=None)
 </pre>
 </div>
 </div>
@@ -1917,7 +1995,7 @@ Parameters: { colsample_bytree, early_stopping_rounds, eval_set, max_depth, subs
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>xgb_params {&#39;learning_rate&#39;: 0.21761562020600114, &#39;eval_metric&#39;: &#39;auc&#39;, &#39;use_label_encoder&#39;: False, &#39;random_state&#39;: 42, &#39;booster&#39;: &#39;gblinear&#39;, &#39;colsample_bytree&#39;: 0.1027132584989078, &#39;early_stopping_rounds&#39;: 171, &#39;max_depth&#39;: 6, &#39;n_estimators&#39;: 7000, &#39;reg_alpha&#39;: 9.583579660175245e-06, &#39;reg_lambda&#39;: 9.238315962782784e-05, &#39;subsample&#39;: 0.4464473710560276, &#39;tree_method&#39;: &#39;approx&#39;}
+<pre>xgb_params {&#39;learning_rate&#39;: 0.07948707900984789, &#39;eval_metric&#39;: &#39;auc&#39;, &#39;use_label_encoder&#39;: False, &#39;random_state&#39;: 42, &#39;booster&#39;: &#39;gblinear&#39;, &#39;colsample_bytree&#39;: 0.30017155189532796, &#39;early_stopping_rounds&#39;: 268, &#39;max_depth&#39;: 5, &#39;n_estimators&#39;: 15000, &#39;reg_alpha&#39;: 2.5216595944303144e-06, &#39;reg_lambda&#39;: 7.984356925605064e-06, &#39;subsample&#39;: 0.9949361731336916, &#39;tree_method&#39;: &#39;approx&#39;}
 </pre>
 </div>
 </div>
@@ -1956,8 +2034,8 @@ Parameters: { colsample_bytree, early_stopping_rounds, eval_set, max_depth, subs
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>CPU times: user 493 ms, sys: 43.3 ms, total: 536 ms
-Wall time: 83.6 ms
+<pre>CPU times: user 560 ms, sys: 17.7 ms, total: 578 ms
+Wall time: 78.9 ms
 </pre>
 </div>
 </div>
@@ -1994,8 +2072,8 @@ Wall time: 83.6 ms
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-12-06 23:21:32,574 INFO  model class:&lt;class &#39;xgboost.sklearn.XGBClassifier&#39;&gt;
-2021-12-06 23:21:32,578 INFO Training Started!
+<pre>2021-12-10 00:51:39,405 INFO  model class:&lt;class &#39;xgboost.sklearn.XGBClassifier&#39;&gt;
+2021-12-10 00:51:39,410 INFO Training Started!
 </pre>
 </div>
 </div>
@@ -2003,7 +2081,7 @@ Wall time: 83.6 ms
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>[23:21:32] WARNING: /Users/travis/build/dmlc/xgboost/src/learner.cc:541: 
+<pre>[00:51:39] WARNING: /Users/travis/build/dmlc/xgboost/src/learner.cc:541: 
 Parameters: { colsample_bytree, early_stopping_rounds, max_depth, subsample, tree_method } might not be used.
 
   This may not be accurate due to some parameters are only used in language bindings but
@@ -2018,17 +2096,13 @@ Parameters: { colsample_bytree, early_stopping_rounds, max_depth, subsample, tre
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-12-06 23:21:42,349 INFO Training Finished!
-2021-12-06 23:21:42,350 INFO Predicting Val Probablities!
-2021-12-06 23:21:42,352 INFO Predicting Val Score!
-2021-12-06 23:21:42,360 INFO fold: 1 roc_auc_score : 0.7861895551257254
-2021-12-06 23:21:42,361 INFO fold: 1 log_loss : 0.5517830674474681
-2021-12-06 23:21:42,361 INFO fold: 1 accuracy_score : 0.72125
-2021-12-06 23:21:42,362 INFO fold: 1 f1_score : 0.6626323751891074
-2021-12-06 23:21:42,363 INFO fold: 1 precision_score : 0.6616314199395771
-2021-12-06 23:21:42,363 INFO fold: 1 recall_score : 0.6636363636363637
-2021-12-06 23:21:42,364 INFO Predicting Test Probablities!
-2021-12-06 23:21:42,370 INFO Training Started!
+<pre>2021-12-10 00:52:00,853 INFO Training Finished!
+2021-12-10 00:52:00,854 INFO Predicting Val Probablities!
+2021-12-10 00:52:00,856 INFO Predicting Val Score!
+2021-12-10 00:52:00,860 INFO fold: 1 roc_auc_score : 0.7867504835589942
+2021-12-10 00:52:00,861 INFO fold: 1 accuracy_score : 0.72625
+2021-12-10 00:52:00,861 INFO Predicting Test Probablities!
+2021-12-10 00:52:00,867 INFO Training Started!
 </pre>
 </div>
 </div>
@@ -2036,7 +2110,7 @@ Parameters: { colsample_bytree, early_stopping_rounds, max_depth, subsample, tre
 <div class="output_area">
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>[23:21:42] WARNING: /Users/travis/build/dmlc/xgboost/src/learner.cc:541: 
+<pre>[00:52:00] WARNING: /Users/travis/build/dmlc/xgboost/src/learner.cc:541: 
 Parameters: { colsample_bytree, early_stopping_rounds, max_depth, subsample, tree_method } might not be used.
 
   This may not be accurate due to some parameters are only used in language bindings but
@@ -2044,134 +2118,6 @@ Parameters: { colsample_bytree, early_stopping_rounds, max_depth, subsample, tre
   verification. Please open an issue if you find above cases.
 
 
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-12-06 23:21:51,670 INFO Training Finished!
-2021-12-06 23:21:51,670 INFO Predicting Val Probablities!
-2021-12-06 23:21:51,672 INFO Predicting Val Score!
-2021-12-06 23:21:51,679 INFO fold: 2 roc_auc_score : 0.7962733720180528
-2021-12-06 23:21:51,680 INFO fold: 2 log_loss : 0.5342360259930138
-2021-12-06 23:21:51,680 INFO fold: 2 accuracy_score : 0.74125
-2021-12-06 23:21:51,681 INFO fold: 2 f1_score : 0.6532663316582914
-2021-12-06 23:21:51,682 INFO fold: 2 precision_score : 0.7303370786516854
-2021-12-06 23:21:51,682 INFO fold: 2 recall_score : 0.5909090909090909
-2021-12-06 23:21:51,683 INFO Predicting Test Probablities!
-2021-12-06 23:21:51,688 INFO Training Started!
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>[23:21:51] WARNING: /Users/travis/build/dmlc/xgboost/src/learner.cc:541: 
-Parameters: { colsample_bytree, early_stopping_rounds, max_depth, subsample, tree_method } might not be used.
-
-  This may not be accurate due to some parameters are only used in language bindings but
-  passed down to XGBoost core.  Or some parameters are not used but slip through this
-  verification. Please open an issue if you find above cases.
-
-
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-12-06 23:22:01,036 INFO Training Finished!
-2021-12-06 23:22:01,037 INFO Predicting Val Probablities!
-2021-12-06 23:22:01,038 INFO Predicting Val Score!
-/Users/pankajmathur/anaconda3/envs/nbdev_env/lib/python3.9/site-packages/sklearn/metrics/_classification.py:2403: RuntimeWarning: divide by zero encountered in log
-  loss = -(transformed_labels * np.log(y_pred)).sum(axis=1)
-2021-12-06 23:22:01,047 INFO fold: 3 roc_auc_score : 0.7733784655061251
-2021-12-06 23:22:01,048 INFO fold: 3 log_loss : inf
-2021-12-06 23:22:01,048 INFO fold: 3 accuracy_score : 0.72
-2021-12-06 23:22:01,049 INFO fold: 3 f1_score : 0.643312101910828
-2021-12-06 23:22:01,049 INFO fold: 3 precision_score : 0.6778523489932886
-2021-12-06 23:22:01,050 INFO fold: 3 recall_score : 0.6121212121212121
-2021-12-06 23:22:01,050 INFO Predicting Test Probablities!
-2021-12-06 23:22:01,056 INFO Training Started!
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>[23:22:01] WARNING: /Users/travis/build/dmlc/xgboost/src/learner.cc:541: 
-Parameters: { colsample_bytree, early_stopping_rounds, max_depth, subsample, tree_method } might not be used.
-
-  This may not be accurate due to some parameters are only used in language bindings but
-  passed down to XGBoost core.  Or some parameters are not used but slip through this
-  verification. Please open an issue if you find above cases.
-
-
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-12-06 23:22:09,796 INFO Training Finished!
-2021-12-06 23:22:09,797 INFO Predicting Val Probablities!
-2021-12-06 23:22:09,799 INFO Predicting Val Score!
-2021-12-06 23:22:09,806 INFO fold: 4 roc_auc_score : 0.789911040395777
-2021-12-06 23:22:09,807 INFO fold: 4 log_loss : 0.5406639995649312
-2021-12-06 23:22:09,808 INFO fold: 4 accuracy_score : 0.7425
-2021-12-06 23:22:09,808 INFO fold: 4 f1_score : 0.6644951140065146
-2021-12-06 23:22:09,809 INFO fold: 4 precision_score : 0.7208480565371025
-2021-12-06 23:22:09,810 INFO fold: 4 recall_score : 0.6163141993957704
-2021-12-06 23:22:09,810 INFO Predicting Test Probablities!
-2021-12-06 23:22:09,816 INFO Training Started!
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>[23:22:09] WARNING: /Users/travis/build/dmlc/xgboost/src/learner.cc:541: 
-Parameters: { colsample_bytree, early_stopping_rounds, max_depth, subsample, tree_method } might not be used.
-
-  This may not be accurate due to some parameters are only used in language bindings but
-  passed down to XGBoost core.  Or some parameters are not used but slip through this
-  verification. Please open an issue if you find above cases.
-
-
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stderr output_text">
-<pre>2021-12-06 23:22:19,205 INFO Training Finished!
-2021-12-06 23:22:19,205 INFO Predicting Val Probablities!
-2021-12-06 23:22:19,207 INFO Predicting Val Score!
-2021-12-06 23:22:19,215 INFO fold: 5 roc_auc_score : 0.7993287769181713
-2021-12-06 23:22:19,215 INFO fold: 5 log_loss : 0.5347861251386348
-2021-12-06 23:22:19,216 INFO fold: 5 accuracy_score : 0.73375
-2021-12-06 23:22:19,216 INFO fold: 5 f1_score : 0.6490939044481056
-2021-12-06 23:22:19,217 INFO fold: 5 precision_score : 0.7137681159420289
-2021-12-06 23:22:19,217 INFO fold: 5 recall_score : 0.595166163141994
-2021-12-06 23:22:19,218 INFO Predicting Test Probablities!
-2021-12-06 23:22:19,224 INFO  Mean Metrics Results from all Folds are: {&#39;roc_auc_score&#39;: 0.7890162419927703, &#39;log_loss&#39;: inf, &#39;accuracy_score&#39;: 0.7317499999999999, &#39;f1_score&#39;: 0.6545599654425693, &#39;precision_score&#39;: 0.7008874040127365, &#39;recall_score&#39;: 0.6156294058408863}
-</pre>
-</div>
-</div>
-
-<div class="output_area">
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>CPU times: user 5min 36s, sys: 6.25 s, total: 5min 43s
-Wall time: 46.7 s
 </pre>
 </div>
 </div>

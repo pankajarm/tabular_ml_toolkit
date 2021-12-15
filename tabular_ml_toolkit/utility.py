@@ -71,28 +71,28 @@ def fetch_tabnet_params_for_problem_type(problem_type):
         direction = "maximize"
         eval_metric = "auc"
         #val_preds_metrics = [roc_auc_score, log_loss, accuracy_score, f1_score, precision_score, recall_score]
-        val_preds_metrics = [roc_auc_score, accuracy_score]
+        val_preds_metrics = roc_auc_score
 
     elif problem_type == "multi_label_classification":
         tabnet_model = TabNetClassifier
         direction = "maximize"
         eval_metric = "auc"
         #val_preds_metrics = [roc_auc_score, log_loss, accuracy_score, f1_score, precision_score, recall_score]
-        val_preds_metrics = [roc_auc_score, accuracy_score]
+        val_preds_metrics = accuracy_score
 
     elif problem_type == "multi_class_classification":
         tabnet_model = TabNetMultiTaskClassifier
         direction = "minimize"
         eval_metric = "logloss"
         #val_preds_metrics = [log_loss, roc_auc_score, accuracy_score, f1_score, precision_score, recall_score]
-        val_preds_metrics = [log_loss]
+        val_preds_metrics = log_loss
 
     elif problem_type == "regression":
         tabnet_model = TabNetRegression
         direction = "minimize"
         eval_metric = "rmse"
         #val_preds_metrics = [mean_absolute_error, mean_squared_error, r2_score]
-        val_preds_metrics = [mean_absolute_error, mean_squared_error]
+        val_preds_metrics = mean_absolute_error
     else:
         raise NotImplementedError
 
@@ -104,28 +104,28 @@ def fetch_xgb_params_for_problem_type(problem_type):
         direction = "maximize"
         eval_metric = "auc"
         #val_preds_metrics = [roc_auc_score, log_loss, accuracy_score, f1_score, precision_score, recall_score]
-        val_preds_metrics = [roc_auc_score, accuracy_score]
+        val_preds_metrics = roc_auc_score
 
     elif problem_type == "multi_label_classification":
         xgb_model = xgboost.XGBClassifier
         direction = "maximize"
         eval_metric = "auc"
         #val_preds_metrics = [roc_auc_score, log_loss, accuracy_score, f1_score, precision_score, recall_score]
-        val_preds_metrics = [roc_auc_score, accuracy_score]
+        val_preds_metrics = accuracy_score
 
     elif problem_type == "multi_class_classification":
         xgb_model = xgboost.XGBClassifier
         direction = "minimize"
         eval_metric = "mlogloss"
         #val_preds_metrics = [log_loss, roc_auc_score, accuracy_score, f1_score, precision_score, recall_score]
-        val_preds_metrics = [log_loss]
+        val_preds_metrics = log_loss
 
     elif problem_type == "regression":
         xgb_model = xgboost.XGBRegressor
         direction = "minimize"
         eval_metric = "rmse"
         #val_preds_metrics = [mean_absolute_error, mean_squared_error, r2_score]
-        val_preds_metrics = [mean_absolute_error, mean_squared_error]
+        val_preds_metrics = mean_absolute_error
 
     else:
         raise NotImplementedError
@@ -136,23 +136,23 @@ def fetch_skl_params_for_problem_type(problem_type):
     if problem_type == "binary_classification":
         direction = "maximize"
         #val_preds_metrics = [roc_auc_score, log_loss, accuracy_score, f1_score, precision_score, recall_score]
-        val_preds_metrics = [roc_auc_score, accuracy_score]
+        val_preds_metrics = roc_auc_score
 
 
     elif problem_type == "multi_label_classification":
         direction = "maximize"
         #val_preds_metrics = [roc_auc_score, log_loss, accuracy_score, f1_score, precision_score, recall_score]
-        val_preds_metrics = [roc_auc_score, accuracy_score]
+        val_preds_metrics = accuracy_score
 
     elif problem_type == "multi_class_classification":
         direction = "minimize"
         #val_preds_metrics = [log_loss, roc_auc_score, accuracy_score, f1_score, precision_score, recall_score]
-        val_preds_metrics = [log_loss]
+        val_preds_metrics = log_loss
 
     elif problem_type == "regression":
         direction = "minimize"
         #val_preds_metrics = [mean_absolute_error, mean_squared_error, r2_score]
-        val_preds_metrics = [mean_absolute_error, mean_squared_error]
+        val_preds_metrics = mean_absolute_error
     else:
         raise NotImplementedError
 

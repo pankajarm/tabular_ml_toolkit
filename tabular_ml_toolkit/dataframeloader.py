@@ -5,9 +5,11 @@ __all__ = ['DataFrameLoader']
 # Cell
 # hide
 import pandas as pd
+import gc
 from sklearn.model_selection import train_test_split
 import numpy as np
 from .logger import *
+import time
 
 # Cell
 # hide
@@ -115,17 +117,60 @@ class DataFrameLoader:
             logger.info(f"No test_file_path given, so training will continue without it!")
         return self
 
+    # fix least class having only 1 value hence breaking logic for train, val split
+    def fix_least_class(self, X, target):
+        y = X[target].values
+        # now check for value count and fix least class value
+        val_cnt = X[target].value_counts().to_frame()
+        least_class_label = val_cnt.index[-1:].to_list()[0]
+        least_class_val = val_cnt.values[-1:][0][0]
+        # TODO see if you want to change 2 to other number and then use for loop to add it
+        if least_class_val < 2:
+            logger.info(f"The least class label is :{least_class_label} and value count is: {least_class_val}")
+            #  just copying more least value
+            lowest_val_cnt_row = X[X[target] == least_class_label]
+            # duplicate lowest value count class bu +12 because of able to do alteast 10 k-fold
+            start_time = time.time()
+            lowest_val_cnt_df = pd.concat([lowest_val_cnt_row, lowest_val_cnt_row, lowest_val_cnt_row,
+                                           lowest_val_cnt_row, lowest_val_cnt_row, lowest_val_cnt_row,
+                                          lowest_val_cnt_row, lowest_val_cnt_row, lowest_val_cnt_row,
+                                          lowest_val_cnt_row, lowest_val_cnt_row, lowest_val_cnt_row],
+                                          axis=0, ignore_index=True)
+            end_time = time.time()
+            logger.info(f"The time took to concat 12 rows: {end_time - start_time}")
+            del [start_time, end_time]
+            # now just copy paste lowest_val_cnt_row
+            # can use for loop here to add multiple times same row but performance will impact
+            logger.info(f"The X shape BEFORE append is: {X.shape}")
+            start_time = time.time()
+            #X = X.append(lowest_val_cnt_df, ignore_index = True)
+            X = pd.concat([X, lowest_val_cnt_df], axis=0, ignore_index=True)
+            end_time = time.time()
+            logger.info(f"The time took to append 1 dataframe to existing one!: {end_time - start_time}")
+            del [start_time, end_time]
+            logger.info(f"The X shape AFTER append is: {X.shape}")
+            y = X[target].values
+        #trigger gc to clearn old X df from memory
+        gc.collect()
+        return y, X
+
 
     # prepare X and y
-    def prepare_X_y(self,input_df:object, target:str):
+    def prepare_X_y(self,input_df:object, target:str, problem_type:str):
         # Remove rows with missing target
         self.X = input_df.dropna(axis=0, subset=[target])
-        # separate target from predictors
-        #TODO: change to to_numpy
-        self.y = self.X[target].values
+        # set target in dfl
         self.target = target
+        # separate target from predictors
+        #TODO: check value_counts() to fix least class having only 1 value
+        # TODO: breaking logic for train, val split
+        if "classification" in problem_type:
+            self.y, self.X = self.fix_least_class(self.X, target)
+        else:
+            self.y = self.X[target].values
         # drop target
-        self.X = input_df.drop([target], axis=1)
+        self.X = self.X.drop([target], axis=1)
+        gc.collect()
         return self
 
     # select categorical columns
@@ -192,6 +237,7 @@ class DataFrameLoader:
     # get train and valid dataframe
     def from_csv(self, train_file_path:str,
                  idx_col:str, target:str,
+                 problem_type:str,
                  nrows:int=None,
                  test_file_path:str=None,
                  use_num_cols:bool=True,
@@ -201,7 +247,7 @@ class DataFrameLoader:
         # read csv and load dataframes using pandas
         self.read_csv(train_file_path,test_file_path, idx_col, nrows)
         if self.X_full is not None:
-            self.prepare_X_y(self.X_full, target)
+            self.prepare_X_y(self.X_full, target, problem_type)
         # create final columns based upon type of columns
         self.prepare_final_cols(self.X)
         if self.final_cols is not None:

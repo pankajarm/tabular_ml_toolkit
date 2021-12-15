@@ -33,6 +33,7 @@ import inspect
 import time
 
 # for os specific settings
+import gc
 import os
 from shutil import rmtree
 
@@ -75,17 +76,6 @@ class TMLT:
                                   nrows=None):
         #set problem type
         self.problem_type = problem_type
-        #         # check if given model supports n_jobs aka cpu core based Parallelism
-        #         estimator_name = model.__class__.__name__
-        #         # logger.info(estimator_name)
-        #         # logger.info((self.has_n_jobs)
-        #         if estimator_name in self.has_n_jobs :
-        #             # In order to OS not to kill the job, leave one processor out
-        #             model.n_jobs = self.IDEAL_CPU_CORES
-        #             self.model = model
-        #         else:
-        #             print(f"{estimator_name} doesn't support parallelism yet! Training will continue on a single thread.")
-        #             self.model = model
 
         # call DataFrameLoader module
         self.dfl = DataFrameLoader().from_csv(
@@ -94,12 +84,14 @@ class TMLT:
             idx_col=idx_col,
             target=target,
             random_state=random_state,
-            nrows=nrows)
+            nrows=nrows,
+            problem_type=self.problem_type)
 
         # call PreProcessor module
         self.pp = PreProcessor().preprocess_all_cols(dataframeloader=self.dfl, problem_type=self.problem_type)
 
         # return tmlt
+        gc.collect()
         return self
 
         #fit-tranform preprocessor
@@ -133,7 +125,7 @@ class TMLT:
                                                      num_cols__scaler=num_cols__scaler,
                                                      cat_cols__imputer=cat_cols__imputer,
                                                      cat_cols__encoder=cat_cols__encoder)
-
+        gc.collect()
         return self
 
 
@@ -154,6 +146,7 @@ class TMLT:
                                                      num_cols__scaler=num_cols__scaler,
                                                      cat_cols__imputer=cat_cols__imputer,
                                                      cat_cols__encoder=cat_cols__encoder)
+        gc.collect()
         return self
 
     # cross validation
@@ -175,6 +168,7 @@ class TMLT:
         # Multiply by -1 since sklearn calculates *negative* scoring for some of the metrics
         if "neg_" in scoring:
             scores = -1 * scores
+        gc.collect()
         return scores
 
     # GridSearch
@@ -192,18 +186,32 @@ class TMLT:
                                    n_jobs=n_jobs)
         # now call fit
         grid_search.fit(X, y)
+        gc.collect()
         return grid_search
 
     #NOTE: OOF with K-Fold and just K-Fold training are 2 different methods because k-fold taking multiple metrics
     # do oof k-fold train and predictions
-    def do_oof_kfold_train_preds(self, X:object, y:object, n_splits:int, oof_model:object,
-                                 X_test:object=None, random_state=42):
+    def do_oof_kfold_train_preds(self, X:object, y:object, n_splits:int, model:object, X_test:object=None,
+                                 random_state=42):
         """
             This methods returns oof_preds and test_preds by doing kfold training on sklearn pipeline
             n_splits=5 by default, takes only int value
             random_sate=42, takes only int value
 
         """
+        #TODO: Find better way without string matching
+        if "tabnet" in str(model.__class__):
+            #fetch problem type params
+            _, val_preds_metrics, eval_metric, _ = fetch_tabnet_params_for_problem_type(self.problem_type)
+
+        elif "xgb" in str(model.__class__):
+            #fetch problem type params
+            _, val_preds_metrics, eval_metric, _ = fetch_xgb_params_for_problem_type(self.problem_type)
+
+        else:
+            #fetch problem type params
+            val_preds_metrics, _ = fetch_skl_params_for_problem_type(self.problem_type)
+
         #create stratified K Folds instance
         kfold = StratifiedKFold(n_splits=n_splits,
                              random_state=random_state,
@@ -218,7 +226,7 @@ class TMLT:
             oof_test_preds = np.zeros(X_test.shape[0])
 
         # k-fold training and predictions for oof predictions
-        oof_model_auc_mean = 0
+        oof_model_metrics_mean = 0
         n=0
         for train_idx, valid_idx in kfold.split(X, y):
             if isinstance(X, np.ndarray):
@@ -230,52 +238,51 @@ class TMLT:
 
             #model training
             logger.info(f"Training Started!")
-            if "tabnet" in str(oof_model.__class__):
-                # now do tabnet  fit
-                oof_model.fit(
-                    X_train, y_train,
-                    eval_set=[(X_valid, y_valid)],
-                    eval_metric=['auc'],
-                    max_epochs=50,
-                    patience=10,
-                    batch_size=1024*16,
-                    virtual_batch_size=128*16
-                    )
+                        #should be better way without string matching
+            if "tabnet" in str(model.__class__):
+                #change for tabnet
+                model.fit(X_train, y_train,
+                          eval_set=[(X_valid, y_valid)],
+                          eval_metric=[eval_metric],
+                          max_epochs=20,
+                          patience=5,
+                          batch_size=2048*self.IDEAL_CPU_CORES,
+                          virtual_batch_size=256*self.IDEAL_CPU_CORES)
 
-            elif "xgb" in str(oof_model.__class__):
-                oof_model.fit(X_train, y_train,
-                          verbose=False,
-                          # detect & avoid overfitting
+            elif "xgb" in str(model.__class__):
+                #change for xgb
+                model.fit(X_train, y_train,
                           eval_set=[(X_train, y_train), (X_valid, y_valid)],
-                          eval_metric="auc",
-                          early_stopping_rounds=300,
-                          )
+                          eval_metric=eval_metric,
+                         verbose=False)
+
             else:
-                oof_model.fit(X_train, y_train)
+                #standard sklearn fit
+                model.fit(X_train, y_train)
             logger.info(f"Training Finished!")
 
             # getting either hyperplane distance or probablities from predictions
-            if "svm" in str(oof_model.__class__):
+            if "svm" in str(model.__class__):
                 #logger.info(f"Predicting Valid Decision!")
-                oof_preds[valid_idx] = oof_model.decision_function(X_valid)
+                oof_preds[valid_idx] = model.decision_function(X_valid)
             else:
                 #logger.info(f"Predicting Valid Proba!")
-                oof_preds[valid_idx] = oof_model.predict_proba(X_valid)[:,1]
+                oof_preds[valid_idx] = model.predict_proba(X_valid)[:,1]
 
             # Getting linear model metric results for each fold
-            oof_model_auc = roc_auc_score(y_valid, oof_preds[valid_idx])
-            logger.info(f"fold: {n+1} OOF Model ROC AUC: {oof_model_auc}!")
+            oof_model_metrics = val_preds_metrics(y_valid, oof_preds[valid_idx])
+            logger.info(f"fold: {n+1} OOF Model Metrics: {oof_model_metrics}!")
             # for mean score
-            oof_model_auc_mean += (oof_model_auc / kfold.n_splits)
+            oof_model_metrics_mean += (oof_model_metrics / kfold.n_splits)
 
 
             # for test preds
             # appending mean test data predictions
             if X_test is not None:
-                if "svm" in str(oof_model.__class__):
-                    oof_test_preds += oof_model.decision_function(X_test) / kfold.n_splits
+                if "svm" in str(model.__class__):
+                    oof_test_preds += model.decision_function(X_test) / kfold.n_splits
                 else:
-                    oof_test_preds += oof_model.predict_proba(X_test)[:,1] / kfold.n_splits
+                    oof_test_preds += model.predict_proba(X_test)[:,1] / kfold.n_splits
             else:
                 logger.warn(f"Trying to do OOF Test Predictions but No Test Dataset Provided!")
 
@@ -283,12 +290,14 @@ class TMLT:
             # they will recreate again next time k-fold is called
             unused_df_lst = [X_train, X_valid, y_train, y_valid]
             del unused_df_lst
+            gc.collect()
 
             # increment fold counter label
             n += 1
 
         #oof_model_auc_mean = (oof_model_auc / kfold.n_splits)
-        logger.info(f"Mean OOF Model ROC AUC: {oof_model_auc_mean}!")
+        logger.info(f"Mean OOF Model Metrics: {oof_model_metrics_mean}!")
+        gc.collect()
 
         return oof_preds, oof_test_preds
 
@@ -303,8 +312,7 @@ class TMLT:
 
         """
 
-        logger.info(f" model class:{model.__class__}")
-
+        #logger.info(f" model class:{model.__class__}")
         #should be better way without string matching
         if "tabnet" in str(model.__class__):
             #fetch problem type params
@@ -317,6 +325,7 @@ class TMLT:
         else:
             #fetch problem type params
             val_preds_metrics, _ = fetch_skl_params_for_problem_type(self.problem_type)
+
 
         #create stratified K Folds instance
         kfold = StratifiedKFold(n_splits=n_splits,
@@ -341,26 +350,28 @@ class TMLT:
 
             # fit
             logger.info(f"Training Started!")
+            #should be better way without string matching
             if "tabnet" in str(model.__class__):
-                # now do tabnet  fit
-                model.fit(
-                    X_train, y_train,
-                    eval_set=[(X_valid, y_valid)],
-                    eval_metric=eval_metric,
-                    max_epochs=50,
-                    patience=10,
-                    batch_size=1024*self.IDEAL_CPU_CORES,
-                    virtual_batch_size=128*self.IDEAL_CPU_CORES)
-
-            elif "xgb" in str(model.__class__):
+                #change for tabnet
                 model.fit(X_train, y_train,
                           eval_set=[(X_train, y_train), (X_valid, y_valid)],
-                          eval_metric=eval_metric)
+                          eval_metric=[eval_metric],
+                          max_epochs=20,
+                          patience=5,
+                          batch_size=2048*self.IDEAL_CPU_CORES,
+                          virtual_batch_size=256*self.IDEAL_CPU_CORES)
+
+            elif "xgb" in str(model.__class__):
+                #change for xgb
+                model.fit(X_train, y_train,
+                          eval_set=[(X_train, y_train), (X_valid, y_valid)],
+                          eval_metric=eval_metric,
+                         verbose=False)
+
             else:
-                if model in self.has_n_jobs():
-                    model.fit(X_train, y_train, n_jobs=self.IDEAL_CPU_CORES)
-                else:
-                    model.fit(X_train, y_train)
+                #standard sklearn fit
+                model.fit(X_train, y_train)
+
             logger.info(f"Training Finished!")
 
             #TO-DO: Merge OOF_KFold and KFold methods at this level
@@ -381,15 +392,15 @@ class TMLT:
 
 
             #metrics
-            for metric in val_preds_metrics:
-                #TO-DO need to test and think about log_loss for SVM
-                if ("log_loss" in str(metric.__name__)) or ("roc_auc_score" in str(metric.__name__)):
-                    if "svm" in str(model.__class__):
-                        metric_result[str(metric.__name__)] = metric(y_valid, preds_decs_func)
-                    else:
-                        metric_result[str(metric.__name__)] = metric(y_valid, preds_probs)
+            metric = val_preds_metrics
+            #TO-DO need to test and think about log_loss for SVM
+            if ("log_loss" in str(metric.__name__)) or ("roc_auc_score" in str(metric.__name__)):
+                if "svm" in str(model.__class__):
+                    metric_result[str(metric.__name__)] = metric(y_valid, preds_decs_func)
                 else:
-                    metric_result[str(metric.__name__)] = metric(y_valid, preds)
+                    metric_result[str(metric.__name__)] = metric(y_valid, preds_probs)
+            else:
+                metric_result[str(metric.__name__)] = metric(y_valid, preds)
 
             #now show value of all the given metrics
             for metric_name, metric_value in metric_result.items():
@@ -413,6 +424,7 @@ class TMLT:
             # they will recreate again next time k-fold is called
             unused_df_lst = [X_train, X_valid, y_train, y_valid]
             del unused_df_lst
+            gc.collect()
 
             # increment fold counter label
             n += 1
@@ -420,7 +432,7 @@ class TMLT:
         #logger.info(f"kfold_metrics_results: {kfold_metrics_results} ")
         mean_metrics_results = kfold_dict_mean(kfold_metrics_results)
         logger.info(f" Mean Metrics Results from all Folds are: {mean_metrics_results}")
-
+        gc.collect()
         return mean_metrics_results, test_preds
 
     # Do optuna bases study optimization for hyperparmaeter search
@@ -456,6 +468,7 @@ class TMLT:
             load_if_exists=True,
         )
         study.optimize(objective, n_trials=opt_trials, timeout=opt_timeout)
+        gc.collect()
         return study
 
 

@@ -244,10 +244,10 @@ class TMLT:
                 model.fit(X_train, y_train,
                           eval_set=[(X_valid, y_valid)],
                           eval_metric=[eval_metric],
-                          max_epochs=20,
-                          patience=5,
-                          batch_size=2048*self.IDEAL_CPU_CORES,
-                          virtual_batch_size=256*self.IDEAL_CPU_CORES)
+                          max_epochs=5,
+                          patience=2,
+                          batch_size=4096*self.IDEAL_CPU_CORES,
+                          virtual_batch_size=512*self.IDEAL_CPU_CORES)
 
             elif "xgb" in str(model.__class__):
                 #change for xgb
@@ -358,8 +358,8 @@ class TMLT:
                           eval_metric=[eval_metric],
                           max_epochs=20,
                           patience=5,
-                          batch_size=2048*self.IDEAL_CPU_CORES,
-                          virtual_batch_size=256*self.IDEAL_CPU_CORES)
+                          batch_size=4096*self.IDEAL_CPU_CORES,
+                          virtual_batch_size=512*self.IDEAL_CPU_CORES)
 
             elif "xgb" in str(model.__class__):
                 #change for xgb

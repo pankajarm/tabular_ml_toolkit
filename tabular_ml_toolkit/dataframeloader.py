@@ -134,6 +134,9 @@ class DataFrameLoader:
             lowest_val_cnt_df = pd.concat([lowest_val_cnt_row, lowest_val_cnt_row, lowest_val_cnt_row,
                                            lowest_val_cnt_row, lowest_val_cnt_row, lowest_val_cnt_row,
                                           lowest_val_cnt_row, lowest_val_cnt_row, lowest_val_cnt_row,
+                                          lowest_val_cnt_row, lowest_val_cnt_row, lowest_val_cnt_row,
+                                          lowest_val_cnt_row, lowest_val_cnt_row, lowest_val_cnt_row,
+                                          lowest_val_cnt_row, lowest_val_cnt_row, lowest_val_cnt_row,
                                           lowest_val_cnt_row, lowest_val_cnt_row, lowest_val_cnt_row],
                                           axis=0, ignore_index=True)
             end_time = time.time()

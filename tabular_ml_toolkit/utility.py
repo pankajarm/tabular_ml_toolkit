@@ -85,7 +85,7 @@ def fetch_tabnet_params_for_problem_type(problem_type):
         direction = "minimize"
         eval_metric = "logloss"
         #val_preds_metrics = [log_loss, roc_auc_score, accuracy_score, f1_score, precision_score, recall_score]
-        val_preds_metrics = log_loss
+        val_preds_metrics = accuracy_score
 
     elif problem_type == "regression":
         tabnet_model = TabNetRegression
@@ -118,7 +118,7 @@ def fetch_xgb_params_for_problem_type(problem_type):
         direction = "minimize"
         eval_metric = "mlogloss"
         #val_preds_metrics = [log_loss, roc_auc_score, accuracy_score, f1_score, precision_score, recall_score]
-        val_preds_metrics = log_loss
+        val_preds_metrics = accuracy_score
 
     elif problem_type == "regression":
         xgb_model = xgboost.XGBRegressor
@@ -147,7 +147,7 @@ def fetch_skl_params_for_problem_type(problem_type):
     elif problem_type == "multi_class_classification":
         direction = "minimize"
         #val_preds_metrics = [log_loss, roc_auc_score, accuracy_score, f1_score, precision_score, recall_score]
-        val_preds_metrics = log_loss
+        val_preds_metrics = accuracy_score
 
     elif problem_type == "regression":
         direction = "minimize"

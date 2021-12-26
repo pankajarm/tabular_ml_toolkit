@@ -10,10 +10,12 @@ index = {"DataFrameLoader": "00_dataframeloader.ipynb",
          "logger": "logger.ipynb",
          "find_ideal_cpu_cores": "utility.ipynb",
          "check_has_n_jobs": "utility.ipynb",
+         "needs_predict_proba": "utility.ipynb",
          "fetch_tabnet_params_for_problem_type": "utility.ipynb",
          "fetch_xgb_params_for_problem_type": "utility.ipynb",
          "fetch_skl_params_for_problem_type": "utility.ipynb",
-         "kfold_dict_mean": "utility.ipynb"}
+         "kfold_dict_mean": "utility.ipynb",
+         "clip_splits": "utility.ipynb"}
 
 modules = ["dataframeloader.py",
            "preprocessor.py",

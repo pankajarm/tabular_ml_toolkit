@@ -24,6 +24,10 @@ from sklearn.model_selection import cross_val_score, GridSearchCV, StratifiedKFo
 import optuna
 #for XGB
 import xgboost
+# for imbalance learn
+from imblearn.over_sampling import SMOTE
+from imblearn.under_sampling import RandomUnderSampler
+from imblearn.combine import SMOTEENN
 
 # for finding n_jobs in all sklearn estimators
 from sklearn.utils import all_estimators
@@ -36,6 +40,9 @@ import time
 import gc
 import os
 from shutil import rmtree
+
+#for clearning torch cache
+import torch
 
 # Cell
 
@@ -94,16 +101,30 @@ class TMLT:
         gc.collect()
         return self
 
-        #fit-tranform preprocessor
-    def pp_fit_transform(self, first_df:object, second_df:object=None):
-        first_np = None
-        second_np = None
+    #fit-tranform preprocessor
+    def pp_fit_transform(self, X:object, y:object, X_test:object=None, resample_approach:str=None,
+                         random_state:int=42):
+        X_np = None
+        X_test_np = None
+        y_np = y
         #fit-transform
-        if first_df is not None:
-            first_np = self.pp.fit_transform(first_df)
-            if second_df is not None:
-                second_np = self.pp.transform(second_df)
-        return first_np, second_np
+        if X is not None:
+            X_np = self.pp.fit_transform(X)
+            if X_test is not None:
+                X_test_np = self.pp.transform(X_test)
+
+        # resample can be done by many approaches, here we are using only 3
+        if resample_approach is not None:
+            if resample_approach == 'oversample':
+                resample = SMOTE()
+            elif resample_approach == 'undersample':
+                resample = RandomUnderSampler(random_state=random_state)
+            elif resample_approach == 'combine':
+                resample = SMOTEENN(random_state=random_state)
+            # now fit and tranform
+            X_np, y_np = resample.fit_resample(X_np, y)
+
+        return X_np, y_np, X_test_np
 
     # Force to update the dataframeloader in pipeline
     def update_dfl(self, X:object, y:object, X_test:object,
@@ -189,10 +210,9 @@ class TMLT:
         gc.collect()
         return grid_search
 
-    #NOTE: OOF with K-Fold and just K-Fold training are 2 different methods because k-fold taking multiple metrics
     # do oof k-fold train and predictions
     def do_oof_kfold_train_preds(self, X:object, y:object, n_splits:int, model:object, X_test:object=None,
-                                 random_state=42):
+                                 tabnet_params:dict=None, random_state=42):
         """
             This methods returns oof_preds and test_preds by doing kfold training on sklearn pipeline
             n_splits=5 by default, takes only int value
@@ -202,15 +222,15 @@ class TMLT:
         #TODO: Find better way without string matching
         if "tabnet" in str(model.__class__):
             #fetch problem type params
-            _, val_preds_metrics, eval_metric, _ = fetch_tabnet_params_for_problem_type(self.problem_type)
+            _,_, eval_metric,_,oof_val_metric = fetch_tabnet_params_for_problem_type(self.problem_type)
 
         elif "xgb" in str(model.__class__):
             #fetch problem type params
-            _, val_preds_metrics, eval_metric, _ = fetch_xgb_params_for_problem_type(self.problem_type)
+            _,_, eval_metric,_,oof_val_metric = fetch_xgb_params_for_problem_type(self.problem_type)
 
         else:
             #fetch problem type params
-            val_preds_metrics, _ = fetch_skl_params_for_problem_type(self.problem_type)
+            _,_,oof_val_metric  = fetch_skl_params_for_problem_type(self.problem_type)
 
         #create stratified K Folds instance
         kfold = StratifiedKFold(n_splits=n_splits,
@@ -226,28 +246,30 @@ class TMLT:
             oof_test_preds = np.zeros(X_test.shape[0])
 
         # k-fold training and predictions for oof predictions
-        oof_model_metrics_mean = 0
+        oof_model_results_mean = 0
         n=0
         for train_idx, valid_idx in kfold.split(X, y):
             if isinstance(X, np.ndarray):
                 # create NUMPY based X_train, X_valid, y_train, y_valid
+                # fix the stratification problem
+                #train_idx,valid_idx = clip_splits(train_idx,valid_idx,self.dfl.X_full)
                 X_train , X_valid, y_train, y_valid = X[train_idx], X[valid_idx], y[train_idx], y[valid_idx]
             else:
                 # create PANDAS based X_train, X_valid, y_train, y_valid
+                # fix the stratification problem
+                #train_idx,valid_idx = clip_splits(train_idx,valid_idx,self.dfl.X_full)
                 X_train , X_valid, y_train, y_valid = X.iloc[train_idx], X.iloc[valid_idx], y[train_idx], y[valid_idx]
 
-            #model training
+            #TRAINING
             logger.info(f"Training Started!")
                         #should be better way without string matching
             if "tabnet" in str(model.__class__):
                 #change for tabnet
-                model.fit(X_train, y_train,
-                          eval_set=[(X_valid, y_valid)],
-                          eval_metric=[eval_metric],
-                          max_epochs=5,
-                          patience=2,
-                          batch_size=4096*self.IDEAL_CPU_CORES,
-                          virtual_batch_size=512*self.IDEAL_CPU_CORES)
+                if  tabnet_params:
+                    model.fit(X_train, y_train,
+                              eval_set=[(X_valid, y_valid)],
+                              eval_metric=[eval_metric],
+                             **tabnet_params)
 
             elif "xgb" in str(model.__class__):
                 #change for xgb
@@ -261,49 +283,65 @@ class TMLT:
                 model.fit(X_train, y_train)
             logger.info(f"Training Finished!")
 
+            #VAL PREDICTIONS
             # getting either hyperplane distance or probablities from predictions
             if "svm" in str(model.__class__):
                 #logger.info(f"Predicting Valid Decision!")
-                oof_preds[valid_idx] = model.decision_function(X_valid)
+                preds = model.decision_function(X_valid)
+                oof_preds[valid_idx] = preds
             else:
                 #logger.info(f"Predicting Valid Proba!")
-                oof_preds[valid_idx] = model.predict_proba(X_valid)[:,1]
+                if "classification" in self.problem_type:
+                    preds = model.predict_proba(X_valid)
+                    oof_preds[valid_idx] = preds[:,1]
+                else:
+                    preds = model.predict(X_valid)
+                    oof_preds[valid_idx] = preds
 
-            # Getting linear model metric results for each fold
-            oof_model_metrics = val_preds_metrics(y_valid, oof_preds[valid_idx])
-            logger.info(f"fold: {n+1} OOF Model Metrics: {oof_model_metrics}!")
+
+            #METRICS
+            # Get metric results for each fold
+            oof_metric_results = oof_val_metric(y_valid, preds)
+            logger.info(f"fold: {n+1} OOF {str(oof_val_metric.__name__)}: {oof_metric_results}!")
+
             # for mean score
-            oof_model_metrics_mean += (oof_model_metrics / kfold.n_splits)
+            oof_model_results_mean += (oof_metric_results / kfold.n_splits)
 
 
-            # for test preds
+            #TEST PREDICTIONS
             # appending mean test data predictions
             if X_test is not None:
                 if "svm" in str(model.__class__):
                     oof_test_preds += model.decision_function(X_test) / kfold.n_splits
                 else:
-                    oof_test_preds += model.predict_proba(X_test)[:,1] / kfold.n_splits
+                    if "classification" in self.problem_type:
+                        oof_test_preds += model.predict_proba(X_test)[:,1] / kfold.n_splits
+                    else:
+                        oof_test_preds += model.predict(X_test) / kfold.n_splits
             else:
                 logger.warn(f"Trying to do OOF Test Predictions but No Test Dataset Provided!")
 
             # In order to better GC, del X_train, X_valid, y_train, y_valid df after each fold is done,
             # they will recreate again next time k-fold is called
-            unused_df_lst = [X_train, X_valid, y_train, y_valid]
-            del unused_df_lst
+            del [X_train, X_valid, y_train, y_valid]
             gc.collect()
+            torch.cuda.empty_cache()
 
             # increment fold counter label
             n += 1
 
         #oof_model_auc_mean = (oof_model_auc / kfold.n_splits)
-        logger.info(f"Mean OOF Model Metrics: {oof_model_metrics_mean}!")
+        logger.info(f"Mean OOF {str(oof_val_metric.__name__)}: {oof_model_results_mean}!")
+        del [kfold, model]
         gc.collect()
+        torch.cuda.empty_cache()
 
         return oof_preds, oof_test_preds
 
 
     # do k-fold training
-    def do_kfold_training(self, X:object, y:object, n_splits:int, model:object, X_test:object=None, random_state=42):
+    def do_kfold_training(self, X:object, y:object, n_splits:int, model:object, kfold_metric:object,
+                          eval_metric:str, X_test:object=None, tabnet_params:dict=None, random_state=42):
 
         """
             This methods returns kfold_metrics_results and test_preds by doing kfold training
@@ -313,19 +351,6 @@ class TMLT:
         """
 
         #logger.info(f" model class:{model.__class__}")
-        #should be better way without string matching
-        if "tabnet" in str(model.__class__):
-            #fetch problem type params
-            _, val_preds_metrics, eval_metric, _ = fetch_tabnet_params_for_problem_type(self.problem_type)
-
-        elif "xgb" in str(model.__class__):
-            #fetch problem type params
-            _, val_preds_metrics, eval_metric, _ = fetch_xgb_params_for_problem_type(self.problem_type)
-
-        else:
-            #fetch problem type params
-            val_preds_metrics, _ = fetch_skl_params_for_problem_type(self.problem_type)
-
 
         #create stratified K Folds instance
         kfold = StratifiedKFold(n_splits=n_splits,
@@ -348,23 +373,20 @@ class TMLT:
                 # create PANDAS based X_train, X_valid, y_train, y_valid
                 X_train , X_valid, y_train, y_valid = X.iloc[train_idx], X.iloc[valid_idx], y[train_idx], y[valid_idx]
 
-            # fit
+            #TRAINING
             logger.info(f"Training Started!")
             #should be better way without string matching
             if "tabnet" in str(model.__class__):
                 #change for tabnet
                 model.fit(X_train, y_train,
-                          eval_set=[(X_train, y_train), (X_valid, y_valid)],
+                          eval_set=[(X_valid, y_valid)],
                           eval_metric=[eval_metric],
-                          max_epochs=20,
-                          patience=5,
-                          batch_size=4096*self.IDEAL_CPU_CORES,
-                          virtual_batch_size=512*self.IDEAL_CPU_CORES)
+                          **tabnet_params)
 
             elif "xgb" in str(model.__class__):
                 #change for xgb
                 model.fit(X_train, y_train,
-                          eval_set=[(X_train, y_train), (X_valid, y_valid)],
+                          eval_set=[(X_valid, y_valid)],
                           eval_metric=eval_metric,
                          verbose=False)
 
@@ -376,31 +398,23 @@ class TMLT:
 
             #TO-DO: Merge OOF_KFold and KFold methods at this level
             metric_result = {}
+            preds = None
+            metric = kfold_metric
 
-            # predictions
-            if "classification" in self.problem_type:
-                if "svm" in str(model.__class__):
-                    logger.info("Predicting Val Decision Function!")
-                    preds_decs_func = model.decision_function(X_valid)
-                else:
-                    logger.info("Predicting Val Probablities!")
-                    preds_probs = model.predict_proba(X_valid)[:, 1]
-
-            # predict score on val set for all problem type
-            logger.info("Predicting Val Score!")
-            preds = model.predict(X_valid)
-
-
-            #metrics
-            metric = val_preds_metrics
-            #TO-DO need to test and think about log_loss for SVM
-            if ("log_loss" in str(metric.__name__)) or ("roc_auc_score" in str(metric.__name__)):
-                if "svm" in str(model.__class__):
-                    metric_result[str(metric.__name__)] = metric(y_valid, preds_decs_func)
-                else:
-                    metric_result[str(metric.__name__)] = metric(y_valid, preds_probs)
+            #VAL PREDICTIONS
+            if "svm" in str(model.__class__):
+                logger.info("Predicting Val Decision Function!")
+                preds = model.decision_function(X_valid)
             else:
-                metric_result[str(metric.__name__)] = metric(y_valid, preds)
+                if needs_predict_proba(metric):
+                    logger.info("Predicting Val Probablities!")
+                    preds = model.predict_proba(X_valid)[:, 1]
+                else:
+                    logger.info("Predicting Val Score!")
+                    preds = model.predict(X_valid)
+
+            #METRIC CALCULATION
+            metric_result[str(metric.__name__)] = metric(y_valid, preds)
 
             #now show value of all the given metrics
             for metric_name, metric_value in metric_result.items():
@@ -409,35 +423,34 @@ class TMLT:
             #now append each kfold metric_result dict to list
             kfold_metrics_results.append(metric_result)
 
-            # for test preds
+            ##TEST PREDICTIONS
             if X_test is not None:
-                if "classification" in self.problem_type:
-                    logger.info("Predicting Test Probablities!")
-                    test_preds += model.predict_proba(X_test)[:,1] / kfold.n_splits
-                else:
-                    logger.info("Predicting Test Scores!")
-                    test_preds += model.predict(X_test) / kfold.n_splits
+                logger.info("Predicting Test Scores!")
+                test_preds += model.predict(X_test) / kfold.n_splits
             else:
                 logger.warn(f"Trying to do Test Predictions but No Test Dataset Provided!")
 
             # In order to better GC, del X_train, X_valid, y_train, y_valid df after each fold is done,
             # they will recreate again next time k-fold is called
-            unused_df_lst = [X_train, X_valid, y_train, y_valid]
-            del unused_df_lst
+            del [X_train, X_valid, y_train, y_valid]
             gc.collect()
+            torch.cuda.empty_cache()
 
             # increment fold counter label
             n += 1
 
         #logger.info(f"kfold_metrics_results: {kfold_metrics_results} ")
         mean_metrics_results = kfold_dict_mean(kfold_metrics_results)
-        logger.info(f" Mean Metrics Results from all Folds are: {mean_metrics_results}")
+        logger.info(f" Mean {str(metric.__name__)} from all Folds are: {mean_metrics_results}")
+        # for explicit memory clean
+        del [kfold, model]
         gc.collect()
+        torch.cuda.empty_cache()
         return mean_metrics_results, test_preds
 
     # Do optuna bases study optimization for hyperparmaeter search
-    def do_xgb_optuna_optimization(self, optuna_db_path:str, use_gpu=False, opt_trials=100,
-                                   opt_timeout=360):
+    def do_xgb_optuna_optimization(self, X_train_np, y_train_np, X_valid_np, y_valid_np, optuna_db_path:str,
+                                   use_gpu=False, opt_trials=100, opt_timeout=360, verbose=False):
         """
             This methods returns and do optuna bases study optimization for hyperparmaeter search
             optuna_db_path is output directory you want to use for storing sql db used for optuna
@@ -448,14 +461,13 @@ class TMLT:
         """
 
         # get params based on problem type
-        xgb_model, val_preds_metrics, eval_metric, direction = fetch_xgb_params_for_problem_type(self.problem_type)
+        xgb_model_type, val_preds_metrics, eval_metric, direction, _ = fetch_xgb_params_for_problem_type(self.problem_type)
 
         # Load the dataset in advance for reusing it each trial execution.
-        objective = XGB_Optuna_Objective(dfl=self.dfl, tmlt=self,
-                                     val_preds_metrics=val_preds_metrics,
-                                     xgb_model=xgb_model,
-                                     xgb_eval_metric=eval_metric,
-                                     use_gpu=use_gpu)
+        objective = XGB_Optuna_Objective(X_train_np, y_train_np, X_valid_np, y_valid_np,
+                                         val_preds_metrics=val_preds_metrics,
+                                         xgb_model_type=xgb_model_type, xgb_eval_metric=eval_metric,
+                                         use_gpu=use_gpu, verbose=verbose)
         # create sql db in optuna db path
         db_path = os.path.join(optuna_db_path, "params.db")
 

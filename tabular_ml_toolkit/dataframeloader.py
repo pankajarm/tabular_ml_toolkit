@@ -130,7 +130,7 @@ class DataFrameLoader:
             #  just copying more least value
             lowest_val_cnt_row = X[X[target] == least_class_label]
             # duplicate lowest value count class bu +12 because of able to do alteast 10 k-fold
-            start_time = time.time()
+            #start_time = time.time()
             lowest_val_cnt_df = pd.concat([lowest_val_cnt_row, lowest_val_cnt_row, lowest_val_cnt_row,
                                            lowest_val_cnt_row, lowest_val_cnt_row, lowest_val_cnt_row,
                                           lowest_val_cnt_row, lowest_val_cnt_row, lowest_val_cnt_row,
@@ -139,19 +139,19 @@ class DataFrameLoader:
                                           lowest_val_cnt_row, lowest_val_cnt_row, lowest_val_cnt_row,
                                           lowest_val_cnt_row, lowest_val_cnt_row, lowest_val_cnt_row],
                                           axis=0, ignore_index=True)
-            end_time = time.time()
-            logger.info(f"The time took to concat 12 rows: {end_time - start_time}")
-            del [start_time, end_time]
+            #end_time = time.time()
+            #logger.info(f"The time took to concat 12 rows: {end_time - start_time}")
+            #del [start_time, end_time]
             # now just copy paste lowest_val_cnt_row
             # can use for loop here to add multiple times same row but performance will impact
-            logger.info(f"The X shape BEFORE append is: {X.shape}")
-            start_time = time.time()
+            logger.info(f"The Original X shape is: {X.shape}")
+            #start_time = time.time()
             #X = X.append(lowest_val_cnt_df, ignore_index = True)
             X = pd.concat([X, lowest_val_cnt_df], axis=0, ignore_index=True)
-            end_time = time.time()
-            logger.info(f"The time took to append 1 dataframe to existing one!: {end_time - start_time}")
-            del [start_time, end_time]
-            logger.info(f"The X shape AFTER append is: {X.shape}")
+            #end_time = time.time()
+            #logger.info(f"The time took to append 1 dataframe to existing one!: {end_time - start_time}")
+            #del [start_time, end_time]
+            logger.info(f"The X shape after least class duplicates appends is: {X.shape}")
             y = X[target].values
         #trigger gc to clearn old X df from memory
         gc.collect()
@@ -223,19 +223,29 @@ class DataFrameLoader:
             self.X_test = self.X_test[final_cols]
 
     # split X and y into X_train, y_train, X_valid & y_valid dataframes
-    def create_train_valid(self, valid_size:float, X=None, y=None, random_state=42):
+    def create_train_valid(self, X:object, y:object, valid_size:float, random_state=42):
 
-        if X and y:
-            self.X_train, self.X_valid, self.y_train, self.y_valid = train_test_split(
-                X, y, train_size=(1-valid_size), test_size=valid_size, random_state=random_state)
+        self.X_train, self.X_valid, self.y_train, self.y_valid = train_test_split(
+            X, y, train_size=(1-valid_size), test_size=valid_size, random_state=random_state)
 
-        else:
-            self.X_train, self.X_valid, self.y_train, self.y_valid = train_test_split(
-                self.X, self.y, train_size=(1-valid_size), test_size=valid_size, random_state=random_state)
-
-        self.update_X_train_X_valid_X_test_with_final_cols(self.final_cols)
+        #self.update_X_train_X_valid_X_test_with_final_cols(self.final_cols)
 
         return self.X_train, self.X_valid, self.y_train, self.y_valid
+
+#     # split X and y into X_train, y_train, X_valid & y_valid dataframes
+#     def create_train_valid(self, valid_size:float, X=None, y=None, random_state=42):
+
+#         if X and y:
+#             self.X_train, self.X_valid, self.y_train, self.y_valid = train_test_split(
+#                 X, y, train_size=(1-valid_size), test_size=valid_size, random_state=random_state)
+
+#         else:
+#             self.X_train, self.X_valid, self.y_train, self.y_valid = train_test_split(
+#                 self.X, self.y, train_size=(1-valid_size), test_size=valid_size, random_state=random_state)
+
+#         self.update_X_train_X_valid_X_test_with_final_cols(self.final_cols)
+
+#         return self.X_train, self.X_valid, self.y_train, self.y_valid
 
     # get train and valid dataframe
     def from_csv(self, train_file_path:str,
@@ -257,8 +267,8 @@ class DataFrameLoader:
             self.update_X_y_with_final_cols(self.final_cols)
 
         # clean up unused dataframes
-        unused_df_lst = [self.X_full]
-        del unused_df_lst
+        del [self.X_full]
+        gc.collect()
 
         return self
 

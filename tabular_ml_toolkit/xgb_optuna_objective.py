@@ -33,6 +33,7 @@ import time
 
 # for os specific settings
 import os
+import gc
 
 # Cell
 
@@ -41,21 +42,24 @@ class XGB_Optuna_Objective:
     Represent XGB Optuna Objective class
 
     Attributes:\n
-    xgb_model: type of xgb modmel\n
-    xgb_eval_metric: type of xgb eval metric \n
-    val_preds_metrics: list of prediction metrics \n
-    tmlt: The main tmlt instance
+    trial: optuna trial object \n
+    use_gpu: list of prediction metrics
     """
 
-    def __init__(self, dfl, tmlt, val_preds_metrics, xgb_model, xgb_eval_metric, use_gpu):
-        self.X = dfl.X
-        self.y = dfl.y
-        self.use_gpu = use_gpu
-        self.tmlt = tmlt
-        self.xgb_model = xgb_model
-        self.trial = None
-        self.xgb_eval_metric = xgb_eval_metric
+    def __init__(self, X_train_np, y_train_np, X_valid_np, y_valid_np, xgb_model_type,
+                 val_preds_metrics, xgb_eval_metric, use_gpu, verbose):
+
+        #attributes
+        self.X_train_np = X_train_np
+        self.y_train_np = y_train_np
+        self.X_valid_np = X_valid_np
+        self.y_valid_np = y_valid_np
         self.val_preds_metrics = val_preds_metrics
+        self.xgb_eval_metric = xgb_eval_metric
+        self.xgb_model_type = xgb_model_type
+        self.use_gpu = use_gpu
+        self.verbose = verbose
+        self.trial = None
 
     def __call__(self, trial):
         self.trial = trial
@@ -64,42 +68,39 @@ class XGB_Optuna_Objective:
         xgb_params = self.get_xgb_params(self.trial, use_gpu=self.use_gpu)
         early_stopping_rounds = xgb_params["early_stopping_rounds"]
         del xgb_params["early_stopping_rounds"]
+        #xgb_params.update({'verbose':self.verbose})
 
-        #create train valid datasets for simple training
-        X_train, X_valid,  y_train_np, y_valid_np =  self.tmlt.dfl.create_train_valid(valid_size=0.2)
-
-        #preprocess X_train and X_valid
-        X_train_np,  X_valid_np = self.tmlt.pp_fit_transform(X_train, X_valid)
+        logger.info(f"final params {xgb_params}")
 
         # create xgb ml model
-        model = self.xgb_model(
+        model = self.xgb_model_type(
             random_state=42,
-            eval_set=[(X_train_np, y_train_np), (X_valid_np, y_valid_np)],
+            eval_set=[(self.X_valid_np, self.y_valid_np)],
             eval_metric=self.xgb_eval_metric,
             use_label_encoder=False,
-            early_stopping_rounds=early_stopping_rounds,
+            #early_stopping_rounds=early_stopping_rounds,
             **xgb_params,
         )
 
         # Now fit
         logger.info("Training Started!")
-        model.fit(X_train_np, y_train_np)
+        model.fit(self.X_train_np, self.y_train_np, verbose=True)
         logger.info("Training Ended!")
 
-
+        gc.collect()
         # choose predict type based upon metrics type
         #TO-DO instead of single metrics use list of metrics and calculate mean using dict
         metric_result = {}
         metric = self.val_preds_metrics
         if ("log_loss" in str(metric.__name__)) or ("roc_auc_score" in str(metric.__name__)):
             #logger.info("Predicting Probablities!")
-            preds_probs = model.predict_proba(X_valid_np)[:, 1]
-            metric_result[str(metric.__name__)] = metric(y_valid_np, preds_probs)
+            preds_probs = model.predict_proba(self.X_valid_np)[:, 1]
+            metric_result[str(metric.__name__)] = metric(self.y_valid_np, self.preds_probs)
 
         else:
             #logger.info("Predicting Score!")
-            preds = model.predict(X_valid_np)
-            metric_result[str(metric.__name__)] = metric(y_valid_np, preds)
+            preds = model.predict(self.X_valid_np)
+            metric_result[str(metric.__name__)] = metric(self.y_valid_np, preds)
 
         #now show value of all the given metrics
         for metric_name, metric_value in metric_result.items():
@@ -109,7 +110,7 @@ class XGB_Optuna_Objective:
         if self.xgb_eval_metric == "logloss":
             return metric_result["log_loss"]
         elif self.xgb_eval_metric == "mlogloss":
-            return metric_result["log_loss"]
+            return metric_result["accuracy_score"]
         elif self.xgb_eval_metric == "rmse":
             return metric_result["mean_absolute_error"]
         elif self.xgb_eval_metric == "auc":
@@ -120,7 +121,7 @@ class XGB_Optuna_Objective:
 
     def __str__(self):
         """Returns human readable string reprsentation"""
-        attr_str = ("X, y, task, use_gpu, tmlt, xgb_model")
+        attr_str = ("X_train_np, X_valid_np, y_train_np, y_valid_np, use_gpu, verbose")
         return ("Optuna Objective object with attributes:"+attr_str)
 
     def __repr__(self):
@@ -131,7 +132,7 @@ class XGB_Optuna_Objective:
     def get_xgb_params(self, trial, use_gpu):
         params = {
             "learning_rate": trial.suggest_float("learning_rate", 1e-2, 0.25, log=True),
-            "n_estimators": trial.suggest_categorical("n_estimators", [7000, 15000, 20000]),
+            "n_estimators": trial.suggest_categorical("n_estimators", [100, 500, 1000]),
             "reg_lambda": trial.suggest_float("reg_lambda", 1e-8, 100.0, log=True),
             "reg_alpha": trial.suggest_float("reg_alpha", 1e-8, 100.0, log=True),
             "subsample": trial.suggest_float("subsample", 0.1, 1.0),

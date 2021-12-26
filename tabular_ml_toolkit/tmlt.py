@@ -439,6 +439,9 @@ class TMLT:
             # increment fold counter label
             n += 1
 
+        # inverse tranform labels predicted in test preds
+        test_preds = self.pp.target_cols__encoder.inverse_transform(test_preds)
+        # (test_proba.argmax(axis=1))
         #logger.info(f"kfold_metrics_results: {kfold_metrics_results} ")
         mean_metrics_results = kfold_dict_mean(kfold_metrics_results)
         logger.info(f" Mean {str(metric.__name__)} from all Folds are: {mean_metrics_results}")

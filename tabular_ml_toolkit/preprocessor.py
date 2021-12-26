@@ -31,7 +31,7 @@ class PreProcessor:
 
     def __init__(self):
         self.columns_transfomer = None
-        self.target_cols_pl = None
+        self.target_cols__encoder = None
         self.cat_cols_pl = None
         self.num_cols_pl = None
 
@@ -79,6 +79,7 @@ class PreProcessor:
         if "classification" in problem_type:
             logger.info("PreProcessing will include target(s) encoding!")
             #now just call fit tranform on y
+            self.target_cols__encoder = target_cols__encoder
             dataframeloader.y = target_cols__encoder.fit_transform(dataframeloader.y)
             #logger.info("Encoded dataframeloader.y:", dataframeloader.y)
 

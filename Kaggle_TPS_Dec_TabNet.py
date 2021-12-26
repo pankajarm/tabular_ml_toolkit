@@ -54,14 +54,14 @@ from pytorch_tabnet.tab_model import TabNetClassifier
 
 
 tabnet_params = {
-    'max_epochs': 30,
-    'patience': 5,
+    'max_epochs': 3,
+    'patience': 1,
     'batch_size': 4096*6*tmlt.IDEAL_CPU_CORES,
     'virtual_batch_size' : 512*6*tmlt.IDEAL_CPU_CORES
 }
 
 #choose model
-tabnet_model = TabNetClassifier(optimizer_params=dict(lr=0.01), verbose=1)
+tabnet_model = TabNetClassifier(optimizer_params=dict(lr=0.02), verbose=1)
 
 # k-fold training
 tabnet_model_metrics_score, tabnet_model_test_preds = tmlt.do_kfold_training(X_np, y_np, X_test=X_test_np, n_splits=5,
@@ -84,16 +84,16 @@ test_preds_round = np.around(test_preds).astype(int)
 
 print(f"{dict(pd.Series(test_preds_round).value_counts())}")
 
-# target encoding changes 1 to 7 classes to 0 to 6
-test_preds_round = test_preds_round + 1
-print(type(test_preds_round))
+# # target encoding changes 1 to 7 classes to 0 to 6
+# test_preds_round = test_preds_round + 1
+# print(type(test_preds_round))
 
 print(f"{dict(pd.Series(test_preds_round).value_counts())}")
 
-submission_file_name = 'tue_dec_21_2027_submission.csv'
+submission_file_name = 'sat_dec_25_2245_submission.csv'
 
-sub = pd.read_csv(DIRECTORY_PATH + OUTPUT_PATH + SAMPLE_SUB_FILE)
+sub = pd.read_csv(DIRECTORY_PATH + SAMPLE_SUB_FILE)
 sub['Cover_Type'] = test_preds_round
 
-sub.to_csv(submission_file_name, index=False)
+sub.to_csv(OUTPUT_PATH+ submission_file_name, index=False)
 print(f"{submission_file_name} saved!")

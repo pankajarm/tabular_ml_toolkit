@@ -67,8 +67,8 @@ from pytorch_tabnet.tab_model import TabNetClassifier
 # #### Now add back based models predictions to X and X_test
 # OOF training and prediction on both train and test dataset by a given model
 tabnet_params = {
-    'max_epochs': 3,
-    'patience': 1,
+    'max_epochs': 30,
+    'patience': 3,
     'batch_size': 4096*6*tmlt.IDEAL_CPU_CORES,
     'virtual_batch_size' : 512*6*tmlt.IDEAL_CPU_CORES
 }
@@ -137,7 +137,7 @@ gc.collect()
 xgb_params = {
     'use_label_encoder': False,
     'learning_rate': 0.22460180743878044,
-    'n_estimators': 15,
+    'n_estimators': 150,
     'reg_lambda': 3.144893773482e-05,
     'reg_alpha': 0.00023758525471934383,
     'subsample': 0.2640308356915845,
@@ -178,7 +178,7 @@ test_preds = test_preds + 1
 
 print(f"{dict(pd.Series(test_preds).value_counts())}")
 
-submission_file_name = 'sat_dec_25_2036_submission.csv'
+submission_file_name = 'sat_dec_25_2106_submission.csv'
 
 sub = pd.read_csv(DIRECTORY_PATH + SAMPLE_SUB_FILE)
 sub['Cover_Type'] = test_preds

@@ -117,7 +117,7 @@ class DataFrameLoader:
             logger.info(f"No test_file_path given, so training will continue without it!")
         return self
 
-    # fix least class having only 1 value hence breaking logic for train, val split
+    # fixes least class having only 1 value hence breaking logic for train, val split
     def fix_least_class(self, X, target):
         y = X[target].values
         # now check for value count and fix least class value

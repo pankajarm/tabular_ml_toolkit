@@ -48,7 +48,7 @@ import os
 def find_ideal_cpu_cores():
     if os.cpu_count() > 2:
         ideal_cpu_cores = os.cpu_count()-1
-        logger.info(f"{os.cpu_count()} cores found, model and data parallel processing should worked!")
+        logger.info(f"{os.cpu_count()} cores found, model and data parallel processing could worked!")
     else:
         ideal_cpu_cores = None
         logger.info(f"{os.cpu_count()} cores found, model and data parallel processing may NOT worked!")

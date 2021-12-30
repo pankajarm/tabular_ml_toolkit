@@ -124,13 +124,12 @@ class DataFrameLoader:
         val_cnt = X[target].value_counts().to_frame()
         least_class_label = val_cnt.index[-1:].to_list()[0]
         least_class_val = val_cnt.values[-1:][0][0]
-        # TODO see if you want to change 2 to other number and then use for loop to add it
+        ##TODO Test if you want to change "2" to other number and then use for loop to add it
         if least_class_val < 2:
             logger.info(f"The least class label is :{least_class_label} and value count is: {least_class_val}")
             #  just copying more least value
             lowest_val_cnt_row = X[X[target] == least_class_label]
-            # duplicate lowest value count class bu +12 because of able to do alteast 10 k-fold
-            #start_time = time.time()
+            # duplicate rows for lowest value count class to +20, so 20 k-fold is possible
             lowest_val_cnt_df = pd.concat([lowest_val_cnt_row, lowest_val_cnt_row, lowest_val_cnt_row,
                                            lowest_val_cnt_row, lowest_val_cnt_row, lowest_val_cnt_row,
                                           lowest_val_cnt_row, lowest_val_cnt_row, lowest_val_cnt_row,
@@ -139,18 +138,10 @@ class DataFrameLoader:
                                           lowest_val_cnt_row, lowest_val_cnt_row, lowest_val_cnt_row,
                                           lowest_val_cnt_row, lowest_val_cnt_row, lowest_val_cnt_row],
                                           axis=0, ignore_index=True)
-            #end_time = time.time()
-            #logger.info(f"The time took to concat 12 rows: {end_time - start_time}")
-            #del [start_time, end_time]
-            # now just copy paste lowest_val_cnt_row
             # can use for loop here to add multiple times same row but performance will impact
             logger.info(f"The Original X shape is: {X.shape}")
-            #start_time = time.time()
             #X = X.append(lowest_val_cnt_df, ignore_index = True)
             X = pd.concat([X, lowest_val_cnt_df], axis=0, ignore_index=True)
-            #end_time = time.time()
-            #logger.info(f"The time took to append 1 dataframe to existing one!: {end_time - start_time}")
-            #del [start_time, end_time]
             logger.info(f"The X shape after least class duplicates appends is: {X.shape}")
             y = X[target].values
         #trigger gc to clearn old X df from memory
@@ -164,9 +155,7 @@ class DataFrameLoader:
         self.X = input_df.dropna(axis=0, subset=[target])
         # set target in dfl
         self.target = target
-        # separate target from predictors
-        #TODO: check value_counts() to fix least class having only 1 value
-        # TODO: breaking logic for train, val split
+        # fix least class value less than CV/k-fold issue
         if "classification" in problem_type:
             self.y, self.X = self.fix_least_class(self.X, target)
         else:
@@ -231,21 +220,6 @@ class DataFrameLoader:
         #self.update_X_train_X_valid_X_test_with_final_cols(self.final_cols)
 
         return self.X_train, self.X_valid, self.y_train, self.y_valid
-
-#     # split X and y into X_train, y_train, X_valid & y_valid dataframes
-#     def create_train_valid(self, valid_size:float, X=None, y=None, random_state=42):
-
-#         if X and y:
-#             self.X_train, self.X_valid, self.y_train, self.y_valid = train_test_split(
-#                 X, y, train_size=(1-valid_size), test_size=valid_size, random_state=random_state)
-
-#         else:
-#             self.X_train, self.X_valid, self.y_train, self.y_valid = train_test_split(
-#                 self.X, self.y, train_size=(1-valid_size), test_size=valid_size, random_state=random_state)
-
-#         self.update_X_train_X_valid_X_test_with_final_cols(self.final_cols)
-
-#         return self.X_train, self.X_valid, self.y_train, self.y_valid
 
     # get train and valid dataframe
     def from_csv(self, train_file_path:str,

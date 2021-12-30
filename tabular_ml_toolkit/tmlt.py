@@ -16,7 +16,7 @@ import numpy as np
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
-from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder, StandardScaler, MinMaxScaler
+from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder, StandardScaler, MinMaxScaler, LabelEncoder
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 from sklearn.metrics import roc_auc_score, accuracy_score, log_loss, f1_score, precision_score, recall_score
 from sklearn.model_selection import cross_val_score, GridSearchCV, StratifiedKFold
@@ -74,7 +74,7 @@ class TMLT:
 
     ## All Core Methods ##
 
-    # Main Method to create, load, preprocessed data based upon problem type
+    # Main Method to create, load, preprocess ready data based upon problem type
     def prepare_data(self, train_file_path:str,
                                   problem_type:str,
                                   idx_col:str, target:str,
@@ -106,12 +106,18 @@ class TMLT:
                          random_state:int=42):
         X_np = None
         X_test_np = None
-        y_np = y
-        #fit-transform
-        if X is not None:
-            X_np = self.pp.fit_transform(X)
-            if X_test is not None:
-                X_test_np = self.pp.transform(X_test)
+        y_np = None
+
+        #fit-transform for X and X_test
+        X_np = self.pp.columns_transfomer.fit_transform(X)
+        if X_test is not None:
+            X_test_np = self.pp.columns_transfomer.transform(X_test)
+        # fit-tranform for y
+        if "classification" in self.problem_type:
+            y_np = self.pp.target_cols__encoder.fit_transform(y)
+            # logger.info(f"Encoded y_np classes values are: {dict(pd.Series(y_np).value_counts())}")
+        else:
+            y_np = y
 
         # resample can be done by many approaches, here we are using only 3
         if resample_approach is not None:
@@ -127,11 +133,12 @@ class TMLT:
         return X_np, y_np, X_test_np
 
     # Force to update the dataframeloader in pipeline
-    def update_dfl(self, X:object, y:object, X_test:object,
+    def update_dfl(self, X:object, y:object, X_test:object,problem_type:str,
                    num_cols__imputer=SimpleImputer(strategy='median'),
                    num_cols__scaler=StandardScaler(),
                    cat_cols__imputer=SimpleImputer(strategy='constant'),
-                   cat_cols__encoder=OneHotEncoder(handle_unknown='ignore')):
+                   cat_cols__encoder=OneHotEncoder(handle_unknown='ignore'),
+                   target_cols__encoder=LabelEncoder()):
 
         # remove the old pipeline_cach directory
         if os.path.isdir("pipeline_cache_dir"):
@@ -141,32 +148,35 @@ class TMLT:
         self.dfl = DataFrameLoader().regenerate_dfl(X,y,X_test)
 
         # change preprocessor
-        self.pp = PreProcessor().preprocess_all_cols(self.dfl,
+        self.pp = PreProcessor().preprocess_all_cols(self.dfl,problem_type=problem_type,
                                                      num_cols__imputer=num_cols__imputer,
                                                      num_cols__scaler=num_cols__scaler,
                                                      cat_cols__imputer=cat_cols__imputer,
-                                                     cat_cols__encoder=cat_cols__encoder)
+                                                     cat_cols__encoder=cat_cols__encoder,
+                                                     target_cols__encoder=LabelEncoder())
         gc.collect()
         return self
 
 
     # Force to update the preprocessor in pipeline
-    def update_preprocessor(self,
+    def update_preprocessor(self,problem_type:str,
                             num_cols__imputer=SimpleImputer(strategy='median'),
                             num_cols__scaler=StandardScaler(),
                             cat_cols__imputer=SimpleImputer(strategy='constant'),
-                            cat_cols__encoder=OneHotEncoder(handle_unknown='ignore')):
+                            cat_cols__encoder=OneHotEncoder(handle_unknown='ignore'),
+                            target_cols__encoder=LabelEncoder()):
 
         # remove the old pipeline_cach directory
         if os.path.isdir("pipeline_cache_dir"):
             rmtree("pipeline_cache_dir")
 
         # change preprocessor
-        self.pp = PreProcessor().preprocess_all_cols(self.dfl,
+        self.pp = PreProcessor().preprocess_all_cols(self.dfl,problem_type=problem_type,
                                                      num_cols__imputer=num_cols__imputer,
                                                      num_cols__scaler=num_cols__scaler,
                                                      cat_cols__imputer=cat_cols__imputer,
-                                                     cat_cols__encoder=cat_cols__encoder)
+                                                     cat_cols__encoder=cat_cols__encoder,
+                                                     target_cols__encoder=LabelEncoder())
         gc.collect()
         return self
 
@@ -210,157 +220,21 @@ class TMLT:
         gc.collect()
         return grid_search
 
-    # do oof k-fold train and predictions
-    def do_oof_kfold_train_preds(self, X:object, y:object, n_splits:int, model:object, X_test:object=None,
-                                 tabnet_params:dict=None, random_state=42):
+   # do k-fold training, test and oof predictions if enabled
+    def do_kfold_train_preds(self, X:object, y:object, n_splits:int, model:object, val_metric:object, eval_metric:str, oof:bool=False, X_test:object=None,tabnet_fit_params:dict=None, random_state=42):
         """
             This methods returns oof_preds and test_preds by doing kfold training on sklearn pipeline
             n_splits=5 by default, takes only int value
             random_sate=42, takes only int value
-
         """
-        #TODO: Find better way without string matching
-        if "tabnet" in str(model.__class__):
-            #fetch problem type params
-            _,_, eval_metric,_,oof_val_metric = fetch_tabnet_params_for_problem_type(self.problem_type)
-
-        elif "xgb" in str(model.__class__):
-            #fetch problem type params
-            _,_, eval_metric,_,oof_val_metric = fetch_xgb_params_for_problem_type(self.problem_type)
-
-        else:
-            #fetch problem type params
-            _,_,oof_val_metric  = fetch_skl_params_for_problem_type(self.problem_type)
-
         #create stratified K Folds instance
-        kfold = StratifiedKFold(n_splits=n_splits,
-                             random_state=random_state,
-                             shuffle=True)
+        kfold = StratifiedKFold(n_splits=n_splits, random_state=random_state, shuffle=True)
 
-        # for oof preds
-        oof_preds = np.zeros(X.shape[0])
+        # for OOF Predictions
+        oof_preds = np.zeros(X.shape[0]) if oof else None
 
         # check whether test dataset exist before test preds
-        oof_test_preds = None
-        if X_test is not None:
-            oof_test_preds = np.zeros(X_test.shape[0])
-
-        # k-fold training and predictions for oof predictions
-        oof_model_results_mean = 0
-        n=0
-        for train_idx, valid_idx in kfold.split(X, y):
-            if isinstance(X, np.ndarray):
-                # create NUMPY based X_train, X_valid, y_train, y_valid
-                # fix the stratification problem
-                #train_idx,valid_idx = clip_splits(train_idx,valid_idx,self.dfl.X_full)
-                X_train , X_valid, y_train, y_valid = X[train_idx], X[valid_idx], y[train_idx], y[valid_idx]
-            else:
-                # create PANDAS based X_train, X_valid, y_train, y_valid
-                # fix the stratification problem
-                #train_idx,valid_idx = clip_splits(train_idx,valid_idx,self.dfl.X_full)
-                X_train , X_valid, y_train, y_valid = X.iloc[train_idx], X.iloc[valid_idx], y[train_idx], y[valid_idx]
-
-            #TRAINING
-            logger.info(f"Training Started!")
-                        #should be better way without string matching
-            if "tabnet" in str(model.__class__):
-                #change for tabnet
-                if  tabnet_params:
-                    model.fit(X_train, y_train,
-                              eval_set=[(X_valid, y_valid)],
-                              eval_metric=[eval_metric],
-                             **tabnet_params)
-
-            elif "xgb" in str(model.__class__):
-                #change for xgb
-                model.fit(X_train, y_train,
-                          eval_set=[(X_train, y_train), (X_valid, y_valid)],
-                          eval_metric=eval_metric,
-                         verbose=False)
-
-            else:
-                #standard sklearn fit
-                model.fit(X_train, y_train)
-            logger.info(f"Training Finished!")
-
-            #VAL PREDICTIONS
-            # getting either hyperplane distance or probablities from predictions
-            if "svm" in str(model.__class__):
-                #logger.info(f"Predicting Valid Decision!")
-                preds = model.decision_function(X_valid)
-                oof_preds[valid_idx] = preds
-            else:
-                #logger.info(f"Predicting Valid Proba!")
-                if "classification" in self.problem_type:
-                    preds = model.predict_proba(X_valid)
-                    oof_preds[valid_idx] = preds[:,1]
-                else:
-                    preds = model.predict(X_valid)
-                    oof_preds[valid_idx] = preds
-
-
-            #METRICS
-            # Get metric results for each fold
-            oof_metric_results = oof_val_metric(y_valid, preds)
-            logger.info(f"fold: {n+1} OOF {str(oof_val_metric.__name__)}: {oof_metric_results}!")
-
-            # for mean score
-            oof_model_results_mean += (oof_metric_results / kfold.n_splits)
-
-
-            #TEST PREDICTIONS
-            # appending mean test data predictions
-            if X_test is not None:
-                if "svm" in str(model.__class__):
-                    oof_test_preds += model.decision_function(X_test) / kfold.n_splits
-                else:
-                    if "classification" in self.problem_type:
-                        oof_test_preds += model.predict_proba(X_test)[:,1] / kfold.n_splits
-                    else:
-                        oof_test_preds += model.predict(X_test) / kfold.n_splits
-            else:
-                logger.warn(f"Trying to do OOF Test Predictions but No Test Dataset Provided!")
-
-            # In order to better GC, del X_train, X_valid, y_train, y_valid df after each fold is done,
-            # they will recreate again next time k-fold is called
-            del [X_train, X_valid, y_train, y_valid]
-            gc.collect()
-            torch.cuda.empty_cache()
-
-            # increment fold counter label
-            n += 1
-
-        #oof_model_auc_mean = (oof_model_auc / kfold.n_splits)
-        logger.info(f"Mean OOF {str(oof_val_metric.__name__)}: {oof_model_results_mean}!")
-        del [kfold, model]
-        gc.collect()
-        torch.cuda.empty_cache()
-
-        return oof_preds, oof_test_preds
-
-
-    # do k-fold training
-    def do_kfold_training(self, X:object, y:object, n_splits:int, model:object, kfold_metric:object,
-                          eval_metric:str, X_test:object=None, tabnet_params:dict=None, random_state=42):
-
-        """
-            This methods returns kfold_metrics_results and test_preds by doing kfold training
-            n_splits=5 by default, takes only int value
-            random_sate=42, takes only int value
-
-        """
-
-        #logger.info(f" model class:{model.__class__}")
-
-        #create stratified K Folds instance
-        kfold = StratifiedKFold(n_splits=n_splits,
-                             random_state=random_state,
-                             shuffle=True)
-
-        # check for test dataset before prediction
-        test_preds = None
-        if X_test is not None:
-            test_preds = np.zeros(X_test.shape[0])
+        test_preds = np.zeros(X_test.shape[0]) if X_test is not None else None
 
         # list contains metrics results for each fold
         kfold_metrics_results = []
@@ -368,88 +242,112 @@ class TMLT:
         for train_idx, valid_idx in kfold.split(X, y):
             if isinstance(X, np.ndarray):
                 # create NUMPY based X_train, X_valid, y_train, y_valid
+                # fix the stratification problem
+                #train_idx,valid_idx = clip_splits(train_idx,valid_idx,self.dfl.X_full)
                 X_train , X_valid, y_train, y_valid = X[train_idx], X[valid_idx], y[train_idx], y[valid_idx]
             else:
                 # create PANDAS based X_train, X_valid, y_train, y_valid
+                # fix the stratification problem
+                #train_idx,valid_idx = clip_splits(train_idx,valid_idx,self.dfl.X_full)
                 X_train , X_valid, y_train, y_valid = X.iloc[train_idx], X.iloc[valid_idx], y[train_idx], y[valid_idx]
 
             #TRAINING
             logger.info(f"Training Started!")
             #should be better way without string matching
+            #change fit for tabnet
             if "tabnet" in str(model.__class__):
-                #change for tabnet
-                model.fit(X_train, y_train,
-                          eval_set=[(X_valid, y_valid)],
-                          eval_metric=[eval_metric],
-                          **tabnet_params)
+                if  tabnet_fit_params:
+                    model.fit(X_train, y_train,
+                                eval_set=[(X_train, y_train), (X_valid, y_valid)],
+                                eval_metric=[eval_metric],
+                                **tabnet_fit_params)
+                else:
+                    raise ValueError("tabnet model requires tabnet_fit_params!")
 
+            #change fit for xgb
             elif "xgb" in str(model.__class__):
-                #change for xgb
                 model.fit(X_train, y_train,
-                          eval_set=[(X_valid, y_valid)],
-                          eval_metric=eval_metric,
-                         verbose=False)
+                            eval_set=[(X_train, y_train), (X_valid, y_valid)],
+                            eval_metric=eval_metric,
+                            verbose=False)
 
+            # assumes model will follow standard sklearn fit API
             else:
-                #standard sklearn fit
                 model.fit(X_train, y_train)
 
             logger.info(f"Training Finished!")
 
-            #TO-DO: Merge OOF_KFold and KFold methods at this level
+            #VAL PREDICTIONS
+            metric = val_metric
             metric_result = {}
             preds = None
-            metric = kfold_metric
-
-            #VAL PREDICTIONS
+            # getting either hyperplane distance or probablities from predictions
             if "svm" in str(model.__class__):
-                logger.info("Predicting Val Decision Function!")
+                logger.info(f"Predicting Val Decision!")
                 preds = model.decision_function(X_valid)
+            elif needs_predict_proba(metric):
+                logger.info("Predicting Val Probablities!")
+                preds = model.predict_proba(X_valid)[:, 1]
             else:
-                if needs_predict_proba(metric):
-                    logger.info("Predicting Val Probablities!")
-                    preds = model.predict_proba(X_valid)[:, 1]
-                else:
-                    logger.info("Predicting Val Score!")
-                    preds = model.predict(X_valid)
+                logger.info("Predicting Val Score!")
+                preds = model.predict(X_valid)
 
-            #METRIC CALCULATION
+            if oof:
+                #now add back out of fold predictions to that val set index
+                oof_preds[valid_idx] = preds
+
+            #METRICS
             metric_result[str(metric.__name__)] = metric(y_valid, preds)
 
-            #now show value of all the given metrics
+            #now display value of all the given metrics
             for metric_name, metric_value in metric_result.items():
                 logger.info(f"fold: {n+1} {metric_name} : {metric_value}")
 
             #now append each kfold metric_result dict to list
             kfold_metrics_results.append(metric_result)
 
-            ##TEST PREDICTIONS
+            #TEST PREDICTIONS
             if X_test is not None:
-                logger.info("Predicting Test Scores!")
-                test_preds += model.predict(X_test) / kfold.n_splits
+                if "svm" in str(model.__class__):
+                    test_preds += model.decision_function(X_test) / kfold.n_splits
+                else:
+                    if "classification" in self.problem_type:
+                        logger.info(f"Predicting Test Set Probabilities!")
+                        temp_preds_prob = model.predict_proba(X_test).argmax(axis=1)
+                        logger.info(f"Fold: {n+1} Test Predictions Class Count is: {dict(pd.Series(temp_preds_prob).value_counts())}")
+                        test_preds += temp_preds_prob / kfold.n_splits
+                    else:
+                        logger.info("Predicting Test Set Scores!")
+                        test_preds += model.predict(X_test) / kfold.n_splits
             else:
-                logger.warn(f"Trying to do Test Predictions but No Test Dataset Provided!")
+                logger.warn(f"Trying to do OOF Test Predictions but No Test Dataset Provided!")
 
             # In order to better GC, del X_train, X_valid, y_train, y_valid df after each fold is done,
             # they will recreate again next time k-fold is called
             del [X_train, X_valid, y_train, y_valid]
             gc.collect()
+            #trigger cuda cache clean
             torch.cuda.empty_cache()
 
             # increment fold counter label
             n += 1
 
         # inverse tranform labels predicted in test preds
-        test_preds = self.pp.target_cols__encoder.inverse_transform(test_preds)
-        # (test_proba.argmax(axis=1))
+        if "classification" in self.problem_type:
+            test_preds = np.around(test_preds).astype(int) #because test_preds are divided by k-fold
+            test_preds = self.pp.target_cols__encoder.inverse_transform(test_preds)
+
+        # For mean k-fold score
         #logger.info(f"kfold_metrics_results: {kfold_metrics_results} ")
         mean_metrics_results = kfold_dict_mean(kfold_metrics_results)
         logger.info(f" Mean {str(metric.__name__)} from all Folds are: {mean_metrics_results}")
+
         # for explicit memory clean
         del [kfold, model]
         gc.collect()
         torch.cuda.empty_cache()
-        return mean_metrics_results, test_preds
+
+        return mean_metrics_results, test_preds, oof_preds
 
     # Do optuna bases study optimization for hyperparmaeter search
     def do_xgb_optuna_optimization(self, X_train_np, y_train_np, X_valid_np, y_valid_np, optuna_db_path:str,

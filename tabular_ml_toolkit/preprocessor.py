@@ -32,6 +32,7 @@ class PreProcessor:
     def __init__(self):
         self.columns_transfomer = None
         self.target_cols__encoder = None
+        self.target_cols_pl = None
         self.cat_cols_pl = None
         self.num_cols_pl = None
 
@@ -58,11 +59,11 @@ class PreProcessor:
                                    #memory="pipeline_cache_dir"
                                    )
 
-    # Create Preprocessing pipeline for target cols
-    def create_target_cols_pp_pl(self, target_cols__encoder):
-        self.target_cols_pl = Pipeline(steps=[('encoder', target_cols__encoder)],
-                                      #memory="pipeline_cache_dir"
-                                      )
+    # # Create Preprocessing pipeline for target cols
+    # def create_target_cols_pp_pl(self, target_cols__encoder):
+    #     self.target_cols_pl = Pipeline(steps=[('encoder', target_cols__encoder)],
+    #                                   #memory="pipeline_cache_dir"
+    #                                   )
 
     # Bundle preprocessing pipelines based upon types of columns
     def preprocess_all_cols(self, dataframeloader, problem_type="regression",
@@ -74,37 +75,24 @@ class PreProcessor:
                             #cat_cols__encoder=OrdinalEncoder(handle_unknown='use_encoded_value',
                                                              #unknown_value=np.nan)):
 
-        #if problem type classification encode target
-        # encode target based upon problem type
-        if "classification" in problem_type:
-            logger.info("PreProcessing will include target(s) encoding!")
-            #now just call fit tranform on y
-            self.target_cols__encoder = target_cols__encoder
-            dataframeloader.y = target_cols__encoder.fit_transform(dataframeloader.y)
-            #logger.info("Encoded dataframeloader.y:", dataframeloader.y)
-
-        #TODO: REALLY NOT HAPPY WITH THIS DETERMINISTIC REPEATED FLOW
+        #TODO: REALLY NOT HAPPY WITH THIS LENGTH BASED REPEATED FLOW CHECK!
+        tranformer_tuple_list = []
         # change preprocessor according to type of column found
         if len(dataframeloader.categorical_cols) < 1:
             logger.info("categorical columns are None, Preprocessing will done accordingly!")
             # create scikit-learn pipelines instance
             self.create_num_cols_pp_pl(num_cols__imputer, num_cols__scaler)
             #now setup columns tranformer
-            self.columns_transfomer  = make_column_transformer(
-                (self.num_cols_pl, dataframeloader.numerical_cols),
-                remainder='passthrough', sparse_threshold=0
-            )
+            num_cols_tuple  = ("num_cols_pl", self.num_cols_pl, dataframeloader.numerical_cols)
+            tranformer_tuple_list.append(num_cols_tuple)
 
         elif len(dataframeloader.numerical_cols) < 1:
             logger.info("numerical columns are None, Preprocessing will done accordingly!")
             # create sklearn pipelines instance
             self.create_cat_cols_pp_pl(cat_cols__imputer, cat_cols__encoder)
             #now setup columns tranformer
-            self.columns_transfomer = make_column_transformer(
-                (self.cat_cols_pl, dataframeloader.categorical_cols),
-                remainder='passthrough', sparse_threshold=0
-            )
-
+            cat_cols_tuple = ("cat_cols_pl", self.cat_cols_pl, dataframeloader.categorical_cols)
+            tranformer_tuple_list.append(cat_cols_tuple)
 
         else:
             # create scikit-learn pipelines instance
@@ -112,11 +100,18 @@ class PreProcessor:
             self.create_num_cols_pp_pl(num_cols__imputer, num_cols__scaler)
             self.create_cat_cols_pp_pl(cat_cols__imputer, cat_cols__encoder)
             #now setup columns tranformer
-            self.columns_transfomer  = make_column_transformer(
-                (self.num_cols_pl, dataframeloader.numerical_cols),
-                (self.cat_cols_pl, dataframeloader.categorical_cols),
-                remainder='passthrough', sparse_threshold=0
-            )
+            num_cols_tuple  = ("num_cols_pl", self.num_cols_pl, dataframeloader.numerical_cols)
+            tranformer_tuple_list.append(num_cols_tuple)
+            cat_cols_tuple = ("cat_cols_pl", self.cat_cols_pl, dataframeloader.categorical_cols)
+            tranformer_tuple_list.append(cat_cols_tuple)
+
+        # encode target based upon problem type
+        if "classification" in problem_type:
+            logger.info("PreProcessing will include target(s) encoding!")
+            self.target_cols__encoder = target_cols__encoder
+
+        #now make final column tranfomer object
+        self.columns_transfomer = ColumnTransformer(tranformer_tuple_list, remainder='passthrough', sparse_threshold=0)
         #logger.info(f"self.transformer_type: {self.transformer_type}")
 
-        return self.columns_transfomer
+        return self

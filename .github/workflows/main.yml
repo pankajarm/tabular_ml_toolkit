@@ -16,8 +16,8 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install build tooling
-        run: pip install setuptools
+        run: pip install "setuptools<81"
       - name: Install package
-        run: pip install -e . --no-deps
+        run: pip install -e . --no-deps --no-build-isolation
       - name: Import smoke test
         run: python -c "import tabular_ml_toolkit; print(tabular_ml_toolkit.__version__)"
